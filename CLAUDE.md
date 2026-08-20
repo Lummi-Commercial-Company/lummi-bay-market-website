@@ -79,12 +79,13 @@ Note: `/about` still exists as a page — it is reached from the footer, not the
 - Read prices/addresses/hours from data, never hard-code them in pages.
 - Ask before adding dependencies, pages, or nav items.
 
-## First tasks
-1. copy-editor: fetch the 3 URLs, extract + de-duplicate content, map to the IA.
-2. ux-navigation-architect: confirm sitemap + nav.
-3. design-director + frontend-engineer: build the layout shell (header, footer,
-   waterline, tokens).
-4. backend-engineer: wire location data + fuel prices + Decap CMS.
+## Build order — slices, not phases
+The build plan lives in `docs/build-plan.md`. It ships one capability at a time through
+every layer (data → CMS field → component → page → deploy → an editor proves it), rather
+than one layer at a time. Read it before starting any build work; do not restate it here.
+- Next up: **S0 — walking skeleton** (Next.js + Tina + Vercel + one editable headline),
+  then **S1 — fuel prices**.
+- A slice is only done when a non-technical editor can change the thing it shipped.
 
 ## Engineering skills (Matt Pocock)
 General engineering + productivity skills are vendored in `.claude/skills/` alongside
