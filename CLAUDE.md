@@ -88,8 +88,16 @@ Note: `/about` still exists as a page — it is reached from the footer, not the
 
 ## Engineering skills (Matt Pocock)
 General engineering + productivity skills are vendored in `.claude/skills/` alongside
-this project's own skills. How they operate is configured in `docs/agents/`:
-- **Issue tracker** — GitHub Issues via `gh`. See `docs/agents/issue-tracker.md`.
-- **Triage labels** — five canonical roles. See `docs/agents/triage-labels.md`.
+this project's own skills — committed to the repo, on the default branch, so every
+session has them without an install step. Never install them at the user level: a web
+session's home directory is rebuilt from scratch each time and they would disappear.
+How they operate is configured in `docs/agents/`:
+- **Skills** — where they live, and why the `/`-only ones are absent from Claude's
+  skill list by design. See `docs/agents/skills.md`.
+- **Issue tracker** — GitHub Issues via the GitHub MCP tools (`gh` only where it
+  exists — remote sessions have no `gh`). See `docs/agents/issue-tracker.md`.
+- **Triage labels** — five canonical roles, already created on the repo.
+  See `docs/agents/triage-labels.md`.
 - **Domain docs** — skills read `CONTEXT.md` + `docs/adr/`. See `docs/agents/domain.md`.
 Typical flow: `/grill-with-docs` → `/to-spec` → `/to-tickets` → `/implement` → `/code-review`.
+Not sure which skill fits? `/ask-matt` routes you.
