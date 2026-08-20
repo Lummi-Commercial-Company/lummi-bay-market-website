@@ -1,8 +1,24 @@
 # Why a skill doesn't show up in the list
 
+## First: the new-session composer never lists repo skills
+
+On claude.ai/code, the `/` menu in the composer **before you send your first message** offers
+only the web UI's own commands — `/config`, `/usage`, `/workflows`. None of this repo's
+skills appear there, and that is expected: at that moment no container exists and the repo
+has not been cloned, so there is nothing for the menu to read `.claude/skills/` from.
+
+The skills register once the session starts and the container clones the repo. So:
+
+- **Send a first message, then type `/`.** The menu fills in with the repo's skills.
+- Inside a running session everything works — `/grill-me`, `/grill-with-docs`, `/to-spec`
+  and the rest.
+
+An empty `/` menu on a brand-new session is not a broken install and nothing about the repo
+can fix it. Check again after the session is running before looking any further.
+
 ## Two kinds of invocation
 
-Most reports of "the skill isn't installed" are this. Open any `SKILL.md` and look at the
+Once a session is running, this is the next thing to check. Open any `SKILL.md` and look at the
 frontmatter:
 
 - **No `disable-model-invocation` line** → Claude may load the skill on its own when the
