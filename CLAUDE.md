@@ -85,3 +85,11 @@ Note: `/about` still exists as a page — it is reached from the footer, not the
 3. design-director + frontend-engineer: build the layout shell (header, footer,
    waterline, tokens).
 4. backend-engineer: wire location data + fuel prices + Decap CMS.
+
+## Engineering skills (Matt Pocock)
+General engineering + productivity skills are vendored in `.claude/skills/` alongside
+this project's own skills. How they operate is configured in `docs/agents/`:
+- **Issue tracker** — GitHub Issues via `gh`. See `docs/agents/issue-tracker.md`.
+- **Triage labels** — five canonical roles. See `docs/agents/triage-labels.md`.
+- **Domain docs** — skills read `CONTEXT.md` + `docs/adr/`. See `docs/agents/domain.md`.
+Typical flow: `/grill-with-docs` → `/to-spec` → `/to-tickets` → `/implement` → `/code-review`.
