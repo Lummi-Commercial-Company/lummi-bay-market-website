@@ -7,14 +7,20 @@ only the web UI's own commands — `/config`, `/usage`, `/workflows`. None of th
 skills appear there, and that is expected: at that moment no container exists and the repo
 has not been cloned, so there is nothing for the menu to read `.claude/skills/` from.
 
-The skills register once the session starts and the container clones the repo. So:
+The skills register once the session starts and the container clones the repo. Two things
+follow, both verified by test:
 
-- **Send a first message, then type `/`.** The menu fills in with the repo's skills.
-- Inside a running session everything works — `/grill-me`, `/grill-with-docs`, `/to-spec`
-  and the rest.
+- **Typing the command blind works.** Type the whole `/grill-me` into that empty-looking
+  composer and send it. The autocomplete never offers it, but the container resolves it on
+  arrival: a test session seeded with `/grill-me` as its first message loaded `grill-me`,
+  chained into `grilling`, and went on to read `CONTEXT.md` and the ADRs exactly as
+  designed. The missing dropdown entry is cosmetic — it does not block invocation.
+- **Or send any first message, then type `/`.** Once the session is running the menu lists
+  the repo's skills normally.
 
-An empty `/` menu on a brand-new session is not a broken install and nothing about the repo
-can fix it. Check again after the session is running before looking any further.
+An empty `/` menu on a brand-new session is not a broken install, and nothing about this
+repo can populate it — the menu simply has no repo to read yet. Don't debug it; type the
+command or start the session first.
 
 ## Two kinds of invocation
 
