@@ -15,15 +15,21 @@ Lummi Bay Market brand — three locations, one site.
   prices, (3) exceptional navigation.
 
 ## The brand = one company, three locations
-1. **Salish Village** (aka "Exit 260") — fuel + convenience store + full truck stop
+1. **Exit 260** (full name "Lummi Bay Market at Exit 260") — fuel + convenience store + full truck stop
    (showers, driver lounge, secondary store, truck parking). The flagship.
-2. **Lummi Bay Mini Mart** — fuel + convenience store.
-3. **The Cove** (aka "Fisherman's Cove") — fuel + convenience store.
+2. **Mini Mart** (full name "Lummi Bay Market Minimart") — fuel + convenience store.
+   Closed for renovation 2026-08-17 → targeted December 2026; pumps stay open.
+3. **Fisherman's Cove** (aka "The Cove", "Gooseberry Point") — fuel + convenience
+   store, plus the Cove Kitchen and boat ramp access. Nav label may change to
+   "The Cove" before go-live; it lives in data, so that is a one-field edit.
 All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 
 ## Hard rules (never break)
 - **Logo is locked.** Use the existing logo art as-is. Never redraw, recolor, or
   restyle it. Colors and fonts *around* it may be enhanced; the logo may not.
+- **"Salish Village" is not a location name.** It is a 160-acre mixed-use
+  development at Exit 260 with its own commercial leasing agent; the market is its
+  anchor tenant, not the development. Never use it to name a store (ADR 0005).
 - **Other Lummi companies** appear ONLY as a single footer link labeled
   "Lummi Commercial Companies." Nowhere else in copy or nav.
 - **Cultural respect.** Coast Salish art is specific to Lummi Nation. For the build,

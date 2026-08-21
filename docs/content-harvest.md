@@ -312,7 +312,36 @@ these are location-page sections or footer utility pages.
 
 ---
 
-## 9. Open questions for the owner
+## 9. Decisions — answered 2026-08-21
+
+All six questions below were put to the owner and answered the same day. Recorded
+here for provenance; the authoritative homes are named per row.
+
+| # | Question | Decision | Recorded in |
+| --- | --- | --- | --- |
+| 1 | Diesel — one price or two? | **Two.** One diesel price shared across the three locations; the Exit 260 truck stop posts its own. So four price sets, not three. | `fuel-price-update` |
+| 2 | Rename location one away from "Salish Village"? | **Yes.** It is "Exit 260". Salish Village is never a location name. | `CLAUDE.md`, `location-content-model`, ADR 0005 |
+| 3 | Mini Mart during renovation? | **Reads as the current lcc-lummi.com page reads.** Plain editable content; **a human editor updates it when the store reopens.** No scheduled logic, no auto-expiry. | `location-content-model` |
+| 4 | The 260Smokes catalog? | **Retire the cart, keep the prices.** May be removed entirely after the build, so build it to be deleted. | ADR 0005 |
+| 5 | The three fuel discounts? | **Post the base price only.** No calculating, stacking, or personalizing. | `fuel-price-update` |
+| 6 | Which name for location three? | **Fisherman's Cove**, possibly changing to "The Cove" before go-live — so the label lives in data. | `CLAUDE.md`, `location-content-model` |
+
+### Still open (not among the six)
+
+- **Ethanol-free fuel at Fisherman's Cove.** In the content model, not found on the
+  live site. A boat ramp makes it plausible, not proven. Confirm before launch.
+- **Exit 260 service hours.** Fuel is 24 hours; store, truck stop, liquor and beer
+  each differ and the legacy footer contradicts the pages. Needs the real numbers
+  from staff, per service.
+- **Where eight or nine orphan content areas live** (§8) — for `ux-navigation-architect`.
+- **The LCC address conflict** (§2) — not our page, but worth passing back.
+
+## 10. The questions as originally posed
+
+(Answers above.)
+
+### Original wording
+
 
 1. **Diesel — one price or two?** Is truck-lane diesel priced separately from the
    auto island? This changes the fuel schema (§2).
