@@ -60,7 +60,10 @@ One component everywhere. Full contract and the reasoning: **ADR 0005**.
 **Shape** — a card, **never wider than 400px**, in every placement and at every width. On a
 375px phone that reads as full-bleed; it is the same rule, not a second layout.
 
-**Placement** — the **top-right corner**, phones and desktop alike.
+**Placement** — a **right-hand rail**, flush to the right edge at every width. The **Rewards
+club card sits above it** at the top of the same rail; the price card is beneath. Rewards is a
+product and holds the top, prices are a reference and sit under it. The rail reserves a column
+on desktop — it must not float over page text.
 
 **Collapsed** — two groups with grade column headers: the page's own Location (Exit 260 on
 every non-Location page), then the Truck Stop, always.
@@ -116,9 +119,10 @@ navigation, the other is information.
 landmark, and keep the control a real `<button>`. It sits above the page's own heading on every
 page; a screen-reader user meets it on every navigation.
 
-**Known cost of the corner placement**, accepted with eyes open: at 375px the card is ~353px
-wide and floats over the top of the page content **shut as well as open**, so it obscures the
-page's own headline persistently.
+**Known cost of the rail on phones**, accepted with eyes open: Rewards card 221px plus price
+block 135px is ~356px, about **44% of a 375x812 viewport** before any page content. The
+recommendation on the table is the club card image on Home and a compact Rewards control on
+interior pages (ADR 0005, still open).
 
 ## Safety checks (test before done — do not assert)
 - JSON parses (no trailing comma).

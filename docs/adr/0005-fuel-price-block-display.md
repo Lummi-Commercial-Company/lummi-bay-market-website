@@ -30,7 +30,15 @@ columns and invisible in a run of inline text.
 **The block is a card, capped at 400px**, in every placement and at every width. On a 375px
 phone that reads as full-bleed; it is the same rule, not a second layout.
 
-**Placement is the top-right corner**, on phones and desktop alike.
+**Placement is a right-hand rail.** The price card is flush to the **right edge** at every
+width. Above it, at the top of the same rail, sits the **Rewards club card**.
+
+This resolves what looked like a collision between the price block and the Rewards utility
+slot. It was not one: *right side* is an edge, *top-right* is a corner. Once the price card
+moves down the right edge, the top of the rail is free, and the two read as one deliberate
+column rather than two elements fighting for the same spot. Order is Rewards first, prices
+beneath — Rewards is a product and stays in focus at the top of the page; prices are a
+reference and sit under it.
 
 **Opening is an overlay, by two different mechanisms.**
 - A block that **loads collapsed** — every page but Home — opens as an **HTML popover**
@@ -75,7 +83,10 @@ popover renders in the browser's top layer and outranks all of it regardless.
 - **Docked, sticky, and bottom-sheet placements.** All three prototyped. Sticky costs 134px
   of every phone screen permanently; docked is gone the moment a guest scrolls; the bottom
   sheet had the best thumb reach and was the only placement needing no anchor positioning.
-  The owner chose corner.
+  The owner chose the right edge.
+- **Rewards moved instead of the price block.** Considered when the two appeared to want the
+  same corner. Rejected once it was clear they want different things — an edge and a corner —
+  and both fit.
 
 ## Consequences
 
@@ -89,12 +100,18 @@ popover renders in the browser's top layer and outranks all of it regardless.
   here — Safari and Firefox are unverified.** Popover itself is broadly supported; anchor
   positioning is the risky half. If it does not hold, the fallback is the ten-line script,
   and the component's shape does not change.
-- **The corner wants the top-right utility slot** that the site architecture reserves for
-  Rewards. Both cannot have it. Unresolved — see below.
-- **On a phone the corner card floats over the top of the page content, shut as well as
-  open.** At 375px the card is 353px wide, so it obscures the page's own headline
-  persistently rather than only while expanded. This is a real cost of corner on small
-  screens and was visible in the prototype before the choice was made.
+- **The Rewards club card is supplied brand art and is placed, never redrawn** — the same
+  rule the logo carries. Its blues are its own and are not in the locked palette, so it needs
+  breathing room rather than sitting directly on `--lb-navy`. Because the word "Rewards" is
+  inside the image, the link needs a real accessible name; the picture is not the label.
+- **The card is sized to the rail on phones, not on desktop.** At the rail's full 400px it is
+  250px tall and pushes prices well down the page, so on desktop it is set to 260px and
+  right-aligned to share the price card's right edge.
+- **The rail must reserve a column on desktop**, not float over one. Prototyped as a float,
+  page text ran underneath both cards.
+- **On a phone the rail costs real estate before any page content.** Measured: Rewards card
+  221px plus price block 135px is 356px, about 44% of a 375x812 viewport. Survivable on Home,
+  wasteful on every interior page — hence the recommendation below.
 - The popover removes a bug the absolute-positioned version had: because the panel lives in
   the top layer, the block's own box never changes, so **there is no collapsed height to
   reserve**. The in-flow variant on Home does not need a reservation either, since it is
@@ -103,7 +120,9 @@ popover renders in the browser's top layer and outranks all of it regardless.
   reaches back into storage — ADR 0004 stands unchanged.
 
 ## Open, and deliberately not decided here
-- **Rewards versus the corner.** One of them moves. Needs the owner.
+- **Whether the club card image appears on every page or only on Home.** Recommended: the
+  card image on Home, a compact Rewards control on interior pages, so the rail does not spend
+  356px of a phone screen on every navigation. Rewards stays at the top either way.
 - **Panel height at large text sizes.** Four places fit today; at 200% text the panel can run
   off a phone. A `max-height` with internal scroll is the intended fix.
 - **The `/fuel-prices` page duplicates the block.** The intended answer is that the block
