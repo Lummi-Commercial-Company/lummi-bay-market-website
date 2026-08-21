@@ -104,15 +104,21 @@ into a location or truck-stop page, or a deliberate retirement. Resolving the li
 the content harvest (E4, issue #20) plus the redirect map (S10); the count is recorded
 here so the scope gap is visible now rather than discovered at launch.
 
-**E-commerce is retired, not migrated.** Owner decision (2026-08-21): the Exit 260
-cart and online-ordering surface do not carry over. The new site sells nothing and
-processes no payments — which also keeps PCI scope, checkout flows, order state, and
-payment secrets entirely out of this codebase. Consequences to handle rather than
-assume: cart, checkout, and product URLs need 301s to the nearest useful page (the
-relevant location or the hot-food content) instead of 404s; and decommissioning the
-live store is an action inside the client's Squarespace account, not something this
-repo can perform — someone with that access must check for open orders, stored
-customer or payment data, and any active subscription before switching it off.
+**No online commerce (ADR 0005).** Owner decision (2026-08-21): *"there is no
+online e-commerce — remove it."* No cart, no checkout, no accounts, no payment
+handling, and **no product catalog** — the ~110 tobacco SKU pages and the ~100 chew,
+pouch, vape and liquor listings behind `/tfs` do not come across, and no read-only
+price list replaces them. Tobacco, liquor and food are described in prose on the
+relevant location page. This keeps PCI scope, checkout flows, order state, payment
+secrets, and online age-verification obligations entirely out of the codebase.
+
+Two consequences to handle rather than assume. First, roughly 110 of the legacy
+site's 116 URLs are product pages, so with no catalog to land on they become the
+project's largest single redirect decision — each path needs a destination chosen on
+purpose, not a bulk rule. Second, decommissioning the live store happens inside the
+client's Squarespace account, not this repo: someone with that access must check for
+open orders, stored customer or payment data, and any active subscription before
+switching it off.
 
 **Deliberately not built here.** No loyalty logic (Rewards is a promo page linking
 to a mobile app). No jobs section (Careers is one editable link). No sub-brand
@@ -147,7 +153,7 @@ fuel prices; verified addresses, hours, and phone numbers; Rewards app store lin
 and whether the app is live; the Careers destination URL; the contact form
 destination and spam tolerance; logo vector files; Vercel and Tina Cloud accounts;
 DNS control; which old URLs deserve targeted redirects. Two items previously listed here are now
-decided: the domain split (ADR 0004) and the retirement of Exit 260 e-commerce.
+decided: the domain split (ADR 0004) and the removal of Exit 260 e-commerce (ADR 0005).
 
 **The brand voice is not yet defined.** `CLAUDE.md` requires one consistent voice
 across content merged from three sites, and assigns it to the copy-editor agent,

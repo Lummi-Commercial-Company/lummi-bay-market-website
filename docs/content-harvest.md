@@ -322,19 +322,28 @@ here for provenance; the authoritative homes are named per row.
 | 1 | Diesel — one price or two? | **Two.** One diesel price shared across the three locations; the Exit 260 truck stop posts its own. So four price sets, not three. | `fuel-price-update` |
 | 2 | Rename location one away from "Salish Village"? | **Yes.** It is "Exit 260". Salish Village is never a location name. | `CLAUDE.md`, `location-content-model`, ADR 0005 |
 | 3 | Mini Mart during renovation? | **Reads as the current lcc-lummi.com page reads.** Plain editable content; **a human editor updates it when the store reopens.** No scheduled logic, no auto-expiry. | `location-content-model` |
-| 4 | The 260Smokes catalog? | **Retire the cart, keep the prices.** May be removed entirely after the build, so build it to be deleted. | ADR 0005 |
+| 4 | The 260Smokes catalog? | **No online commerce at all.** No cart, no accounts, no payments, and no product catalog or price list. Tobacco and spirits are described in prose on the location page. | ADR 0005 |
 | 5 | The three fuel discounts? | **Post the base price only.** No calculating, stacking, or personalizing. | `fuel-price-update` |
 | 6 | Which name for location three? | **Fisherman's Cove**, possibly changing to "The Cove" before go-live — so the label lives in data. | `CLAUDE.md`, `location-content-model` |
 
 ### Still open (not among the six)
 
-- **Ethanol-free fuel at Fisherman's Cove.** In the content model, not found on the
-  live site. A boat ramp makes it plausible, not proven. Confirm before launch.
-- **Exit 260 service hours.** Fuel is 24 hours; store, truck stop, liquor and beer
-  each differ and the legacy footer contradicts the pages. Needs the real numbers
-  from staff, per service.
-- **Where eight or nine orphan content areas live** (§8) — for `ux-navigation-architect`.
-- **The LCC address conflict** (§2) — not our page, but worth passing back.
+- **The LCC address conflict** (§2) — not our page, but worth passing back to
+  whoever maintains those sites.
+
+Three that were open here have since been decided (2026-08-21):
+
+- **Ethanol-free at Fisherman's Cove — include it.** It is body copy in the
+  location page, so it can be corrected or removed later without a code change.
+- **Exit 260 hours — trust the page, not the legacy footer.** The page says "Open
+  Daily 24 Hours"; the footer's "Mon-Sun 7AM - 9PM" is a global Squarespace
+  template stamped onto pages that contradict it. Service-specific times that
+  appear *in page copy* still hold: liquor to midnight, beer cave to 2AM, kitchen
+  from 6AM, tenders and hot case from 11AM.
+- **Orphan content keeps its location.** Old page content maps to the new page for
+  the same place — everything on exit260.com becomes Exit 260 page content,
+  `cove-lottery` becomes Cove content. No new nav items; these are sections, not
+  destinations.
 
 ## 10. The questions as originally posed
 

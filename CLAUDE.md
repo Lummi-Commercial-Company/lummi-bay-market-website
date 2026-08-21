@@ -10,7 +10,7 @@ Merge the existing location websites into ONE fast, easy-to-update site for the
 Lummi Bay Market brand — three locations, one site.
 - Sources: exit260.com and lcc-lummi.com's market content → one site. lummibay.com is
   a *destination*, not a source — it currently serves Lummi Bay Marina, which moves to
-  marina.lummibay.com (ADR 0004). Exit 260's e-commerce/cart is retired, not migrated.
+  marina.lummibay.com (ADR 0004). Exit 260's e-commerce is removed, not migrated (ADR 0005).
 - Must-haves: (1) easy content updates by non-technical staff, (2) editable fuel
   prices, (3) exceptional navigation.
 

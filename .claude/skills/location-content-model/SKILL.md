@@ -31,9 +31,24 @@ them: exit260.com's home page says "Open Daily 24 Hours" while its global footer
 stamps "Mon-Sun 7AM - 9PM" onto every page, and lcc-lummi.com's holiday-hours page
 lists **three separate** entries for Exit 260 — store, fuel, and truck stop.
 
+**Decided: trust the page, not the legacy footer.** Where a page states its own
+hours, those are the hours. The footer's "Mon-Sun 7AM - 9PM" is a global Squarespace
+template stamped onto pages that contradict it, and is not evidence of anything.
+
 So `hours` is a list. A location may have any of: `fuel`, `store`, `truckStop`,
 `kitchen`, `liquor`, `beer`, `driveThru`. Never collapse them into one string, and
 never put hours in page markup — staff edit them in the CMS.
+
+## Legacy content keeps its location
+**Decided:** old page content maps to the new page for the same place. Everything on
+exit260.com — services, hot food, tobacco and spirits, the drive-thru, fleet
+accounts, accepted payments, Sasquatch, ratings — becomes **Exit 260** page content.
+`lcc-lummi.com/cove-lottery` becomes **Fisherman's Cove** content. These are
+sections on a location page, not new nav destinations, and the four-item nav does
+not grow to hold them.
+
+Two exceptions, both from ADR 0001: `billboards` and `salishvillage` are LCC, not
+Market, and do not come across at all.
 
 ## The three locations
 
@@ -44,8 +59,8 @@ market is its anchor tenant, not the development. Never use it as a location nam
 
 4839 Rural Avenue, Bellingham WA 98226 · 48.815898, -122.5582847
 C-store 360-778-1894 · Truck stop 360-778-1696
-Hours: fuel 24 hours; store, truck stop, liquor (to midnight) and beer (to 2AM) all
-differ — confirm each with the client before launch.
+Hours: **open 24 hours.** Service times stated in page copy still apply — liquor to
+midnight, beer cave to 2AM, kitchen from 6AM, tenders and hot case from 11AM.
 
 The flagship. 9,800 sq ft. Amenities: 16 fuel pumps; 8 diesel and DEF lanes; EV fast
 chargers; tobacco/vape drive-thru (entrance relocated — approach from Rural Avenue
@@ -88,9 +103,9 @@ before go-live — keep the label in data so that is a one-field edit, not a cod
 Kitchen 6AM–6PM (breakfast 6–11AM, hot case 11AM–6PM). Amenities: fuel +
 convenience store, the Cove Kitchen, boat ramp access, lottery and scratch tickets,
 ICEE. `truckStop: false`.
-`fuelGrades`: regular, diesel, ethanol-free — **confirm ethanol-free before launch**;
-it is in this model but was not found on the live site, and a boat ramp makes it
-plausible rather than proven.
+`fuelGrades`: regular, diesel, ethanol-free. **Decided:** ethanol-free is included.
+It was not found on the legacy site, so it is stated in page body copy where an
+editor can correct or remove it without a code change.
 
 ## Rules
 - Amenity badges/icons are driven by the `amenities` list — don't hand-place them.
