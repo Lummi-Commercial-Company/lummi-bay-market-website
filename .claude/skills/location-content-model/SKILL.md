@@ -39,6 +39,11 @@ So `hours` is a list. A location may have any of: `fuel`, `store`, `truckStop`,
 `kitchen`, `liquor`, `beer`, `driveThru`. Never collapse them into one string, and
 never put hours in page markup — staff edit them in the CMS.
 
+**Format is fixed: `h:mm` with lowercase am/pm.** `6:00am`, `11:00am`, `2:00am`,
+`12:00am`. Never "6 AM", "6am", or "midnight". "24 hours" is not a clock time and
+stays as it is. Label the CMS field with the format so editors match it without
+being told, and validate on save. The full voice rules live in `PRODUCT.md`.
+
 ## Legacy content keeps its location
 **Decided:** old page content maps to the new page for the same place. Everything on
 exit260.com — services, hot food, tobacco and spirits, the drive-thru, fleet

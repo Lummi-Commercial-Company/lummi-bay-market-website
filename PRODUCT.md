@@ -155,9 +155,53 @@ destination and spam tolerance; logo vector files; Vercel and Tina Cloud account
 DNS control; which old URLs deserve targeted redirects. Two items previously listed here are now
 decided: the domain split (ADR 0004) and the removal of Exit 260 e-commerce (ADR 0005).
 
-**The brand voice is not yet defined.** `CLAUDE.md` requires one consistent voice
-across content merged from three sites, and assigns it to the copy-editor agent,
-but no voice has been agreed. Open decision.
+**The brand voice is decided (2026-08-21).** It is the voice already on
+exit260.com, sharpened — not a replacement for it. The harvest
+(`docs/content-harvest.md` §6) found a working voice with four instincts worth
+keeping, and the reference implementation is
+`docs/previews/exit-260-voice-preview.html`.
+
+**What the voice does**
+
+1. **Numbers lead.** 16 pumps. 51 free spots. 8 diesel lanes. 9,800 square feet.
+   200 miles of charge in 15 minutes. Specificity is the personality — a number
+   always beats an adjective, and a number is what the reader came for.
+2. **Orients by drive time, not geography.** "15 minutes before Canada."
+   "4 minutes to Silver Reef." A traveler measures distance in minutes.
+3. **Sentence fragments.** It reads like signage, because it is read at speed.
+4. **Competes out loud, warmly.** "We'll never point you to an 800 number" is kept
+   verbatim; it is the best line on either legacy site.
+5. **Keeps the joke.** Sasquatch is a campaign, a burrito, and a photo page. It is
+   theirs and it is funny. Do not sand it off.
+6. **Shifts register by page, not by whim.** Truck stop is spec-dense; fleet is
+   warm and competitive; the kitchen is playful. One voice, three settings.
+
+**Binding rules**
+
+- **Never hedge.** No "around", "about", "roughly", "approximately", "plenty",
+  "many", "several", "a few". State the fact or leave it out. If the number is
+  unknown, the site says it is unconfirmed — it does not approximate it. Owner
+  instruction: *"Voice should not be lazy or vague."*
+- **Times are always `h:mm` with lowercase am/pm** — `6:00am`, `11:00am`,
+  `2:00am`, `12:00am`. Never "6 AM", never "6am", never "midnight". "24 hours" is
+  not a clock time and stays as it is. This applies to page copy, CMS hours
+  fields, and every price timestamp.
+- **No exclamation marks.** Type hierarchy carries emphasis. The legacy site set
+  "WIN a $500 Fuel Card!" at the same weight as the fuel price; that is the exact
+  failure this rule prevents.
+- **Sentence case** for headings and UI, per `brand-system`.
+- **Never invent a fact to complete a sentence.** An unknown renders as unknown.
+
+**What the voice does not yet do:** it says nothing about being a Lummi Nation
+enterprise — the legacy warmth is generic roadside warmth. That gap belongs on
+`/about`, and any copy written in a Lummi or Coast Salish register must be written
+or approved by Lummi Nation, on the same track as the art. An invented
+"tribal-sounding" voice is the same error as AI-generated formline.
+
+**Why this voice and not a quieter one:** two non-technical editors have to sustain
+it. This voice is sustainable because its hardest rule is *use the real number*,
+which is a research task, not a writing talent. A voice whose personality lived in
+its adjectives would decay by the third edit.
 
 ## Brand Commitments
 
