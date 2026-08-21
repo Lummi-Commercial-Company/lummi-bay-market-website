@@ -28,6 +28,13 @@ ethanol-free fuel.
 **Amenity** — A service offered at a Location (e.g., showers, driver lounge). A café or
 deli, if one exists at a Location, is an Amenity — not a separate brand or site section.
 
+**Fuel Grade** — A product sold at a posted per-unit price. Three exist in scope: regular,
+diesel, and DEF. Midgrade, premium, and ethanol-free are not priced on this site.
+_Avoid_: fuel type, product.
+
+**DEF** — Diesel exhaust fluid. Not a fuel, but posted and priced like one, so it is a
+Fuel Grade. Sold at the Truck Stop only.
+
 **Truck Stop** — The driver-facing facility at the Exit 260 / Salish Village site
 (diesel lanes, driver store, showers, lounge, parking). Summarized on the Exit 260 page
 and detailed on its own dedicated `/truck-stop` page; the two cross-link.
