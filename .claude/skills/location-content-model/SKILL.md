@@ -14,7 +14,9 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
 - `aka`: legacy/alternate name(s)
 - `address`, `city`, `state`, `zip`, `phone`, `hours`
 - `map`: embed or lat/lng
-- `fuelGrades`: which grades this location sells (drives fuel-prices.json)
+- fuel prices are NOT stored here. All eight live in `content/fuel-prices.json`;
+  the grades a place sells are the entries present in its price list (ADR 0004,
+  skill `fuel-price-update`).
 - `amenities`: string list (drives badges/icons — never hand-place per page)
 - `truckStop`: boolean (only exit-260 is true)
 - `hero`: image + alt (mark placeholder if art not final)
@@ -28,20 +30,20 @@ client before launch.)
    Amenities: 24-hr convenience store, ~16 fuel lanes, tobacco & liquor drive-thru,
    quick-serve food, and a separate TRUCK STOP (diesel lanes, driver store, showers,
    lounge, truck parking). truckStop: true.
-   fuelGrades: regular, midgrade, premium, diesel.
 
 2. **mini-mart** — "Lummi Bay Market Mini Mart"; nav "Mini Mart".
    4884 Haxton Way, Ferndale WA 98248 · ~6AM–10PM · 360-380-2049. Next to Silver Reef
    Casino. Amenities: fuel + convenience store. truckStop: false.
-   fuelGrades: regular, diesel.
 
 3. **fishermans-cove** — "Lummi Bay Market at Fisherman's Cove"; nav "Fisherman's Cove";
    aka The Cove. 2570 Lummi View Drive, Bellingham WA 98226 · ~6AM–9PM · 360-758-2448.
    Amenities: fuel + convenience store, the Cove Kitchen, ethanol-free fuel.
-   truckStop: false. fuelGrades: regular, diesel, ethanol-free.
+   truckStop: false.
 
 ## Rules
 - Amenity badges/icons are driven by the `amenities` list — don't hand-place them.
 - Only exit-260 (truckStop: true) shows the Truck Stop summary + links to `/truck-stop`.
 - Keep addresses/hours in data, never in page markup, so staff edit via the CMS.
+- Only regular, diesel and DEF are priced on this site. Midgrade, premium and
+  ethanol-free may remain Amenities, but carry no posted price.
 - The footer "Lummi Commercial Companies" link is global, not per-location.

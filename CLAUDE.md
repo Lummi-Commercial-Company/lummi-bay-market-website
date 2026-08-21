@@ -84,7 +84,7 @@ Note: `/about` still exists as a page — it is reached from the footer, not the
 2. ux-navigation-architect: confirm sitemap + nav.
 3. design-director + frontend-engineer: build the layout shell (header, footer,
    waterline, tokens).
-4. backend-engineer: wire location data + fuel prices + Decap CMS.
+4. backend-engineer: wire location data + fuel prices + TinaCMS (see ADR 0002, 0004).
 
 ## Engineering skills (Matt Pocock)
 General engineering + productivity skills are vendored in `.claude/skills/` alongside
