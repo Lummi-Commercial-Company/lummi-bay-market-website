@@ -95,6 +95,16 @@ Rewards; About; one site-wide contact form. Navigation is locked at four primary
 items — Home · Locations · Truck Stop · Fuel Prices — with About, Rewards, Careers,
 and the Lummi Commercial Companies link in the footer.
 
+**The legacy surface is wider than this IA, deliberately.** As of 2026-08-21,
+exit260.com alone runs Services, TruckStop, Sasquatch, Jobs, Contact, Rewards, Hot
+Food Menu, Fleet Information, Travel Center, Store Selection, Accepted Payment Types,
+Terms, Sitemap, Support — and a working **Cart**, i.e. live e-commerce. The locked
+four-item IA absorbs none of that by default. Every one of those URLs is either a
+redirect target, content folded into a location or truck-stop page, or a deliberate
+retirement, and e-commerce in particular is outside the agreed scope. Resolving this
+list is the content harvest (E4, issue #20) plus the redirect map (S10); the count is
+recorded here so the scope gap is visible now rather than discovered at launch.
+
 **Deliberately not built here.** No loyalty logic (Rewards is a promo page linking
 to a mobile app). No jobs section (Careers is one editable link). No sub-brand
 sections for Café / Marina / Deli — those lockups exist in the brand book but get
@@ -103,9 +113,19 @@ no pages. A café or deli at a location is an amenity, not a section.
 **Technical constraints.** TinaCMS free tier, two editor seats (Team tier at
 $29/mo covers five if staff grows). No granular roles, no built-in media library,
 no document version history — accepted, with git history as the audit trail.
-Static-first, so no content database to run or back up. lummibay.com is canonical;
+Static-first, so no content database to run or back up. lummibay.com is named canonical;
 exit260.com 301-redirects to the Exit 260 location page; lcc-lummi.com is left
 untouched (ADR 0001).
+
+**Unresolved domain collision.** `CLAUDE.md` lists lummibay.com as both a source site
+to merge and the canonical domain, but as of 2026-08-21 that domain serves **Lummi Bay
+Marina** — a live boat and dry-dock storage business on third-party storage software,
+with its own phone, email, office hours, paying storage customers, and a nav that links
+*out* to lcc-lummi.com/cove for the Market. It is not Market content awaiting a merge.
+Marina is a known sub-brand that `CONTEXT.md` puts out of scope as a site section, so
+taking this domain means displacing an operating business's site. Needs an owner
+decision before any redirect or DNS work (E5, S10): move the marina, use a subdomain,
+or choose a different canonical host.
 
 **Terminology** is fixed in `CONTEXT.md` and is binding on copy: Location, Amenity,
 Truck Stop, Rewards, Sub-brand, Salish Village, LCC. Notably, "Salish Village" is a
@@ -115,7 +135,9 @@ development, not a store; the store there is "Exit 260".
 fuel prices; verified addresses, hours, and phone numbers; Rewards app store links
 and whether the app is live; the Careers destination URL; the contact form
 destination and spam tolerance; logo vector files; Vercel and Tina Cloud accounts;
-DNS control; which old URLs deserve targeted redirects.
+DNS control; which old URLs deserve targeted redirects. Additionally: whether lummibay.com can
+become the Market's canonical domain given the marina occupying it, and which legacy
+exit260.com surfaces (notably the cart) are retired versus carried over.
 
 **The brand voice is not yet defined.** `CLAUDE.md` requires one consistent voice
 across content merged from three sites, and assigns it to the copy-editor agent,
@@ -135,10 +157,11 @@ duplicated, per `CLAUDE.md`.
   navy-dominant, teal and cedar as accents only, Space Grotesk plus Inter. Do not
   invent alternatives.
 - **The waterline is the brand's recurring connective signature**, used on every
-  page. *Open conflict:* `brand-system` defines it as `--lb-teal` while
-  `pnw-tribal-art` defines it as `--lb-waterline` → `--lb-blue-900`, two tokens
-  absent from the approved palette. Both skills are marked locked, so this needs an
-  owner decision; it is scoped to slice S0 (issue #6) and is still unresolved.
+  page. Owner decision (2026-08-21): it gradients `--lb-teal` → `--lb-navy`, both
+  approved `brand-system` tokens. `pnw-tribal-art` previously named two tokens absent
+  from the palette; it has been corrected, and `brand-system` is now the project's
+  single color vocabulary. Taken as a working decision, revisitable if the shoot or
+  the final art argues otherwise — but never by reintroducing a second token name.
 - **Cultural guardrail.** Coast Salish formline is specific to Lummi Nation, and AI
   or stock imitations risk being inaccurate or appropriative. Build-time motifs are
   representative placeholders only, each marked
@@ -159,15 +182,32 @@ PR #5); skills `brand-system`, `pnw-tribal-art`, `location-content-model`,
 E1–E10.
 
 **Present but untrustworthy — must carry a confirmation marker:**
-- Addresses, hours, and phone numbers in `location-content-model` are **scraped
-  from lcc-lummi.com and unverified** (E6). Ship only with `TODO: client confirm`.
-- Fuel prices in `fuel-price-update` are **2018 sample values**, not real prices.
-  They must never reach production as current.
+- Addresses, hours, and phone numbers in `location-content-model` are **scraped from
+  lcc-lummi.com and unverified** (E6). Ship only with `TODO: client confirm`. Owner
+  confirms the intended home: each location's own page content
+  (`content/locations/<location>.md`), edited through the CMS, with the footer and
+  any JSON-LD reading those same fields rather than retyping them.
+- Fuel prices in `fuel-price-update` are **illustrative placeholders**, not real
+  prices: the skill's example JSON is stamped `"updated": "2018-05-01"` with values
+  like regular 3.79 and diesel 4.29. They exist to show the file's shape and must
+  never reach production as current. For scale, `exit260.com` currently posts regular
+  at 4.65 and diesel at 5.79 — as sign images, not machine-readable text, so those
+  are a sanity check on magnitude, not a source to copy. Real launch numbers come
+  from the client (E6).
 
 **Not on hand, and must not be fabricated:**
-- **Photography.** None exists today. The owner confirmed a shoot is planned before
-  launch, so the design must carry its full visual load without photos while
-  reserving correctly specified image slots the shoot can fill without a redesign.
+- **Photography.** The owner confirms the legacy sites' imagery is theirs to reuse,
+  and it is the working image source — especially for templating, so layouts are
+  built against real photos rather than grey boxes. `exit260.com` is the substantive
+  library: it runs on Squarespace and serves its images from
+  `images.squarespace-cdn.com/content/v1/5e86582913617e5d37eb1527/`, covering the
+  truck stop, fuel-price signage, hot food, DEF, and driver-service icons, with more
+  on `/services`, `/truck`, `/hotfood`, and `/tfs`. A dedicated shoot is still planned
+  before launch, so treat legacy photos as the template layer and keep image slots
+  specified so better frames drop in without a redesign. Two limits: the legacy
+  library is Exit 260-weighted, so Mini Mart and Fisherman's Cove coverage must be
+  confirmed rather than assumed; and reuse permission is not the same as a model or
+  property release, so any recognizable person needs checking before publication.
 - Logo vector files (E1).
 - Authentic or approved Lummi art (E7).
 - Rewards app screenshots and store links (E8).
