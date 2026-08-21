@@ -5,7 +5,8 @@ description: The safe, exact procedure for changing fuel prices at any of the th
 
 # Fuel Price Update
 
-Model and rationale: **ADR 0004**. Terms (Fuel Price, Fuel Grade, DEF, Truck Stop): `CONTEXT.md`.
+Storage and rationale: **ADR 0004**. Display and interaction: **ADR 0005**.
+Terms (Fuel Price, Fuel Grade, DEF, Truck Stop): `CONTEXT.md`.
 
 ## Source of prices (launch = MANUAL entry)
 Single source: `content/fuel-prices.json`, a TinaCMS collection with `ui.global: true` so it
@@ -54,10 +55,15 @@ Rules that hold no matter who is editing:
 - Changing all three Locations means writing three values. There is no shortcut field.
 
 ## How prices are displayed
-One component, two states. Every page shows it exactly once.
+One component everywhere. Full contract and the reasoning: **ADR 0005**.
 
-**Collapsed** — every page except Home. Shows **two** groups: the page's own Location (Exit 260
-everywhere else, and on `/truck-stop`), then the Truck Stop, always:
+**Shape** — a card, **never wider than 400px**, in every placement and at every width. On a
+375px phone that reads as full-bleed; it is the same rule, not a second layout.
+
+**Placement** — the **top-right corner**, phones and desktop alike.
+
+**Collapsed** — two groups with grade column headers: the page's own Location (Exit 260 on
+every non-Location page), then the Truck Stop, always.
 
 ```
                      regular   diesel
@@ -67,36 +73,62 @@ Exit 260              3.79      4.29
 Truck Stop            4.55      3.29
 ```
 
-The Truck Stop is always present because drivers are a distinct audience and diesel + DEF is
-what they came for. Affordance reads "View all prices", not "Tap" — it is a click on desktop.
+On `/truck-stop` the order reverses — Truck Stop first, so diesel and DEF lead for drivers.
 
-On phones, collapse each group to one line so the strip stays two lines rather than four:
-`Exit 260 · Reg 3.79 · Diesel 4.29`. Wide screens use the column-header layout above.
-
-**Expanded** — and the default state on Home. All four places, same two-group shape:
+**Expanded** — all four places, same two-group shape, same column headers:
 
 ```
                      regular   diesel
 Exit 260              3.79      4.29
 Mini Mart             3.79      4.29
-Fisherman's Cove      3.79      4.29
+Fisherman's Cove      3.85      4.29
 
                      diesel     def
 Truck Stop            4.55      3.29
 ```
 
 - Always all four. No "only show them if they differ" — a conditional layout has no answer for
-  partly-different prices, and it changes shape day to day.
-- Collapsed and expanded differ by exactly two rows. If that stops earning the interaction,
-  drop the toggle and always render expanded.
-- Use a native `<details>`/`<summary>` for the toggle: expand, collapse and keyboard access with
-  **zero JavaScript**, keeping the strip a static server-rendered component on every page.
-- Prices use `--lb-navy-deep` so they stay a recognizable cue (skill `brand-system`).
+  partly-different prices and changes shape day to day.
+- Keep the column headers in **both** states. They are what makes a Location priced a few cents
+  apart visible at a glance; dropping them collapsed would make the two states two layouts.
+- Prices use `--lb-navy-deep`, labels `--lb-navy` (skill `brand-system`).
+- Place labels get `text-overflow: ellipsis`, never wrapping. A wrapped "Fisherman's Cove"
+  breaks row alignment and the columns with it.
+
+**Every block collapses and expands.** There is no "always expanded" variant.
+
+**Opening — two mechanisms, one rule.** *A panel already open on arrival cannot overlay.*
+
+| the block… | opens as | why |
+|---|---|---|
+| loads collapsed (every page but Home) | HTML **popover** (`popover="auto"`), anchored over the block | overlays the page; outside-click and Escape dismiss it with **zero JavaScript** |
+| loads expanded (Home, `/fuel-prices`) | plain in-flow disclosure | an overlay drawn on arrival would cover the hero before anyone touched it |
+
+The popover covers the block rather than opening below it, so the two collapsed rows are not
+repeated inside the panel. It lives in the browser's top layer, so the block's own box never
+changes and there is no collapsed height to reserve.
+
+**Stacking order** (ADR 0005, deliberately not in the locked `brand-system`):
+waterline `1` · block `40` · panel `50` · header and nav `60`. Nav outranks the panel — one is
+navigation, the other is information.
+
+**Accessibility** — wrap the block in `<aside aria-label="Fuel prices">` so it is one skippable
+landmark, and keep the control a real `<button>`. It sits above the page's own heading on every
+page; a screen-reader user meets it on every navigation.
+
+**Known cost of the corner placement**, accepted with eyes open: at 375px the card is ~353px
+wide and floats over the top of the page content **shut as well as open**, so it obscures the
+page's own headline persistently.
 
 ## Safety checks (test before done — do not assert)
 - JSON parses (no trailing comma).
 - All four places present; every grade shown on a page exists in the data.
 - Prices render collapsed on a Location page, on `/truck-stop`, and on a non-Location page;
-  expanded on Home.
+  expanded on Home. `/truck-stop` shows the Truck Stop first.
+- The popover dismisses on outside-click **and** on Escape. Check in Safari and Firefox, not
+  only Chromium — CSS anchor positioning is the project's one dependency on a newer feature,
+  and the corner placement is what requires it (ADR 0005).
+- Opening the popover moves page content by **zero pixels**. Assert it, do not eyeball it.
+- At 200% text the expanded panel still fits the screen, or scrolls inside itself.
 - With the checkbox checked, saving writes all three Locations — and leaves the Truck Stop alone.
 - The strip reads on a 375px-wide screen without horizontal scroll.

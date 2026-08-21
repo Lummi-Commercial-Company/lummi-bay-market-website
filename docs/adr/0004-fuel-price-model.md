@@ -2,6 +2,8 @@
 
 Status: Accepted
 
+How these prices are *shown* is ADR 0005. This ADR covers storage only.
+
 ## Context
 Four places post fuel prices: the three Locations and the Truck Stop (see `CONTEXT.md`).
 Eight prices in total — regular and diesel at each Location, diesel and DEF at the Truck
