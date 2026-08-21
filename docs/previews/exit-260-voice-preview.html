@@ -1,0 +1,376 @@
+<title>Exit 260 Voice Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Tokens are the LOCKED brand-system palette. Do not add colors or faces. */
+:root{
+  --lb-navy:#1C4E8F; --lb-navy-deep:#14396B; --lb-teal:#0FB5C4; --lb-cedar:#C9772E;
+  --lb-ground:#FBF9F4; --lb-paper:#FFFFFF; --lb-ink:#2A2820; --lb-bone:#F5F1E8;
+  --surface:var(--lb-ground); --card:var(--lb-paper); --text:var(--lb-ink);
+  --heading:var(--lb-navy); --price:var(--lb-navy-deep); --band:var(--lb-navy);
+  --band-text:var(--lb-bone); --rule:#E3DED2; --muted:#5E5A4E; --accent:var(--lb-teal);
+  --radius:8px; --radius-card:12px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --surface:#0E1B2B; --card:#152435; --text:#EDE9DE; --heading:#8FC0F0;
+    --price:#BFDCFA; --band:#0B1624; --band-text:var(--lb-bone);
+    --rule:#26384C; --muted:#A9A695; --accent:#3FD3E0;
+  }
+}
+:root[data-theme="dark"]{
+  --surface:#0E1B2B; --card:#152435; --text:#EDE9DE; --heading:#8FC0F0;
+  --price:#BFDCFA; --band:#0B1624; --band-text:var(--lb-bone);
+  --rule:#26384C; --muted:#A9A695; --accent:#3FD3E0;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--text);
+  font:400 1rem/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  -webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:"Space Grotesk",Inter,system-ui,sans-serif;font-weight:700;
+  line-height:1.1;color:var(--heading);margin:0;text-wrap:balance}
+h1{font-size:clamp(2rem,7vw,3rem)}
+h2{font-size:clamp(1.5rem,4.5vw,1.75rem)}
+h3{font-size:1.125rem}
+p{margin:0}
+a{color:var(--heading)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.stack{display:flex;flex-direction:column}
+main>section{padding:48px 0;border-top:1px solid var(--rule)}
+main>section:first-child{border-top:0}
+.eyebrow{font-size:.875rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted)}
+
+/* header */
+header{background:var(--band);color:var(--band-text)}
+.bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 0}
+/* TODO: replace with the approved Market lockup vector. Logo art is locked — never redrawn. */
+.logo{border:1px dashed rgba(245,241,232,.5);border-radius:var(--radius);
+  padding:8px 12px;font-family:"Space Grotesk",sans-serif;font-weight:700;
+  font-size:.875rem;letter-spacing:.04em;color:var(--band-text)}
+nav ul{display:flex;gap:4px;flex-wrap:wrap;list-style:none;margin:0;padding:0}
+nav a{display:block;padding:8px 12px;border-radius:var(--radius);text-decoration:none;
+  color:var(--band-text);font-weight:500;font-size:.9375rem}
+nav a:hover{background:rgba(245,241,232,.12)}
+nav a[aria-current="page"]{background:rgba(245,241,232,.16);font-weight:600}
+.util{margin-left:auto}
+.util a{border:1px solid rgba(245,241,232,.45)}
+
+/* hero */
+.hero{padding:32px 0 48px}
+.hero .stack{gap:16px}
+.open{display:inline-flex;align-items:center;gap:8px;align-self:start;
+  background:var(--accent);color:#06232B;font-weight:600;font-size:.875rem;
+  padding:6px 12px;border-radius:999px}
+.orient{display:flex;flex-wrap:wrap;gap:8px 24px;color:var(--muted);font-size:1.125rem}
+
+/* prices */
+.board{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:720px){.board{grid-template-columns:2fr 1fr}}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:var(--radius-card);
+  padding:24px}
+.card h3{margin-bottom:4px}
+.card .sub{color:var(--muted);font-size:.875rem;margin-bottom:16px}
+.grades{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));
+  list-style:none;margin:0;padding:0}
+.grade{display:flex;flex-direction:column;gap:4px}
+.grade .g{font-size:.8125rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted)}
+.grade .n{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:2.25rem;
+  line-height:1;color:var(--price);font-variant-numeric:tabular-nums}
+.grade .n.none{font-size:1.375rem;color:var(--muted);font-family:Inter,sans-serif;
+  font-weight:500}
+.stamp{margin-top:16px;padding-top:16px;border-top:1px solid var(--rule);
+  color:var(--muted);font-size:.875rem}
+
+/* waterline: teal -> navy, the brand signature. TODO: replace with approved Lummi art. */
+.waterline{display:block;width:100%;height:40px}
+
+/* generic */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.lede{font-size:1.375rem;line-height:1.4;max-width:34ch}
+.body{max-width:65ch;color:var(--text)}
+.specs{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.specs li{display:flex;gap:12px;align-items:baseline}
+.specs b{font-family:"Space Grotesk",sans-serif;font-size:1.375rem;color:var(--price);
+  font-variant-numeric:tabular-nums;min-width:3.5ch}
+.hours{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.hours li{display:flex;justify-content:space-between;gap:16px;padding:12px 0;
+  border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.hours li:last-child{border-bottom:0}
+.hours .svc{font-weight:600}
+.hours .val{font-variant-numeric:tabular-nums;text-align:right}
+.todo{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--lb-cedar);border:1px solid var(--lb-cedar);
+  border-radius:999px;padding:2px 8px;margin-left:8px}
+.cta{display:inline-flex;align-self:start;background:var(--lb-navy);color:var(--lb-bone);
+  text-decoration:none;font-weight:600;padding:12px 24px;border-radius:var(--radius)}
+.cta:hover{background:var(--lb-navy-deep)}
+:root[data-theme="dark"] .cta,
+:root:not([data-theme="light"]) .cta{color:var(--lb-bone)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.chips li{border:1px solid var(--rule);border-radius:999px;padding:6px 12px;
+  font-size:.875rem;background:var(--card)}
+.rate{display:flex;gap:32px;flex-wrap:wrap;list-style:none;margin:0;padding:0}
+.rate .n{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:1.75rem;
+  color:var(--price);font-variant-numeric:tabular-nums}
+.rate .src{color:var(--muted);font-size:.875rem}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9375rem}
+th,td{text-align:left;padding:12px 16px 12px 0;border-bottom:1px solid var(--rule);
+  white-space:nowrap}
+th{font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td.code{font-variant-numeric:tabular-nums}
+footer{background:var(--band);color:var(--band-text);padding:48px 0 64px}
+footer a{color:var(--band-text)}
+footer h3{color:var(--band-text)}
+.fgrid{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.fgrid ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.note{background:var(--card);border:1px solid var(--lb-cedar);border-left-width:4px;
+  border-radius:var(--radius);padding:16px;font-size:.9375rem;max-width:65ch}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header>
+  <div class="wrap bar">
+    <span class="logo">Market lockup — placeholder</span>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#" aria-current="page">Locations</a></li>
+        <li><a href="#truck">Truck Stop</a></li>
+        <li><a href="#fuel">Fuel Prices</a></li>
+      </ul>
+    </nav>
+    <div class="util"><nav aria-label="Rewards"><ul><li><a href="#">Rewards</a></li></ul></nav></div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap stack">
+      <p class="eyebrow">Lummi Bay Market</p>
+      <h1>Exit 260</h1>
+      <span class="open">Open 24 hours</span>
+      <p class="orient"><span>I-5 Exit 260</span><span>15 minutes before Canada</span><span>4 minutes to Silver Reef</span></p>
+    </div>
+  </section>
+
+  <section id="fuel">
+    <div class="wrap stack" style="gap:24px">
+      <h2>Today's fuel</h2>
+      <div class="board">
+        <div class="card">
+          <h3>Store and auto lanes</h3>
+          <p class="sub">16 pumps</p>
+          <ul class="grades">
+            <li class="grade"><span class="g">Regular</span><span class="n">4.65</span></li>
+            <li class="grade"><span class="g">Midgrade</span><span class="n none">Not posted</span></li>
+            <li class="grade"><span class="g">Premium</span><span class="n none">Not posted</span></li>
+            <li class="grade"><span class="g">Diesel</span><span class="n">5.79</span></li>
+          </ul>
+          <p class="stamp">Updated today, 6:10 AM</p>
+        </div>
+        <div class="card">
+          <h3>Truck stop lanes</h3>
+          <p class="sub">8 diesel and DEF lanes — priced separately</p>
+          <ul class="grades">
+            <li class="grade"><span class="g">Diesel</span><span class="n">5.65</span></li>
+            <li class="grade"><span class="g">DEF</span><span class="n">2.99</span></li>
+          </ul>
+          <p class="stamp">Updated today, 6:10 AM</p>
+        </div>
+      </div>
+      <p class="body" style="color:var(--muted);font-size:.9375rem">Posted prices. Tribal, Rewards
+      and Silver Reef discounts are applied at the pump, not shown here.</p>
+    </div>
+  </section>
+
+  <svg class="waterline" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <defs><linearGradient id="wl" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0FB5C4"/><stop offset="1" stop-color="#1C4E8F"/>
+    </linearGradient></defs>
+    <path fill="url(#wl)" d="M0 22 C 150 4 250 40 400 22 C 550 4 650 40 800 22 C 950 4 1050 40 1200 22 L1200 40 L0 40 Z"/>
+  </svg>
+
+  <section id="truck">
+    <div class="wrap stack" style="gap:24px">
+      <p class="eyebrow">Truck stop</p>
+      <h2>Park here. Shower here. Sleep here.</h2>
+      <ul class="specs">
+        <li><b>51</b><span>free overnight spots. Check in at the fuel desk.</span></li>
+        <li><b>8</b><span>diesel and DEF lanes, separate from the car pumps.</span></li>
+      </ul>
+      <ul class="chips">
+        <li>Showers</li><li>Laundry</li><li>Wi-Fi</li><li>Driver store</li>
+        <li>Document scanning</li><li>Truck parts</li><li>RV dump station</li>
+      </ul>
+      <a class="cta" href="#">Everything at the truck stop</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap stack" style="gap:24px">
+      <p class="eyebrow">Fleet accounts</p>
+      <h2>We'll never point you to an 800 number.</h2>
+      <p class="lede">Billing questions get answered by the team on site.</p>
+      <p class="body">A Lummi Bay Market house account bills you directly, so you're not
+      spending your lines of credit on fuel. Invoicing on your schedule, on your terms.</p>
+      <div class="scroll">
+        <table>
+          <caption class="sr-only" style="position:absolute;left:-9999px">Fleet card station codes</caption>
+          <thead><tr><th scope="col">Fleet card</th><th scope="col">Station code</th></tr></thead>
+          <tbody>
+            <tr><td>Comdata</td><td class="code">WA0311</td></tr>
+            <tr><td>EFS</td><td class="code">2974</td></tr>
+            <tr><td>FleetOne</td><td class="code">541740</td></tr>
+            <tr><td>FuelMan</td><td class="code">542190</td></tr>
+            <tr><td>MultiService</td><td class="code">97975</td></tr>
+            <tr><td>T-Chek</td><td class="code">44916</td></tr>
+            <tr><td>TCH</td><td class="code">541740</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="body" style="color:var(--muted);font-size:.9375rem">Also accepted: Voyager, Wex,
+      Visa, Mastercard, Amex, Discover, debit, Apple Pay, EBT, and cash.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap stack" style="gap:24px">
+      <p class="eyebrow">Kitchen</p>
+      <h2>Breakfast from 6. Tenders from 11.</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Breakfast</h3>
+          <p class="sub">From 6 AM</p>
+          <p>Biscuits and gravy. Biscuit, muffin and waffle sandwiches. And the famous
+          Sasquatch Burritos.</p>
+        </div>
+        <div class="card">
+          <h3>Chicken tenders</h3>
+          <p class="sub">From 11 AM</p>
+          <p>1 piece to 25. Combos come with a honey butter biscuit. Sides are mac and
+          cheese, mashed potatoes, or JoJos.</p>
+        </div>
+        <div class="card">
+          <h3>Hot case</h3>
+          <p class="sub">From 11 AM</p>
+          <p>Corndogs, burritos, and the classics. Piroshky Piroshky bakery on the counter.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap stack" style="gap:24px">
+      <h2>9,800 square feet of store</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Tobacco and spirits</h3>
+          <p>Around 100 kinds of cigarettes. Over 100 chew blends. Vape and pouches.
+          More than 500 liquor choices, plenty of wine under $20, and a beer cave worth
+          the walk. Liquor until midnight, beer until 2 AM.</p>
+        </div>
+        <div class="card">
+          <h3>Drive-thru</h3>
+          <p>Smokes, vape, chew and pouches without leaving the cab.
+          <strong>The entrance moved.</strong> Drive past the main entrance, then turn
+          right directly off Rural Avenue.</p>
+        </div>
+        <div class="card">
+          <h3>EV charging</h3>
+          <p>Fast chargers on site. 200 miles of charge in about 15 minutes — roughly a
+          tenders combo and a walk around the store.</p>
+        </div>
+        <div class="card">
+          <h3>Also inside</h3>
+          <p>ICEE, ice by the bag, lottery and scratch tickets, ATM, and party supplies
+          for whatever you're driving to.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap stack" style="gap:24px">
+      <h2>Hours, by what you came for</h2>
+      <ul class="hours">
+        <li><span class="svc">Fuel</span><span class="val">24 hours</span></li>
+        <li><span class="svc">Store</span><span class="val">24 hours</span></li>
+        <li><span class="svc">Kitchen</span><span class="val">Breakfast from 6 AM · hot food from 11 AM</span></li>
+        <li><span class="svc">Liquor and wine</span><span class="val">Until midnight</span></li>
+        <li><span class="svc">Beer cave</span><span class="val">Until 2 AM</span></li>
+        <li><span class="svc">Truck stop <span class="todo">Confirm</span></span><span class="val">Not yet confirmed</span></li>
+        <li><span class="svc">Drive-thru <span class="todo">Confirm</span></span><span class="val">Not yet confirmed</span></li>
+      </ul>
+      <p class="note"><strong>Why two rows say "Confirm":</strong> the legacy site's footer
+      claimed 7 AM–9 PM on every page, including the pages that said 24 hours. Rather than
+      pick one, unverified hours show as unverified until staff supply them. Nothing on this
+      site is invented.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap stack" style="gap:24px">
+      <h2>Find us</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Address</h3>
+          <p>4839 Rural Avenue<br>Bellingham, WA 98226</p>
+        </div>
+        <div class="card">
+          <h3>Store</h3>
+          <p><a href="tel:+13607781894">360-778-1894</a></p>
+        </div>
+        <div class="card">
+          <h3>Truck stop</h3>
+          <p><a href="tel:+13607781696">360-778-1696</a></p>
+        </div>
+      </div>
+      <ul class="rate">
+        <li><div class="n">4.7</div><div class="src">GasBuddy</div></li>
+        <li><div class="n">4.6</div><div class="src">Trucker Path</div></li>
+        <li><div class="n">4.4</div><div class="src">Google</div></li>
+        <li><div class="n">2024</div><div class="src">Best One-Stop Shop, <em>Bellingham Alive</em></div></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<svg class="waterline" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="wl2" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#0FB5C4"/><stop offset="1" stop-color="#1C4E8F"/>
+  </linearGradient></defs>
+  <path fill="url(#wl2)" d="M0 22 C 150 4 250 40 400 22 C 550 4 650 40 800 22 C 950 4 1050 40 1200 22 L1200 40 L0 40 Z"/>
+</svg>
+
+<footer>
+  <div class="wrap fgrid">
+    <div>
+      <h3>Locations</h3>
+      <ul>
+        <li><a href="#">Exit 260</a></li>
+        <li><a href="#">Mini Mart</a></li>
+        <li><a href="#">Fisherman's Cove</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>More</h3>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Rewards</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Lummi Bay Market</h3>
+      <ul>
+        <li><a href="#">Lummi Commercial Companies</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
