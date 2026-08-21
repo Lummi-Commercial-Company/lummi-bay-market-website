@@ -32,12 +32,18 @@ deli, if one exists at a Location, is an Amenity — not a separate brand or sit
 diesel, and DEF. Midgrade, premium, and ethanol-free are not priced on this site.
 _Avoid_: fuel type, product.
 
+**Fuel Price** — A posted price for one Fuel Grade at one place. Four places post prices:
+the three Locations and the Truck Stop. The three Locations may be priced together or
+separately; the Truck Stop is always priced on its own.
+_Avoid_: gas price, pump price, rate.
+
 **DEF** — Diesel exhaust fluid. Not a fuel, but posted and priced like one, so it is a
 Fuel Grade. Sold at the Truck Stop only.
 
 **Truck Stop** — The driver-facing facility at the Exit 260 / Salish Village site
-(diesel lanes, driver store, showers, lounge, parking). Summarized on the Exit 260 page
-and detailed on its own dedicated `/truck-stop` page; the two cross-link.
+(diesel lanes, driver store, showers, lounge, parking). Not a Location, but it posts its
+own Fuel Prices — diesel and DEF — independently of the three Locations. Summarized on the
+Exit 260 page and detailed on its own dedicated `/truck-stop` page; the two cross-link.
 
 **Rewards** — The Lummi Bay Market loyalty program, delivered via a mobile app. On this
 site it is a promo page (`/rewards`) that pitches the app and links to the download —
