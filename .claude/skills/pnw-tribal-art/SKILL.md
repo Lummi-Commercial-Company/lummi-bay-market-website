@@ -16,11 +16,16 @@ inaccurate or appropriative.
 ## Motif library (subjects for the build)
 Echo the logo's world: canoe + paddle (already in the logo), eagle, salmon, orca
 (killer whale), crab, and moving water.
-- **Waterline** — the signature. A horizontal blue wave band (using `--lb-waterline`)
+- **Waterline** — the signature. A horizontal blue wave band (using `--lb-teal`)
   separating sections, echoing the brand book's cyan wave. This is the theme's anchor.
 - **Paddle** — dividers, list markers, scroll accents (never alter the logo's paddle).
 - **Salmon / orca / crab / eagle** — spot illustrations, section icons, empty-state
   art, footer band.
+
+## Colour comes from the locked palette
+Every colour here is a token defined in skill `brand-system`, which is LOCKED. Never invent
+a token. In particular the waterline is `--lb-teal` fading to `--lb-navy`; `--lb-navy-deep`
+is reserved for fuel prices and emphasis, so it is not available for decoration.
 
 ## Usage rules
 - Style: simple, flat, 1–2 colors max (blue + one wood tone). Clean, not busy.
@@ -30,6 +35,7 @@ Echo the logo's world: canoe + paddle (already in the logo), eagle, salmon, orca
 - One "hero" motif per page max; the waterline is the connective tissue between them.
 
 ## Waterline component (reusable)
-Build one `<Waterline />` React component: an SVG wave band, blue gradient
-(`--lb-waterline` → `--lb-blue-900`), used between sections and above the footer.
+Build one `<Waterline />` React component: an SVG wave band, gradient
+`--lb-teal` → `--lb-navy`, used between sections and above the footer. It takes no
+colour props — the token layer owns colour, so every waterline on the site matches.
 Every page uses it so the brand feels consistent.
