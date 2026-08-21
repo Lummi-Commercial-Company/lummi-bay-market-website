@@ -98,17 +98,27 @@ and the Lummi Commercial Companies link in the footer.
 **The legacy surface is wider than this IA, deliberately.** As of 2026-08-21,
 exit260.com alone runs Services, TruckStop, Sasquatch, Jobs, Contact, Rewards, Hot
 Food Menu, Fleet Information, Travel Center, Store Selection, Accepted Payment Types,
-Terms, Sitemap, Support — and a working **Cart**, i.e. live e-commerce. The locked
-four-item IA absorbs none of that by default. Every one of those URLs is either a
-redirect target, content folded into a location or truck-stop page, or a deliberate
-retirement, and e-commerce in particular is outside the agreed scope. Resolving this
-list is the content harvest (E4, issue #20) plus the redirect map (S10); the count is
-recorded here so the scope gap is visible now rather than discovered at launch.
+Terms, Sitemap, Support — and a working cart. The locked four-item IA absorbs none of
+that by default. Every one of those URLs must end as a redirect target, content folded
+into a location or truck-stop page, or a deliberate retirement. Resolving the list is
+the content harvest (E4, issue #20) plus the redirect map (S10); the count is recorded
+here so the scope gap is visible now rather than discovered at launch.
+
+**E-commerce is retired, not migrated.** Owner decision (2026-08-21): the Exit 260
+cart and online-ordering surface do not carry over. The new site sells nothing and
+processes no payments — which also keeps PCI scope, checkout flows, order state, and
+payment secrets entirely out of this codebase. Consequences to handle rather than
+assume: cart, checkout, and product URLs need 301s to the nearest useful page (the
+relevant location or the hot-food content) instead of 404s; and decommissioning the
+live store is an action inside the client's Squarespace account, not something this
+repo can perform — someone with that access must check for open orders, stored
+customer or payment data, and any active subscription before switching it off.
 
 **Deliberately not built here.** No loyalty logic (Rewards is a promo page linking
 to a mobile app). No jobs section (Careers is one editable link). No sub-brand
 sections for Café / Marina / Deli — those lockups exist in the brand book but get
-no pages. A café or deli at a location is an amenity, not a section.
+no pages. A café or deli at a location is an amenity, not a section. **No commerce
+of any kind:** no cart, no checkout, no online ordering, no payment handling.
 
 **Technical constraints.** TinaCMS free tier, two editor seats (Team tier at
 $29/mo covers five if staff grows). No granular roles, no built-in media library,
@@ -117,15 +127,16 @@ Static-first, so no content database to run or back up. lummibay.com is named ca
 exit260.com 301-redirects to the Exit 260 location page; lcc-lummi.com is left
 untouched (ADR 0001).
 
-**Unresolved domain collision.** `CLAUDE.md` lists lummibay.com as both a source site
-to merge and the canonical domain, but as of 2026-08-21 that domain serves **Lummi Bay
+**Domain split (ADR 0004).** lummibay.com was found to be serving **Lummi Bay
 Marina** — a live boat and dry-dock storage business on third-party storage software,
-with its own phone, email, office hours, paying storage customers, and a nav that links
-*out* to lcc-lummi.com/cove for the Market. It is not Market content awaiting a merge.
-Marina is a known sub-brand that `CONTEXT.md` puts out of scope as a site section, so
-taking this domain means displacing an operating business's site. Needs an owner
-decision before any redirect or DNS work (E5, S10): move the marina, use a subdomain,
-or choose a different canonical host.
+with paying customers and its own rent/support/map pages — not Market content awaiting
+a merge. Owner decision (2026-08-21): the marina moves to **marina.lummibay.com** and
+the Market takes the **lummibay.com** apex as originally specified. Marina stays out of
+scope as a section of this site; only its address changes. Two obligations follow, and
+both are recorded in ADR 0004: the marina's storage-software vendor must support a
+custom domain with TLS, and the subdomain must be verified live *before* the apex
+flips, or paying customers lose their rental and payment pages. The marina's old apex
+paths need path-preserving 301s into the S10 redirect map.
 
 **Terminology** is fixed in `CONTEXT.md` and is binding on copy: Location, Amenity,
 Truck Stop, Rewards, Sub-brand, Salish Village, LCC. Notably, "Salish Village" is a
@@ -135,9 +146,8 @@ development, not a store; the store there is "Exit 260".
 fuel prices; verified addresses, hours, and phone numbers; Rewards app store links
 and whether the app is live; the Careers destination URL; the contact form
 destination and spam tolerance; logo vector files; Vercel and Tina Cloud accounts;
-DNS control; which old URLs deserve targeted redirects. Additionally: whether lummibay.com can
-become the Market's canonical domain given the marina occupying it, and which legacy
-exit260.com surfaces (notably the cart) are retired versus carried over.
+DNS control; which old URLs deserve targeted redirects. Two items previously listed here are now
+decided: the domain split (ADR 0004) and the retirement of Exit 260 e-commerce.
 
 **The brand voice is not yet defined.** `CLAUDE.md` requires one consistent voice
 across content merged from three sites, and assigns it to the copy-editor agent,
@@ -175,7 +185,7 @@ duplicated, per `CLAUDE.md`.
 
 ## Evidence on Hand
 
-**Exists in the repo:** `CONTEXT.md` (confirmed glossary); three ADRs in
+**Exists in the repo:** `CONTEXT.md` (confirmed glossary); four ADRs in
 `docs/adr/`; the slice-based build plan (`docs/build-plan.md`, currently unmerged in
 PR #5); skills `brand-system`, `pnw-tribal-art`, `location-content-model`,
 `fuel-price-update`; a 21-issue backlog covering slices S0–S10 and enabling items
@@ -211,7 +221,9 @@ E1–E10.
 - Logo vector files (E1).
 - Authentic or approved Lummi art (E7).
 - Rewards app screenshots and store links (E8).
-- Content from the three source sites — not yet harvested (E4, issue #20).
+- Content from the source sites — not yet harvested (E4, issue #20). The real sources
+  are exit260.com and lcc-lummi.com's market/location pages (the Cove lives at
+  lcc-lummi.com/cove). lummibay.com is not a content source; it is the marina.
 - Testimonials, reviews, customer or traffic numbers, awards, press, partner logos,
   fuel-price comparisons against competitors, and staff names or quotes. None of
   these exist. Do not write them.

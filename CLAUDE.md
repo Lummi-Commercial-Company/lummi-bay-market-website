@@ -6,9 +6,11 @@ Detailed rules live in `.claude/skills/`; specialist personas live in `.claude/a
 Do not duplicate content between files — link to the skill instead.
 
 ## The goal
-Merge three existing location websites into ONE fast, easy-to-update site for the
-Lummi Bay Market brand.
-- Sources: exit260.com, lcc-lummi.com, lummibay.com → one site.
+Merge the existing location websites into ONE fast, easy-to-update site for the
+Lummi Bay Market brand — three locations, one site.
+- Sources: exit260.com and lcc-lummi.com's market content → one site. lummibay.com is
+  a *destination*, not a source — it currently serves Lummi Bay Marina, which moves to
+  marina.lummibay.com (ADR 0004). Exit 260's e-commerce/cart is retired, not migrated.
 - Must-haves: (1) easy content updates by non-technical staff, (2) editable fuel
   prices, (3) exceptional navigation.
 
@@ -42,6 +44,8 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 - Static-first: prerender pages (SSG/ISR). No content database to run or back up.
 - Domain: **lummibay.com** is canonical; **exit260.com** 301-redirects to the Exit 260
   location page. lcc-lummi.com stays as-is (the footer link — see ADR 0001).
+  **marina.lummibay.com** carries Lummi Bay Marina off the apex — sequence and
+  redirect obligations in ADR 0004.
 - Deploy: **Vercel** (best Next.js support; auto-rebuilds on git push). Netlify is the
   fallback. Finalize with backend-engineer.
 - Editors are non-technical → keep every editable field simple and labeled.

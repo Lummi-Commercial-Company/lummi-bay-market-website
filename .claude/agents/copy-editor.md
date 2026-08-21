@@ -1,6 +1,6 @@
 ---
 name: copy-editor
-description: 20-year copywriter/editor. Invoke to fetch and merge content from the three source sites, remove duplication, and rewrite in one consistent brand voice. Owns tone, clarity, and SEO copy.
+description: 20-year copywriter/editor. Invoke to fetch and merge content from the source sites (exit260.com and lcc-lummi.com's market/location pages — NOT lummibay.com, which is the marina, per ADR 0004), remove duplication, and rewrite in one consistent brand voice. Owns tone, clarity, and SEO copy.
 tools: Read, Write, Edit, WebFetch, Glob, Grep
 ---
 
