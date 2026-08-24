@@ -27,8 +27,35 @@ Column headers are kept in both states. They are a comparison device, and expand
 the comparison happens: a Location priced a few cents apart is visible at a glance in aligned
 columns and invisible in a run of inline text.
 
-**The block is a card, capped at 400px**, in every placement and at every width. On a 375px
-phone that reads as full-bleed; it is the same rule, not a second layout.
+**The block is a card, capped at 400px** — in every placement, at every width, in its resting
+shape. On a 375px phone that reads as full-bleed; it is the same rule, not a second layout.
+The one exception is the condensed desktop bar below, which is deliberately not a card.
+
+**On desktop the block condenses to a single line once the page has scrolled through its
+middle.** It is pinned under the sticky header, and at that point it stops being a 400px card
+and becomes a bar carrying the same two groups on one line — `Exit 260 · Reg 3.79 · Diesel
+4.29 | Truck Stop · Diesel 4.55 · DEF 3.29` — with the toggle moved to the end of the line as
+"All prices". The expanded panel is unchanged in content and gets a two-column layout at bar
+width: the three Locations left, the Truck Stop right.
+
+Width is `max(50%, 620px)`, not a flat 50%. The line's intrinsic width is 614px, so half of a
+1024px screen (492px) and half of a 1152px screen (556px) both clip it. Swept across seven
+widths with nothing clipping: 620px at 1024 and 1280, then a true half above that — 695px at
+1440, 935px at 1920. The 48–49% rather than 50% is the page's own side padding.
+
+**The condensed bar's panel is positioned against the viewport, not against the block.** No
+`position-anchor`. This is what makes a sticky block safe (ADR 0006) and it removes CSS anchor
+positioning from desktop entirely — the project's one unverifiable dependency now survives on
+phones only, where the block still scrolls away and a fixed panel would be left behind.
+
+**The trigger needs JavaScript** — about ten lines of `IntersectionObserver` watching a
+sentinel that occupies the block's slot and is the block's own height, so "less than half of it
+is still visible" is literally "the page has scrolled through the middle of the block". The
+zero-JavaScript route was tried first and does not hold: `animation-timeline: view()` works on
+a plain element, but a sticky subject's own view progress stalls before completing (measured at
+96%), and moving the timeline to a sentinel with `timeline-scope` did not resolve at page level
+or inside a scroller. That is in Chromium, the most permissive engine available. This is the
+first feature on the project that costs script.
 
 **Placement is a right-hand rail.** The price card is flush to the **right edge** at every
 width. Above it, at the top of the same rail, sits the **Rewards control**.

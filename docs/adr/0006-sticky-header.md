@@ -22,8 +22,16 @@ z-index on the page. A sticky header and a top-layer panel are exactly the pair 
 the whole scroll. This is what "exceptional navigation" asks for on pages that are long enough
 to lose the guest.
 
-**The fuel price rail is not sticky.** It sits at the top of the page and scrolls away with the
-content. This is not a stylistic preference — it is required for the panel to work; see below.
+**The fuel price rail is not sticky while its panel is anchored to it.** An anchor-positioned
+panel plus a sticky anchor is broken; see below. On phones that is the whole story — the rail
+sits at the top of the page and scrolls away.
+
+**On desktop the block is sticky, because its panel stopped being anchored.** Once the page has
+scrolled through the block's middle it condenses to a one-line bar pinned under the header, and
+its panel is positioned against the viewport rather than against the block (ADR 0005). With no
+`position-anchor` in play the defect below cannot occur: retested with a sticky block and a
+viewport-fixed panel, scrolled 1200px, clicking inside the open panel reached the panel 3 of 3.
+The rule here was always conditional on the mechanism; the mechanism changed, so the rule did.
 
 **The header's top-right utility slot is not used for Rewards.** Rewards is the compact control
 at the top of the rail (ADR 0005). A nav-sized pill in the header reads as wayfinding at the
@@ -45,8 +53,18 @@ and opens downward. Hit-tested inside the header at scroll offsets 0, 300, 900 a
 the panel open, the header answered every time.
 
 ## Consequences
-- The header holds roughly 47px of every phone viewport permanently. On a 375x812 screen that
-  is about 6%. Accepted: it buys the four primary destinations from anywhere on the page.
+- The header holds **52px** of every phone viewport permanently — about 6% of a 375x812 screen.
+  Accepted: it buys the four primary destinations from anywhere on the page. (47px until the
+  logo lockup was measured; see the next point.)
+- **The supplied logo cannot sit on a navy header.** The Lummi Bay Market lockup is a navy
+  wordmark over a cedar paddle on a light ground, and the header is `--lb-navy`. Navy on navy
+  is not a contrast to tune — the wordmark disappears — and the logo is locked, so it may not
+  be recoloured or knocked out to white to fix it. Two ways out, both the client's call: ask
+  for an approved reversed lockup, or make the header a light ground (`--lb-bone` or
+  `--lb-paper`) with a navy rule beneath it. The second needs no new art but changes the whole
+  page's weight. **This is unresolved and blocks the header's final styling.**
+- The lockup is roughly **2.8:1**, not the 4.5:1 slot the mockups had assumed. Correcting it is
+  what moved the phone header from 47px to 52px.
 - **Chromium 141 only.** It is the one engine available in the build container. The sticky
   failure is an anchor-positioning interop bug of exactly the kind that varies by engine, so
   Safari and Firefox still need checking. The decision is safe either way — not making the
@@ -57,13 +75,16 @@ the panel open, the header answered every time.
 - In-page anchor links need `scroll-margin-top` equal to the header height, or targets land
   underneath the pinned header.
 - The header is now permanently over page content, so its contrast against every background
-  it crosses is fixed, not incidental. It is `--lb-navy` throughout.
+  it crosses is fixed, not incidental. It is `--lb-navy` throughout — pending the logo
+  question above, which may change that ground.
 - The compact Rewards control is cedar partly because of this decision: directly beneath a
   permanently visible navy header, a navy control reads as a second nav bar (ADR 0005).
 
 ## Rejected
 - **A header that hides on scroll down and returns on scroll up.** Cheaper in screen space,
   but it needs JavaScript, and it moves under the guest — the opposite of wayfinding.
-- **Sticky header plus sticky price rail.** The defect above.
+- **Sticky header plus a sticky, anchor-positioned price rail.** The defect above. A sticky
+  block whose panel is viewport-positioned is a different thing and is now the desktop
+  behaviour (ADR 0005).
 - **Rewards as a header pill.** Costs no page height and would have returned about 55px on a
   phone, but demotes a product to wayfinding. Recorded in ADR 0005.

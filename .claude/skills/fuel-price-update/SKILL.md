@@ -75,10 +75,28 @@ a second price card. Do not demote it to a pill in the header's utility slot; th
 wayfinding, not as a product (ADR 0005 records why, twice — it was reconsidered after the
 header became sticky and rejected again).
 
-**The header is sticky; the rail is not** (ADR 0006). Never give the price card
-`position: sticky` to make prices follow the guest. Tested: after ~300px of scroll the open
-panel is painted correctly but clicks fall through to the collapsed card behind it, which then
-light-dismisses the panel. If prices must follow the guest, that is a different mechanism.
+**The header is sticky** (ADR 0006). Never give the price card `position: sticky` **while its
+panel is anchored to it** — tested: after ~300px of scroll the open panel is painted correctly
+but clicks fall through to the collapsed card behind it, which then light-dismisses it. That is
+the rule on phones, where the rail scrolls away.
+
+**Desktop condenses.** Once the page has scrolled through the block's middle it becomes a
+one-line bar pinned under the header:
+
+```
+Exit 260  REG 3.79  DIESEL 4.29 | Truck Stop  DIESEL 4.55  DEF 3.29      ⌄ All prices
+```
+
+| | Resting card | Condensed bar |
+| --- | --- | --- |
+| Width | 400px | `max(50%, 620px)` — a flat 50% clips below ~1280px |
+| Panel | anchored to the block | **positioned against the viewport** — no `position-anchor` |
+| Panel layout | one table | two columns: Locations left, Truck Stop right |
+
+The condensed bar is sticky and safe *because* its panel is viewport-positioned. Do not make
+one sticky without the other. The trigger is ~10 lines of `IntersectionObserver` on a sentinel
+in the block's slot, the block's own height — the CSS-only route does not work with a sticky
+subject (ADR 0005 records the measurements).
 
 **Collapsed** — two groups with grade column headers: the page's own Location (Exit 260 on
 every non-Location page), then the Truck Stop, always.
