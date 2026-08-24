@@ -19,6 +19,16 @@ width, two split it, three or four wrap — no per-count layout to write. On a p
 stack. Being below the two-column region rather than inside it is what lets them go full width
 without ever running under the price rail.
 
+**Each promo picks a width from a fixed ladder**, on a 12-column grid: full, two-thirds, half,
+third, quarter. Any mix tiles exactly. Free-typed percentages were rejected — 45% + 45% leaves
+a 10% orphan, and a staff member editing the set months later has no way to know what the other
+promos are set to.
+
+A **20% promo is below the readable floor on most desktops**: measured, 20% of a 1280px viewport
+is 247px of content and 279px at 1440 — narrower than a 375px phone screen, for artwork meant to
+carry an offer. Only at 1920 does it reach 375px. A quarter is what 20% usually means in
+practice and it holds up. On a phone the ladder is ignored and every promo is full width.
+
 **The slot reserves its box with a fixed `aspect-ratio`** so the page does not shift when the
 image loads — 5:1 on desktop, 16:9 on a phone as built. Two crops, not one image scaled: a
 wide desktop banner rendered at 375px is unreadable.

@@ -93,6 +93,14 @@ the bar scrolls away immediately.
 resting layout and has been replaced by the card above. Its cell format survives as the
 condensed line — the work moved rather than being discarded.
 
+**Condensing closes the panel; it must never prevent it.** This was got wrong once and is worth
+stating as a rule. Suppressing the panel with `display: none` while condensed stopped an open
+panel hanging off the bar mid-scroll — and also made "All prices" do nothing in the one state
+the bar exists for. `<details>` reported `open: true` with nothing on screen, so it read as
+broken rather than blocked. The correct split: the observer closes the block on entering the
+condensed state, and the CSS leaves the panel openable. The panel also hangs off the **bar**,
+not off the block's reserved box, or it opens level with the space the collapsed card vacated.
+
 **The condense trigger** is the same at both widths — roughly half the resting card's height
 scrolled past it — a
 sentinel occupying the card's slot, at the card's own height, so "less than half of it is still
