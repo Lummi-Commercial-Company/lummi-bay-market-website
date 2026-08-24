@@ -13,6 +13,12 @@ graphic promos on pages, where clicking the image opens a page with product info
 **A promo slot sits above the page's own title.** Reading order on an interior page is:
 sticky header → fuel price band → promo → page title. The whole image is the link.
 
+**Promos are a full-width region below the two-column top, not a slot inside it**, and the
+region grows with the number of promos: a grid of `minmax(300px, 1fr)`, so one promo fills the
+width, two split it, three or four wrap — no per-count layout to write. On a phone they always
+stack. Being below the two-column region rather than inside it is what lets them go full width
+without ever running under the price rail.
+
 **The slot reserves its box with a fixed `aspect-ratio`** so the page does not shift when the
 image loads — 5:1 on desktop, 16:9 on a phone as built. Two crops, not one image scaled: a
 wide desktop banner rendered at 375px is unreadable.

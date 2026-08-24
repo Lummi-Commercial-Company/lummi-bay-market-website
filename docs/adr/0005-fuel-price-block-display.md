@@ -63,27 +63,25 @@ Carrying one place rather than two is what makes the condensed bar narrow. The T
 dropped from it deliberately: the guest is on a page, the page has a Location, and the line is
 a reminder of where they are — not a comparison. The comparison is one click away.
 
-**Home loads expanded and does not condense; interior pages condense.** One rule per page
-type, not a special case per width. Home's block is expanded at rest — 400x257 on desktop,
-345x230 on a phone — and condensing needs the resting height reserved so the page does not
-jump; reserving *that* would leave a large blank hole with a 39px line floating in it. There is
-a structural reason too: on Home the two-column region is the **top of the page only**, with
-locations, the truck stop and the footer full width beneath it, so the rail has nowhere to
-follow the guest to. Home shows all four prices on arrival and lets them scroll away; a
-persistent price line earns its keep on the pages that do not.
-
-**Desktop is a two-column page.** The block sits in a **reserved 400px grid column**, not
-floating over content — the promo is left-aligned in the content column and its right edge lands
+**Desktop is a two-column page.** The block sits in a **reserved 400px grid column** spanning
+the whole page — not the top region, which gives sticky only the hero's height to work in and
+loses the condensed bar a screen later. The column is `pointer-events: none` with the block
+itself re-enabled, so the full-width sections beneath stay clickable through it. (`grid-row:
+1 / -1` does not do this: with no explicit `grid-template-rows`, `-1` resolves to the end of
+the *explicit* grid — line 1 — and the page silently loses half its height. `1 / span 2`.)
+The block does not float over content — the promo is left-aligned in the content column and its right edge lands
 exactly **14px** from the block, so the two cannot collide at any width. On a phone the block is
 in flow, full width, above the promo.
 
-**Condensing must not move the page.** A block that shrinks in the flow drags everything below
-it: measured on a phone, the promo jumped **37px** mid-scroll. That is a layout shift caused by
+**Condensing must not move the page — at any width.** A block that shrinks drags whatever
+depends on its height: measured, a phone promo jumped **37px** mid-scroll and a desktop one
+**10px**. Desktop looked immune on Home only by luck, because the hero happened to be the taller
+grid item, so the row height did not depend on the block. That is a layout shift caused by
 scrolling, which counts against Core Web Vitals rather than being excused by it. The block
 therefore **keeps its resting height** when it condenses — the collapsed face stays in the
 layout and goes `visibility: hidden`, the cue keeps its box, and the one-line bar is drawn over
-the reserved space. Measured down in three passes: 37px, 19px, 9px, then **0**. Desktop was 0
-throughout, because the grid column absorbs the change.
+the reserved space. Measured down in three passes: 37px, 19px, 9px, then **0** — and 0 on all four frames once the
+rule was applied at both widths.
 
 Two more phone-only details, both found in a browser rather than in a spec. The one-line bar
 **clipped at 375px** (357px of content in 343px of room), so the affordance reads "All" there
@@ -132,16 +130,16 @@ else, on every page. Every earlier arrangement here — the club card image, the
 cedar control — is superseded; they are kept in the history below because each was rejected for
 a reason worth not rediscovering.
 
-**Opening is an overlay, by two different mechanisms.**
-- A block that **loads collapsed** — every page but Home — opens as an **HTML popover**
-  (`popover="auto"` with a `popovertarget` button), anchored over the block so the panel
-  covers it rather than repeating its rows.
-- A block that **loads expanded** — Home, and the `/fuel-prices` page — cannot overlay
-  anything, because an overlay drawn on arrival would cover the hero before anyone touched
-  it. There the panel sits **in the layout** as a plain disclosure and collapsing it lets the
-  page rise.
+**Every block loads collapsed, on every page.** Home and `/fuel-prices` no longer load
+expanded. That removes a whole branch: this ADR used to carry two opening mechanisms and a rule
+to choose between them — *a panel already open on arrival cannot overlay* — because something
+could arrive open. Nothing does. **The in-flow disclosure variant is gone; every block opens the
+same way**, as an HTML popover (`popover="auto"` with a `popovertarget` button) drawn over the
+page. One mechanism, one set of behaviours to test.
 
-That branch is one rule, not a special case: *a panel already open on arrival cannot overlay.*
+It also unblocks Home. Condensing needs the resting height reserved, and an expanded block was
+too tall to reserve without leaving a hole; a collapsed one is not. **Home condenses like every
+other page**, which is simpler than the exception it replaced.
 
 **Stacking order** is fixed as four named layers, recorded here rather than in skill
 `brand-system`:
@@ -161,15 +159,17 @@ popover renders in the browser's top layer and outranks all of it regardless.
 - **Column headers dropped when collapsed**, one line per place. Rejected after seeing both:
   headers cost two lines and buy nothing collapsed, but keeping them in *both* states makes
   the two layouts one layout at two lengths. Consistency won over the two lines.
-- **No toggle on Home** — "always expanded" was in an earlier draft of the display rules. It
-  contradicted the one-component decision in the same breath and is now gone. Every block
-  collapses.
+- **No toggle on Home**, and later **loading expanded on Home at all** — both were in earlier
+  drafts, and both are gone. The first contradicted the one-component decision in the same
+  breath; the second cost a second opening mechanism and blocked Home from condensing. Every
+  block collapses, and every block loads collapsed.
 - **A full-bleed bar.** Rejected by the owner: at desktop widths a price strip spanning
   1200px is a banner, not a detail.
 - **`<details>`/`<summary>` for every block**, which was the original zero-JavaScript plan.
   Rejected for the overlay case: native `<details>` closes only from its own control, so a
-  guest who taps the page behind an open panel — or presses Escape — gets nothing. It
-  survives for the in-flow case, where there is no overlay to dismiss.
+  guest who taps the page behind an open panel — or presses Escape — gets nothing. Since
+  every block now loads collapsed and therefore opens as an overlay, `<details>` has no
+  remaining case.
 - **Ten lines of script for outside-click and Escape.** Held as the fallback if the popover's
   anchor positioning proves unsafe.
 - **Docked, sticky, and bottom-sheet placements.** All three prototyped. Sticky costs 134px
@@ -211,9 +211,9 @@ popover renders in the browser's top layer and outranks all of it regardless.
   300px of scroll. The same test confirmed the panel never covers the sticky header. Both
   results and their Chromium-only caveat are in ADR 0006.
 - The popover removes a bug the absolute-positioned version had: because the panel lives in
-  the top layer, the block's own box never changes, so **there is no collapsed height to
-  reserve**. The in-flow variant on Home does not need a reservation either, since it is
-  meant to move the page.
+  the top layer, **opening** never changes the block's own box. **Condensing** does, which is
+  why the resting height is reserved separately — those are two different mechanisms and only
+  one of them is solved by the top layer.
 - Prices are still read from `content/fuel-prices.json` and printed. Nothing about display
   reaches back into storage — ADR 0004 stands unchanged.
 

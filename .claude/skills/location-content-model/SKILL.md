@@ -45,6 +45,9 @@ client before launch.)
    truckStop: false.
 
 ## Rules
+- **The location list is derived, never authored per page** (ADR 0009). Order is Truck Stop
+  callout first, then Exit 260, Mini Mart, Fisherman's Cove. The component filters out the
+  page's own Location, and the heading becomes "Our other locations" when it does.
 - Amenity badges/icons are driven by the `amenities` list — don't hand-place them.
 - Only exit-260 (truckStop: true) shows the Truck Stop summary + links to `/truck-stop`.
 - Keep addresses/hours in data, never in page markup, so staff edit via the CMS.

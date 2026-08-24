@@ -57,6 +57,11 @@ Rules that hold no matter who is editing:
 ## How prices are displayed
 One component everywhere. Full contract and the reasoning: **ADR 0005**.
 
+**Every block loads collapsed, on every page** — Home and `/fuel-prices` included. Nothing
+arrives open, so there is one opening mechanism (a popover over the page) and one condensing
+behaviour. Do not reintroduce a "loads expanded" variant; it cost a second mechanism and
+blocked Home from condensing.
+
 **One shape at rest, everywhere.** A **card, never wider than 400px**, in a right-hand rail
 flush to the right edge — the page's own Location and the Truck Stop, with grade column
 headers. There is no per-page variant.
@@ -91,10 +96,17 @@ Exit 260 │ REG 3.79   DIESEL 4.29        ⌄ All prices
 **The panel adds only what is not already on screen.** Its heading is "Also at", not "All
 locations". Never list a place twice — that is one rule, not a case per state.
 
-**Condensing must move the page by zero pixels.** The block keeps its resting height: the
-collapsed face stays in the layout as `visibility: hidden` and the one-line bar draws over it.
-Assert it; do not eyeball it. A shrink that reaches the flow moved a phone promo 37px mid-scroll,
-which counts against Core Web Vitals.
+**Condensing must move the page by zero pixels, at every width.** The block keeps its resting
+height: the collapsed face and the cue stay in the layout as `visibility: hidden` and the
+one-line bar draws over the space they reserve. Assert it; do not eyeball it. Measured without
+it: a phone promo moved 37px mid-scroll, a desktop one 10px. Desktop looked immune on Home only
+because the hero happened to be the taller grid item.
+
+**The desktop rail column spans the whole page**, not the top region — given only the hero's
+height, `position: sticky` loses the condensed bar a screen later. It is `pointer-events: none`
+with the block re-enabled, so full-width sections stay clickable through it. Use
+`grid-row: 1 / span 2`, never `1 / -1`: with no explicit `grid-template-rows`, `-1` resolves to
+line 1 and the page silently loses half its height.
 
 The condensed bar is sticky and safe *because* its panel is viewport-positioned. Do not make one
 sticky without the other. The trigger is ~10 lines of `IntersectionObserver` on a sentinel in
