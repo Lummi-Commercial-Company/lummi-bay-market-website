@@ -33,15 +33,16 @@ its panel is positioned against the viewport rather than against the block (ADR 
 viewport-fixed panel, scrolled 1200px, clicking inside the open panel reached the panel 3 of 3.
 The rule here was always conditional on the mechanism; the mechanism changed, so the rule did.
 
-**The header's top-right utility slot carries a "Get the App" pill on interior pages.** This
+**The header's top-right utility slot carries a "Get the App" pill on every page.** This
 reverses an earlier decision recorded here twice — that a nav-sized pill would read as
 wayfinding rather than as a product, so the slot should stay free. It is settled the other way.
 
 Two things make the reversal work rather than merely overrule the objection. The label is an
 **instruction, not a noun**: "Get the App" asks for an action where a bare "Rewards" pill would
 have sat at the same weight as Locations and Truck Stop. And it is **cedar on the navy header**,
-so it does not read as a fifth nav item. On interior pages this removes the rail entirely —
-Rewards is in the header, prices are a band below it (ADR 0005).
+so it does not read as a fifth nav item. Being global, Rewards now appears exactly once per
+page and always in the same place: interior pages lose the rail entirely (prices become a band
+below the header, ADR 0005) and Home's rail is the price card alone.
 
 ## Why the rail cannot be sticky
 Pinning the price card under the pinned header is the obvious next move — prices would follow

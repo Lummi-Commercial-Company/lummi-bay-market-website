@@ -57,23 +57,16 @@ Rules that hold no matter who is editing:
 ## How prices are displayed
 One component everywhere. Full contract and the reasoning: **ADR 0005**.
 
-**Shape** — a card, **never wider than 400px**, in every placement and at every width. On a
-375px phone that reads as full-bleed; it is the same rule, not a second layout.
+**Two shapes, by page.** Home is a **card, never wider than 400px**, in a right-hand rail
+flush to the right edge. Every other page is the **band** below. There is no third shape.
 
-**Placement** — a **right-hand rail**, flush to the right edge at every width. The **Rewards
-slot sits above it** at the top of the same rail; the price card is beneath. Rewards is a
-product and holds the top, prices are a reference and sit under it. The rail reserves a column
-on desktop — it must not float over page text.
+**Rewards is never beside the prices.** It is a global "Get the App" pill in the header
+(ADR 0006), on every page including Home. Home's rail is the price card alone. Do not
+reintroduce a Rewards element into a rail or a band — the club card image and the compact
+cedar control were both tried there and both superseded.
 
-**The Rewards slot is the same on every page** — a **compact control**: mark, name, one-line
-reason, call to action. Home included. The club card image is not in the rail. Phone rail is
-**191px**, desktop **211px**, identical everywhere.
-
-The control is **cedar** with a navy call-to-action pill. Not navy — the sticky header directly
-above it is navy and the two fuse into one bar. Not paper with a teal underline — that makes it
-a second price card. Do not demote it to a pill in the header's utility slot; that reads as
-wayfinding, not as a product (ADR 0005 records why, twice — it was reconsidered after the
-header became sticky and rejected again).
+**A promo may sit between the block and the page title** on interior pages (ADR 0007). It is
+not part of this component; do not let its placement pull the price block down the page.
 
 **The header is sticky** (ADR 0006). Never give the price card `position: sticky` **while its
 panel is anchored to it** — tested: after ~300px of scroll the open panel is painted correctly
@@ -100,8 +93,7 @@ navigation still says Fisherman's Cove. The expansion **overlays** — the page 
 pixels — and the toggle column is a **fixed width**, because a cue that changes width between
 "All 4" and "Hide" re-flows the row under it and clips "Truck Stop".
 
-Rewards is not in the band or beside it: on interior pages it is a **"Get the App" pill in the
-header** (ADR 0006). There is no rail on interior pages.
+There is no rail on interior pages — the band sits below the header on its own.
 
 **Home condenses on scroll.** Once the page has scrolled through the card's middle it becomes a
 one-line bar pinned under the header:

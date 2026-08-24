@@ -103,30 +103,10 @@ reference and sit under it.
 utility slot (ADR 0006), and the price band sits below the header on its own. The rail —
 Rewards above prices on the right — is Home's layout only.
 
-**On Home, the Rewards slot is the compact control** — one line:
-mark, name, one-line reason, and a call to action. The club card image is not in the rail at
-all. The rail is therefore identical on every page: Rewards control, price card, nothing
-page-conditional to build or to get wrong.
-
-An earlier version of this ADR put the club card image in the Home rail and the compact control
-everywhere else. Both were built and looked at; the control won on Home too. The image cost
-221px of a phone's first screen against the control's 45px, and the split meant two rail
-layouts to maintain for one idea. The club card is still supplied brand art with no place on
-the site — the `/rewards` app-promo page is the obvious home, and that is recommended below,
-not decided here.
-
-The control is **cedar**, not navy. Drawn in navy it read as a second nav bar, because the site
-header directly above it is the same navy and the two fused into one mass. Drawn in paper with
-a teal underline it read as a second price card and Rewards disappeared into the rail. Cedar is
-the brand accent, it separates from both, and the call-to-action pill goes navy on it.
-
-Rejected: demoting Rewards to a pill in the header's top-right utility slot. It costs no page
-height, and it is what the locked architecture anticipated for that slot, but a nav-sized pill
-reads as wayfinding at the same weight as Locations and Truck Stop — not as a key product.
-The header has since been made sticky (ADR 0006), which is the condition under which the pill
-would have been worth revisiting — it would never scroll away. It was reconsidered on that basis
-and still rejected: permanent visibility does not make a nav-sized pill read as a product, and
-the rail already puts Rewards at the top of every page. The slot stays free.
+**Home's rail is the price card alone.** Rewards is the global header pill (ADR 0006), so no
+page carries a Rewards element beside its prices. Every earlier arrangement here — the club
+card image, then the compact cedar control — is superseded; they are kept in the history below
+because each was rejected for a reason worth not rediscovering.
 
 **Opening is an overlay, by two different mechanisms.**
 - A block that **loads collapsed** — every page but Home — opens as an **HTML popover**
