@@ -83,12 +83,18 @@ shorter, 360x39 from 400x151 — pinned under the header and still expandable to
 Exit 260 │ REG 3.79   DIESEL 4.29        ⌄ All prices
 ```
 
-| | Resting card | Condensed line |
-| --- | --- | --- |
-| Places shown | page's Location + Truck Stop | page's Location only |
-| Size | 400x151 desktop, 353x135 phone | 360x39, desktop only |
-| Width rule | capped at 400px | `max-content`, floor 340px, ceiling 440px |
-| Panel | anchored to the block | **positioned against the viewport** |
+| | Resting | Condensed | Expanded |
+| --- | --- | --- | --- |
+| Desktop | Location + Truck Stop, 400x148 | Location only, 365x39 | adds Mini Mart, The Cove |
+| Phone (interior) | **Location only**, 345x76 | Location only, one line | adds those two **and** the Truck Stop |
+
+**The panel adds only what is not already on screen.** Its heading is "Also at", not "All
+locations". Never list a place twice — that is one rule, not a case per state.
+
+**Condensing must move the page by zero pixels.** The block keeps its resting height: the
+collapsed face stays in the layout as `visibility: hidden` and the one-line bar draws over it.
+Assert it; do not eyeball it. A shrink that reaches the flow moved a phone promo 37px mid-scroll,
+which counts against Core Web Vitals.
 
 The condensed bar is sticky and safe *because* its panel is viewport-positioned. Do not make one
 sticky without the other. The trigger is ~10 lines of `IntersectionObserver` on a sentinel in

@@ -29,23 +29,33 @@ columns and invisible in a run of inline text.
 
 **One component, three states.**
 
-1. **Resting**, on every page and at every width — a card, **capped at 400px**, carrying the
-   page's own Location and the Truck Stop with grade column headers. 400x151 on desktop,
-   353x135 on a phone.
-2. **Expanded** — all four places, overlaying rather than pushing (the mechanism is below).
-3. **Condensed**, desktop only — once the page has scrolled roughly halfway past the resting
-   card, it becomes a **single line carrying the page's own Location alone**, pinned under the
-   sticky header, still expandable to all four. It gets *narrower as well as shorter*:
-   **360x39, from 400x151**.
+1. **Resting** — a card, **capped at 400px**, with grade column headers. On **desktop** it
+   carries the page's own Location *and* the Truck Stop (400x148). On a **phone interior page**
+   it carries the Location **alone** (345x76).
+2. **Condensed** — once the page has scrolled roughly halfway past the resting card, at
+   **both** widths, it becomes a **single line carrying the page's own Location**: desktop
+   365x39 from 400x148, a phone one line from 345x76. Narrower as well as shorter on desktop.
+3. **Expanded** — the panel adds **only the places not currently on screen**. Never a repeat.
+   Two on desktop (Mini Mart, The Cove), three from a phone interior page or from the condensed
+   line (those two plus the Truck Stop). Its heading is "Also at", not "All locations", because
+   that is what it now contains. This is one rule rather than a case per state: it falls out of
+   what is showing.
 
 ```
-resting                          condensed
+resting (desktop)                condensed (both)
 ┌──────────────────────────┐     ┌────────────────────────────────────┐
 │ ⌄ View all prices        │     │ Exit 260 │ REG 3.79  DIESEL 4.29 ⌄ │
 │            REGULAR DIESEL│     └────────────────────────────────────┘
 │ Exit 260      3.79   4.29│
-│             DIESEL   DEF │
-│ Truck Stop    4.55   3.29│
+│             DIESEL   DEF │     expanded, from either
+│ Truck Stop    4.55   3.29│     ┌──────────────────────────┐
+└──────────────────────────┘     │ ALSO AT                  │
+                                 │ Mini Mart, The Cove, …   │
+resting (phone, interior)        └──────────────────────────┘
+┌──────────────────────────┐
+│ ⌄ View all prices        │     the panel carries the remainder,
+│            REGULAR DIESEL│     so nothing is ever listed twice
+│ Exit 260      3.79   4.29│
 └──────────────────────────┘
 ```
 
@@ -53,14 +63,31 @@ Carrying one place rather than two is what makes the condensed bar narrow. The T
 dropped from it deliberately: the guest is on a page, the page has a Location, and the line is
 a reminder of where they are — not a comparison. The comparison is one click away.
 
-**The card is in flow on a phone**, and in a reserved right-hand column on desktop. It is never
-absolutely positioned on a phone: it covered the promo (ADR 0007) completely when it was.
+**Desktop is a two-column page.** The block sits in a **reserved 400px grid column**, not
+floating over content — the promo is left-aligned in the content column and its right edge lands
+exactly **14px** from the block, so the two cannot collide at any width. On a phone the block is
+in flow, full width, above the promo.
+
+**Condensing must not move the page.** A block that shrinks in the flow drags everything below
+it: measured on a phone, the promo jumped **37px** mid-scroll. That is a layout shift caused by
+scrolling, which counts against Core Web Vitals rather than being excused by it. The block
+therefore **keeps its resting height** when it condenses — the collapsed face stays in the
+layout and goes `visibility: hidden`, the cue keeps its box, and the one-line bar is drawn over
+the reserved space. Measured down in three passes: 37px, 19px, 9px, then **0**. Desktop was 0
+throughout, because the grid column absorbs the change.
+
+Two more phone-only details, both found in a browser rather than in a spec. The one-line bar
+**clipped at 375px** (357px of content in 343px of room), so the affordance reads "All" there
+rather than "All prices". And the rail wrapper has to be dissolved with `display: contents`: as
+a box it is only the block's own height, so `position: sticky` has nothing to stick within and
+the bar scrolls away immediately.
 
 **The band is superseded.** A thin full-width horizontal band was built as the interior page's
 resting layout and has been replaced by the card above. Its cell format survives as the
 condensed line — the work moved rather than being discarded.
 
-**The condense trigger** is roughly half the resting card's height scrolled past it — a
+**The condense trigger** is the same at both widths — roughly half the resting card's height
+scrolled past it — a
 sentinel occupying the card's slot, at the card's own height, so "less than half of it is still
 visible" is literally that. Width is `max-content` with a 340px floor and a 440px ceiling: the
 line measures 358px as built, and letting content set the width is what keeps it narrow when a
@@ -182,6 +209,10 @@ popover renders in the browser's top layer and outranks all of it regardless.
   reaches back into storage — ADR 0004 stands unchanged.
 
 ## Open, and deliberately not decided here
+- **Desktop and phone now rest on different content**, not just a different arrangement —
+  desktop shows the Location and the Truck Stop, a phone interior page shows the Location alone.
+  This was asked for and is defensible, but it is the first place a breakpoint changes *what
+  data is rendered*. The component and the panel both have to know which case they are in.
 - **Where the club card image goes now that it is out of the rail.** Recommended: the
   `/rewards` page, shown large — the guest there has already chosen to look at Rewards. It
   was not part of the ask, so it is not decided here.
