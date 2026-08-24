@@ -31,7 +31,7 @@ columns and invisible in a run of inline text.
 phone that reads as full-bleed; it is the same rule, not a second layout.
 
 **Placement is a right-hand rail.** The price card is flush to the **right edge** at every
-width. Above it, at the top of the same rail, sits the **Rewards club card**.
+width. Above it, at the top of the same rail, sits the **Rewards control**.
 
 This resolves what looked like a collision between the price block and the Rewards utility
 slot. It was not one: *right side* is an edge, *top-right* is a corner. Once the price card
@@ -40,10 +40,17 @@ column rather than two elements fighting for the same spot. Order is Rewards fir
 beneath — Rewards is a product and stays in focus at the top of the page; prices are a
 reference and sit under it.
 
-**The Rewards slot changes size by page, not by structure.** On Home it holds the **club card
-image**. On every other page it holds a **compact control** — one line: mark, name, one-line
-reason, and a call to action. The rail is the same on both; only the slot's height differs, so
-Rewards is at the top of every page and the pattern is learned once.
+**The Rewards slot is the same compact control on every page, Home included** — one line:
+mark, name, one-line reason, and a call to action. The club card image is not in the rail at
+all. The rail is therefore identical on every page: Rewards control, price card, nothing
+page-conditional to build or to get wrong.
+
+An earlier version of this ADR put the club card image in the Home rail and the compact control
+everywhere else. Both were built and looked at; the control won on Home too. The image cost
+221px of a phone's first screen against the control's 45px, and the split meant two rail
+layouts to maintain for one idea. The club card is still supplied brand art with no place on
+the site — the `/rewards` app-promo page is the obvious home, and that is recommended below,
+not decided here.
 
 The control is **cedar**, not navy. Drawn in navy it read as a second nav bar, because the site
 header directly above it is the same navy and the two fused into one mass. Drawn in paper with
@@ -53,7 +60,10 @@ the brand accent, it separates from both, and the call-to-action pill goes navy 
 Rejected: demoting Rewards to a pill in the header's top-right utility slot. It costs no page
 height, and it is what the locked architecture anticipated for that slot, but a nav-sized pill
 reads as wayfinding at the same weight as Locations and Truck Stop — not as a key product.
-Worth revisiting only if the header is made sticky, since then Rewards would never scroll away.
+The header has since been made sticky (ADR 0006), which is the condition under which the pill
+would have been worth revisiting — it would never scroll away. It was reconsidered on that basis
+and still rejected: permanent visibility does not make a nav-sized pill read as a product, and
+the rail already puts Rewards at the top of every page. The slot stays free.
 
 **Opening is an overlay, by two different mechanisms.**
 - A block that **loads collapsed** — every page but Home — opens as an **HTML popover**
@@ -115,20 +125,24 @@ popover renders in the browser's top layer and outranks all of it regardless.
   here — Safari and Firefox are unverified.** Popover itself is broadly supported; anchor
   positioning is the risky half. If it does not hold, the fallback is the ten-line script,
   and the component's shape does not change.
-- **The Rewards club card is supplied brand art and is placed, never redrawn** — the same
-  rule the logo carries. Its blues are its own and are not in the locked palette, so it needs
-  breathing room rather than sitting directly on `--lb-navy`. Because the word "Rewards" is
-  inside the image, the link needs a real accessible name; the picture is not the label.
-- **The card is sized to the rail on phones, not on desktop.** At the rail's full 400px it is
-  250px tall and pushes prices well down the page, so on desktop it is set to 260px and
-  right-aligned to share the price card's right edge.
+- **The club card image is supplied brand art and is placed, never redrawn** — the same rule
+  the logo carries. That rule stands wherever the image ends up. Its blues are its own and are
+  not in the locked palette, so it needs breathing room rather than sitting directly on
+  `--lb-navy`, and because the word "Rewards" is inside the image, any link wrapping it needs
+  a real accessible name; the picture is not the label.
+- **The compact control needs a real accessible name too**, but for the opposite reason: its
+  visible text is "LBM Rewards", which is the name, so the link text carries it and no
+  `aria-label` should contradict it.
 - **The rail must reserve a column on desktop**, not float over one. Prototyped as a float,
   page text ran underneath both cards.
-- **On a phone the rail costs real estate before any page content.** Measured on Home:
-  card 221px + 10px gap + price block 135px = **366px**, about 45% of a 375x812 viewport.
-  The compact control brings the interior-page rail to **191px** — 175px back — and on
-  desktop from 323px to **211px**. The header pill would have returned a further 55px on a
-  phone; that is what the rejection above costs.
+- **On a phone the rail costs 191px before any page content** — control 45px, gap 10px,
+  price block 135px — on every page including Home. That is down from 366px when the club
+  card image sat in the Home rail. Desktop is 211px, down from 323px. The rejected header
+  pill would have returned a further 55px on a phone; that is what the rejection costs.
+- **The header above the rail is sticky (ADR 0006), and the rail is not.** That is not a
+  style choice: a sticky price card makes the open panel painted-but-unclickable after about
+  300px of scroll. The same test confirmed the panel never covers the sticky header. Both
+  results and their Chromium-only caveat are in ADR 0006.
 - The popover removes a bug the absolute-positioned version had: because the panel lives in
   the top layer, the block's own box never changes, so **there is no collapsed height to
   reserve**. The in-flow variant on Home does not need a reservation either, since it is
@@ -137,6 +151,9 @@ popover renders in the browser's top layer and outranks all of it regardless.
   reaches back into storage — ADR 0004 stands unchanged.
 
 ## Open, and deliberately not decided here
+- **Where the club card image goes now that it is out of the rail.** Recommended: the
+  `/rewards` page, shown large — the guest there has already chosen to look at Rewards. It
+  was not part of the ask, so it is not decided here.
 - **Panel height at large text sizes.** Four places fit today; at 200% text the panel can run
   off a phone. A `max-height` with internal scroll is the intended fix.
 - **The `/fuel-prices` page duplicates the block.** The intended answer is that the block

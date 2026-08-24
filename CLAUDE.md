@@ -57,8 +57,11 @@ Primary nav (4): **Home · Locations · Truck Stop · Fuel Prices**.
 - Locations: index → 3 detail pages (nav labels: Exit 260 · Mini Mart · Fisherman's Cove).
 - Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it.
 - Fuel Prices: all locations in one view (also on Home and each location page).
-- **Rewards**: Home hero callout + `/rewards` app-promo page (download link) + footer.
-- Logo (Market lockup) top-left → Home. Optional top-right utility slot for Rewards.
+- **Rewards**: a compact control at the top of the fuel-price rail on **every** page, plus the
+  `/rewards` app-promo page (download link) and the footer. Not a header pill — see ADR 0005.
+- Header is **sticky** on every page; the fuel-price rail is **not** — ADR 0006 records why the
+  rail must never be sticky. Logo (Market lockup) top-left → Home. The optional top-right
+  utility slot stays free.
 Footer: **About** (brand story grounded in the Lummi values + light community note; LCC
 corporate/enterprise content stays out), contact form, per-location hours/phone,
 **Rewards**, **Careers** (editable link), and the single **Lummi Commercial Companies**
