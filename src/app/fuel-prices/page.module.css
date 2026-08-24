@@ -1,0 +1,17 @@
+.page {
+  padding-top: var(--sp-48);
+}
+
+.lede {
+  margin-top: var(--sp-16);
+  max-width: 52ch;
+  font-size: 1.125rem;
+}
+
+.card {
+  margin-top: var(--sp-32);
+  background: var(--lb-paper);
+  border: 1px solid var(--lb-rule);
+  border-radius: var(--radius-card);
+  padding: var(--sp-16) var(--sp-24);
+}

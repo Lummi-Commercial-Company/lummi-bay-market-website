@@ -1,0 +1,9 @@
+[
+  {
+    "id": "in-store-special",
+    "title": "In-store specials",
+    "blurb": "This week's deals on snacks, drinks and tobacco.",
+    "scope": "All locations",
+    "active": true
+  }
+]

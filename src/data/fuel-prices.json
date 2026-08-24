@@ -1,0 +1,25 @@
+{
+  "exit-260": {
+    "updated": "2018-05-01",
+    "regular": 3.79,
+    "midgrade": 3.99,
+    "premium": 4.19,
+    "diesel": 4.29
+  },
+  "exit-260-truck-stop": {
+    "updated": "2018-05-01",
+    "diesel": 4.29,
+    "def": 3.29
+  },
+  "mini-mart": {
+    "updated": "2018-05-01",
+    "regular": 3.79,
+    "diesel": 4.29
+  },
+  "fishermans-cove": {
+    "updated": "2018-05-01",
+    "regular": 3.79,
+    "diesel": 4.29,
+    "ethanol-free": 4.49
+  }
+}

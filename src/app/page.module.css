@@ -1,0 +1,124 @@
+.intro {
+  padding-top: var(--sp-32);
+  padding-bottom: var(--sp-8);
+}
+
+.h1 {
+  max-width: 24ch;
+}
+
+.lede {
+  margin-top: var(--sp-16);
+  max-width: 52ch;
+  font-size: 1.125rem;
+  color: var(--lb-ink);
+}
+
+.section {
+  padding-top: var(--sp-48);
+}
+
+.section > h2 {
+  margin-bottom: var(--sp-24);
+}
+
+/* Mosaic: one feature tile, then an even grid. Single column on phones. */
+.mosaic,
+.locations {
+  display: grid;
+  gap: var(--sp-16);
+  grid-template-columns: 1fr;
+}
+
+.priceCard {
+  background: var(--lb-paper);
+  border: 1px solid var(--lb-rule);
+  border-radius: var(--radius-card);
+  padding: var(--sp-16) var(--sp-24);
+}
+
+.moreLink {
+  display: inline-block;
+  margin-top: var(--sp-16);
+  font-weight: 600;
+}
+
+.promo,
+.rewards {
+  background: var(--lb-navy);
+  color: var(--lb-bone);
+  border-radius: var(--radius-card);
+  padding: var(--sp-24);
+}
+
+.promoEyebrow {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lb-bone);
+}
+
+.promoTitle,
+.rewardsTitle {
+  color: var(--lb-paper);
+  margin-top: var(--sp-8);
+}
+
+.promoBlurb,
+.rewardsBlurb {
+  margin-top: var(--sp-8);
+  max-width: 46ch;
+}
+
+.rewardsCta {
+  display: inline-block;
+  margin-top: var(--sp-16);
+  background: var(--lb-paper);
+  color: var(--lb-navy-deep);
+  font-weight: 600;
+  text-decoration: none;
+  padding: var(--sp-12) var(--sp-24);
+  border-radius: var(--radius);
+}
+
+.rewardsCta:hover {
+  background: var(--lb-bone);
+}
+
+@media (min-width: 700px) {
+  .mosaic {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* The feature tile takes the full first row; the rest form one even row below.
+     Four tiles fill this exactly — no empty cell. */
+  .mosaic > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .locations {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .intro {
+    padding-top: var(--sp-48);
+  }
+
+  .section {
+    padding-top: var(--sp-64);
+  }
+
+  .mosaic,
+  .locations {
+    gap: var(--sp-24);
+  }
+
+  .promo,
+  .rewards {
+    padding: var(--sp-48);
+  }
+}

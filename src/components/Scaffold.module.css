@@ -1,0 +1,25 @@
+.scaffold {
+  padding-top: var(--sp-64);
+  padding-bottom: var(--sp-64);
+  max-width: 60ch;
+}
+
+.flag {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lb-cedar-text);
+  margin-bottom: var(--sp-12);
+}
+
+.note {
+  margin-top: var(--sp-16);
+  color: var(--lb-ink-muted);
+}
+
+.back {
+  display: inline-block;
+  margin-top: var(--sp-24);
+  font-weight: 600;
+}

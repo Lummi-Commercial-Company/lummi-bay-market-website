@@ -1,0 +1,23 @@
+.page {
+  padding-top: var(--sp-48);
+}
+
+.lede {
+  margin-top: var(--sp-16);
+  max-width: 52ch;
+  font-size: 1.125rem;
+}
+
+.grid {
+  margin-top: var(--sp-32);
+  display: grid;
+  gap: var(--sp-16);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-24);
+  }
+}

@@ -1,0 +1,137 @@
+/*
+  Brand tokens are LOCKED — see skill `brand-system`. Do not add colors or type
+  families beyond these. #000F9F lives inside the logo art only and is never a UI color.
+*/
+
+:root {
+  /* Approved palette */
+  --lb-navy: #1c4e8f;
+  --lb-navy-deep: #14396b;
+  --lb-teal: #0fb5c4;
+  --lb-cedar: #c9772e;
+  --lb-ground: #fbf9f4;
+  --lb-paper: #ffffff;
+  --lb-ink: #2a2820;
+  --lb-bone: #f5f1e8;
+
+  /* Derived from the locked palette — tints, not new hues. */
+  --lb-rule: color-mix(in srgb, var(--lb-navy) 18%, transparent);
+  --lb-ink-muted: color-mix(in srgb, var(--lb-ink) 75%, var(--lb-ground));
+  --lb-bone-muted: color-mix(in srgb, var(--lb-bone) 72%, var(--lb-navy));
+  /* brand-system: cedar fails AA as small text on light. Darkened for the one place
+     an accent has to carry a small label — verified at 4.95:1 on --lb-ground. */
+  --lb-cedar-text: color-mix(in srgb, var(--lb-cedar) 70%, var(--lb-ink));
+
+  /* Spacing scale: 4 8 12 16 24 32 48 64 96 */
+  --sp-4: 4px;
+  --sp-8: 8px;
+  --sp-12: 12px;
+  --sp-16: 16px;
+  --sp-24: 24px;
+  --sp-32: 32px;
+  --sp-48: 48px;
+  --sp-64: 64px;
+  --sp-96: 96px;
+
+  --radius: 8px;
+  --radius-card: 12px;
+  --max-w: 1200px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--lb-ground);
+  color: var(--lb-ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--lb-navy);
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(1.75rem, 4.5vw, 3rem);
+}
+
+h2 {
+  font-size: clamp(1.375rem, 3vw, 2.25rem);
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--lb-navy);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--sp-16);
+}
+
+@media (min-width: 900px) {
+  .wrap {
+    padding: 0 var(--sp-32);
+  }
+}
+
+/* Visible focus everywhere — never removed. */
+:focus-visible {
+  outline: 3px solid var(--lb-teal);
+  outline-offset: 2px;
+}
+
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--lb-paper);
+  color: var(--lb-navy);
+  padding: var(--sp-12) var(--sp-16);
+  z-index: 50;
+  border-radius: 0 0 var(--radius) 0;
+}
+
+.skipLink:focus {
+  left: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

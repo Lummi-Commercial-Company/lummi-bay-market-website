@@ -1,0 +1,53 @@
+[
+  {
+    "id": "exit-260",
+    "name": "Lummi Bay Market at Exit 260",
+    "navLabel": "Exit 260",
+    "aka": "Salish Village",
+    "address": "4839 Rural Ave",
+    "city": "Bellingham",
+    "state": "WA",
+    "zip": "98226",
+    "phone": "360-778-1894",
+    "hours": "Open 24 hours",
+    "truckStop": true,
+    "fuelGrades": ["regular", "midgrade", "premium", "diesel"],
+    "amenities": [
+      "24-hour convenience store",
+      "16 fuel lanes",
+      "Tobacco & liquor drive-thru",
+      "Quick-serve food",
+      "Truck stop"
+    ]
+  },
+  {
+    "id": "mini-mart",
+    "name": "Lummi Bay Market Mini Mart",
+    "navLabel": "Mini Mart",
+    "aka": "",
+    "address": "4884 Haxton Way",
+    "city": "Ferndale",
+    "state": "WA",
+    "zip": "98248",
+    "phone": "360-380-2049",
+    "hours": "6AM – 10PM",
+    "truckStop": false,
+    "fuelGrades": ["regular", "diesel"],
+    "amenities": ["Convenience store", "Next to Silver Reef Casino"]
+  },
+  {
+    "id": "fishermans-cove",
+    "name": "Lummi Bay Market at Fisherman's Cove",
+    "navLabel": "Fisherman's Cove",
+    "aka": "The Cove",
+    "address": "2570 Lummi View Drive",
+    "city": "Bellingham",
+    "state": "WA",
+    "zip": "98226",
+    "phone": "360-758-2448",
+    "hours": "6AM – 9PM",
+    "truckStop": false,
+    "fuelGrades": ["regular", "diesel", "ethanol-free"],
+    "amenities": ["Convenience store", "The Cove Kitchen", "Ethanol-free fuel"]
+  }
+]

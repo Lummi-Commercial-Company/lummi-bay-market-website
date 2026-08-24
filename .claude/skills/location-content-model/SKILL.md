@@ -29,6 +29,9 @@ client before launch.)
    quick-serve food, and a separate TRUCK STOP (diesel lanes, driver store, showers,
    lounge, truck parking). truckStop: true.
    fuelGrades: regular, midgrade, premium, diesel.
+   The TRUCK LANES are a separate price group (`exit-260-truck-stop`) selling diesel
+   and **DEF**, priced independently of the car lanes at the same site. DEF is sold
+   here and at no other location. See `fuel-price-update`.
 
 2. **mini-mart** — "Lummi Bay Market Mini Mart"; nav "Mini Mart".
    4884 Haxton Way, Ferndale WA 98248 · ~6AM–10PM · 360-380-2049. Next to Silver Reef
@@ -44,4 +47,6 @@ client before launch.)
 - Amenity badges/icons are driven by the `amenities` list — don't hand-place them.
 - Only exit-260 (truckStop: true) shows the Truck Stop summary + links to `/truck-stop`.
 - Keep addresses/hours in data, never in page markup, so staff edit via the CMS.
+- A location can own more than one price group (Exit 260 owns two: car lanes and truck
+  lanes). `priceGroupsForLocation()` in `src/lib/fuel.ts` is the single mapping.
 - The footer "Lummi Commercial Companies" link is global, not per-location.

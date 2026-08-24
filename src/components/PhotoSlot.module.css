@@ -1,0 +1,47 @@
+.slot {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  text-align: center;
+  padding: var(--sp-16);
+  background: var(--lb-bone);
+  /* Dashed edge + label so a slot is never mistaken for finished art. */
+  border: 1px dashed var(--lb-rule);
+  color: var(--lb-ink-muted);
+}
+
+.label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.name {
+  font-size: 0.8125rem;
+  max-width: 22ch;
+}
+
+.standard {
+  aspect-ratio: 4 / 3;
+}
+
+/* Portrait-ish on a phone so the caption does not swallow the image; letterbox once
+   the tile spans the full width of a wide grid. */
+.feature {
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 700px) {
+  .feature {
+    aspect-ratio: 16 / 7;
+  }
+}
+
+/* The caption is laid over the bottom of the slot — keep the placeholder text above it. */
+.slot {
+  padding-bottom: var(--sp-64);
+}
