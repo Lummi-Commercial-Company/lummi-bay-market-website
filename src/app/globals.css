@@ -46,6 +46,14 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* Anchor targets must clear the pinned header. */
+  scroll-padding-top: 12rem;
+}
+
+@media (min-width: 900px) {
+  html {
+    scroll-padding-top: 9rem;
+  }
 }
 
 body {

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import FuelPrices from "@/components/FuelPrices";
 import Tile from "@/components/Tile";
 import type { TileData } from "@/components/Tile";
 import promotions from "@/data/promotions.json";
@@ -9,8 +8,10 @@ import styles from "./page.module.css";
 /**
  * Home is a Persuade surface for the traveler already on I-5: what fuel costs,
  * whether it is open, and what is actually there — before the off-ramp.
- * Prices live in the header panel (top-right on desktop, under the logo on mobile).
- * Everything else is one tap away.
+ *
+ * There is deliberately NO price table on this page. Prices live in the sticky header
+ * widget, which stays on screen the whole way down, so a second copy here would be
+ * redundant. /fuel-prices carries the full grade list.
  */
 
 const promo = promotions.find((p) => p.active);
@@ -99,25 +100,6 @@ export default function HomePage() {
             />
           ))}
         </div>
-      </section>
-
-      <section className={`wrap ${styles.section}`} aria-labelledby="all-prices">
-        <h2 id="all-prices">Fuel prices</h2>
-        {/* Same component as the header panel, in its full variant. */}
-        <div className={styles.priceCard}>
-          <FuelPrices
-            groups={[
-              "exit-260",
-              "exit-260-truck-stop",
-              "mini-mart",
-              "fishermans-cove",
-            ]}
-            variant="full"
-          />
-        </div>
-        <Link href="/fuel-prices" className={styles.moreLink}>
-          See the fuel prices page
-        </Link>
       </section>
 
       <section className={`wrap ${styles.section}`} aria-labelledby="rewards">

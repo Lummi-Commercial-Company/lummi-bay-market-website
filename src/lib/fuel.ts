@@ -29,7 +29,7 @@ export type PriceGroup = {
 };
 
 const GRADE_LABELS: Record<Grade, string> = {
-  regular: "Regular",
+  regular: "Unleaded",
   midgrade: "Midgrade",
   premium: "Premium",
   diesel: "Diesel",
@@ -51,6 +51,16 @@ export const GROUP_LABELS: Record<PriceGroupId, string> = {
   "exit-260-truck-stop": "Truck Stop",
   "mini-mart": "Mini Mart",
   "fishermans-cove": "Fisherman's Cove",
+};
+
+/**
+ * Names for the pinned widget, where four columns share a phone's width. Every one
+ * fits on a single line, so no column's prices fall out of line with its neighbours.
+ * "The Cove" is this location's documented aka, not a new name.
+ */
+export const GROUP_SHORT_LABELS: Record<PriceGroupId, string> = {
+  ...GROUP_LABELS,
+  "fishermans-cove": "The Cove",
 };
 
 export function getPriceGroup(id: PriceGroupId): PriceGroup {

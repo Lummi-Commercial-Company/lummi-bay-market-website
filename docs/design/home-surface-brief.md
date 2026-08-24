@@ -11,25 +11,34 @@ actually there. Home either answers those above the fold or it has failed.
 
 ## The shape
 
-- **A compact price panel that never makes them hunt.** Exit 260 above Truck Stop,
-  tiny grade labels over big tabular numbers. Top-right on desktop, directly under the
-  header on mobile. The truck lanes are priced independently of the car lanes.
+- **A pinned price widget that never makes them hunt.** All four price groups —
+  Exit 260, Mini Mart, The Cove, Truck Stop — with unleaded and diesel at each
+  location and diesel and DEF at the truck lanes, which are priced independently of
+  the car lanes at the same site. Tiny grade labels over big tabular numbers.
+- **The header stays put.** Nav and prices are sticky, so the numbers are on screen at
+  every point of the visit. The utility bar scrolls away; everything below it pins.
+- **No second price table on Home.** The pinned widget already follows the reader
+  down, so a table at the bottom would only repeat it. `/fuel-prices` carries the full
+  grade list — midgrade, premium and ethanol-free included.
+- **On a phone: logo, then nav, then prices.** Navigation reads above the widget, and
+  the widget is condensed to four columns across so the pinned block stays shallow.
 - **A photo-tile mosaic with captions overlaid** — one full-width feature tile, then an
   even row. It carries the truck stop, the drive-thru, coffee and the Cove Kitchen.
 - **Promotions** as an editable band, read from data.
 - **Three locations** as an even row of tiles, hours on the face of each.
-- **All prices in full** further down, then the Rewards app.
-- **A navy footer** with per-location hours and phones, and the single mandatory
-  Lummi Commercial Companies link.
+- **The Rewards app**, then a navy footer with per-location hours and phones, and the
+  single mandatory Lummi Commercial Companies link.
 - **No wave band.** The waterline was cut on instruction — see "Open" below.
-
-Prices for Exit 260 and the truck stop in the header; everything else one tap away.
 
 ## Decisions taken
 
 | Decision | Where it landed |
 |---|---|
 | No car wash | The tile is a coffee tile instead. |
+| Nav and prices are sticky | The `<header>` itself pins, offset by the utility bar's height. |
+| The widget shows unleaded and diesel only | `only` narrows the display; the data keeps every grade, and the full views still show them. |
+| "Unleaded", not "Regular" | Display label only — the data key stays `regular`. |
+| No price table at the bottom of Home | Removed; the pinned widget covers it. |
 | DEF is real, at the truck stop only | A fuel grade in the data model and the validator. |
 | Stock photography for launch | Seven marked slots plus `home-shot-list.md`. |
 | No earning-rate claim for Rewards | Copy reads "Get the Rewards app". |
@@ -47,3 +56,6 @@ Prices for Exit 260 and the truck stop in the header; everything else one tap aw
 - **Rewards programme terms**, before any earning claim is published.
 - **Whether a `/legal` page exists**, and what it contains.
 - **Social accounts** — whether they exist, and their URLs.
+- **Whether midgrade, premium and ethanol-free should disappear everywhere,** not just
+  from the pinned widget. They are still sold, so they were left on `/fuel-prices` and
+  the location pages; say the word and they come out of the data too.

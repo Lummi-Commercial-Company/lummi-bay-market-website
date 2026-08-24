@@ -1,14 +1,62 @@
-/* Compact panel: header top-right on desktop, straight under the header on mobile. */
+/*
+  Two shapes for one component.
+
+  .panel — the condensed sticky widget. It is on screen the whole time the reader is
+  scrolling, so it has to stay short: groups sit side by side, not stacked. Two columns
+  on a phone, one row of four on a wide screen.
+
+  .full — the all-grades view on /fuel-prices and the location pages. Room to breathe.
+*/
+
 .panel {
   background: var(--lb-paper);
   border: 1px solid var(--lb-rule);
-  border-radius: 12px;
-  padding: var(--sp-12) var(--sp-16);
+  border-radius: var(--radius-card);
+  padding: var(--sp-8) var(--sp-12);
+}
+
+.panel .group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-4) 0;
+}
+
+/* Phones: all four groups across in one row, grades stacked inside each. Keeps the
+   pinned widget shallow without abbreviating a grade name or hiding a location
+   behind a horizontal scroll. */
+.panel .groups {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-8);
+}
+
+.panel .grades {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.panel .groupLabel {
+  font-size: 0.625rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.panel .price {
+  font-size: 1.0625rem;
+}
+
+.panel .gradeLabel {
+  font-size: 0.5625rem;
 }
 
 .full {
   display: grid;
   gap: var(--sp-16);
+}
+
+.groups {
+  display: contents;
 }
 
 .group {
@@ -18,7 +66,7 @@
   padding: var(--sp-8) 0;
 }
 
-.group + .group {
+.full .group + .group {
   border-top: 1px solid var(--lb-rule);
 }
 
@@ -28,7 +76,6 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--lb-navy);
-  min-width: 5.5rem;
   flex-shrink: 0;
 }
 
@@ -44,15 +91,14 @@
 .grade {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 3.75rem;
+  gap: 1px;
 }
 
-/* Small labels stay navy/ink — teal and cedar fail AA at this size. */
+/* Small labels stay navy — teal and cedar fail AA at this size. */
 .gradeLabel {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--lb-navy);
 }
@@ -60,10 +106,11 @@
 .price {
   font-family: var(--font-display);
   font-size: 1.375rem;
-  line-height: 1.1;
+  line-height: 1.05;
   color: var(--lb-navy-deep);
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
+  white-space: nowrap;
 }
 
 .dollar {
@@ -73,13 +120,14 @@
 }
 
 .updated {
-  margin: var(--sp-8) 0 0;
-  font-size: 0.75rem;
+  margin: var(--sp-4) 0 0;
+  font-size: 0.625rem;
   color: var(--lb-ink-muted);
 }
 
+/* --- full variant --- */
+
 .full .group {
-  /* Stacked on phones so grades sit in a grid rather than one per line. */
   flex-direction: column;
   align-items: stretch;
   gap: var(--sp-8);
@@ -92,13 +140,8 @@
   gap: var(--sp-12);
 }
 
-.full .price {
-  font-size: 2rem;
-}
-
 .full .groupLabel {
   font-size: 1rem;
-  min-width: 9rem;
 }
 
 @media (min-width: 700px) {
@@ -112,10 +155,38 @@
     display: flex;
     gap: var(--sp-24);
   }
+
+  .full .groupLabel {
+    min-width: 9rem;
+  }
+
+  .full .price {
+    font-size: 2rem;
+  }
 }
 
 @media (min-width: 900px) {
-  .panel .group {
-    padding: var(--sp-4) 0;
+  /* Wide enough to put each group's grades side by side again. */
+  .panel .groups {
+    display: flex;
+    gap: var(--sp-24);
   }
+
+  .panel .grades {
+    flex-direction: row;
+    gap: var(--sp-16);
+  }
+
+  .panel .group {
+    padding: 0;
+  }
+
+  .panel .price {
+    font-size: 1.25rem;
+  }
+
+  .panel .gradeLabel {
+    font-size: 0.625rem;
+  }
+
 }

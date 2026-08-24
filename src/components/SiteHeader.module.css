@@ -1,10 +1,17 @@
 .header {
+  /* The whole header pins, pulled up by exactly the utility bar's height so that the
+     bar scrolls away and the logo, nav and prices stay on screen. --utility-h must
+     match .utility's fixed height. */
+  --utility-h: 32px;
+  position: sticky;
+  top: calc(-1 * var(--utility-h));
+  z-index: 30;
   background: var(--lb-ground);
-  border-bottom: 3px solid var(--lb-navy-deep);
 }
 
-/* Thin utility bar above the masthead. */
+/* Thin utility bar. Not sticky — it scrolls away and stays out of the way. */
 .utility {
+  height: var(--utility-h);
   background: var(--lb-bone);
   border-bottom: 1px solid var(--lb-rule);
 }
@@ -13,7 +20,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 34px;
+  height: 100%;
 }
 
 .utilityLink {
@@ -23,42 +30,55 @@
   text-transform: uppercase;
   color: var(--lb-navy);
   text-decoration: none;
-  padding: var(--sp-8) 0;
+  line-height: 1;
 }
 
 .utilityLink:hover {
   text-decoration: underline;
 }
 
-.masthead {
+/*
+  The pinned block: logo, nav and prices.
+
+  On a phone .mastRow is display:contents, so logo and prices become direct children
+  of this flex column and the nav can be ordered between them. On desktop .mastRow
+  becomes a real row and the nav sits below it, its navy band running the full width
+  while its own inner container re-centres the links.
+*/
+.bar {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-16);
-  padding-top: var(--sp-16);
-  padding-bottom: var(--sp-16);
+  background: var(--lb-ground);
+  border-bottom: 3px solid var(--lb-navy-deep);
 }
 
-.logoLink {
+.mastRow {
+  display: contents;
+}
+
+.logoArea {
+  order: 1;
   text-decoration: none;
   align-self: flex-start;
+  padding: var(--sp-4) var(--sp-16) 0;
 }
 
-.prices {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-8);
-  align-items: flex-start;
-}
-
-.allPrices {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--lb-navy);
-}
-
-/* Navy nav band. */
+/* Navigation sits above the prices on a phone. */
 .nav {
+  order: 2;
   background: var(--lb-navy-deep);
+}
+
+.priceArea {
+  order: 3;
+  display: flex;
+  padding: var(--sp-8) var(--sp-16);
+}
+
+/* The widget takes the full width it is given. */
+.priceArea > :first-child {
+  flex: 1;
+  min-width: 0;
 }
 
 .navInner {
@@ -75,7 +95,7 @@
   display: flex;
   align-items: center;
   gap: var(--sp-12);
-  padding: var(--sp-12) 0;
+  padding: var(--sp-8) 0 var(--sp-8);
   color: var(--lb-bone);
   font-weight: 600;
   font-size: 0.9375rem;
@@ -117,26 +137,35 @@
 }
 
 @media (min-width: 900px) {
-  .masthead {
-    flex-direction: row;
+  .mastRow {
+    display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--sp-32);
-    padding-top: var(--sp-24);
-    padding-bottom: var(--sp-24);
+    max-width: var(--max-w);
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 var(--sp-32);
   }
 
-  .prices {
-    align-items: flex-end;
+  .logoArea {
+    padding: var(--sp-12) 0;
   }
 
-  /* Desktop shows the full nav row; the disclosure control disappears. */
-  .toggle {
-    display: none;
+  .priceArea {
+    padding: var(--sp-8) 0;
+  }
+
+  .priceArea > :first-child {
+    flex: 0 0 auto;
   }
 
   .navInner {
     padding: 0 var(--sp-32);
+  }
+
+  .toggle {
+    display: none;
   }
 
   /* Desktop: the list is always a row, whatever the disclosure state is. */
@@ -153,7 +182,7 @@
 
   .navLink {
     border-top: 0;
-    padding: var(--sp-16) 0;
+    padding: var(--sp-12) 0;
     font-size: 1rem;
   }
 }

@@ -30,18 +30,7 @@
   grid-template-columns: 1fr;
 }
 
-.priceCard {
-  background: var(--lb-paper);
-  border: 1px solid var(--lb-rule);
-  border-radius: var(--radius-card);
-  padding: var(--sp-16) var(--sp-24);
-}
 
-.moreLink {
-  display: inline-block;
-  margin-top: var(--sp-16);
-  font-weight: 600;
-}
 
 .promo,
 .rewards {

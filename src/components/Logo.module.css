@@ -1,17 +1,17 @@
 .slot {
   display: inline-flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   min-width: 72px;
   /* Dashed edge marks this as an unfilled art slot during the build. */
-  padding: var(--sp-8) var(--sp-12);
+  padding: var(--sp-4) var(--sp-8);
   border: 1px dashed var(--lb-rule);
   border-radius: var(--radius);
 }
 
 .mark {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   line-height: 1;
   color: var(--lb-navy);
 }
@@ -23,4 +23,14 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--lb-ink-muted);
+}
+
+@media (min-width: 900px) {
+  .slot {
+    padding: var(--sp-8) var(--sp-12);
+  }
+
+  .mark {
+    font-size: 1.5rem;
+  }
 }
