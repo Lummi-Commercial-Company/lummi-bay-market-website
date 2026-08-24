@@ -53,10 +53,11 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 - Fuel-price editing procedure → skill `fuel-price-update`.
 
 ## Site architecture (locked — owned by ux-navigation-architect)
-Primary nav (4): **Home · Locations · Truck Stop · Fuel Prices**.
+Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, see ADR 0008.
 - Locations: index → 3 detail pages (nav labels: Exit 260 · Mini Mart · Fisherman's Cove).
 - Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it.
-- Fuel Prices: all locations in one view (also on Home and each location page).
+- `/fuel-prices` still exists as a page — reached from the footer and the price block's
+  "All prices" panel, not from the nav (ADR 0008).
 - **Rewards**: a "Get the App" pill in the header's right-hand utility slot on **every** page,
   plus the `/rewards` app-promo page and the footer. Nowhere else — see ADR 0006.
 - **Promos**: a graphic promo above the page title on interior pages, linking to a product info

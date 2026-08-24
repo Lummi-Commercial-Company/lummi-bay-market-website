@@ -25,12 +25,52 @@ nothing in the build to show for it. The class is `.promo`.
 **Clicking opens a product info page.** That page type does not exist in the locked
 architecture and is not designed here; see Open.
 
+**Promos are a constrained template, not a freeform builder.** One TinaCMS collection with
+fixed fields — image (desktop crop, phone crop), alt text, eyebrow, headline, body, button
+label, button link, start, end, which pages it appears on, priority — rendered by one component.
+
+A builder that lets staff assemble graphics, text and buttons freely was considered and
+rejected. It is *harder* for non-technical staff, not easier: it hands them layout decisions
+they did not ask for and cannot evaluate, and the project's first requirement is that content
+updates be easy for exactly those people. It also puts the locked brand system at the mercy of
+whoever is filling in a promo that afternoon. A form with fixed slots produces an on-brand,
+accessible, responsive promo every time; a genuinely bespoke layout is a developer change, not
+a builder feature.
+
+**Scheduling is the hard half, and it is not the scheduler.** Dates in a file are trivial.
+Making them *fire* on a static site is the real work: pages are rendered at build time, so a
+promo whose end date is Friday at 5pm does not vanish at Friday 5pm — nothing rebuilds. Three
+mechanisms, in preference order:
+
+1. **A scheduled rebuild** (Vercel cron) at the granularity the offers need. Reliable, exact,
+   and the site stays genuinely static in between. Use this when an end time is a promise —
+   "offer ends Friday" has to actually end Friday.
+2. **ISR `revalidate`.** No cron to maintain, and expiry is bounded by the interval — but
+   Next.js serves stale-while-revalidating, so the *first* visitor after the window closes
+   still sees the expired promo. Acceptable for soft promos, not for dated offers.
+3. **A client-side date check. Rejected.** The promo's markup ships to everyone regardless, it
+   flashes on load, search engines index an offer that is not running, and anyone can read it
+   in view-source before it starts.
+
+Dates carry an explicit timezone — `America/Los_Angeles`. Staff typing "Friday" mean Friday
+here, and a UTC-naive date silently shifts the window.
+
 ## Consequences
-- **On a phone the promo pushes the page title to 350px** — header 52 + band 72 + promo 197.
-  That is 43% down a 375x812 screen, so a guest landing on a Location page cannot see which
-  Location without scrolling. Measured. A 2.5:1 phone crop would cost ~140px and land the title
-  around 265px. Built at 16:9 as the prominent reading of "predominantly graphic"; the trade is
-  worth choosing deliberately rather than inheriting.
+- **On a phone, three things now stack above the page title.** Header 52 + price card 135 +
+  a 16:9 promo 197 puts the title at **424px — 52% down a 375x812 screen**. A guest landing on
+  a Location page gets past half the first screen before it says which Location. Measured, by
+  moving the real elements: a **2.5:1 phone crop** brings it to **367px**; swapping the card and
+  promo changes **nothing**, since both are still above the title; **moving the promo below the
+  title** brings it to **214px**. The last is much the biggest win and contradicts the brief, so
+  it is raised rather than taken. If the promo stays above the title, take the 2.5:1 crop.
+- **The price card must be in flow on a phone**, not absolutely positioned as the desktop rail
+  is. Left absolute it covered the promo completely. The reserved-column arrangement is
+  desktop-only.
+- The same revalidation question governs fuel prices (ADR 0004), which are also static. Whatever
+  mechanism is chosen here should cover both rather than being solved twice.
+- **Rules are needed for zero and for more than one active promo.** With none, the slot must
+  collapse to nothing rather than reserve an empty box. With several, `priority` decides, and
+  only one renders per slot — otherwise a busy month silently stacks banners above every title.
 - **The promo is almost certainly the page's largest contentful paint**, since it is the first
   large element. Every page it appears on is as fast as that image is. It needs explicit
   dimensions, a modern format, and a size budget.
@@ -52,7 +92,7 @@ architecture and is not designed here; see Open.
 - **First-party promo or paid third-party placement.** If any promo is sold, it needs
   disclosure, and the two cases have different legal and editorial rules. Assumed first-party
   throughout.
-- **Whether Home carries a promo, and whether more than one appears per page.** Only the
-  above-the-title slot on interior pages was asked for.
+- **Whether Home carries a promo.** Only the above-the-title slot on interior pages was asked
+  for.
 - **What happens when no promo is active.** The slot must collapse to nothing rather than
   reserve an empty box, or every page carries a hole.

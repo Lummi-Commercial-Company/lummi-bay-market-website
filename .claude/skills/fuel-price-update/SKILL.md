@@ -57,46 +57,46 @@ Rules that hold no matter who is editing:
 ## How prices are displayed
 One component everywhere. Full contract and the reasoning: **ADR 0005**.
 
-**Two shapes, by page.** Home is a **card, never wider than 400px**, in a right-hand rail
-flush to the right edge. Every other page is the **band** below. There is no third shape.
+**One shape at rest, everywhere.** A **card, never wider than 400px**, in a right-hand rail
+flush to the right edge — the page's own Location and the Truck Stop, with grade column
+headers. There is no per-page variant.
 
 **Rewards is never beside the prices.** It is a global "Get the App" pill in the header
-(ADR 0006), on every page including Home. Home's rail is the price card alone. Do not
-reintroduce a Rewards element into a rail or a band — the club card image and the compact
-cedar control were both tried there and both superseded.
+(ADR 0006), on every page. The rail is the price card alone. Do not reintroduce a Rewards
+element into it — the club card image and the compact cedar control were both tried there and
+both superseded.
 
-**A promo may sit between the block and the page title** on interior pages (ADR 0007). It is
-not part of this component; do not let its placement pull the price block down the page.
+**A promo sits between the block and the page title** on interior pages (ADR 0007). It is not
+part of this component, but on a phone the two stack: header 52 + card 135 + promo 197 puts the
+page title at 424px. Do not add a fourth thing above the title without measuring what it costs.
 
 **The header is sticky** (ADR 0006). Never give the price card `position: sticky` **while its
 panel is anchored to it** — tested: after ~300px of scroll the open panel is painted correctly
 but clicks fall through to the collapsed card behind it, which then light-dismisses it. That is
 the rule on phones, where the rail scrolls away.
 
-**Interior pages use the band, not the card.** One cell per place, reading across:
+**Desktop condenses on scroll.** Once the page has scrolled roughly halfway past the resting
+card it becomes a single line carrying **the page's own Location alone** — narrower as well as
+shorter, 360x39 from 400x151 — pinned under the header and still expandable to all four.
 
 ```
-Exit 260  | Reg. 3.79  Diesel 4.29     Truck Stop | Diesel 4.55  DEF 3.29   ⌄ All 4
-– expanded –
-Mini Mart | Reg. 3.79  Diesel 4.29     The Cove   | Reg.  3.85   Diesel 4.29
+Exit 260 │ REG 3.79   DIESEL 4.29        ⌄ All prices
 ```
 
-| | Phone | Desktop |
+| | Resting card | Condensed line |
 | --- | --- | --- |
-| Width | full width | 50%, floor 628px |
-| Cells per line | 1 (measured: two never fit at 375px) | 2 |
-| Height, open or shut | 72px | 44px |
+| Places shown | page's Location + Truck Stop | page's Location only |
+| Size | 400x151 desktop, 353x135 phone | 360x39, desktop only |
+| Width rule | capped at 400px | `max-content`, floor 340px, ceiling 440px |
+| Panel | anchored to the block | **positioned against the viewport** |
 
-Each place prints **its own grades** — the Truck Stop's are Diesel/DEF, a Location's are
-Regular/Diesel. **The Cove does not sell DEF.** The Cove is `shortLabel`, used only here;
-navigation still says Fisherman's Cove. The expansion **overlays** — the page moves by zero
-pixels — and the toggle column is a **fixed width**, because a cue that changes width between
-"All 4" and "Hide" re-flows the row under it and clips "Truck Stop".
+The condensed bar is sticky and safe *because* its panel is viewport-positioned. Do not make one
+sticky without the other. The trigger is ~10 lines of `IntersectionObserver` on a sentinel in
+the card's slot, at the card's height — the CSS-only route does not work with a sticky subject
+(ADR 0005 records the measurements).
 
-There is no rail on interior pages — the band sits below the header on its own.
-
-**Home condenses on scroll.** Once the page has scrolled through the card's middle it becomes a
-one-line bar pinned under the header:
+**On a phone the card is in flow**, never absolutely positioned — absolute, it covered the promo
+below it completely. The reserved right-hand column is desktop-only.
 
 ```
 Exit 260  REG 3.79  DIESEL 4.29 | Truck Stop  DIESEL 4.55  DEF 3.29      ⌄ All prices

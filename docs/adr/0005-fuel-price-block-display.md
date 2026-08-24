@@ -27,53 +27,44 @@ Column headers are kept in both states. They are a comparison device, and expand
 the comparison happens: a Location priced a few cents apart is visible at a glance in aligned
 columns and invisible in a run of inline text.
 
-**Interior pages do not use the card at all. They use a band.** The card is Home's shape. On
-every other page the block is a thin horizontal strip that reads across: one cell per place,
-`Name | Grade price  Grade price`. Collapsed carries the page's own Location and the Truck
-Stop; expanded adds the other two beneath them, aligned column for column.
+**One component, three states.**
+
+1. **Resting**, on every page and at every width — a card, **capped at 400px**, carrying the
+   page's own Location and the Truck Stop with grade column headers. 400x151 on desktop,
+   353x135 on a phone.
+2. **Expanded** — all four places, overlaying rather than pushing (the mechanism is below).
+3. **Condensed**, desktop only — once the page has scrolled roughly halfway past the resting
+   card, it becomes a **single line carrying the page's own Location alone**, pinned under the
+   sticky header, still expandable to all four. It gets *narrower as well as shorter*:
+   **360x39, from 400x151**.
 
 ```
-Exit 260  | Reg. 3.79  Diesel 4.29     Truck Stop | Diesel 4.55  DEF 3.29   ⌄ All 4
-– expanded –
-Mini Mart | Reg. 3.79  Diesel 4.29     The Cove   | Reg.  3.85   Diesel 4.29
+resting                          condensed
+┌──────────────────────────┐     ┌────────────────────────────────────┐
+│ ⌄ View all prices        │     │ Exit 260 │ REG 3.79  DIESEL 4.29 ⌄ │
+│            REGULAR DIESEL│     └────────────────────────────────────┘
+│ Exit 260      3.79   4.29│
+│             DIESEL   DEF │
+│ Truck Stop    4.55   3.29│
+└──────────────────────────┘
 ```
 
-Each place keeps **its own grade labels** — the Truck Stop's pair is Diesel/DEF, a Location's
-is Regular/Diesel. The Cove does not sell DEF. (The brief's expanded example showed Dies./Def.
-against The Cove; that is the Truck Stop's pair repeated down the column, and was read as
-pattern copy rather than intent.)
+Carrying one place rather than two is what makes the condensed bar narrow. The Truck Stop is
+dropped from it deliberately: the guest is on a page, the page has a Location, and the line is
+a reminder of where they are — not a comparison. The comparison is one click away.
 
-Width is **full width on a phone and 50% on desktop, with a 628px floor** — two cells plus the
-toggle column need 620px of measured content, so below about a 1260px viewport the floor
-applies. On a phone two cells cannot sit side by side at all (each needs 246px), so it is one
-cell per line: two lines collapsed, four expanded.
+**The card is in flow on a phone**, and in a reserved right-hand column on desktop. It is never
+absolutely positioned on a phone: it covered the promo (ADR 0007) completely when it was.
 
-Height is **44px on desktop and 72px on a phone, open or shut** — the expansion overlays, per
-the rule below, so the page moves by nothing. That replaces a 151px desktop card and a 135px
-phone card.
+**The band is superseded.** A thin full-width horizontal band was built as the interior page's
+resting layout and has been replaced by the card above. Its cell format survives as the
+condensed line — the work moved rather than being discarded.
 
-The toggle is a fixed-width right-hand column. It has to be fixed: the shut and open labels
-differ by 36px, and a cue that changes width on toggle re-flows the row underneath it and
-clipped "Truck Stop". Measured, then pinned.
-
-**On Home the block is a card, capped at 400px** — in that resting shape. On a 375px phone that reads as full-bleed; it is the same rule, not a second layout.
-The one exception is the condensed desktop bar below, which is deliberately not a card.
-
-**The scroll-condense below is superseded on interior pages** — the band already *is* the thin
-line, so there is nothing to morph into, and scrolling would only pin it. Whether it should pin
-is open. What follows applies to Home, whose block is still a card.
-
-**On desktop a card condenses to a single line once the page has scrolled through its
-middle.** It is pinned under the sticky header, and at that point it stops being a 400px card
-and becomes a bar carrying the same two groups on one line — `Exit 260 · Reg 3.79 · Diesel
-4.29 | Truck Stop · Diesel 4.55 · DEF 3.29` — with the toggle moved to the end of the line as
-"All prices". The expanded panel is unchanged in content and gets a two-column layout at bar
-width: the three Locations left, the Truck Stop right.
-
-Width is `max(50%, 620px)`, not a flat 50%. The line's intrinsic width is 614px, so half of a
-1024px screen (492px) and half of a 1152px screen (556px) both clip it. Swept across seven
-widths with nothing clipping: 620px at 1024 and 1280, then a true half above that — 695px at
-1440, 935px at 1920. The 48–49% rather than 50% is the page's own side padding.
+**The condense trigger** is roughly half the resting card's height scrolled past it — a
+sentinel occupying the card's slot, at the card's own height, so "less than half of it is still
+visible" is literally that. Width is `max-content` with a 340px floor and a 440px ceiling: the
+line measures 358px as built, and letting content set the width is what keeps it narrow when a
+Location has two grades and wider if one ever has three.
 
 **The condensed bar's panel is positioned against the viewport, not against the block.** No
 `position-anchor`. This is what makes a sticky block safe (ADR 0006) and it removes CSS anchor
@@ -99,14 +90,11 @@ column rather than two elements fighting for the same spot. Order is Rewards fir
 beneath — Rewards is a product and stays in focus at the top of the page; prices are a
 reference and sit under it.
 
-**Interior pages have no rail.** Rewards is a "Get the App" pill in the header's right-hand
-utility slot (ADR 0006), and the price band sits below the header on its own. The rail —
-Rewards above prices on the right — is Home's layout only.
-
-**Home's rail is the price card alone.** Rewards is the global header pill (ADR 0006), so no
-page carries a Rewards element beside its prices. Every earlier arrangement here — the club
-card image, then the compact cedar control — is superseded; they are kept in the history below
-because each was rejected for a reason worth not rediscovering.
+**No page has a Rewards element beside its prices.** Rewards is the global "Get the App" pill
+in the header's right-hand utility slot (ADR 0006), so the rail is the price card and nothing
+else, on every page. Every earlier arrangement here — the club card image, then the compact
+cedar control — is superseded; they are kept in the history below because each was rejected for
+a reason worth not rediscovering.
 
 **Opening is an overlay, by two different mechanisms.**
 - A block that **loads collapsed** — every page but Home — opens as an **HTML popover**
