@@ -63,6 +63,15 @@ Carrying one place rather than two is what makes the condensed bar narrow. The T
 dropped from it deliberately: the guest is on a page, the page has a Location, and the line is
 a reminder of where they are — not a comparison. The comparison is one click away.
 
+**Home loads expanded and does not condense; interior pages condense.** One rule per page
+type, not a special case per width. Home's block is expanded at rest — 400x257 on desktop,
+345x230 on a phone — and condensing needs the resting height reserved so the page does not
+jump; reserving *that* would leave a large blank hole with a 39px line floating in it. There is
+a structural reason too: on Home the two-column region is the **top of the page only**, with
+locations, the truck stop and the footer full width beneath it, so the rail has nowhere to
+follow the guest to. Home shows all four prices on arrival and lets them scroll away; a
+persistent price line earns its keep on the pages that do not.
+
 **Desktop is a two-column page.** The block sits in a **reserved 400px grid column**, not
 floating over content — the promo is left-aligned in the content column and its right edge lands
 exactly **14px** from the block, so the two cannot collide at any width. On a phone the block is
@@ -209,6 +218,12 @@ popover renders in the browser's top layer and outranks all of it regardless.
   reaches back into storage — ADR 0004 stands unchanged.
 
 ## Open, and deliberately not decided here
+- **Whether Home's phone layout leads with the price block or the hero.** As the rules stand
+  the block is first, which puts the logo lockup and "Three stops on the bay" at **391px** —
+  the brand's front door opens on a price table. Measured alternative: hero first, block
+  immediately under it, puts the headline at **161px**. Desktop is unaffected (193px either
+  way, since the block is in the rail column). Recommended: hero first on Home's phone layout
+  only; every other page keeps prices on top.
 - **Desktop and phone now rest on different content**, not just a different arrangement —
   desktop shows the Location and the Truck Stop, a phone interior page shows the Location alone.
   This was asked for and is defensible, but it is the first place a breakpoint changes *what
