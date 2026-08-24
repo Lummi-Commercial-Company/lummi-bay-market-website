@@ -27,11 +27,43 @@ Column headers are kept in both states. They are a comparison device, and expand
 the comparison happens: a Location priced a few cents apart is visible at a glance in aligned
 columns and invisible in a run of inline text.
 
-**The block is a card, capped at 400px** — in every placement, at every width, in its resting
-shape. On a 375px phone that reads as full-bleed; it is the same rule, not a second layout.
+**Interior pages do not use the card at all. They use a band.** The card is Home's shape. On
+every other page the block is a thin horizontal strip that reads across: one cell per place,
+`Name | Grade price  Grade price`. Collapsed carries the page's own Location and the Truck
+Stop; expanded adds the other two beneath them, aligned column for column.
+
+```
+Exit 260  | Reg. 3.79  Diesel 4.29     Truck Stop | Diesel 4.55  DEF 3.29   ⌄ All 4
+– expanded –
+Mini Mart | Reg. 3.79  Diesel 4.29     The Cove   | Reg.  3.85   Diesel 4.29
+```
+
+Each place keeps **its own grade labels** — the Truck Stop's pair is Diesel/DEF, a Location's
+is Regular/Diesel. The Cove does not sell DEF. (The brief's expanded example showed Dies./Def.
+against The Cove; that is the Truck Stop's pair repeated down the column, and was read as
+pattern copy rather than intent.)
+
+Width is **full width on a phone and 50% on desktop, with a 628px floor** — two cells plus the
+toggle column need 620px of measured content, so below about a 1260px viewport the floor
+applies. On a phone two cells cannot sit side by side at all (each needs 246px), so it is one
+cell per line: two lines collapsed, four expanded.
+
+Height is **44px on desktop and 72px on a phone, open or shut** — the expansion overlays, per
+the rule below, so the page moves by nothing. That replaces a 151px desktop card and a 135px
+phone card.
+
+The toggle is a fixed-width right-hand column. It has to be fixed: the shut and open labels
+differ by 36px, and a cue that changes width on toggle re-flows the row underneath it and
+clipped "Truck Stop". Measured, then pinned.
+
+**On Home the block is a card, capped at 400px** — in that resting shape. On a 375px phone that reads as full-bleed; it is the same rule, not a second layout.
 The one exception is the condensed desktop bar below, which is deliberately not a card.
 
-**On desktop the block condenses to a single line once the page has scrolled through its
+**The scroll-condense below is superseded on interior pages** — the band already *is* the thin
+line, so there is nothing to morph into, and scrolling would only pin it. Whether it should pin
+is open. What follows applies to Home, whose block is still a card.
+
+**On desktop a card condenses to a single line once the page has scrolled through its
 middle.** It is pinned under the sticky header, and at that point it stops being a 400px card
 and becomes a bar carrying the same two groups on one line — `Exit 260 · Reg 3.79 · Diesel
 4.29 | Truck Stop · Diesel 4.55 · DEF 3.29` — with the toggle moved to the end of the line as
@@ -67,7 +99,11 @@ column rather than two elements fighting for the same spot. Order is Rewards fir
 beneath — Rewards is a product and stays in focus at the top of the page; prices are a
 reference and sit under it.
 
-**The Rewards slot is the same compact control on every page, Home included** — one line:
+**Interior pages have no rail.** Rewards is a "Get the App" pill in the header's right-hand
+utility slot (ADR 0006), and the price band sits below the header on its own. The rail —
+Rewards above prices on the right — is Home's layout only.
+
+**On Home, the Rewards slot is the compact control** — one line:
 mark, name, one-line reason, and a call to action. The club card image is not in the rail at
 all. The rail is therefore identical on every page: Rewards control, price card, nothing
 page-conditional to build or to get wrong.

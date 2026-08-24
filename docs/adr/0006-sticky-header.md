@@ -33,9 +33,15 @@ its panel is positioned against the viewport rather than against the block (ADR 
 viewport-fixed panel, scrolled 1200px, clicking inside the open panel reached the panel 3 of 3.
 The rule here was always conditional on the mechanism; the mechanism changed, so the rule did.
 
-**The header's top-right utility slot is not used for Rewards.** Rewards is the compact control
-at the top of the rail (ADR 0005). A nav-sized pill in the header reads as wayfinding at the
-same weight as Locations and Truck Stop, not as a product. The slot stays free.
+**The header's top-right utility slot carries a "Get the App" pill on interior pages.** This
+reverses an earlier decision recorded here twice — that a nav-sized pill would read as
+wayfinding rather than as a product, so the slot should stay free. It is settled the other way.
+
+Two things make the reversal work rather than merely overrule the objection. The label is an
+**instruction, not a noun**: "Get the App" asks for an action where a bare "Rewards" pill would
+have sat at the same weight as Locations and Truck Stop. And it is **cedar on the navy header**,
+so it does not read as a fifth nav item. On interior pages this removes the rail entirely —
+Rewards is in the header, prices are a band below it (ADR 0005).
 
 ## Why the rail cannot be sticky
 Pinning the price card under the pinned header is the obvious next move — prices would follow
@@ -86,5 +92,6 @@ the panel open, the header answered every time.
 - **Sticky header plus a sticky, anchor-positioned price rail.** The defect above. A sticky
   block whose panel is viewport-positioned is a different thing and is now the desktop
   behaviour (ADR 0005).
-- **Rewards as a header pill.** Costs no page height and would have returned about 55px on a
-  phone, but demotes a product to wayfinding. Recorded in ADR 0005.
+- ~~**Rewards as a header pill.**~~ Rejected twice, then adopted — see the Decision above.
+  It costs no page height, which is what it was always worth; the objection was about
+  emphasis, and the "Get the App" wording answers it.

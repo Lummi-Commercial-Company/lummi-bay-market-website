@@ -11,6 +11,10 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
 - `id` (slug): exit-260 | mini-mart | fishermans-cove
 - `name`: full name (e.g., "Lummi Bay Market at Exit 260")
 - `navLabel`: short nav label (Exit 260 | Mini Mart | Fisherman's Cove)
+- `shortLabel`: the tightest display label, for the fuel price band where horizontal
+  room is scarce (Exit 260 | Mini Mart | **The Cove**). Falls back to `navLabel` when
+  the two are the same. This is a third name, not a reuse of `aka` — `aka` records what
+  a place is *also called*; `shortLabel` is what we *print* in a constrained slot.
 - `aka`: legacy/alternate name(s)
 - `address`, `city`, `state`, `zip`, `phone`, `hours`
 - `map`: embed or lat/lng
@@ -36,7 +40,7 @@ client before launch.)
    Casino. Amenities: fuel + convenience store. truckStop: false.
 
 3. **fishermans-cove** — "Lummi Bay Market at Fisherman's Cove"; nav "Fisherman's Cove";
-   aka The Cove. 2570 Lummi View Drive, Bellingham WA 98226 · ~6AM–9PM · 360-758-2448.
+   shortLabel "The Cove"; aka The Cove. 2570 Lummi View Drive, Bellingham WA 98226 · ~6AM–9PM · 360-758-2448.
    Amenities: fuel + convenience store, the Cove Kitchen, ethanol-free fuel.
    truckStop: false.
 

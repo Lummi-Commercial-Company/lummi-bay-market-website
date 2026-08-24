@@ -80,7 +80,30 @@ panel is anchored to it** — tested: after ~300px of scroll the open panel is p
 but clicks fall through to the collapsed card behind it, which then light-dismisses it. That is
 the rule on phones, where the rail scrolls away.
 
-**Desktop condenses.** Once the page has scrolled through the block's middle it becomes a
+**Interior pages use the band, not the card.** One cell per place, reading across:
+
+```
+Exit 260  | Reg. 3.79  Diesel 4.29     Truck Stop | Diesel 4.55  DEF 3.29   ⌄ All 4
+– expanded –
+Mini Mart | Reg. 3.79  Diesel 4.29     The Cove   | Reg.  3.85   Diesel 4.29
+```
+
+| | Phone | Desktop |
+| --- | --- | --- |
+| Width | full width | 50%, floor 628px |
+| Cells per line | 1 (measured: two never fit at 375px) | 2 |
+| Height, open or shut | 72px | 44px |
+
+Each place prints **its own grades** — the Truck Stop's are Diesel/DEF, a Location's are
+Regular/Diesel. **The Cove does not sell DEF.** The Cove is `shortLabel`, used only here;
+navigation still says Fisherman's Cove. The expansion **overlays** — the page moves by zero
+pixels — and the toggle column is a **fixed width**, because a cue that changes width between
+"All 4" and "Hide" re-flows the row under it and clips "Truck Stop".
+
+Rewards is not in the band or beside it: on interior pages it is a **"Get the App" pill in the
+header** (ADR 0006). There is no rail on interior pages.
+
+**Home condenses on scroll.** Once the page has scrolled through the card's middle it becomes a
 one-line bar pinned under the header:
 
 ```

@@ -22,7 +22,8 @@ flagship.
 "Mini Mart". Fuel + convenience store; next to Silver Reef Casino.
 
 **Fisherman's Cove** — A Location. Full name "Lummi Bay Market at Fisherman's Cove";
-nav label "Fisherman's Cove". Fuel + convenience store; includes the Cove Kitchen and
+nav label "Fisherman's Cove"; short label "The Cove", used only where horizontal room is
+scarce — the fuel price band. Navigation never abbreviates it. Fuel + convenience store; includes the Cove Kitchen and
 ethanol-free fuel.
 
 **Amenity** — A service offered at a Location (e.g., showers, driver lounge). A café or
