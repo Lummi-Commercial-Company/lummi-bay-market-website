@@ -80,7 +80,12 @@ panel is anchored to it** — tested: after ~300px of scroll the open panel is p
 but clicks fall through to the collapsed card behind it, which then light-dismisses it. That is
 the rule on phones, where the rail scrolls away.
 
-**Desktop condenses on scroll.** Once the page has scrolled roughly halfway past the resting
+**Condensing closes the panel; it must never prevent it.** Do not put `display: none` on the
+panel in the condensed state — that kills "All prices" in the one state the bar exists for, and
+`<details>` will still report `open: true`, so it reads as broken rather than blocked. Close the
+block in the observer instead, and hang the panel off the **bar**, not the block's reserved box.
+
+**Every page condenses on scroll**, at both widths. Once the page has scrolled roughly halfway past the resting
 card it becomes a single line carrying **the page's own Location alone** — narrower as well as
 shorter, 360x39 from 400x151 — pinned under the header and still expandable to all four.
 
