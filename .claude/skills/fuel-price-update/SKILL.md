@@ -148,8 +148,11 @@ subject (ADR 0005 records the measurements).
 headers — that is what this replaced, and it read as two unrelated cards of numbers. A place
 that does not sell a grade gets an em-dash.
 
-The column set is derived: **the table shows the union of the grades its rows sell.** The DEF
-column exists when the Truck Stop is a row and not otherwise. No per-state layout.
+The column set is derived: **the table shows the union of the grades sold by the rows currently
+on screen** — visible, not present. DEF is a Truck Stop grade. Shut on a phone the card is
+Exit 260 alone, so there is no DEF column; it arrives with the Truck Stop when the block opens.
+On desktop the Truck Stop is in the card at rest, so DEF is there in both states. Never print a
+grade column that no visible row sells.
 
 ```
 open at rest (desktop)                  open while condensed (desktop)
@@ -158,18 +161,23 @@ open at rest (desktop)                  open while condensed (desktop)
 │           REGULAR DIESEL   DEF │      ├────────────────────────────────────┤
 │ Exit 260     3.79    4.29    — │      │        REGULAR   DIESEL       DEF  │
 │ Truck Stop      —    4.55  3.29│      │ Mini Mart 3.79     4.29         —  │
-│ TRUCK LANES                    │      │ The Cove  3.85     4.29         —  │
-├────────────────────────────────┤      │ Truck Stop   —     4.55       3.29 │
-│ Mini Mart    3.79    4.29    — │      │ TRUCK LANES                        │
+├────────────────────────────────┤      │ The Cove  3.85     4.29         —  │
+│ Mini Mart    3.79    4.29    — │      │ Truck Stop   —     4.55       3.29 │
 │ The Cove     3.85    4.29    — │      └────────────────────────────────────┘
 └────────────────────────────────┘
+
+phone, shut — no Truck Stop row on screen, so no DEF column
+┌──────────────────────────┐
+│ ⌄ View all prices        │
+│            REGULAR DIESEL│
+│ Exit 260      3.79   4.29│
+└──────────────────────────┘
 ```
 
 On `/truck-stop` the Truck Stop row leads, so diesel and DEF are the first numbers a driver hits.
 
-- **The Truck Stop row carries a `truck lanes` sub-label.** Sharing a DIESEL column with the car
-  lanes is only honest if the row says which lane it is — 4.55 against 4.29 is a big enough gap
-  that a guest who misses the distinction has been misled by the layout.
+- **Hide a column by hiding one cell per row**, header included, so grid auto-placement stays
+  intact.
 - **Hide the header row as a whole or not at all.** The leading blank cell is part of it; hiding
   the three labels but not the blank pushes every price one column right. Give the blank the
   same class as the labels.

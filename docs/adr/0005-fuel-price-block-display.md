@@ -24,14 +24,14 @@ information rather than a gap. The earlier design stacked two separate tables (L
 regular/diesel, the Truck Stop under diesel/DEF) and it read as two unrelated cards of numbers
 sitting on top of each other.
 
-The column set is derived: **the table shows the union of the grades its rows sell.** That one
-rule covers every state — the DEF column is present when the Truck Stop is a row and gone when
-it is not — with no per-state layout to maintain.
+The column set is derived: **the table shows the union of the grades sold by the rows currently
+on screen.** Visible, not present — that distinction is the whole rule. DEF is a Truck Stop
+grade, so shut on a phone, where the card is Exit 260 alone, there is no DEF column to explain;
+it arrives with the Truck Stop when the block opens. On desktop the Truck Stop is in the card at
+rest, so DEF is there in both states. One rule, no per-state layout to maintain.
 
-Sharing a DIESEL column between car lanes and truck lanes is only honest if the row says which
-it is, so the Truck Stop row carries a small `truck lanes` label under its name. Truck-lane
-diesel is not car-lane diesel and the price difference (4.55 against 4.29) is large enough that
-a guest who misses the distinction has been misled by the layout.
+The columns carry the grade, and the row label carries the place. Truck-lane diesel and car-lane
+diesel share the DIESEL column; the Truck Stop row is what says which lane it is.
 
 Column headers appear exactly once. **The panel is a continuation of the card's table, not a
 table of its own**, so it repeats neither the headers nor a caption — a hairline separates the
@@ -67,13 +67,23 @@ open at rest (desktop)                  open while condensed (desktop)
 │           REGULAR DIESEL   DEF │      ├────────────────────────────────────┤
 │ Exit 260     3.79    4.29    — │      │        REGULAR   DIESEL       DEF  │
 │ Truck Stop      —    4.55  3.29│      │ Mini Mart 3.79     4.29         —  │
-│ TRUCK LANES                    │      │ The Cove  3.85     4.29         —  │
-├────────────────────────────────┤      │ Truck Stop   —     4.55       3.29 │
-│ Mini Mart    3.79    4.29    — │      │ TRUCK LANES                        │
+├────────────────────────────────┤      │ The Cove  3.85     4.29         —  │
+│ Mini Mart    3.79    4.29    — │      │ Truck Stop   —     4.55       3.29 │
 │ The Cove     3.85    4.29    — │      └────────────────────────────────────┘
 └────────────────────────────────┘
                                         the bar carries one Location, so the
 one card, one header row, one hairline   Truck Stop moves into the panel
+
+phone, shut                             phone, open
+┌──────────────────────────┐            ┌──────────────────────────────────┐
+│ ⌄ View all prices        │            │ ⌃ Hide                           │
+│            REGULAR DIESEL│            │          REGULAR  DIESEL     DEF │
+│ Exit 260      3.79   4.29│            │ Exit 260    3.79    4.29       — │
+└──────────────────────────┘            ├──────────────────────────────────┤
+                                        │ Mini Mart   3.79    4.29       — │
+no Truck Stop row on screen,            │ The Cove    3.85    4.29       — │
+so no DEF column to explain             │ Truck Stop     —    4.55    3.29 │
+                                        └──────────────────────────────────┘
 ```
 
 Carrying one place rather than two is what makes the condensed bar narrow. The Truck Stop is
