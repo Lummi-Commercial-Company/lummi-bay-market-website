@@ -61,9 +61,21 @@ One component everywhere. Full contract and the reasoning: **ADR 0005**.
 375px phone that reads as full-bleed; it is the same rule, not a second layout.
 
 **Placement** — a **right-hand rail**, flush to the right edge at every width. The **Rewards
-club card sits above it** at the top of the same rail; the price card is beneath. Rewards is a
+slot sits above it** at the top of the same rail; the price card is beneath. Rewards is a
 product and holds the top, prices are a reference and sit under it. The rail reserves a column
 on desktop — it must not float over page text.
+
+**The Rewards slot by page** — the rail is the same everywhere; only the slot's height changes.
+
+| Page | Rewards slot | Phone rail |
+| --- | --- | --- |
+| Home | the **club card image** (supplied art, placed, never redrawn) | 366px |
+| every other page | a **compact control**: mark, name, one-line reason, call to action | 191px |
+
+The compact control is **cedar** with a navy call-to-action pill. Not navy — the site header
+directly above it is navy and the two fuse into one bar. Not paper with a teal underline — that
+makes it a second price card. Do not demote it to a pill in the header's utility slot; that
+reads as wayfinding, not as a product (ADR 0005 records why).
 
 **Collapsed** — two groups with grade column headers: the page's own Location (Exit 260 on
 every non-Location page), then the Truck Stop, always.
@@ -119,10 +131,9 @@ navigation, the other is information.
 landmark, and keep the control a real `<button>`. It sits above the page's own heading on every
 page; a screen-reader user meets it on every navigation.
 
-**Known cost of the rail on phones**, accepted with eyes open: Rewards card 221px plus price
-block 135px is ~356px, about **44% of a 375x812 viewport** before any page content. The
-recommendation on the table is the club card image on Home and a compact Rewards control on
-interior pages (ADR 0005, still open).
+**Known cost of the rail on phones**, accepted with eyes open: on Home, card 221px + gap 10px +
+price block 135px = **366px**, about 45% of a 375x812 viewport before any page content. That is
+Home only — the compact control brings every other page to **191px**.
 
 ## Safety checks (test before done — do not assert)
 - JSON parses (no trailing comma).

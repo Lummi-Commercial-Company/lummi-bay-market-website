@@ -40,6 +40,21 @@ column rather than two elements fighting for the same spot. Order is Rewards fir
 beneath — Rewards is a product and stays in focus at the top of the page; prices are a
 reference and sit under it.
 
+**The Rewards slot changes size by page, not by structure.** On Home it holds the **club card
+image**. On every other page it holds a **compact control** — one line: mark, name, one-line
+reason, and a call to action. The rail is the same on both; only the slot's height differs, so
+Rewards is at the top of every page and the pattern is learned once.
+
+The control is **cedar**, not navy. Drawn in navy it read as a second nav bar, because the site
+header directly above it is the same navy and the two fused into one mass. Drawn in paper with
+a teal underline it read as a second price card and Rewards disappeared into the rail. Cedar is
+the brand accent, it separates from both, and the call-to-action pill goes navy on it.
+
+Rejected: demoting Rewards to a pill in the header's top-right utility slot. It costs no page
+height, and it is what the locked architecture anticipated for that slot, but a nav-sized pill
+reads as wayfinding at the same weight as Locations and Truck Stop — not as a key product.
+Worth revisiting only if the header is made sticky, since then Rewards would never scroll away.
+
 **Opening is an overlay, by two different mechanisms.**
 - A block that **loads collapsed** — every page but Home — opens as an **HTML popover**
   (`popover="auto"` with a `popovertarget` button), anchored over the block so the panel
@@ -109,9 +124,11 @@ popover renders in the browser's top layer and outranks all of it regardless.
   right-aligned to share the price card's right edge.
 - **The rail must reserve a column on desktop**, not float over one. Prototyped as a float,
   page text ran underneath both cards.
-- **On a phone the rail costs real estate before any page content.** Measured: Rewards card
-  221px plus price block 135px is 356px, about 44% of a 375x812 viewport. Survivable on Home,
-  wasteful on every interior page — hence the recommendation below.
+- **On a phone the rail costs real estate before any page content.** Measured on Home:
+  card 221px + 10px gap + price block 135px = **366px**, about 45% of a 375x812 viewport.
+  The compact control brings the interior-page rail to **191px** — 175px back — and on
+  desktop from 323px to **211px**. The header pill would have returned a further 55px on a
+  phone; that is what the rejection above costs.
 - The popover removes a bug the absolute-positioned version had: because the panel lives in
   the top layer, the block's own box never changes, so **there is no collapsed height to
   reserve**. The in-flow variant on Home does not need a reservation either, since it is
@@ -120,9 +137,6 @@ popover renders in the browser's top layer and outranks all of it regardless.
   reaches back into storage — ADR 0004 stands unchanged.
 
 ## Open, and deliberately not decided here
-- **Whether the club card image appears on every page or only on Home.** Recommended: the
-  card image on Home, a compact Rewards control on interior pages, so the rail does not spend
-  356px of a phone screen on every navigation. Rewards stays at the top either way.
 - **Panel height at large text sizes.** Four places fit today; at 200% text the panel can run
   off a phone. A `max-height` with internal scroll is the intended fix.
 - **The `/fuel-prices` page duplicates the block.** The intended answer is that the block
