@@ -93,13 +93,21 @@ shorter, 360x39 from 400x151 — pinned under the header and still expandable to
 Exit 260 │ REG 3.79   DIESEL 4.29        ⌄ All prices
 ```
 
-| | Resting | Condensed | Expanded |
+| | Resting | Condensed | Expanded adds |
 | --- | --- | --- | --- |
-| Desktop | Location + Truck Stop, 400x148 | Location only, 365x39 | adds Mini Mart, The Cove |
-| Phone (interior) | **Location only**, 345x76 | Location only, one line | adds those two **and** the Truck Stop |
+| Desktop | Location + Truck Stop, 400x122 | Location only, 400x39 | Mini Mart, The Cove |
+| Desktop, condensed | — | — | those two **and the Truck Stop** |
+| Phone (interior) | **Location only**, 345x78 | Location only, one line | those two **and the Truck Stop** |
 
-**The panel adds only what is not already on screen.** Its heading is "Also at", not "All
-locations". Never list a place twice — that is one rule, not a case per state.
+**The panel adds only what is not already on screen.** Never list a place twice — that is one
+rule, not a case per state. Apply it to the Truck Stop as well: the condensed bar carries one
+Location, so on desktop the Truck Stop moves *into* the panel the moment the block condenses.
+Missing that is what dropped truck prices out of the desktop condensed view entirely.
+
+**The panel has no caption.** It is a continuation of the card's table, not a table of its own,
+so it repeats neither a heading nor the column headers — a hairline separates the rows already
+on the page from the rest. It supplies a header row only in the condensed state, where the card
+is not on screen to carry one.
 
 **Condensing must move the page by zero pixels, at every width.** The block keeps its resting
 height: the collapsed face and the cue stay in the layout as `visibility: hidden` and the
@@ -122,47 +130,51 @@ the card's slot, at the card's height — the CSS-only route does not work with 
 below it completely. The reserved right-hand column is desktop-only.
 
 ```
-Exit 260  REG 3.79  DIESEL 4.29 | Truck Stop  DIESEL 4.55  DEF 3.29      ⌄ All prices
+Exit 260 │ REG 3.79   DIESEL 4.29                              ⌃ All prices
 ```
 
 | | Resting card | Condensed bar |
 | --- | --- | --- |
-| Width | 400px | `max(50%, 620px)` — a flat 50% clips below ~1280px |
-| Panel | anchored to the block | **positioned against the viewport** — no `position-anchor` |
-| Panel layout | one table | two columns: Locations left, Truck Stop right |
+| Width | 400px | **400px — the same.** `max-content` gave 365px, and a narrow bar on a 400px panel reads as two objects, not one card |
+| Panel | butts onto the card | butts onto the bar |
+| Panel position | against the block's **border box** (`left:-1px; right:-1px`), never `left:0` | same |
 
 The condensed bar is sticky and safe *because* its panel is viewport-positioned. Do not make
 one sticky without the other. The trigger is ~10 lines of `IntersectionObserver` on a sentinel
 in the block's slot, the block's own height — the CSS-only route does not work with a sticky
 subject (ADR 0005 records the measurements).
 
-**Collapsed** — two groups with grade column headers: the page's own Location (Exit 260 on
-every non-Location page), then the Truck Stop, always.
+**ONE TABLE. One header row. A column per grade.** Never two grouped tables with their own
+headers — that is what this replaced, and it read as two unrelated cards of numbers. A place
+that does not sell a grade gets an em-dash.
+
+The column set is derived: **the table shows the union of the grades its rows sell.** The DEF
+column exists when the Truck Stop is a row and not otherwise. No per-state layout.
 
 ```
-                     regular   diesel
-Exit 260              3.79      4.29
-
-                     diesel     def
-Truck Stop            4.55      3.29
+open at rest (desktop)                  open while condensed (desktop)
+┌────────────────────────────────┐      ┌────────────────────────────────────┐
+│ ⌃ Hide                         │      │ Exit 260 │ REG 3.79  DIESEL 4.29 ⌃ │
+│           REGULAR DIESEL   DEF │      ├────────────────────────────────────┤
+│ Exit 260     3.79    4.29    — │      │        REGULAR   DIESEL       DEF  │
+│ Truck Stop      —    4.55  3.29│      │ Mini Mart 3.79     4.29         —  │
+│ TRUCK LANES                    │      │ The Cove  3.85     4.29         —  │
+├────────────────────────────────┤      │ Truck Stop   —     4.55       3.29 │
+│ Mini Mart    3.79    4.29    — │      │ TRUCK LANES                        │
+│ The Cove     3.85    4.29    — │      └────────────────────────────────────┘
+└────────────────────────────────┘
 ```
 
-On `/truck-stop` the order reverses — Truck Stop first, so diesel and DEF lead for drivers.
+On `/truck-stop` the Truck Stop row leads, so diesel and DEF are the first numbers a driver hits.
 
-**Expanded** — all four places, same two-group shape, same column headers:
-
-```
-                     regular   diesel
-Exit 260              3.79      4.29
-Mini Mart             3.79      4.29
-Fisherman's Cove      3.85      4.29
-
-                     diesel     def
-Truck Stop            4.55      3.29
-```
-
-- Always all four. No "only show them if they differ" — a conditional layout has no answer for
-  partly-different prices and changes shape day to day.
+- **The Truck Stop row carries a `truck lanes` sub-label.** Sharing a DIESEL column with the car
+  lanes is only honest if the row says which lane it is — 4.55 against 4.29 is a big enough gap
+  that a guest who misses the distinction has been misled by the layout.
+- **Hide the header row as a whole or not at all.** The leading blank cell is part of it; hiding
+  the three labels but not the blank pushes every price one column right. Give the blank the
+  same class as the labels.
+- Always all four places. No "only show them if they differ" — a conditional layout has no answer
+  for partly-different prices and changes shape day to day.
 - Keep the column headers in **both** states. They are what makes a Location priced a few cents
   apart visible at a glance; dropping them collapsed would make the two states two layouts.
 - Prices use `--lb-navy-deep`, labels `--lb-navy` (skill `brand-system`).

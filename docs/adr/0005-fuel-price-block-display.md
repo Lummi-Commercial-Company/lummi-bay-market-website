@@ -17,15 +17,30 @@ because each one cost a wrong turn first.
 
 ## Decision
 
-**One component, two layouts.**
-- *Collapsed* — two groups with grade column headers: the page's own Location, then the
-  Truck Stop, always. On `/truck-stop` the order reverses so diesel and DEF lead.
-- *Expanded* — all four places in the same two-group shape: the three Locations under
-  regular/diesel, the Truck Stop under diesel/DEF.
+**One table. One header row. Never two grouped blocks.**
+Every place in the block is a row of the same grid, under one header row, with **a column per
+grade** — regular, diesel, DEF. A place that does not sell a grade gets an em-dash, which is
+information rather than a gap. The earlier design stacked two separate tables (Locations under
+regular/diesel, the Truck Stop under diesel/DEF) and it read as two unrelated cards of numbers
+sitting on top of each other.
 
-Column headers are kept in both states. They are a comparison device, and expanded is where
-the comparison happens: a Location priced a few cents apart is visible at a glance in aligned
-columns and invisible in a run of inline text.
+The column set is derived: **the table shows the union of the grades its rows sell.** That one
+rule covers every state — the DEF column is present when the Truck Stop is a row and gone when
+it is not — with no per-state layout to maintain.
+
+Sharing a DIESEL column between car lanes and truck lanes is only honest if the row says which
+it is, so the Truck Stop row carries a small `truck lanes` label under its name. Truck-lane
+diesel is not car-lane diesel and the price difference (4.55 against 4.29) is large enough that
+a guest who misses the distinction has been misled by the layout.
+
+Column headers appear exactly once. **The panel is a continuation of the card's table, not a
+table of its own**, so it repeats neither the headers nor a caption — a hairline separates the
+rows already on the page from the rest, the way a rule separates sections of one table. The
+panel supplies a header row only in the condensed state, where the card is not on screen to
+carry one.
+
+Headers earn their place: they are the comparison device. A Location priced a few cents apart is
+visible at a glance in aligned columns and invisible in a run of inline text.
 
 **One component, three states.**
 
@@ -36,27 +51,29 @@ columns and invisible in a run of inline text.
    **both** widths, it becomes a **single line carrying the page's own Location**: desktop
    365x39 from 400x148, a phone one line from 345x76. Narrower as well as shorter on desktop.
 3. **Expanded** — the panel adds **only the places not currently on screen**. Never a repeat.
-   Two on desktop (Mini Mart, The Cove), three from a phone interior page or from the condensed
-   line (those two plus the Truck Stop). Its heading is "Also at", not "All locations", because
-   that is what it now contains. This is one rule rather than a case per state: it falls out of
-   what is showing.
+   Two on desktop at rest (Mini Mart, The Cove — the Truck Stop is in the card); **three from
+   the desktop condensed line** (those two *plus the Truck Stop*, which the one-line bar does
+   not carry); three from a phone interior page. This is one rule rather than a case per state,
+   and getting it wrong is what dropped the Truck Stop out of the desktop condensed view
+   entirely: the bar shows one Location, so everything else — Truck Stop included — belongs in
+   the panel.
+   The panel has **no caption**. "Also at" labelled a second block, and there is no second
+   block any more.
 
 ```
-resting (desktop)                condensed (both)
-┌──────────────────────────┐     ┌────────────────────────────────────┐
-│ ⌄ View all prices        │     │ Exit 260 │ REG 3.79  DIESEL 4.29 ⌄ │
-│            REGULAR DIESEL│     └────────────────────────────────────┘
-│ Exit 260      3.79   4.29│
-│             DIESEL   DEF │     expanded, from either
-│ Truck Stop    4.55   3.29│     ┌──────────────────────────┐
-└──────────────────────────┘     │ ALSO AT                  │
-                                 │ Mini Mart, The Cove, …   │
-resting (phone, interior)        └──────────────────────────┘
-┌──────────────────────────┐
-│ ⌄ View all prices        │     the panel carries the remainder,
-│            REGULAR DIESEL│     so nothing is ever listed twice
-│ Exit 260      3.79   4.29│
-└──────────────────────────┘
+open at rest (desktop)                  open while condensed (desktop)
+┌────────────────────────────────┐      ┌────────────────────────────────────┐
+│ ⌃ Hide                         │      │ Exit 260 │ REG 3.79  DIESEL 4.29 ⌃ │
+│           REGULAR DIESEL   DEF │      ├────────────────────────────────────┤
+│ Exit 260     3.79    4.29    — │      │        REGULAR   DIESEL       DEF  │
+│ Truck Stop      —    4.55  3.29│      │ Mini Mart 3.79     4.29         —  │
+│ TRUCK LANES                    │      │ The Cove  3.85     4.29         —  │
+├────────────────────────────────┤      │ Truck Stop   —     4.55       3.29 │
+│ Mini Mart    3.79    4.29    — │      │ TRUCK LANES                        │
+│ The Cove     3.85    4.29    — │      └────────────────────────────────────┘
+└────────────────────────────────┘
+                                        the bar carries one Location, so the
+one card, one header row, one hairline   Truck Stop moves into the panel
 ```
 
 Carrying one place rather than two is what makes the condensed bar narrow. The Truck Stop is
@@ -101,12 +118,25 @@ broken rather than blocked. The correct split: the observer closes the block on 
 condensed state, and the CSS leaves the panel openable. The panel also hangs off the **bar**,
 not off the block's reserved box, or it opens level with the space the collapsed card vacated.
 
+**Open is one card, and that is a geometry rule, not a styling preference.** The card gives up
+its own floor (`border-bottom-color: transparent`, bottom corners squared) and the panel butts
+straight onto it with no gap, no top border and no second radius. Two details make or break it:
+
+- **Position the panel against the block's border box, not its padding box.** An absolutely
+  positioned child resolves `left: 0` against the *padding* box, so the panel landed 1px inside
+  the block and the "one card" had a 1px jog down both edges. `left: -1px; right: -1px;
+  width: auto` puts the panel's border box exactly on the block's. Measured after: block, bar
+  and panel all at left 425, width 400.
+- **Pin the condensed bar to the card's width.** Sized by `max-content` it measured 365px
+  against the panel's 400px, so opening it produced a narrow bar on a wider card — visibly two
+  objects. The bar is now the card's width at both ends of the transition.
+
 **The condense trigger** is the same at both widths — roughly half the resting card's height
-scrolled past it — a
-sentinel occupying the card's slot, at the card's own height, so "less than half of it is still
-visible" is literally that. Width is `max-content` with a 340px floor and a 440px ceiling: the
-line measures 358px as built, and letting content set the width is what keeps it narrow when a
-Location has two grades and wider if one ever has three.
+scrolled past it — a sentinel occupying the card's slot, **at the card's own height**, so "less
+than half of it is still visible" is literally that. That height is a consequence, not a
+constant: collapsing the two grouped tables into one took the desktop resting card from 148px
+to 122px (and the phone card to 78px), and the sentinel had to move with it or the trigger
+would no longer mean what it says.
 
 **The condensed bar's panel is positioned against the viewport, not against the block.** No
 `position-anchor`. This is what makes a sticky block safe (ADR 0006) and it removes CSS anchor
