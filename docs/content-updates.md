@@ -75,7 +75,52 @@ CDN-cached page can lag a little further. For hours, promos and store copy that 
 price must be correct to the minute, this stack is the wrong shape and that should be said out
 loud now rather than discovered at launch.
 
+## Is there a staging site?
+**Three different things get called staging, and they cost differently.** Two are free and
+already part of the stack; the third is the one people usually mean, and it is $41/mo.
+
+**1. Preview while you edit — free, built in.** TinaCMS visual editing renders the real page
+with your change as you type, before you press Publish. This is precisely why the stack is
+React/Next.js rather than Astro (ADR 0003). It answers "let me see it before it goes live" for
+the person making the edit.
+
+**2. A shareable URL for developer changes — free, automatic.** Vercel builds a preview
+deployment for every branch, each with its own URL. Anything a developer or Claude changes can
+be looked at, and sent to someone, before it touches production.
+
+**3. Staff edits landing on a branch for someone *else* to approve.** That is TinaCMS
+**Editorial Workflow**: the editor saves to a new branch, a draft pull request is opened, a
+configured `previewUrl` gives a branch-specific link, and publishing means merging the PR.
+Verified against tina.io (Aug 2026): it is **Team Plus at $41/mo** — not free, and *not* Team
+at $24.
+
+**The distinction that decides whether you need to pay:** 1 and 2 are *view before live*. 3 is
+*someone else approves before live*. Only the second costs money, and only some organisations
+want it.
+
+### The free workaround, and its catch
+Point the single TinaCloud project at a `staging` branch rather than `main`. Staff edits land on
+staging, Vercel gives staging its own URL, and going live is a merge — a button in GitHub, or
+Claude in chat. Costs nothing.
+
+Two catches. **The free tier allows one project**, so this is staging *instead of* production
+editing, not alongside it. And publishing stops being self-service, which works against the
+project's first requirement.
+
+That matters unevenly, and it is the thing to think about before choosing:
+**fuel prices want to be instant and self-service; promos and page copy want review.** A single
+global gate makes price changes slow, which is the one thing this site cannot afford. Do not put
+prices behind an approval step to get review on copy.
+
+**Recommendation: start free.** Live preview plus branch previews cover "view before live" on day
+one. Revisit Editorial Workflow once there is evidence staff want an approval step — and when
+that comes up, check whether they want it for *promos and copy* rather than for prices, because
+the answer changes what is worth buying.
+
 ## Limits worth knowing before staff are trained
+- **The free tier caps assets at 100 MB and allows one project.** The asset cap is worth knowing
+  *now*, while photography is still an open decision — a modest set of store photos will exceed
+  it, and that pushes either the plan or where images are hosted.
 - **Two editor logins** on the free tier. A third needs Team at $24/mo (ADR 0002). Decide
   who the two are before provisioning — shared logins destroy the per-person audit trail that is
   half the point.

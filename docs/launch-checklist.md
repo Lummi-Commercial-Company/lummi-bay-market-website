@@ -9,7 +9,7 @@ compressed by working faster.
 |---|---|---|---|
 | A1 | **Logo vector files** — including a reversed/light lockup | The header, on every page | Currently a chat image; not in the repo. See ADR 0006 |
 | A2 | **Confirmed addresses, hours, phone numbers** | Every Location page, the footer | Present values were scraped and are marked unconfirmed |
-| A3 | **Art direction + budget** — commissioned Lummi art, photography, or both | Every page's finished look | Site has no imagery at all today (ADR 0012) |
+| A3 | **Art direction + budget** — commissioned Lummi art, photography, or both | Every page's finished look | Site has no imagery at all today (ADR 0012). Note the CMS free tier caps assets at **100 MB** — a real photo set exceeds it |
 | A4 | **Cultural approval** for any Coast Salish art | Launch, unconditionally | Final art must be authentic, commissioned, or tribe-approved |
 | A5 | **Pricing sign-off** — is a short stale window acceptable, and what disclaimer runs | The fuel block's footnote | Register C7. A business decision |
 | A6 | **Domain control for lummibay.com and exit260.com** | DNS cutover, the 301 | Registrar login or someone who has it |
@@ -47,6 +47,7 @@ compressed by working faster.
 |---|---|
 | Vercel Hobby | $0 — but check whether commercial use requires Pro ($20/mo) |
 | **Vercel Pro, if promos must expire at a set time** | **$20/mo, effectively mandatory** — Hobby cron runs *once per day* with ±59 min precision (see ADR 0007) |
+| TinaCMS **Team Plus**, only if staff edits need someone's approval before going live | $41/mo — Editorial Workflow is not on Free or Team. Free preview options first: see `docs/content-updates.md` |
 | TinaCMS free tier | $0, 2 editor logins. Team $24/mo for 3; Team Plus $41/mo for 5 (ADR 0002) |
 | Domains | existing renewals |
 | **Total** | **$0–$20/mo** as scoped; **$20–$45/mo** with timed promos and a third editor. No database either way |
