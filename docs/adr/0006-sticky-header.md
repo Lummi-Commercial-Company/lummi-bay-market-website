@@ -60,7 +60,7 @@ and opens downward. Hit-tested inside the header at scroll offsets 0, 300, 900 a
 the panel open, the header answered every time.
 
 **On a phone the logo carries Home; the nav carries the other two.** Measured at 375px — the
-*widest* common phone — the 52px bar needs exactly its full 349px of usable width for logo +
+*widest* common phone — the bar needs exactly its full 349px of usable width for logo +
 three nav items + the "Get the App" pill. Zero slack. At 360px (common Android) or 320px
 (iPhone SE) it overflows or the nav wraps to a second line, and a two-row sticky header costs
 that height on every page and every scroll.
@@ -73,15 +73,17 @@ spare, but it strips the words off a decision made deliberately to keep Rewards 
 a hamburger drawer (fits everything, hides everything behind a tap, and is more machinery than
 three destinations warrant).
 
-*Open:* the phone nav's tap targets are still short. The items measure 26px, 43px and 48px
-wide against a 44px guideline, in a bar with 52px of height to spend. Padding each item to a
-44px hit area is a layout fix, not a redesign, but it has not been done and it will re-tighten
-the width budget.
+*Resolved (ADR 0010):* the nav items are now 44px-tall targets, 53px and 58px wide, and the
+**phone bar is 56px, not 52px** — the 4px is what a row of real tap targets costs. The pill
+drops "Get the" below 370px to keep the width budget honest, and the phone nav is
+`flex-wrap: nowrap` so an overfill shows as an overflow instead of silently becoming a second
+row of sticky header.
 
 ## Consequences
-- The header holds **52px** of every phone viewport permanently — about 6% of a 375x812 screen.
-  Accepted: it buys the four primary destinations from anywhere on the page. (47px until the
-  logo lockup was measured; see the next point.)
+- The header holds **56px** of every phone viewport permanently — about 7% of a 375x812 screen.
+  Accepted: it buys the primary destinations from anywhere on the page. It has grown twice for
+  reasons, not for taste: 47px → 52px when the logo lockup was measured at its real ratio (see
+  below), and 52px → 56px to seat a row of 44px tap targets (ADR 0010).
 - **The supplied logo cannot sit on a navy header.** The Lummi Bay Market lockup is a navy
   wordmark over a cedar paddle on a light ground, and the header is `--lb-navy`. Navy on navy
   is not a contrast to tune — the wordmark disappears — and the logo is locked, so it may not
@@ -90,7 +92,7 @@ the width budget.
   `--lb-paper`) with a navy rule beneath it. The second needs no new art but changes the whole
   page's weight. **This is unresolved and blocks the header's final styling.**
 - The lockup is roughly **2.8:1**, not the 4.5:1 slot the mockups had assumed. Correcting it is
-  what moved the phone header from 47px to 52px.
+  what moved the phone header from 47px to 52px, before tap targets took it to 56px.
 - **Chromium 141 only.** It is the one engine available in the build container. The sticky
   failure is an anchor-positioning interop bug of exactly the kind that varies by engine, so
   Safari and Firefox still need checking. The decision is safe either way — not making the

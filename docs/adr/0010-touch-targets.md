@@ -48,9 +48,42 @@ no-ops into wrong destinations.
 - The method generalises: aim at the text, offset, hit-test what the browser returns. It is the
   way to settle any "is this too close together" question on this project without arguing.
 
-## Open
-**The phone header's nav still fails this test and has not been fixed.** Its items measure
-26px, 43px and 48px wide against the 44px guideline (ADR 0006). The bar has 52px of height to
-spend, so padding them vertically is free; padding them horizontally is not, because that bar
-already has zero slack. This is the one place on a phone where the targets are known to be
-short, and it is the header — the thing on every page.
+## The header, fixed the same way
+The phone header nav failed this test when the footer was written: items 26px, 43px and 48px
+wide against the 44px guideline. Fixed by spending the bar's height, which is cheap, and its
+width, which is not:
+
+- **Nav items and the Rewards pill are 44px tall targets.** The bar grows 52px → **56px**. That
+  is the whole cost, once, on a sticky header.
+- **Nav items are 53px and 58px wide** — a 44px `min-width` with 5px of padding, so a short word
+  never makes a short target.
+- **The pill's hit area is the anchor, not the cedar shape.** The shape keeps its size; the
+  anchor around it is 44px tall. A filled button forced to 44px would have dominated the bar.
+- **`flex-wrap: nowrap` on the phone nav.** It wrapped silently to a second row before, which is
+  the worst failure mode for a sticky header — it doubles the chrome on every page and nobody
+  notices in review. Now an overfill overflows visibly instead.
+- **The pill drops "Get the" below 370px.** The same "drop the word there is no room for" call
+  already made for the condensed bar's affordance. `★ Get the App` at 375px and up; `★ App`
+  below.
+
+Width budget after, measured, `available / needed`: **375px → 349/325**, 360px → 334/279,
+320px → 294/279. No overflow at any of them; the 2016-era 320px phones were previously broken.
+
+Aim-error simulation on the header, same method as the footer:
+
+| aim error | wrong target |
+| --- | --- |
+| ±22px | 0% |
+| ±26px | 0% |
+| ±30px | 0% |
+| ±34px | 0.9% |
+
+Better than the footer (2.6% wrong at ±26px), for a structural reason: the footer's neighbours
+are directly above and below, while the header's are beside, separated by a 4px gutter, with
+nothing above or below the bar. Vertical overshoot leaves the bar and hits nothing — 16% of
+touches at ±30px land on no target, which is the correct outcome for a slip.
+
+**Desktop got the lower bar it needs**, not the phone one: nav items are 40px tall and 44–71px
+wide. 44px is a thumb standard, but a 12px-tall link fails the 24px minimum that applies to any
+input, and laptops have touchscreens. The desktop bar stays 58px — its existing padding already
+had the room.
