@@ -63,6 +63,13 @@ visible at a glance in aligned columns and invisible in a run of inline text.
    The panel has **no caption**. "Also at" labelled a second block, and there is no second
    block any more.
 
+   **"The page's own" is the page's subject, not always a Location.** On `/truck-stop` the
+   Truck Stop leads the resting table so diesel and DEF are the first numbers a driver hits, it
+   is what the condensed bar carries, and **Exit 260** is therefore the row that moves into the
+   panel on condense. Same component, same rule, different subject — the class that marks that
+   row is named `oncond` ("in the card, not in the bar") rather than for whichever place it
+   happens to be on a given page.
+
 ```
 open at rest (desktop)                  open while condensed (desktop)
 ┌────────────────────────────────┐      ┌────────────────────────────────────┐

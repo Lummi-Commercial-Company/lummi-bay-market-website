@@ -178,7 +178,15 @@ phone, shut — the same card as desktop
 └──────────────────────────────────┘
 ```
 
-On `/truck-stop` the Truck Stop row leads, so diesel and DEF are the first numbers a driver hits.
+On `/truck-stop` the Truck Stop row leads, so diesel and DEF are the first numbers a driver
+hits. It is also what the condensed bar carries there — **"the page's own" means the page's
+subject, not always a Location** — so on that page **Exit 260** is the row that moves into the
+panel on condense. Mark that row `oncond` ("in the card, not in the bar"), never with the name
+of a place: the place changes per page, the rule does not.
+
+**When a row is hidden, hide its price cells with it.** The phone panel once carried `oncond` on
+the Truck Stop's *label* only; at rest the label vanished and three orphan price cells stayed in
+the grid, shifting every row after them. One class per cell, or the row is not a row.
 
 - **Hide a column by hiding one cell per row**, header included, so grid auto-placement stays
   intact.
