@@ -57,11 +57,39 @@ Buy the upgrade when the trigger fires, not before:
 | Someone must approve staff edits before they publish | TinaCMS Team Plus | $41/mo |
 | Photography exceeds 100 MB | a higher CMS tier, or host images elsewhere | TBD |
 
+## TinaCMS commercial use — checked, and the answer is two answers
+**The software: unambiguously fine.** TinaCMS is **Apache License 2.0**, which explicitly permits
+commercial use with no restriction. That covers the CMS itself.
+
+**TinaCloud, the hosted service that makes email logins work: no prohibition found, but no
+permission stated either.** The Terms of Service carry no tier-specific commercial restriction.
+The nearest thing is a general licence grant — "a non-exclusive, limited, non-transferable,
+freely revocable license to access and use the Service for your **personal, internal use only**."
+That is ordinary SaaS boilerplate meaning *do not resell or sublicense our service*; "internal
+use" is the operative phrase and is normal for business software. Nothing in the FAQ or on the
+pricing page restricts the Free tier either, and that page markets Free alongside plans plainly
+aimed at businesses.
+
+**The contrast is the actual evidence.** Vercel states its restriction explicitly, by name, in a
+document about plan limits: "non-commercial, personal use only." Tina has no equivalent sentence
+anywhere we could find. That is a meaningful difference — but it is still absence of a
+prohibition rather than a stated permission, which is a weaker standard of proof than the Vercel
+answer, and it should be reported as such rather than rounded up to "confirmed."
+
+**Assessment: proceed on TinaCloud Free.** The risk is low and the exit is real.
+
+**The exit, if it ever matters:** TinaCMS self-hosts under Apache 2.0 with no TinaCloud at all,
+using your own auth (Auth.js, Clerk, others). Per Tina's FAQ that costs three features:
+**git-backed media, runtime branch switching, and search.** Only the first matters here — and it
+is the asset handling, so self-hosting removes the 100 MB cap and hands us the media problem
+instead. Not free of consequences, but a genuine fallback rather than a bluff.
+
+**Still worth one email.** Asking Tina directly converts "no evidence against" into an actual
+answer and costs nothing. Do it before launch, not after.
+
 ## Open
-- **Vercel's commercial-use rule was verified; TinaCMS's was not.** Tina's Free tier is presented
-  as an ordinary product tier and no commercial restriction was found, but that is absence of
-  evidence rather than evidence of absence. **Confirm before launch**, since it is the same class
-  of problem the Vercel check just caught.
+- **Scheduling is confirmed wanted** and is included at no extra cost, since Vercel Pro is
+  required regardless. The mechanism is settled in ADR 0007.
 - If $20/mo is genuinely a blocker, Netlify is the recorded fallback host (CLAUDE.md). Its free
   tier terms would need the same check, and the redirect and revalidation behaviour would need
   re-verifying — it is not a drop-in.

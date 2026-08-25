@@ -68,6 +68,21 @@ whoever is filling in a promo that afternoon. A form with fixed slots produces a
 accessible, responsive promo every time; a genuinely bespoke layout is a developer change, not
 a builder feature.
 
+### Settled: scheduling is in scope, and the mechanism is the dynamic slot
+The owner has confirmed they want scheduled promos — "a promotion that expires at noon should be
+removed at noon without a user having to be there at noon." **Mechanism 3 below is the decision.**
+
+It wins on the thing that matters here: **nothing is scheduled, so nothing can fail to fire.** A
+cron job that silently does not run leaves an expired promo live, which is precisely the failure
+the requirement exists to prevent — the owner is asking not to depend on a human at noon, and a
+scheduler is just a different thing to depend on. The dynamic slot compares the date per visitor,
+so expiry is exact by construction. It is also less to build: a `<Suspense>` boundary, against a
+cron entry plus a route handler plus a shared secret plus monitoring that it fired.
+
+Mechanism 1 stays documented as the fallback if per-request compute ever becomes a problem. It is
+now affordable — Vercel Pro is required for licensing reasons regardless (ADR 0013), so
+per-minute scheduling arrived at no extra cost — but affordable is not the same as better.
+
 **Scheduling is the hard half, and it is not the scheduler.** Dates in a file are trivial.
 Making them *fire* on a static site is the real work: pages are rendered at build time, so a
 promo whose end date is Friday at 5pm does not vanish at Friday 5pm — nothing rebuilds. Three
