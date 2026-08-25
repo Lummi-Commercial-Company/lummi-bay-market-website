@@ -51,9 +51,8 @@ different destination at the same street address, and stays.
   different lengths.
 
 **On a phone the list is a list, not a stack of cards.** Three stacked cards ran **439px** on a
-375px screen — over half a viewport spent on three names. The compact row is motif, name,
-two clamped lines, chevron: **78px per row, 249px for three**, a 190px saving, with nothing
-clipped at the current copy lengths.
+375px screen — over half a viewport spent on three names. The compact row is motif, name, one
+line, chevron: **61px per row, 199px for three**, a **240px saving — 55%**.
 
 Three-across was measured first, since it is the obvious fix and it is worse: **88px columns**,
 `Fisherman's` rendering **100px wide inside an 88px box**, body copy at **8 / 6 / 4 lines**, and
@@ -63,9 +62,18 @@ The per-row `VISIT →` label goes with it. The whole row is the link, so three 
 identical labels for three different destinations; a chevron says the same thing in 18px. This
 is a phone-width rendering of the same component, not a second component.
 
-*Copy dependency:* the description clamps at two lines and currently uses both on all three
-Locations. A phone-length "where it is" line — the street, not the street plus the amenities —
-would take each row to roughly 60px and the list to about 190px. That is copy-editor's call
-against the three source sites, not a layout change.
+**The description is one line, and it is the street and the hours** — "4839 Rural Ave · Open 24
+hours". Not a sentence about the place: the two facts a guest picking between three stops
+actually needs. The amenities that used to be in that sentence are already the `amenities` list
+and belong on the detail page, so nothing was lost, only moved off a list view. This is a change
+to the field, not a phone-only string, so the desktop card takes it too and drops **108px → 89px**.
+
+**The line truncates rather than wrapping, which makes its length a copy budget.** Slack from the
+end of the longest string to the edge of its box: **74px at 375, 59px at 360, 33px at 320** —
+about five characters on the narrowest common phone, and that is *after* a step down one type
+size below 340px, which buys back 14px. Concretely: hours must stay in the `6am–9pm` form.
+`6:00 AM – 9:00 PM` does not fit, and it is the hours that get cut, because the street comes
+first. Truncating with an ellipsis is the right failure here — the row height is fixed either
+way, and a wrap would push every row below it.
 - The heading has two forms — "Our locations" and "Our other locations" — and which one shows
   follows from whether anything was filtered out.

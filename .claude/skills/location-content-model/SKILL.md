@@ -17,6 +17,10 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
   a place is *also called*; `shortLabel` is what we *print* in a constrained slot.
 - `aka`: legacy/alternate name(s)
 - `address`, `city`, `state`, `zip`, `phone`, `hours`
+- `cardLine`: the single line under the name in a Location card — **street, then hours**,
+  e.g. `4839 Rural Ave · Open 24 hours`. Derived from `address` + `hours` where those are
+  clean; stored when they are not, because the card wants "4839 Rural Ave", not the full
+  postal address. **It truncates, it never wraps** — see the budget in the Rules below.
 - `map`: embed or lat/lng
 - fuel prices are NOT stored here. All eight live in `content/fuel-prices.json`;
   the grades a place sells are the entries present in its price list (ADR 0004,
@@ -55,8 +59,16 @@ client before launch.)
   **Exit 260 card is still listed on `/truck-stop`** — the filter drops the page's *subject*
   (there, the callout), never everything at the page's street address (ADR 0009).
 - **On a phone the Location list renders as compact rows**, not stacked cards: motif, name,
-  a two-line description, chevron — 78px a row against 148px a card. The whole row is the
-  link, so no per-row "VISIT" label. Same component, one width breakpoint (ADR 0009).
+  `cardLine`, chevron — 61px a row against 148px a card. The whole row is the link, so no
+  per-row "VISIT" label. Same component, one width breakpoint (ADR 0009).
+- **`cardLine` has a hard length budget**: it is one line that truncates with an ellipsis rather
+  than wrapping. Measured slack past the longest current string is 74px at 375px, 59px at 360px
+  and 33px at 320px — roughly five characters on the narrowest common phone. Write hours as
+  `6am–9pm`, never `6:00 AM – 9:00 PM`; the street comes first, so anything over budget cuts the
+  hours. If a Location genuinely needs a longer line, shorten the street form before touching
+  the layout.
+- The card line carries **where it is and when it is open — not what it sells**. Amenities live
+  in `amenities` and render on the detail page. A list view is for choosing between places.
 - Amenity badges/icons are driven by the `amenities` list — don't hand-place them.
 - Only exit-260 (truckStop: true) shows the Truck Stop summary + links to `/truck-stop`.
 - Keep addresses/hours in data, never in page markup, so staff edit via the CMS.
