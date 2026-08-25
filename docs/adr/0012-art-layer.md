@@ -1,10 +1,24 @@
-# 0012 — The art layer: where decoration goes, and where it must not
+# 0012 — The art layer: built, reviewed, rejected
 
-Status: Accepted
+Status: **Rejected** — the illustrated layer was built, shown, and turned down on review
+(2026-08-25). It has been removed from the build. What survives is recorded below: the
+placement rule, which was never the problem, and two defects worth not rediscovering.
+
+**What was removed:** wave waterlines, a shoreline band with cedars and the sasquatch,
+per-Location motifs (canoe, salmon, crab), a paddle mark on section labels, and sasquatch tracks
+on the Truck Stop callout. The waterline is a plain token bar again and the Location motifs are
+marked placeholder boxes.
+
+**What was kept:** the promo region's real layout and copy — that was content, not decoration,
+and the rejection was of the art. The `aria-label` fix below is load-bearing for it.
 
 Terms (Location, Truck Stop): `CONTEXT.md`. Motif library and the cultural guardrail: skill
 `pnw-tribal-art`. Colour tokens: skill `brand-system` (LOCKED). Interacts with the promo region
 (ADR 0007), the location list (ADR 0009) and the fuel price block (ADR 0005).
+
+## Why it is still here
+A rejected ADR is cheaper than rediscovering the same two defects, and the placement rule is
+reusable by whoever draws the real art. Nothing below is a proposal to try again.
 
 ## Context
 The layout was settled and correct and read as a wireframe. The ask was to make it warmer and
@@ -24,7 +38,7 @@ surviving to launch.
 The sasquatch is a different case and is not covered by that rule — he is the company's own
 mascot and broadly regional, not tribal art.
 
-## Decision
+## The placement rule (still good, independent of the art)
 **Decoration lives in the page's own furniture, and nowhere else.** The full map:
 
 | Gets art | What |
@@ -62,7 +76,7 @@ shape rather than one per shape-and-colour.
 reads instantly is a mascot in the way; one you notice on the second visit is the one people
 mention. He is standing *in* the treeline, not in front of it.
 
-## Consequences
+## The two defects, which are the durable part
 - **Unsupported masks render every motif as a solid coloured block.** Not a hypothetical: it
   happened in this build when the custom properties failed to parse, and a page of cedar
   rectangles is far worse than a page with no art. There is now an `@supports not (mask-image)`
@@ -88,9 +102,9 @@ mention. He is standing *in* the treeline, not in front of it.
   enumerated in skill `pnw-tribal-art`. That is a procurement item with a lead time, not a build
   task, and it is on the critical path in the same way the logo is.
 
-## Open
-- **Photography.** Nothing here is a photograph; the promo field is a tint standing in for one.
-  Where photos go — Location heroes, the Truck Stop, the Cove Kitchen — and who shoots them is
-  not decided.
-- **Whether the sasquatch has a name.** He is currently an anonymous silhouette. A named mascot
-  is a different and larger commitment than a figure in a treeline.
+## What this leaves open
+- **The site has no illustration or photography of any kind.** That is now a known gap, not an
+  oversight. Whatever fills it — commissioned Lummi art, photography of the three stores, the
+  company's own sasquatch, or some combination — is an art-direction decision with a real budget
+  and lead time, and it is on the critical path in the same way the logo is.
+- The guardrail above does not expire. Whoever draws the final art works to it.

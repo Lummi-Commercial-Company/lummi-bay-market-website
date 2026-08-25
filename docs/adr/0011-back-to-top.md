@@ -44,9 +44,10 @@ flickers into existence for the final **3%** of two pages — a control that app
 guest has already arrived is worse than no control. 0.75 is the only setting that is generous
 where the page is long and silent everywhere else.
 
-These six pages run 1.5–1.7 screens except Home at 2.3, so today only the phone Home page
-carries the button. Desktop Home sits at **1.72 — 0.03 below the threshold** after the art layer
-added a 36px shoreline (ADR 0012), so that one is now near a boundary rather than clear of it. That is the rule working, not a page missing a feature: on a page you can reach the
+These six pages run ~1.4–1.6 screens except phone Home at 2.25, so today only phone Home carries
+the button. (An art layer briefly took desktop Home to 1.72 — 0.03 under the threshold — before
+being removed; ADR 0012. Worth remembering that a 36px band is enough to move a page across
+this line.) That is the rule working, not a page missing a feature: on a page you can reach the
 bottom of in one flick, a floating button is an obstruction with a job that does not exist.
 Real copy will lengthen these pages and more will qualify — no code changes when they do.
 
