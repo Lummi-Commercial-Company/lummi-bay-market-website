@@ -1,0 +1,66 @@
+# Next steps
+
+Where this actually stands: **93 tracked files, none of them application code.** No
+`package.json`, no Next.js app, no components. What exists is a locked stack, twelve decisions
+(`docs/adr/`), a content model, and a browser-verified interaction proof for the hardest
+component on the site. That is real work and it de-risks the build — but the build has not
+started, and nothing on this list should read as "nearly done."
+
+The proof sheet is a standalone HTML page used to settle behaviour. **It is not the site and no
+part of it ships.** Its CSS was written to make one file demonstrate six frames; the React
+components get written fresh against the ADRs.
+
+## Phase 0 — unblock (parallel, mostly not engineering)
+These gate later phases and none of them are code. Start them now because they have lead times.
+
+1. **The logo files.** Still not in the repo — it arrived as a chat image. Needs the real vector
+   (SVG preferred, EPS/AI acceptable) plus a **reversed / light version**, because of item 2.
+2. **Resolve the navy-on-navy header** (ADR 0006). The wordmark is navy and the sticky header is
+   navy, so today the header cannot carry the logo at all. Either an approved reversed lockup or
+   a light header ground. **This blocks the header, which is on every page.**
+3. **Confirm addresses, hours and phone numbers.** Everything in `location-content-model` was
+   pulled from lcc-lummi.com and is marked unconfirmed. Hours must come back in the short form
+   (`6am–9pm`) — there is a measured length budget on the Location card line (ADR 0009).
+4. **Decide art direction.** The site currently has no illustration or photography of any kind;
+   the illustrated layer was built and rejected (ADR 0012). Options are commissioned Lummi art,
+   photography of the three stores, the company's sasquatch, or some mix. This has a budget and
+   a lead time and it sits on the critical path.
+5. **Answer the pricing question (register C7).** If a posted price is stale for two minutes
+   after a rebuild, is that acceptable, and does the site carry an "updated" stamp and a
+   "prices subject to change" line? This is a business call, not a design one — it belongs with
+   whoever owns pricing.
+
+## Phase 1 — scaffold
+6. `create-next-app` (App Router, TypeScript), the locked tokens from `brand-system` as CSS
+   custom properties, Google Fonts (Space Grotesk + Inter) self-hosted or `next/font`.
+7. Vercel project, connected to the repo, deploying previews on every branch.
+8. The layout shell: sticky header, footer, waterline, the Rewards pill, Back-to-top (ADR 0011).
+   Owner: frontend-engineer with design-director.
+
+## Phase 2 — data and CMS
+9. `content/locations/*.md` and `content/fuel-prices.json` per `location-content-model` and
+   ADR 0004. **Data first, pages second** — every page reads from these and nothing is
+   hard-coded.
+10. TinaCMS: collections, field labels written for non-technical staff, visual editing wired,
+    two editor logins provisioned (ADR 0002/0003). Owner: backend-engineer.
+11. **Verify a real staff member can change a fuel price and see it live**, without help. That
+    is the project's first requirement; test it before building more pages on top.
+
+## Phase 3 — pages
+12. The fuel price block. The largest single component and the one with the most decisions
+    behind it (ADR 0005) — build it from the ADR, not by copying the proof sheet.
+13. Home · Locations index · three Location pages · Truck Stop · Rewards · Fuel Prices · About.
+14. Promo region and the TinaCMS promo collection (ADR 0007), including scheduling.
+15. Copy: copy-editor merges the three source sites into one voice. Currently first-draft
+    placeholder throughout.
+
+## Phase 4 — launch
+See `docs/launch-checklist.md`.
+
+## Still undecided, and cheap to leave that way
+- **Product info pages** — promos link to them, and the page type does not exist. IA work,
+  outside the locked three-item nav. Needed before promos can go live, not before the site can.
+- **Register C5** (panel height at 200% text) and **C9** (`updated` stamp stored vs derived).
+  Both have recommendations; neither causes rework if settled later.
+- **Safari/Firefox verification of CSS anchor positioning.** Only Chromium was testable here.
+  Phones only, and the fallback is a ten-line script whose component shape is identical.
