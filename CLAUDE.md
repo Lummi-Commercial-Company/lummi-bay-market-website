@@ -43,8 +43,9 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 - Static-first: prerender pages (SSG/ISR). No content database to run or back up.
 - Domain: **lummibay.com** is canonical; **exit260.com** 301-redirects to the Exit 260
   location page. lcc-lummi.com stays as-is (the footer link — see ADR 0001).
-- Deploy: **Vercel** (best Next.js support; auto-rebuilds on git push). Netlify is the
-  fallback. Finalize with backend-engineer.
+- Deploy: **Vercel Pro, $20/mo** (best Next.js support; auto-rebuilds on git push). Pro is
+  required, not chosen: Hobby is restricted to non-commercial use and this is a commercial
+  site — see ADR 0013. Netlify is the fallback. Finalize with backend-engineer.
 - Editors are non-technical → keep every editable field simple and labeled.
 
 ## Brand, theme, content (see skills)

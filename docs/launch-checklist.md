@@ -45,12 +45,12 @@ compressed by working faster.
 ## Running costs
 | Item | Cost |
 |---|---|
-| Vercel Hobby | $0 — but check whether commercial use requires Pro ($20/mo) |
-| **Vercel Pro, if promos must expire at a set time** | **$20/mo, effectively mandatory** — Hobby cron runs *once per day* with ±59 min precision (see ADR 0007) |
-| TinaCMS **Team Plus**, only if staff edits need someone's approval before going live | $41/mo — Editorial Workflow is not on Free or Team. Free preview options first: see `docs/content-updates.md` |
+| **Vercel Pro — required** | **$20/mo.** Hobby is restricted to "non-commercial, personal use only" and this is a commercial site. Not optional (ADR 0013) |
+| Timed promos (expire at a set time) | **included** — Pro brings per-minute scheduling at no extra cost |
+| TinaCMS **Team Plus**, only if staff edits need someone's approval | $41/mo — skipped at launch (ADR 0013) |
 | TinaCMS free tier | $0, 2 editor logins. Team $24/mo for 3; Team Plus $41/mo for 5 (ADR 0002) |
 | Domains | existing renewals |
-| **Total** | **$0–$20/mo** as scoped; **$20–$45/mo** with timed promos and a third editor. No database either way |
+| **Total at launch** | **$20/mo** — all of it Vercel. The CMS is genuinely free. No database either way |
 
 ## What could move the date
 1. **Art and photography.** The largest unknown, entirely outside engineering, on the critical
