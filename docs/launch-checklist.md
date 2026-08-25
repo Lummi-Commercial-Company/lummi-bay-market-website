@@ -46,9 +46,10 @@ compressed by working faster.
 | Item | Cost |
 |---|---|
 | Vercel Hobby | $0 — but check whether commercial use requires Pro ($20/mo) |
-| TinaCMS free tier | $0, 2 editor logins. Team tier $29/mo for 5 (ADR 0002) |
+| **Vercel Pro, if promos must expire at a set time** | **$20/mo, effectively mandatory** — Hobby cron runs *once per day* with ±59 min precision (see ADR 0007) |
+| TinaCMS free tier | $0, 2 editor logins. Team $24/mo for 3; Team Plus $41/mo for 5 (ADR 0002) |
 | Domains | existing renewals |
-| **Total** | **$0–$50/mo**, no database to run or back up |
+| **Total** | **$0–$20/mo** as scoped; **$20–$45/mo** with timed promos and a third editor. No database either way |
 
 ## What could move the date
 1. **Art and photography.** The largest unknown, entirely outside engineering, on the critical

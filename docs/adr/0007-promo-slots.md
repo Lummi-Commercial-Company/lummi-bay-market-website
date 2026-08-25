@@ -73,15 +73,37 @@ Making them *fire* on a static site is the real work: pages are rendered at buil
 promo whose end date is Friday at 5pm does not vanish at Friday 5pm — nothing rebuilds. Three
 mechanisms, in preference order:
 
-1. **A scheduled rebuild** (Vercel cron) at the granularity the offers need. Reliable, exact,
-   and the site stays genuinely static in between. Use this when an end time is a promise —
-   "offer ends Friday" has to actually end Friday.
-2. **ISR `revalidate`.** No cron to maintain, and expiry is bounded by the interval — but
-   Next.js serves stale-while-revalidating, so the *first* visitor after the window closes
-   still sees the expired promo. Acceptable for soft promos, not for dated offers.
-3. **A client-side date check. Rejected.** The promo's markup ships to everyone regardless, it
+1. **A scheduled revalidation** (Vercel Cron hitting a route that calls `revalidatePath`) at the
+   granularity the offers need. Reliable, exact, and the site stays genuinely static in between.
+   Use this when an end time is a promise — "offer ends Friday" has to actually end Friday.
+
+   **This requires Vercel Pro, and that is a hard constraint, not a preference.** Verified
+   against Vercel's cron docs (Aug 2026): **Hobby is limited to one cron run per day, with
+   per-hour precision — a job set for 12:00 fires anywhere in the noon hour** — and a more
+   frequent expression *fails at deploy time* rather than degrading. Pro is once-per-minute with
+   per-minute precision. So "the promo ends at noon" costs $20/mo. Budget it or drop the
+   promise; there is no free version of this.
+2. **Time-based ISR `revalidate`.** No cron to maintain, and expiry is bounded by the interval —
+   but Next.js serves stale-while-revalidating, so the *first* visitor after the window closes
+   still sees the expired promo, and only the visitor *after* them gets the new page. Two
+   sources of lateness, not one: the interval, plus one stale serve. Acceptable for soft promos,
+   not for dated offers.
+
+   Worth knowing that on-demand revalidation does **not** have the second problem: a path
+   invalidated by `revalidatePath` regenerates on the next request and serves fresh
+   (`x-nextjs-cache: REVALIDATED`), where a time-expired path serves `STALE` once first.
+3. **A dynamic promo slot.** Keep the page static and render only the promo region at request
+   time, so the date comparison happens per visitor and expiry is exact with no cron and no
+   plan requirement. Costs a function invocation per page view and gives up "genuinely static",
+   which is why it is not first — but it is the option that makes noon mean noon on any plan,
+   and it should be measured rather than assumed expensive.
+4. **A client-side date check. Rejected.** The promo's markup ships to everyone regardless, it
    flashes on load, search engines index an offer that is not running, and anyone can read it
    in view-source before it starts.
+
+**Whatever is chosen, `output: 'export'` must never be set.** ISR and on-demand revalidation are
+both unsupported under Next.js static export, so that one config line would silently remove
+every scheduling mechanism above except the rejected one.
 
 Dates carry an explicit timezone — `America/Los_Angeles`. Staff typing "Friday" mean Friday
 here, and a UTC-naive date silently shifts the window.

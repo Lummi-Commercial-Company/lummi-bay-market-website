@@ -76,7 +76,7 @@ price must be correct to the minute, this stack is the wrong shape and that shou
 loud now rather than discovered at launch.
 
 ## Limits worth knowing before staff are trained
-- **Two editor logins** on the free tier. A third person needs Team at $29/mo (ADR 0002). Decide
+- **Two editor logins** on the free tier. A third needs Team at $24/mo (ADR 0002). Decide
   who the two are before provisioning — shared logins destroy the per-person audit trail that is
   half the point.
 - **Staff edit content, not layout.** They can change prices, hours, copy, promos, and the
@@ -88,6 +88,34 @@ loud now rather than discovered at launch.
 - **A publish can fail.** If a build breaks, the previously published site stays up — visitors
   see the old page, not an error. Someone still has to notice and fix it, so build failures need
   to reach a human.
+
+## Scheduling: can a promo take itself down at noon?
+**Yes, but it costs $20/mo, and that is worth knowing before it is promised to anyone.**
+
+A static page does not know what time it is — it was rendered when someone last pushed. So
+"expires at noon" needs something to *happen* at noon. Three ways, verified Aug 2026:
+
+| Mechanism | Precision at noon | Cost |
+|---|---|---|
+| **Vercel Cron → `revalidatePath`** | exact, per-minute | **Vercel Pro, $20/mo** |
+| Same, on Vercel **Hobby** | **not possible** — one run per day, ±59 min | $0 |
+| Time-based ISR (`revalidate`) | late by the interval, **plus one stale page view** | $0 |
+| Dynamic promo slot (page static, promo rendered per request) | exact | $0 + a function call per view |
+
+The trap is the second row. Vercel's Hobby plan allows **one cron run per day with per-hour
+precision** — a job set for 12:00 fires somewhere in the noon hour — and a more frequent
+schedule *fails at deploy* rather than quietly running late. So the obvious answer ("just add a
+cron") is not available on the plan this project was costed at.
+
+Two smaller details that decide the feel of it:
+- **Time-based ISR is late twice, not once.** The interval has to elapse, and then the first
+  visitor after it still gets the expired page while the new one builds behind them. The visitor
+  after that gets the correct page.
+- **`output: 'export'` must never be set.** Next.js static export supports neither ISR nor
+  on-demand revalidation, so that one line would remove every option above except the one we
+  rejected.
+
+Full reasoning in ADR 0007.
 
 ## Fuel prices specifically
 All eight prices live in one file, `content/fuel-prices.json`, and every place the site shows a

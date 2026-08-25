@@ -36,7 +36,8 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 - **TinaCMS** — git-based CMS with **visual (click-to-edit) editing**: staff open the
   page, click text or a fuel price, edit it in a sidebar with live preview, and publish.
   Login is by email — no GitHub account needed. See ADR 0002 and ADR 0003.
-  - **Free tier, 2 editor logins** (locked). Team tier ($29/mo, 5 users) only if staff grows.
+  - **Free tier, 2 editor logins** (locked). Next tiers: Team $24/mo (3 users),
+    Team Plus $41/mo (5 users). Verified against tina.io/pricing, Aug 2026.
   - Content is stored as Markdown/JSON **files in the git repo** — this is what lets
     Claude make content updates through chat via a normal commit and push.
 - Static-first: prerender pages (SSG/ISR). No content database to run or back up.
