@@ -32,6 +32,30 @@ compressed by working faster.
 | B9 | Accessibility pass | Targets and contrast are designed; the built site still needs a real audit |
 | B10 | Performance budget | Static-first makes this achievable, images are what will break it |
 
+## When each account is needed
+Two different questions hide in "when do I set up accounts", and only one of them is about
+creating anything.
+
+**Do now — verify access to what already exists.**
+| What | Why now |
+|---|---|
+| **Registrar logins for lummibay.com and exit260.com** | Nothing to create, but *someone at the company must be able to log in*. This has an unbounded discovery time — a domain registered years ago under a former employee's address can take weeks to recover, and it is the single most common launch-week disaster. Checking costs nothing today and can cost the launch date if left. |
+| **Decide who owns the accounts** | Company-controlled identities, not an individual's personal login. Retrofitting ownership later is painful, and on Vercel specifically **owners cannot be changed during a Pro trial**. |
+| **Confirm the GitHub repo sits in a company org**, not a personal account | Same bus-factor problem, and it is far easier to move now than after CI, the CMS and the host are all wired to it. |
+
+**Create when the work needs it.**
+| Account | When | Note |
+|---|---|---|
+| GitHub | already exists | confirm ownership, above |
+| **Vercel** | Phase 1, when the app is first deployed | **Do not start the Pro trial now.** It is **14 days, one per user account** — started today it expires long before launch, and it is the only free look at Pro. Either pay from the day you connect ($20/mo during the build is noise) or hold the trial for the final fortnight. |
+| **TinaCloud** | Phase 2, once there is real content to edit | Set up by whoever holds GitHub — only that person needs it. An empty CMS teaches staff nothing, so provision it when there is something to click. |
+| Staff editor logins ×2 | Phase 2, at training | Decide *which two people* before provisioning: shared logins destroy the per-person history that is half the point (ADR 0013) |
+| Analytics | Phase 3 | Pick the product and the person who will actually read it |
+| Contact form inbox | Phase 3 | Also decides whether spam protection is needed |
+
+**The rule:** create an account when the work that needs it starts — but confirm access *today*
+to anything that already exists. The registrar is the one that bites.
+
 ## C. Verify before cutover
 - A staff member changes a fuel price in TinaCMS, unaided, and sees it live. **If this fails,
   nothing else matters** — it is the project's first requirement.

@@ -25,7 +25,11 @@ These gate later phases and none of them are code. Start them now because they h
    the illustrated layer was built and rejected (ADR 0012). Options are commissioned Lummi art,
    photography of the three stores, the company's sasquatch, or some mix. This has a budget and
    a lead time and it sits on the critical path.
-5. **Answer the pricing question (register C7).** If a posted price is stale for two minutes
+5. **Verify registrar access for lummibay.com and exit260.com**, and decide who owns the
+   accounts. Nothing to build — but a domain nobody can log into is discovered at cutover, and
+   recovering one registered years ago under a former employee's address takes weeks. Costs an
+   afternoon now. See the account timing table in `docs/launch-checklist.md`.
+6. **Answer the pricing question (register C7).** If a posted price is stale for two minutes
    after a rebuild, is that acceptable, and does the site carry an "updated" stamp and a
    "prices subject to change" line? This is a business call, not a design one — it belongs with
    whoever owns pricing.
