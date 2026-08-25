@@ -1,4 +1,4 @@
-# 0007 — A graphic promo above the page title, linking to a product info page
+# 0007 — A graphic promo region, below the page title, linking to a product info page
 
 Status: Accepted
 
@@ -10,8 +10,23 @@ The three source sites carry no promotional surface. The owner wants one: predom
 graphic promos on pages, where clicking the image opens a page with product information.
 
 ## Decision
-**A promo slot sits above the page's own title.** Reading order on an interior page is:
-sticky header → fuel price band → promo → page title. The whole image is the link.
+**The promo region sits below the page's own title.** Reading order on an interior page is:
+sticky header → fuel price band → page title → promo. The whole image is the link.
+
+*This reverses the original wording of this ADR, which said "above the page's own title".* That
+clause could not both be true and coexist with the next one: a full-width region **below the
+two-column top** is by construction below the title, because the title lives inside that
+two-column top. Measured on the built desktop pages, the title sits at 92px and the promo at
+205px — the region has been below the title on desktop the whole time, and there is no
+arrangement in which it is not. The ADR asserted two things that contradict each other, and
+only one of them was ever buildable.
+
+On a phone the choice was real, and the numbers settle it. With the current header (56px) and
+price card (102px), a 16:9 promo above the title puts the page title at **388px — 48% down an
+812px screen**, so a guest who tapped "Exit 260" is half a screen in before the page says
+Exit 260. A 2.5:1 crop only reaches 332px. Below the title the title sits at **190px**, and the
+promo is still the first large graphic on the page. The original Consequences section computed
+this and raised it; it is now taken.
 
 **Promos are a full-width region below the two-column top, not a slot inside it**, and the
 region grows with the number of promos: a grid of `minmax(300px, 1fr)`, so one promo fills the
@@ -72,13 +87,13 @@ Dates carry an explicit timezone — `America/Los_Angeles`. Staff typing "Friday
 here, and a UTC-naive date silently shifts the window.
 
 ## Consequences
-- **On a phone, three things now stack above the page title.** Header 52 + price card 135 +
-  a 16:9 promo 197 puts the title at **424px — 52% down a 375x812 screen**. A guest landing on
-  a Location page gets past half the first screen before it says which Location. Measured, by
-  moving the real elements: a **2.5:1 phone crop** brings it to **367px**; swapping the card and
-  promo changes **nothing**, since both are still above the title; **moving the promo below the
-  title** brings it to **214px**. The last is much the biggest win and contradicts the brief, so
-  it is raised rather than taken. If the promo stays above the title, take the 2.5:1 crop.
+- **The phone title now sits at 190px**, 23% down an 812px screen, with the header at 56 and the
+  price card at 102. Re-measured after the header and price card changed size (ADR 0006, 0005);
+  the figures this section carried before — header 52, card 135, title at 424px — were taken
+  before either. Moving real elements in the built page rather than adding heights: promo above
+  the title at 16:9 gives **388px**, at a 2.5:1 crop **332px**, below the title **190px**.
+  Swapping the price card and the promo changes nothing while both are above the title, which is
+  what makes "below" the only lever that moves.
 - **The price card must be in flow on a phone**, not absolutely positioned as the desktop rail
   is. Left absolute it covered the promo completely. The reserved-column arrangement is
   desktop-only.
@@ -86,7 +101,7 @@ here, and a UTC-naive date silently shifts the window.
   mechanism is chosen here should cover both rather than being solved twice.
 - **Rules are needed for zero and for more than one active promo.** With none, the slot must
   collapse to nothing rather than reserve an empty box. With several, `priority` decides, and
-  only one renders per slot — otherwise a busy month silently stacks banners above every title.
+  only one renders per slot — otherwise a busy month silently stacks banners on every page.
 - **The promo is almost certainly the page's largest contentful paint**, since it is the first
   large element. Every page it appears on is as fast as that image is. It needs explicit
   dimensions, a modern format, and a size budget.
@@ -108,7 +123,8 @@ here, and a UTC-naive date silently shifts the window.
 - **First-party promo or paid third-party placement.** If any promo is sold, it needs
   disclosure, and the two cases have different legal and editorial rules. Assumed first-party
   throughout.
-- **Whether Home carries a promo.** Only the above-the-title slot on interior pages was asked
-  for.
+- **Whether Home carries a promo.** Only interior pages were asked for. Home currently renders
+  one in the proof so the region can be seen in context; that is a proof convenience, not a
+  decision.
 - **What happens when no promo is active.** The slot must collapse to nothing rather than
   reserve an empty box, or every page carries a hole.

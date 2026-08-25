@@ -23,6 +23,18 @@ rendered. On Home everything appears.
 summary in the locked architecture. Exit 260 is the truck stop's home, and two routes to it
 from the page it lives on is emphasis, not duplication.
 
+**The Exit 260 card stays on `/truck-stop`.** This was raised as a possible redundancy — the
+truck stop *is* at Exit 260, so listing Exit 260 on the truck stop's own page looks like a page
+listing itself. It is not, and the reason is a fact about the business rather than a layout
+preference: **Exit 260 and the Truck Stop are two c-stores sharing one property.** Different
+stores, different fuel needs, different customers — truckers at one, everything else at the
+other. A driver reading `/truck-stop` who wants the main store needs that card, and the union
+rule in ADR 0005 already treats them as two rows for exactly the same reason.
+
+This is why "a page never advertises itself" is scoped to the page's **subject**, not its
+address. `/truck-stop`'s self is the callout, which is dropped; the Exit 260 Location is a
+different destination at the same street address, and stays.
+
 ## Consequences
 - The list is derived, not authored: the component takes the current page's Location id and
   filters it out. Nothing is hand-placed per page, which is the same rule the amenity badges
@@ -36,7 +48,24 @@ from the page it lives on is emphasis, not duplication.
 - The desktop card puts the motif **beside** the name rather than above it, which takes the
   card from 151px to 108px tall. The `VISIT` link is floor-aligned (`align-self: end` on a
   `auto 1fr auto` row set) so the links line up across cards whose descriptions run to
-  different lengths. Phone cards keep the stacked form — they are full-width there, so
-  height is not the constraint.
+  different lengths.
+
+**On a phone the list is a list, not a stack of cards.** Three stacked cards ran **439px** on a
+375px screen — over half a viewport spent on three names. The compact row is motif, name,
+two clamped lines, chevron: **78px per row, 249px for three**, a 190px saving, with nothing
+clipped at the current copy lengths.
+
+Three-across was measured first, since it is the obvious fix and it is worse: **88px columns**,
+`Fisherman's` rendering **100px wide inside an 88px box**, body copy at **8 / 6 / 4 lines**, and
+only a 150px saving. Less room saved, for text that cannot be read.
+
+The per-row `VISIT →` label goes with it. The whole row is the link, so three rows carried three
+identical labels for three different destinations; a chevron says the same thing in 18px. This
+is a phone-width rendering of the same component, not a second component.
+
+*Copy dependency:* the description clamps at two lines and currently uses both on all three
+Locations. A phone-length "where it is" line — the street, not the street plus the amenities —
+would take each row to roughly 60px and the list to about 190px. That is copy-editor's call
+against the three source sites, not a layout change.
 - The heading has two forms — "Our locations" and "Our other locations" — and which one shows
   follows from whether anything was filtered out.

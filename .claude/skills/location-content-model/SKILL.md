@@ -48,6 +48,15 @@ client before launch.)
 - **The location list is derived, never authored per page** (ADR 0009). Order is Truck Stop
   callout first, then Exit 260, Mini Mart, Fisherman's Cove. The component filters out the
   page's own Location, and the heading becomes "Our other locations" when it does.
+- **The Truck Stop is a second store, not a wing of Exit 260.** It shares the Exit 260 property
+  physically, and that is all it shares: two c-stores, two fuel needs, two sets of customers
+  (truckers at one, everything else at the other). Consequences that follow from this and not
+  from anything else: the two are separate rows in the price table (ADR 0004/0005), and the
+  **Exit 260 card is still listed on `/truck-stop`** — the filter drops the page's *subject*
+  (there, the callout), never everything at the page's street address (ADR 0009).
+- **On a phone the Location list renders as compact rows**, not stacked cards: motif, name,
+  a two-line description, chevron — 78px a row against 148px a card. The whole row is the
+  link, so no per-row "VISIT" label. Same component, one width breakpoint (ADR 0009).
 - Amenity badges/icons are driven by the `amenities` list — don't hand-place them.
 - Only exit-260 (truckStop: true) shows the Truck Stop summary + links to `/truck-stop`.
 - Keep addresses/hours in data, never in page markup, so staff edit via the CMS.

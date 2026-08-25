@@ -60,8 +60,8 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
   "All prices" panel, not from the nav (ADR 0008).
 - **Rewards**: a "Get the App" pill in the header's right-hand utility slot on **every** page,
   plus the `/rewards` app-promo page and the footer. Nowhere else — see ADR 0006.
-- **Promos**: a graphic promo above the page title on interior pages, linking to a product info
-  page (ADR 0007). Product info pages are a new page type, not yet designed.
+- **Promos**: a full-width graphic promo region below the page title on interior pages, linking
+  to a product info page (ADR 0007). Product info pages are a new page type, not yet designed.
 - Header is **sticky** on every page; the fuel-price rail is **not** — ADR 0006 records why the
   rail must never be sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
   carries the Rewards "Get the App" pill on every page.
