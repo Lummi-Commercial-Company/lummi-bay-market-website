@@ -92,12 +92,21 @@ mechanisms, in preference order:
    Worth knowing that on-demand revalidation does **not** have the second problem: a path
    invalidated by `revalidatePath` regenerates on the next request and serves fresh
    (`x-nextjs-cache: REVALIDATED`), where a time-expired path serves `STALE` once first.
-3. **A dynamic promo slot.** Keep the page static and render only the promo region at request
-   time, so the date comparison happens per visitor and expiry is exact with no cron and no
-   plan requirement. Costs a function invocation per page view and gives up "genuinely static",
-   which is why it is not first — but it is the option that makes noon mean noon on any plan,
-   and it should be measured rather than assumed expensive.
-4. **A client-side date check. Rejected.** The promo's markup ships to everyone regardless, it
+3. **A dynamic promo slot** — *and on re-checking, this is probably the right default.* Keep the
+   page's shell static on the CDN and render only the promo region at request time, behind a
+   `<Suspense>` boundary. The date comparison then happens per visitor: expiry is exact, on any
+   plan, with no cron and nothing scheduled.
+
+   Two things verified since this ADR was first written (Next.js docs, Aug 2026) move it up the
+   list. **This is the default rendering model in Next.js 16** with Cache Components — Partial
+   Prerendering — not an exotic mode: "every produced static shell can be served directly from a
+   CDN". And **bots and crawlers are served the fully rendered page**, so a search engine never
+   indexes an expired offer. That last point is what separates it from option 4 below, which was
+   rejected largely for that reason.
+
+   The cost is real but small: a little server work per page view instead of none. Measure it
+   rather than assuming.
+4. **A client-side date check. Still rejected.** The promo's markup ships to everyone regardless, it
    flashes on load, search engines index an offer that is not running, and anyone can read it
    in view-source before it starts.
 

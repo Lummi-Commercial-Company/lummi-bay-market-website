@@ -117,6 +117,21 @@ Two smaller details that decide the feel of it:
 
 Full reasoning in ADR 0007.
 
+## "Can't we just refresh the price pages?"
+No — because **the price block is on every page** (ADR 0005), so there is no smaller set to
+refresh. Refreshing prices is refreshing the site.
+
+What that choice really trades is *eager against lazy*. A full rebuild re-renders every page up
+front, takes one to two minutes, and ships as one atomic deployment you can roll back.
+On-demand refreshing marks every page stale in seconds and re-renders each one when its next
+visitor arrives — nobody ever sees a stale price, but the first visitor to each page waits for
+one render, and the site now has two publishing paths instead of one.
+
+For a site of about ten pages, the rebuild is the sane default: code changes need a build
+anyway, and prebuilt pages cost nothing to serve. **If prices genuinely have to be current
+within seconds, the answer is neither** — it is to stop baking prices into the page and render
+that one block per visitor. See ADR 0004.
+
 ## Fuel prices specifically
 All eight prices live in one file, `content/fuel-prices.json`, and every place the site shows a
 price reads from it — the block, the condensed bar, the panel, `/fuel-prices`. **Change the

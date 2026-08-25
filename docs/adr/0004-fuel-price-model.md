@@ -23,6 +23,40 @@ Second, the owner wants prices edited **in a sidebar**, not by clicking the pric
 page. Click-to-edit was the entire argument for folding prices into Location documents, and
 it turned out to serve a need this field does not have.
 
+## How a price change reaches the site — corrected
+An earlier answer here claimed that on-demand revalidation would refresh "just the price
+pages" in seconds, against a full rebuild's one to two minutes. **That was wrong, and the
+reason is ADR 0005: the price block is on every page.** Invalidating prices invalidates the
+whole site. There is no smaller set.
+
+The real difference between the two is not *how many* pages, it is **eager vs lazy**:
+
+| | Full rebuild | On-demand revalidation |
+|---|---|---|
+| What happens on save | every page re-rendered up front | every page's cache entry marked invalid |
+| How long that takes | ~1–2 min for a site this size | seconds — it is just marking |
+| When a page re-renders | before anyone asks | when the next visitor asks for it |
+| Who waits | nobody; pages are prebuilt | the first visitor to each page, for one render |
+| What a visitor sees | old page, then new page | never a stale price — the next request serves fresh |
+| Deployment | yes, atomic, rollback-able | no deployment at all |
+
+So revalidation is genuinely faster to *take effect*, and nobody sees a stale price either
+way. What it costs is that the first visitor to each page absorbs a render, and the site now
+has two publishing mechanisms to understand instead of one.
+
+**For a site of roughly ten pages that is a thin win**, and a full rebuild remains the
+default: code changes require a build regardless, a deploy is atomic and revertible, and
+prebuilt pages are pure CDN hits with no first-visitor cost. Revalidation earns its keep at
+hundreds or thousands of pages, which this site is not.
+
+**If price freshness in seconds is a real requirement, neither is the right tool.** The
+answer is then to stop baking prices into the page at all: render the price block behind a
+`<Suspense>` boundary so the page shell stays static on the CDN and the block resolves per
+request. Prices are then always current, on every page, with no rebuild and no invalidation —
+at the cost of a little server work per page view. This is the same mechanism as the promo
+slot in ADR 0007, and it is the default shape of Next.js 16 with Cache Components, not an
+exotic option. **Decide this with register item C7**, not separately.
+
 ## Decision
 All eight prices live in **one** document, `content/fuel-prices.json`, configured as a
 TinaCMS collection with `ui.global: true` — it appears under "Site" in the sidebar and opens
