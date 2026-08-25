@@ -93,11 +93,15 @@ shorter, 360x39 from 400x151 — pinned under the header and still expandable to
 Exit 260 │ REG 3.79   DIESEL 4.29        ⌄ All prices
 ```
 
+**The resting card is the same at both widths**: the page's own Location *and* the Truck Stop.
+No phone-only variant — truck prices are the reason a whole class of guests is on the site, and
+a phone is what they are holding.
+
 | | Resting | Condensed | Expanded adds |
 | --- | --- | --- | --- |
-| Desktop | Location + Truck Stop, 400x122 | Location only, 400x39 | Mini Mart, The Cove |
-| Desktop, condensed | — | — | those two **and the Truck Stop** |
-| Phone (interior) | **Location only**, 345x78 | Location only, one line | those two **and the Truck Stop** |
+| Desktop | Location + Truck Stop, 400x110 | Location only, 400x39 | Mini Mart, The Cove |
+| Phone | Location + Truck Stop, 345x102 | Location only, one line | Mini Mart, The Cove |
+| Either, once condensed | — | — | those two **and the Truck Stop** |
 
 **The panel adds only what is not already on screen.** Never list a place twice — that is one
 rule, not a case per state. Apply it to the Truck Stop as well: the condensed bar carries one
@@ -149,10 +153,9 @@ headers — that is what this replaced, and it read as two unrelated cards of nu
 that does not sell a grade gets an em-dash.
 
 The column set is derived: **the table shows the union of the grades sold by the rows currently
-on screen** — visible, not present. DEF is a Truck Stop grade. Shut on a phone the card is
-Exit 260 alone, so there is no DEF column; it arrives with the Truck Stop when the block opens.
-On desktop the Truck Stop is in the card at rest, so DEF is there in both states. Never print a
-grade column that no visible row sells.
+on screen** — visible, not present. DEF is a Truck Stop grade, so the DEF column exists wherever
+the Truck Stop is a row: the resting card at both widths, and the panel once the block condenses
+and the Truck Stop moves into it. Never print a grade column that no visible row sells.
 
 ```
 open at rest (desktop)                  open while condensed (desktop)
@@ -166,12 +169,13 @@ open at rest (desktop)                  open while condensed (desktop)
 │ The Cove     3.85    4.29    — │      └────────────────────────────────────┘
 └────────────────────────────────┘
 
-phone, shut — no Truck Stop row on screen, so no DEF column
-┌──────────────────────────┐
-│ ⌄ View all prices        │
-│            REGULAR DIESEL│
-│ Exit 260      3.79   4.29│
-└──────────────────────────┘
+phone, shut — the same card as desktop
+┌──────────────────────────────────┐
+│ ⌄ View all prices                │
+│          REGULAR  DIESEL     DEF │
+│ Exit 260    3.79    4.29       — │
+│ Truck Stop     —    4.55    3.29 │
+└──────────────────────────────────┘
 ```
 
 On `/truck-stop` the Truck Stop row leads, so diesel and DEF are the first numbers a driver hits.

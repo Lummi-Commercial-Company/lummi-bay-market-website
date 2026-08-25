@@ -26,9 +26,10 @@ sitting on top of each other.
 
 The column set is derived: **the table shows the union of the grades sold by the rows currently
 on screen.** Visible, not present — that distinction is the whole rule. DEF is a Truck Stop
-grade, so shut on a phone, where the card is Exit 260 alone, there is no DEF column to explain;
-it arrives with the Truck Stop when the block opens. On desktop the Truck Stop is in the card at
-rest, so DEF is there in both states. One rule, no per-state layout to maintain.
+grade, so the DEF column exists wherever the Truck Stop is a row and nowhere else: in the
+resting card at both widths, in the panel once the block condenses and the Truck Stop moves
+there, and never in the condensed one-line bar, which carries a single Location. One rule, no
+per-state layout to maintain.
 
 The columns carry the grade, and the row label carries the place. Truck-lane diesel and car-lane
 diesel share the DIESEL column; the Truck Stop row is what says which lane it is.
@@ -44,19 +45,21 @@ visible at a glance in aligned columns and invisible in a run of inline text.
 
 **One component, three states.**
 
-1. **Resting** — a card, **capped at 400px**, with grade column headers. On **desktop** it
-   carries the page's own Location *and* the Truck Stop (400x148). On a **phone interior page**
-   it carries the Location **alone** (345x76).
+1. **Resting** — a card, **capped at 400px**, with grade column headers, carrying the page's own
+   Location *and* the Truck Stop. **The same card at both widths**: 400x110 desktop, 345x102
+   phone. The phone once carried the Location alone; that difference is gone, and with it a
+   per-width branch in the component. Truck prices are the reason a whole class of guests is on
+   the site, and a phone is what they are holding.
 2. **Condensed** — once the page has scrolled roughly halfway past the resting card, at
-   **both** widths, it becomes a **single line carrying the page's own Location**: desktop
-   365x39 from 400x148, a phone one line from 345x76. Narrower as well as shorter on desktop.
+   **both** widths, it becomes a **single line carrying the page's own Location**: 400x39 from
+   400x110 on desktop, 345x39 from 345x102 on a phone. The Truck Stop is not dropped when this
+   happens — it moves into the panel, per rule 3. The bar keeps the card's width; sized by
+   content it came out 365px, and a narrow bar under a 400px panel reads as two objects.
 3. **Expanded** — the panel adds **only the places not currently on screen**. Never a repeat.
-   Two on desktop at rest (Mini Mart, The Cove — the Truck Stop is in the card); **three from
-   the desktop condensed line** (those two *plus the Truck Stop*, which the one-line bar does
-   not carry); three from a phone interior page. This is one rule rather than a case per state,
-   and getting it wrong is what dropped the Truck Stop out of the desktop condensed view
-   entirely: the bar shows one Location, so everything else — Truck Stop included — belongs in
-   the panel.
+   At rest, two at both widths: Mini Mart and The Cove, because the Truck Stop is in the card.
+   From the condensed line, three at both widths: those two *plus the Truck Stop*, because the
+   one-line bar carries a single Location. This is one rule rather than a case per state, and
+   getting it wrong is what dropped the Truck Stop out of the condensed view entirely.
    The panel has **no caption**. "Also at" labelled a second block, and there is no second
    block any more.
 
@@ -74,16 +77,15 @@ open at rest (desktop)                  open while condensed (desktop)
                                         the bar carries one Location, so the
 one card, one header row, one hairline   Truck Stop moves into the panel
 
-phone, shut                             phone, open
-┌──────────────────────────┐            ┌──────────────────────────────────┐
-│ ⌄ View all prices        │            │ ⌃ Hide                           │
-│            REGULAR DIESEL│            │          REGULAR  DIESEL     DEF │
-│ Exit 260      3.79   4.29│            │ Exit 260    3.79    4.29       — │
-└──────────────────────────┘            ├──────────────────────────────────┤
-                                        │ Mini Mart   3.79    4.29       — │
-no Truck Stop row on screen,            │ The Cove    3.85    4.29       — │
-so no DEF column to explain             │ Truck Stop     —    4.55    3.29 │
-                                        └──────────────────────────────────┘
+phone, shut — the same card as desktop  phone, condensed and open
+┌──────────────────────────────────┐    ┌──────────────────────────────────┐
+│ ⌄ View all prices                │    │ Exit 260 │ REG 3.79  DIESEL 4.29 ⌃│
+│          REGULAR  DIESEL     DEF │    ├──────────────────────────────────┤
+│ Exit 260    3.79    4.29       — │    │          REGULAR  DIESEL     DEF │
+│ Truck Stop     —    4.55    3.29 │    │ Mini Mart   3.79    4.29       — │
+└──────────────────────────────────┘    │ The Cove    3.85    4.29       — │
+                                        │ Truck Stop     —    4.55    3.29 │
+truck prices are visible on arrival     └──────────────────────────────────┘
 ```
 
 Carrying one place rather than two is what makes the condensed bar narrow. The Truck Stop is
@@ -144,9 +146,11 @@ straight onto it with no gap, no top border and no second radius. Two details ma
 **The condense trigger** is the same at both widths — roughly half the resting card's height
 scrolled past it — a sentinel occupying the card's slot, **at the card's own height**, so "less
 than half of it is still visible" is literally that. That height is a consequence, not a
-constant: collapsing the two grouped tables into one took the desktop resting card from 148px
-to 122px (and the phone card to 78px), and the sentinel had to move with it or the trigger
-would no longer mean what it says.
+constant, and it has moved twice: collapsing the two grouped tables into one took the desktop
+card to 122px, dropping a row label took it to 110px, and giving the phone card the Truck Stop
+row took that to 102px. Each time the sentinel had to move with it or the trigger would stop
+meaning what it says. Measured after the last move: the block condenses at 56px of scroll on a
+110px card and 52px on a 102px card — half, to within one scroll step.
 
 **The condensed bar's panel is positioned against the viewport, not against the block.** No
 `position-anchor`. This is what makes a sticky block safe (ADR 0006) and it removes CSS anchor
