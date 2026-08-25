@@ -59,6 +59,25 @@ worry does not materialise, because the panel is anchored to a card that sits be
 and opens downward. Hit-tested inside the header at scroll offsets 0, 300, 900 and 1800 with
 the panel open, the header answered every time.
 
+**On a phone the logo carries Home; the nav carries the other two.** Measured at 375px — the
+*widest* common phone — the 52px bar needs exactly its full 349px of usable width for logo +
+three nav items + the "Get the App" pill. Zero slack. At 360px (common Android) or 320px
+(iPhone SE) it overflows or the nav wraps to a second line, and a two-row sticky header costs
+that height on every page and every scroll.
+
+The three destinations are all still reachable: the Market lockup links Home, as the locked
+architecture already specifies, and the nav shows Locations · Truck Stop. This is the same
+"drop what there is no room for" call already made for the condensed bar's affordance, applied
+to the header. The alternatives were an icon-only Rewards pill (measured to fit with 59px to
+spare, but it strips the words off a decision made deliberately to keep Rewards prominent) and
+a hamburger drawer (fits everything, hides everything behind a tap, and is more machinery than
+three destinations warrant).
+
+*Open:* the phone nav's tap targets are still short. The items measure 26px, 43px and 48px
+wide against a 44px guideline, in a bar with 52px of height to spend. Padding each item to a
+44px hit area is a layout fix, not a redesign, but it has not been done and it will re-tighten
+the width budget.
+
 ## Consequences
 - The header holds **52px** of every phone viewport permanently — about 6% of a 375x812 screen.
   Accepted: it buys the four primary destinations from anywhere on the page. (47px until the
