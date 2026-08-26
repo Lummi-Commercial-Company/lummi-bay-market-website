@@ -12,7 +12,6 @@ to white yourself — that needs an approved reversed lockup from the brand owne
 
 | File | What it actually is | Status |
 |---|---|---|
-| `logo-market.svg` | **Real vector** — 32 paths, 8 polygons, 6 gradients, zero font references, zero embedded bitmaps. Canvas `336 x 120`, with both `width`/`height` and a `viewBox`. It is the **reversed** lockup (white wordmark), so it is the counterpart of `logo-market-reversed.png`, not of `logo-market.png` | The header's file. Caveats below |
 | `logo-market.png` | 512 x 512, the Market lockup in navy `#1D3D7C` on transparency, letterboxed with ~65% empty vertical space | Primary raster for light grounds. Uploaded as `icon.png`; renamed, because it is the lockup, not an icon |
 | `logo-market-reversed.png` | 336 x 120, the **reversed** lockup — white wordmark, navy outline, saturated cedar paddle with visible grain | The reversed raster. Uploaded as `logo-market.png.png`; renamed |
 | `favicon.svg` | **Not a vector.** An SVG wrapper around one embedded base64 PNG — zero `<path>` elements. The payload is byte-identical to `logo-market.png` (sha256 `ff999899…`, 27,566 bytes) | Works, but does not scale |
@@ -30,34 +29,53 @@ before it ships.
 check any `.svg` in five seconds, open it in a text editor: `<path`, `<polygon` and friends mean
 real vector; `<image` with `base64` means a bitmap in an SVG costume, with none of the benefits.
 
-## Caveats on `logo-market.svg`
+## Decision: the logo ships as PNG
 
-Verified in Chromium 141. Rendered evidence: `docs/proofs/header-logo-proof.html`.
+**No SVG is used for the logo.** The supplied vector's paddle rendered pale, with a smooth
+gradient and no wood grain, where the approved raster's paddle is saturated cedar with visible
+grain. The logo is locked, so that mismatch is disqualifying rather than a matter of taste, and
+ownership ruled the vector out. It is archived at `assets/brand-source/logo-market.svg`, which is
+never served; nothing here references it. If a corrected vector arrives, revisit this — vector is
+the better format when its colours are right.
 
-- **Its box is not its art.** The canvas is 2.8:1, but the ink occupies only the top of it and
-  leaves **21.8 of 120 units empty at the bottom**; the ink itself is 3.68:1. The reversed PNG
-  leaves 4. Sized to the same width the SVG therefore reads visibly smaller and sits higher —
-  30.2px of ink at a 112px box against the PNG's 36px — and vertically centring the box does not
-  vertically centre the logo. **Ask for a re-export with the artboard trimmed to the art.** Until
-  then any header CSS carries a magic number.
-- **Its paddle does not match the raster's.** The vector's paddle is pale with a smooth gradient
-  and no wood grain; the raster's is saturated cedar with visible grain. The logo is locked, so
-  this is not a preference: one of the two misrepresents the approved art, and ownership has to
-  say which is authoritative.
-- **It cannot serve light grounds.** White wordmark — on `--lb-bone` it all but vanishes. The home
-  hero and `/rewards` still need the navy vector.
-- **No inlining hazard.** The file uses `mix-blend-mode` (6 uses) with `isolation`. Rendered inline
-  in a page and via `<img src>` on the same navy ground, output is identical — the blend modes are
-  properly isolated and either usage is safe.
+Which file a surface takes is decided by its **background**, and by nothing else:
+
+| Ground | File | Ink |
+|---|---|---|
+| Navy / dark — the sticky header, every page | `logo-market-reversed.png` | 334 x 109, 3.06:1 |
+| Light — home hero, `/rewards`, print | `logo-market.png` | 503 x 162, 3.10:1 |
+
+Neither file can cover for the other. A white wordmark on `--lb-bone` all but vanishes; a navy
+wordmark on `--lb-navy` measures 1.6:1 and disappears outright.
+
+### PNG is sufficient at 3x DPR — measured, not assumed
+
+A raster is sufficient when its **ink** width is at least three times the CSS width it renders at.
+Rendered evidence and the full table: `docs/proofs/header-logo-proof.html`.
+
+| Surface | CSS | 3x wants | File | Ink | Verdict |
+|---|---|---|---|---|---|
+| Phone header | 95px | 285px | reversed | 334px | OK, 1.17x spare |
+| Desktop header | 112px | 336px | reversed | 334px | OK, 99.4% |
+| Phone hero | 123px | 369px | navy | 503px | OK, 1.36x spare |
+| Desktop hero | 146px | 438px | navy | 503px | OK, 1.15x spare |
+
+Two things to know rather than fix. The desktop header lands at 99.4% of a true 3x sample — a 0.6%
+shortfall no eye resolves. And the reversed file has no headroom past that: any future reversed use
+wider than ~111px CSS (a dark hero, a footer lockup, an OG image) would upscale. Cheap insurance is
+one more export of the same art at **1008 x 360**.
+
+What PNG gives up: print and large format above ~500px, which is what `assets/brand-source/` is
+for; and CSS tinting or `mask-image`, which the locked logo may not be subjected to anyway.
 
 ## Still needed
 
 | File | Why |
 |---|---|
-| A **navy** vector, for light grounds | `logo-market.svg` is the reversed lockup. The home hero, `/rewards` and print sit on light ground and have no vector at all |
-| `logo-market.svg` re-exported, artboard trimmed to the art | Removes the 21.8-unit bottom gap so the header can size the logo without a magic number |
-| A ruling on the paddle | Vector and raster disagree: pale and ungrained versus saturated cedar with grain |
-| A favicon set built from the **mark alone** | The present set carries the full lockup and is illegible at tab size |
+| A favicon set built from the **mark alone** | The present set carries the full lockup and is illegible at tab size. Needs an approved standalone mark first |
+| `logo-market-reversed.png` at **1008 x 360** | Optional. Gives the reversed lockup headroom above ~111px CSS at 3x |
+| The `.ai` / `.eps` masters in `assets/brand-source/` | Still empty apart from the rejected vector. Print and signage need them |
+| A corrected vector, eventually | Not blocking anything. Would let the PNG decision above be revisited |
 
 Masters (`.ai`, `.eps`) belong in `assets/brand-source/`, which is empty.
 
@@ -74,6 +92,10 @@ Masters (`.ai`, `.eps`) belong in `assets/brand-source/`, which is empty.
   Neither is a UI colour; the UI navy stays `--lb-navy` `#1C4E8F`.
 
 ## Export requirement: text must be outlined
+
+*Applies to any future vector. The logo itself now ships as PNG, so nothing shipping today depends
+on this — but the rule is what made the supplied vector checkable, and it caught nothing wrong
+there: that file's text was properly outlined.*
 
 An SVG that keeps the wordmark as live `<text>` renders wrong anywhere the brand font is
 not installed — the renderer substitutes a font with different glyph widths and the lockup
