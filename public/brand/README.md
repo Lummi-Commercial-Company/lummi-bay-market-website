@@ -28,6 +28,24 @@ the paddle-handle height on all sides (skill `brand-system`).
 SVG is strongly preferred — one file covers every size. The header height is set from the
 art's real ratio, not the reverse (ADR 0006).
 
+## Export requirement: text must be outlined
+
+An SVG that keeps the wordmark as live `<text>` renders wrong anywhere the brand font is
+not installed — the renderer substitutes a font with different glyph widths and the lockup
+reflows. Letters shift, "MARKET" slides off the paddle. This has already happened once.
+
+Before exporting to this folder: **Type -> Create Outlines** (Illustrator, shift-cmd-O), then
+**Object -> Path -> Outline Stroke**. On export choose Styling *Presentation Attributes*,
+Font *Convert to outline*, Images *Embed*, and leave **Responsive unchecked** so the root
+keeps `width`/`height` next to its `viewBox`.
+
+Outlining is not re-typesetting and does not breach the locked-logo rule: every glyph keeps
+the exact shape it already had. Retyping the wordmark in a lookalike font *would* breach it.
+Keep the live-text version as the master in `assets/brand-source/`.
+
+To check a file: open it in a text editor and search for `<text` or `font-family`. Either
+one means it is not ready for this folder. Also confirm the root element has a `viewBox`.
+
 ## Blocked: the header cannot carry the logo yet
 
 The sticky header is `--lb-navy` and the supplied wordmark is navy, so the wordmark
