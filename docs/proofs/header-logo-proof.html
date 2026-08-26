@@ -1,0 +1,170 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Header logo — the real vector in the real header</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --lb-navy:#1C4E8F; --lb-navy-deep:#14396B; --lb-teal:#0FB5C4; --lb-cedar:#C9772E;
+    --lb-ground:#FBF9F4; --lb-paper:#FFFFFF; --lb-ink:#2A2820; --lb-bone:#F5F1E8;
+    --rule:#DCD6C8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--lb-ground);color:var(--lb-ink);
+    font:400 15px/1.55 Inter,system-ui,-apple-system,sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:34px 22px 90px}
+  h1{font:600 26px/1.2 Inter,system-ui,sans-serif;color:var(--lb-navy);margin:0 0 6px}
+  .sub{color:#6B6656;margin:0 0 30px;max-width:62ch}
+  h2{font:600 16px/1.3 Inter,system-ui,sans-serif;color:var(--lb-navy);
+    margin:38px 0 4px;padding-top:20px;border-top:1px solid var(--rule)}
+  .note{max-width:66ch;margin:0 0 16px;color:#4A4636}
+  .mono{font:400 12.5px/1.5 "IBM Plex Mono",ui-monospace,monospace}
+  .cap{font:500 10.5px/1.4 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.13em;
+    text-transform:uppercase;color:#8A8472;margin:0 0 8px}
+
+  /* ---- the header, at the approved dimensions (ADR 0006 + ADR 0010) ---- */
+  .vp{border:1px solid var(--rule);background:var(--lb-ground);overflow:hidden;margin-bottom:6px}
+  .sitebar{background:var(--lb-navy);display:flex;align-items:center;gap:12px;padding:12px 22px}
+  .lock{flex:0 0 auto;display:block}
+  .lock img{display:block;width:112px;height:auto}
+  .sitenav{display:flex;gap:20px;margin-left:auto;
+    font:500 12px/1 Inter,sans-serif;color:var(--lb-bone);letter-spacing:.03em}
+  .sitenav a{color:inherit;text-decoration:none}
+  .pill{flex:0 0 auto;background:var(--lb-bone);color:var(--lb-navy);text-decoration:none;
+    font:600 11px/1 Inter,sans-serif;padding:9px 12px;border-radius:999px;white-space:nowrap}
+  .waterline{height:6px;background:linear-gradient(90deg,var(--lb-teal),#0a8f9c)}
+  .body{padding:22px;min-height:120px}
+  .body h3{font:600 20px/1.25 Inter,sans-serif;color:var(--lb-navy);margin:0}
+
+  /* phone variant: 56px bar, 44px tap targets, nowrap (ADR 0010) */
+  .vp.phone{width:375px}
+  .phone .sitebar{gap:7px;padding:6px 12px}
+  .phone .lock img{width:95px}
+  .phone .sitenav{gap:4px;flex-wrap:nowrap}
+  .phone .sitenav a{min-width:44px;min-height:44px;padding:0 5px;display:flex;
+    align-items:center;justify-content:center;font-size:11px}
+  .phone .pill{min-height:44px;display:flex;align-items:center}
+
+  .measure{display:flex;gap:26px;flex-wrap:wrap;margin:14px 0 0}
+  .m{font:400 12px/1.5 "IBM Plex Mono",ui-monospace,monospace;color:#4A4636}
+  .m b{color:var(--lb-navy);font-weight:600}
+
+  /* ---- the ink-vs-canvas demonstration ---- */
+  .cmp{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+  .cell{background:var(--lb-navy);padding:0;position:relative}
+  .cell img{display:block;width:224px;height:auto}
+  .cell.box{outline:1px dashed rgba(245,241,232,.55);outline-offset:-1px}
+  .ink{position:absolute;outline:1px solid var(--lb-cedar);pointer-events:none}
+  .legend{font:400 11.5px/1.5 "IBM Plex Mono",ui-monospace,monospace;color:#6B6656;margin-top:7px}
+  .swatch{display:inline-block;width:9px;height:9px;vertical-align:baseline;margin-right:4px}
+
+  table{border-collapse:collapse;width:100%;margin:10px 0 0;
+    font:400 13px/1.5 Inter,system-ui,sans-serif}
+  th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-weight:600;color:var(--lb-navy);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
+  td.n{font:400 12.5px/1.5 "IBM Plex Mono",ui-monospace,monospace;white-space:nowrap}
+  .flag{color:#8A3B1F;font-weight:600}
+  .ok{color:#1E6B3A;font-weight:600}
+</style>
+
+<div class="wrap">
+  <h1>Header logo — the real vector in the real header</h1>
+  <p class="sub">First look at <span class="mono">logo-market.svg</span> in the header the site
+  actually ships, at the dimensions ADR 0006 and ADR 0010 fix. Nothing here is a mockup of the
+  logo: the file is loaded from <span class="mono">/public/brand/</span> unmodified.</p>
+
+  <h2>Desktop — 112px logo on a navy bar</h2>
+  <p class="note">The wordmark is white, so the navy ground works. This is the question ADR 0006
+  left open, answered: the header keeps <span class="mono">--lb-navy</span> and needs no light-ground
+  redesign.</p>
+  <div class="vp">
+    <header class="sitebar">
+      <a class="lock" href="#"><img src="../../public/brand/logo-market.svg"
+         alt="Lummi Bay Market — home"></a>
+      <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck Stop</a></nav>
+      <a class="pill" href="#">Get the App</a>
+    </header>
+    <div class="waterline"></div>
+    <div class="body"><h3>Salish Village</h3></div>
+  </div>
+  <div class="measure">
+    <span class="m">box <b>112 &times; 40</b></span>
+    <span class="m">ink <b>112 &times; 30.2</b></span>
+    <span class="m">bar height <b>64px</b></span>
+    <span class="m">wordmark on navy <b>8.28:1</b></span>
+  </div>
+
+  <h2>Phone — 375px, 95px logo, 44px tap targets</h2>
+  <p class="note">The logo carries Home; the nav carries the other two destinations; the pill keeps
+  its words. Zero horizontal slack by design — ADR 0006 measured it.</p>
+  <div class="vp phone">
+    <header class="sitebar">
+      <a class="lock" href="#"><img src="../../public/brand/logo-market.svg"
+         alt="Lummi Bay Market — home"></a>
+      <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck&nbsp;Stop</a></nav>
+      <a class="pill" href="#">Get the App</a>
+    </header>
+    <div class="waterline"></div>
+    <div class="body"><h3>Salish Village</h3></div>
+  </div>
+  <div class="measure">
+    <span class="m">box <b>95 &times; 33.9</b></span>
+    <span class="m">ink <b>95 &times; 25.7</b></span>
+    <span class="m">bar height <b>56px</b></span>
+  </div>
+
+  <h2>The problem: the file's box is not its art</h2>
+  <p class="note">The SVG canvas is <span class="mono">336 &times; 120</span> — exactly the 2.8:1
+  ADR 0006 assumes. But the ink sits in the <em>top</em> of that box and stops well short of the
+  bottom edge. Dashed outline is the canvas the layout sizes; cedar outline is where the ink
+  actually is.</p>
+  <div class="cmp">
+    <div>
+      <p class="cap">logo-market.svg</p>
+      <div class="cell box"><img src="../../public/brand/logo-market.svg" alt="">
+        <span class="ink" style="left:1.0%;top:6.25%;right:0.24%;bottom:18.2%"></span></div>
+      <p class="legend"><span class="swatch" style="background:#C9772E"></span>ink 3.68:1 &middot;
+        21.8 of 120 units empty at the bottom</p>
+    </div>
+    <div>
+      <p class="cap">logo-market-reversed.png</p>
+      <div class="cell box"><img src="../../public/brand/logo-market-reversed.png" alt="">
+        <span class="ink" style="left:0.3%;top:5.8%;right:0.3%;bottom:3.3%"></span></div>
+      <p class="legend"><span class="swatch" style="background:#C9772E"></span>ink 3.06:1 &middot;
+        4 of 120 units empty at the bottom</p>
+    </div>
+  </div>
+  <p class="note" style="margin-top:18px">Same nominal box, different art inside it. Sized to the
+  same width, the SVG reads visibly smaller and sits higher than the PNG — 30.2px of ink against
+  the PNG's 36px at a 112px box. Vertically centring the box does not vertically centre the logo.</p>
+
+  <h2>What the two files disagree about</h2>
+  <table>
+    <tr><th>&nbsp;</th><th>logo-market.svg</th><th>logo-market-reversed.png</th></tr>
+    <tr><td>Canvas</td><td class="n">336 &times; 120 &mdash; 2.80:1</td><td class="n">336 &times; 120 &mdash; 2.80:1</td></tr>
+    <tr><td>Ink ratio</td><td class="n flag">3.68:1</td><td class="n">3.06:1</td></tr>
+    <tr><td>Padding, bottom</td><td class="n flag">21.8 units</td><td class="n">4 units</td></tr>
+    <tr><td>Wordmark</td><td class="n">white, dark outline</td><td class="n">white, navy outline</td></tr>
+    <tr><td>Paddle</td><td class="n flag">pale, smooth gradient,<br>no wood grain</td><td class="n">saturated cedar,<br>visible grain</td></tr>
+    <tr><td>Text</td><td class="n ok">outlined &mdash; 0 font refs</td><td class="n">n/a (raster)</td></tr>
+    <tr><td>Scales</td><td class="n ok">yes &mdash; 32 paths, 8 polygons</td><td class="n">no</td></tr>
+  </table>
+
+  <h2>Open items this proof raises</h2>
+  <p class="note"><b>1. Which paddle is authoritative?</b> The vector's paddle is pale and
+  ungrained; the raster's is saturated cedar. The logo is locked, so this is not a preference —
+  one of the two files misrepresents the approved art and ownership has to say which.</p>
+  <p class="note"><b>2. Re-export with the artboard trimmed to the art.</b> That removes the
+  21.8-unit bottom gap, makes the file's box its art, and lets the header size the logo without a
+  per-file fudge factor. Until then any header CSS carries a magic number.</p>
+  <p class="note"><b>3. There is still no vector for light grounds.</b> This file is the reversed
+  lockup — on <span class="mono">--lb-bone</span> the white wordmark all but vanishes. The home
+  hero and <span class="mono">/rewards</span> sit on light ground and need the navy vector.</p>
+  <p class="note"><b>4. ADR 0006's 2.8:1 is right about the canvas.</b> It is the ink that varies
+  between files. The header height does not need re-opening on the strength of a ratio, but it
+  does need one authoritative file to measure.</p>
+
+  <p class="legend" style="margin-top:34px">Rendered in Chromium 141. Logo files loaded unmodified
+  from <span class="mono">/public/brand/</span>. TODO: replace the waterline gradient with the real
+  <span class="mono">&lt;Waterline /&gt;</span> component; the placeholder motifs are absent here on
+  purpose.</p>
+</div>
