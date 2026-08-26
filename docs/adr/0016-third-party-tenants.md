@@ -1,20 +1,27 @@
 # 0016 — Third-party tenants get pages; they are not Locations
 
-Status: Accepted
+Status: Accepted — as a **capability**. Nothing is published until the business decides to.
 
 Terms (Location, Truck Stop): `CONTEXT.md`. Bounded by ADR 0001 (what stays off this site)
 and the hard rules in CLAUDE.md. Built on the collection mechanism in ADR 0015.
 
 ## Context
-The Exit 260 property carries businesses that are not Lummi Bay Market:
+Three independent businesses rent space at Exit 260 / Salish Village today:
 
-- a **Wendy's**, in its own building on the property,
-- a **piroshki counter**, inside the Exit 260 store,
-- a **drive-through coffee shop**, on the property.
+- **Wendy's**, in its own building on the property,
+- **High Tide Coffee**, a drive-through on the property,
+- the **piroshki counter**, inside the Exit 260 store. *Trading name to confirm.*
 
-They rent space. Lummi Bay Market does not own or operate them. A tenant contract —
-Wendy's is the likely one — may at some point require the property to list the business
-on its website, so the capability is wanted before it is needed.
+Lummi Bay Market does not own or operate any of them.
+
+**Whether to advertise them at all is undecided, and this ADR does not decide it.** The
+ask is narrower and worth stating plainly: the *ability* to publish such a page should
+exist before it is needed, because the moment it is needed it will be needed quickly — a
+tenant contract, Wendy's being the likely one, may require the property to list the
+business on its website.
+
+Building the capability now costs one collection. Discovering the need later, with no page
+type, costs a build cycle against a contract deadline.
 
 Two boundaries have to be checked before adding third parties to this site, and they turn
 out to be different boundaries.
@@ -31,7 +38,11 @@ would therefore read, to anyone who knows LCC, as exactly the development ADR 00
 
 ## Decision
 
-**Tenants get pages, in the Lummi Bay Market theme, as a `tenants` collection.** Each is a
+**The `tenants` collection exists and ships empty.** No tenant page is written, and none is
+published, until someone decides to advertise. The decision here is that the capability is
+in place and the rules it must follow are settled in advance — not that any page will exist.
+
+**A tenant page, if one is published, is in the Lummi Bay Market theme.** Each is a
 header image for the business, its hours, and a short description — the same shape as an
 `infoPage` under ADR 0015.
 
@@ -65,6 +76,11 @@ page shows an `hoursConfirmed` date beside them, or omits hours entirely and lin
 tenant's own site. Stale hours for someone else's business is a complaint we would have
 volunteered for.
 
+**Nothing appears while the collection is empty.** The "Also at Exit 260" index and the link
+to it render only when at least one tenant page is published. An empty collection is
+invisible to a guest — no stub page, no empty index, no dead link. Publishing the first
+tenant is what makes the entry point appear.
+
 **Not in the navigation.** ADR 0008 is unchanged. The entry point is a link on the Exit 260
 Location page, plus a promo if one is wanted. If a contract later requires more prominence,
 that is a nav decision to take then, on its own merits.
@@ -81,5 +97,8 @@ that is a nav decision to take then, on its own merits.
   of scope, and ADR 0001's boundary is what keeps it narrow: **tenants of a Lummi Bay
   property, not businesses in the LCC portfolio.** A future request to add Silver Reef,
   Loomis Trail or the development itself is still refused by ADR 0001.
-- Someone should confirm whether any current tenant contract already requires listing. If
-  one does, this stops being speculative and joins Phase 0.
+- **Nothing here obliges the business to advertise anyone.** If the answer is that tenants
+  stay off the site, the cost of this decision is one unused collection definition.
+- Two things to confirm when convenient: the piroshki counter's exact trading name, and
+  whether any current tenant contract already requires listing. If one does, this stops
+  being speculative and joins Phase 0.

@@ -29,6 +29,16 @@ ethanol-free fuel.
 **Amenity** — A service offered at a Location (e.g., showers, driver lounge). A café or
 deli, if one exists at a Location, is an Amenity — not a separate brand or site section.
 
+**Tenant** — An independent business renting space on a Lummi Bay property. Not owned or
+operated by Lummi Bay Market. Three exist at Exit 260 / Salish Village: Wendy's, High Tide
+Coffee, and the piroshki counter (trading name to confirm). A Tenant is **not a Location**
+— Locations are the three Lummi Bay stores and nothing else, and the Locations index and
+the fuel price table both read from that set. A Tenant is also **not an Amenity**: the Cove
+Kitchen is an Amenity because Lummi Bay Market runs it, while the piroshki counter sits
+inside the Exit 260 store and is somebody else's business. Ownership decides which, not
+whether it shares a roof. See ADR 0016.
+_Avoid_: partner, vendor, concession.
+
 **Fuel Grade** — A product sold at a posted per-unit price. Three exist in scope: regular,
 diesel, and DEF. Midgrade, premium, and ethanol-free are not priced on this site.
 _Avoid_: fuel type, product.

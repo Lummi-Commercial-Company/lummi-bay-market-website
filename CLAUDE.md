@@ -83,10 +83,12 @@ the layout and cannot be lost or moved by a page.
 - `mainPages` — more than one main page may exist; a settings singleton points at the live one,
   so a replacement is built in full and switched over by changing one field.
 - `infoPages` — what a promo links to.
-- `tenants` — third-party businesses renting space on a Lummi Bay property (Wendy's, the
-  piroshki counter, the drive-through coffee). **A tenant is never a Location** — it would
-  otherwise land in the Locations index and the fuel price table. Indexed as "Also at Exit 260",
-  never "Salish Village" (ADR 0001 collision). Not in the nav.
+- `tenants` — independent businesses renting space on a Lummi Bay property. Three exist at
+  Exit 260 today: Wendy's, High Tide Coffee, the piroshki counter. **Whether to advertise them
+  is undecided** — the collection ships empty and nothing renders until a page is published
+  (ADR 0016). **A tenant is never a Location** (it would land in the Locations index and the
+  fuel price table) and never an Amenity (the Cove Kitchen is one; ownership decides).
+  Indexed as "Also at Exit 260", never "Salish Village" (ADR 0001 collision). Not in the nav.
 A new page never appears in the nav on its own — the nav stays three items (ADR 0008).
 
 ## Specialist agents (delegate to keep context lean)
