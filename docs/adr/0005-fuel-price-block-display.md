@@ -299,3 +299,46 @@ popover renders in the browser's top layer and outranks all of it regardless.
   subject to change" line is a business decision, not a design one.
 - **The `updated` stamp, stored or derived** — carried from ADR 0004 and now load-bearing if
   the stamp is displayed.
+
+## Revision — the desktop block sits flush under the header, and the trigger is measured under it
+
+Reviewed against `docs/proofs/home-review.html` and corrected on the owner's call. Two
+defects, one report: the block looked like a floating window a short way below the header,
+and it jumped upward the moment the page moved.
+
+**The block pins flush to the underside of the header, and never moves.** Its sticky offset
+is the **header's height**, not a number chosen near it. The proof sheet pins at `72px`
+under a bar of roughly `64px`, which leaves an 8px gap whenever the block is stuck — small
+enough to read as a rendering fault rather than a decision. The page grid's top padding made
+it worse: the block began about 30px lower still, so it dropped into place and then rose to
+its sticky offset on the first scroll event. Two positions for one element, and a guest sees
+the difference between them as movement.
+
+The offset now equals the header, and the top padding belongs to the **content column**
+rather than the grid, so the rail column starts flush. Measured at scroll 0, 60, 140 and
+full scroll: the gap is **0px at every one**.
+
+State the rule as a relationship, not a value. The header is 60px plus a 5px waterline
+today; if either changes, the offset follows automatically and there is no second number to
+remember. Anything else is two constants that have to agree, and eventually will not.
+
+**Flush means the top corners are square** — `border-radius: 0 0 6px 6px` — so the block
+reads as hanging from the header bar rather than floating over the page. Rounded corners
+butted against a straight edge are what make a flush element look misaligned rather than
+attached. The teal bottom border and the bottom radius stay.
+
+**The condense trigger is measured under the header, not against the viewport.** The
+sentinel is observed with the scroller as root, but the sticky header covers the top of that
+scroller. The sentinel therefore stayed "visible" to the observer long after the guest had
+stopped seeing it, and the block condensed later than the page implied — on a page without
+much scroll range, **never at all**.
+
+The observer takes a `rootMargin` pulling the root's top edge down to the underside of the
+header, so "scrolled halfway past the block" means halfway past the part of it a guest can
+see. Home now condenses by 60px of scroll against 140px of range; it previously needed most
+of the page. This is the same class of error the ADRs keep catching: a rule written
+correctly and then measured against the wrong frame of reference.
+
+**The phone is unchanged.** Its placement was reviewed and accepted as it stands. The
+`rootMargin` applies at both widths because it is a correctness fix rather than a layout
+choice; it only makes the phone condense marginally earlier.

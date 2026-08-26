@@ -85,6 +85,11 @@ panel in the condensed state — that kills "All prices" in the one state the ba
 `<details>` will still report `open: true`, so it reads as broken rather than blocked. Close the
 block in the observer instead, and hang the panel off the **bar**, not the block's reserved box.
 
+**On desktop the block pins flush to the underside of the header** — sticky offset equals the
+header's height, never a fixed number near it, and the page's top padding goes on the content
+column so the rail starts flush too. Top corners square (`0 0 6px 6px`) so it hangs off the bar
+instead of floating. A gap here reads as a rendering fault; see the revision on ADR 0005.
+
 **Every page condenses on scroll**, at both widths. Once the page has scrolled roughly halfway past the resting
 card it becomes a single line carrying **the page's own Location alone** — narrower as well as
 shorter, 360x39 from 400x151 — pinned under the header and still expandable to all four.
