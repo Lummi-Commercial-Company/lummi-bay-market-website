@@ -1,0 +1,12 @@
+import {chromium} from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1500,height:1300}});
+await pg.goto('file://'+process.cwd()+'/fuel-strip-proof.html');await pg.waitForTimeout(800);
+const top=()=>pg.evaluate(()=>{const st=document.getElementById('j-phone');
+  return Math.round(st.querySelector('.herotitle').getBoundingClientRect().top-st.getBoundingClientRect().top);});
+console.log('as built (block above hero):', await top());
+await pg.evaluate(()=>{const st=document.getElementById('j-phone');
+  const main=st.querySelector('.maincol'), hero=st.querySelector('.hero');
+  st.querySelector('.pagegrid').insertBefore(hero, st.querySelector('.railcol'));});
+await pg.waitForTimeout(300);
+console.log('hero first, then the block:', await top());
+await b.close();

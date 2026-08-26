@@ -1,0 +1,15 @@
+import {chromium} from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1500,height:1100}});
+await pg.goto('file://'+process.cwd()+'/fuel-strip-proof.html');await pg.waitForTimeout(600);
+const t=async()=>pg.evaluate(()=>{const st=document.getElementById('i-phone-shut');
+  return Math.round(st.querySelector('.ph').getBoundingClientRect().top-st.getBoundingClientRect().top);});
+console.log('as built (16:9 promo, 135px card):', await t());
+await pg.evaluate(()=>{document.querySelector('#i-phone-shut .promo').style.aspectRatio='2.5';});
+await pg.waitForTimeout(250); console.log('2.5:1 promo:', await t());
+await pg.evaluate(()=>{const st=document.getElementById('i-phone-shut');
+  st.querySelector('.promoslot').after(st.querySelector('.railflow'));});
+await pg.waitForTimeout(250); console.log('2.5:1 promo + promo above the card:', await t());
+await pg.evaluate(()=>{const st=document.getElementById('i-phone-shut');
+  const pb=st.querySelector('.pagebody'); pb.after(st.querySelector('.promoslot'));});
+await pg.waitForTimeout(250); console.log('promo moved below the page body:', await t());
+await b.close();

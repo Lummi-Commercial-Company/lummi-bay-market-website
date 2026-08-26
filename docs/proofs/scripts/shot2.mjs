@@ -1,0 +1,17 @@
+import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const file='file:///tmp/claude-0/-home-user-lummi-bay-market-website/21c83485-f133-5f64-be53-154ad32f55ba/scratchpad/fuel-strip-proof.html';
+const b=await chromium.launch();
+const p=await b.newPage({viewport:{width:1240,height:1200},deviceScaleFactor:2});
+await p.goto(file,{waitUntil:'load'}); await p.waitForTimeout(1200);
+const st=await p.locator('.stage.phone').first().boundingBox();
+await p.screenshot({path:'v-collapsed.png',clip:{x:st.x-6,y:st.y-6,width:st.width+12,height:280}});
+const exp=p.locator('.spec.exp').first();
+await exp.locator('label[for="m-bottom"]').click(); await p.waitForTimeout(200);
+await exp.locator('.strip > summary').click(); await p.waitForTimeout(350);
+const st2=await exp.locator('.stage').boundingBox();
+await p.screenshot({path:'v-bottom-open.png',clip:{x:st2.x-6,y:st2.y-6,width:st2.width+12,height:st2.height+12}});
+await exp.locator('.strip > summary').click(); await p.waitForTimeout(200);
+await p.screenshot({path:'v-bottom-shut.png',clip:{x:st2.x-6,y:st2.y-6,width:st2.width+12,height:st2.height+12}});
+await exp.locator('label[for="m-corner"]').click(); await p.waitForTimeout(200);
+await p.screenshot({path:'v-corner.png',clip:{x:st2.x-6,y:st2.y-6,width:st2.width+12,height:st2.height+12}});
+await b.close();

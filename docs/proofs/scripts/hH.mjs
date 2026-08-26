@@ -1,0 +1,14 @@
+import {chromium} from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const b=await chromium.launch();const pg=await b.newPage({viewport:{width:2300,height:1100},deviceScaleFactor:1.2});
+await pg.goto('file://'+process.cwd()+'/fuel-strip-proof.html');await pg.waitForTimeout(700);
+const m=async v=>{await pg.evaluate(v=>{document.querySelector('#h-wide .scroller').scrollTop=v;},v);
+ await pg.waitForTimeout(400);
+ return pg.evaluate(()=>{const b=document.getElementById('h-block').getBoundingClientRect();
+   return {w:Math.round(b.width),h:Math.round(b.height)};});};
+console.log('resting', JSON.stringify(await m(0)));
+console.log('condensed', JSON.stringify(await m(500)));
+await pg.locator('#h-wide').screenshot({path:'v-h1.png'});
+await pg.evaluate(()=>{document.getElementById('h-block').open=true;});
+await pg.waitForTimeout(300);
+await pg.locator('#h-wide').screenshot({path:'v-h2.png'});
+await b.close();

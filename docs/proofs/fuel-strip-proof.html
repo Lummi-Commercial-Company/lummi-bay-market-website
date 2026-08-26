@@ -1,0 +1,1771 @@
+<title>Fuel Price Strip Proof</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* ===== chrome tokens: light default, dark redefines tokens only ===== */
+:root{
+  --c-bg:#E3E9F1; --c-board:#F2F5F9; --c-ink:#141B24; --c-ink-soft:#4A5666;
+  --c-rule:#C2CEDD; --c-rule-soft:#D5DEE9; --c-accent:#1C4E8F;
+  --c-warn:#8A4B12; --c-good:#15603F; --c-chip:#FFFFFF; --radius:3px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --c-bg:#10161E; --c-board:#1A222C; --c-ink:#DEE5ED; --c-ink-soft:#93A1B2;
+    --c-rule:#2B3644; --c-rule-soft:#222C38; --c-accent:#77AEEA;
+    --c-warn:#DFA35F; --c-good:#63C598; --c-chip:#232E3A;
+  }
+}
+:root[data-theme="dark"]{
+  --c-bg:#10161E; --c-board:#1A222C; --c-ink:#DEE5ED; --c-ink-soft:#93A1B2;
+  --c-rule:#2B3644; --c-rule-soft:#222C38; --c-accent:#77AEEA;
+  --c-warn:#DFA35F; --c-good:#63C598; --c-chip:#232E3A;
+}
+/* ===== brand tokens: LOCKED. never theme-dependent — this is the specimen ===== */
+:root{
+  --lb-navy:#1C4E8F; --lb-navy-deep:#14396B; --lb-teal:#0FB5C4; --lb-cedar:#C9772E;
+  --lb-ground:#FBF9F4; --lb-paper:#FFFFFF; --lb-ink:#2A2820; --lb-bone:#F5F1E8;
+  /* proposed layer scale — see the calls at the foot of this page */
+  --z-strip:40; --z-panel:50; --z-nav:60; --z-top:70;
+}
+
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--c-bg);color:var(--c-ink);
+  font:400 16px/1.55 Archivo,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 96px}
+
+header.top{padding:64px 0 40px;border-bottom:1px solid var(--c-rule)}
+.eyebrow{font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--c-ink-soft);display:flex;gap:14px;flex-wrap:wrap}
+h1{font:700 clamp(2.25rem,6vw,3.25rem)/1.05 Archivo,sans-serif;letter-spacing:-.02em;
+  margin:18px 0 0;text-wrap:balance}
+.dek{margin:16px 0 0;max-width:62ch;font-size:1.0625rem;color:var(--c-ink-soft);text-wrap:pretty}
+.dek strong{color:var(--c-ink);font-weight:600}
+
+.plate{padding:56px 0;border-bottom:1px solid var(--c-rule-soft)}
+.plate-head{display:flex;gap:20px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+.plate-id{font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--c-accent);border:1px solid var(--c-rule);
+  border-radius:var(--radius);padding:6px 9px;white-space:nowrap}
+.plate-id.settled{color:var(--c-good)}
+h2{font:600 1.5rem/1.2 Archivo,sans-serif;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.plate-note{margin:10px 0 0;max-width:70ch;color:var(--c-ink-soft);text-wrap:pretty}
+code{font:400 .875em/1 "IBM Plex Mono",ui-monospace,monospace;background:var(--c-rule-soft);
+  padding:2px 5px;border-radius:var(--radius);color:var(--c-ink)}
+
+.board{position:relative;background:var(--c-board);border:1px solid var(--c-rule);
+  border-radius:var(--radius);margin-top:28px;padding:34px 26px;
+  display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start;overflow-x:auto}
+.board::before,.board::after{content:"";position:absolute;width:9px;height:9px;pointer-events:none}
+.board::before{top:7px;left:7px;border-top:1px solid var(--c-rule);border-left:1px solid var(--c-rule)}
+.board::after{bottom:7px;right:7px;border-bottom:1px solid var(--c-rule);border-right:1px solid var(--c-rule)}
+.spec{flex:0 0 auto}
+.spec-cap{font:500 10.5px/1.4 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--c-ink-soft);margin-bottom:10px}
+.spec-cap b{color:var(--c-ink);font-weight:500}
+.dim{font:400 10.5px/1.45 "IBM Plex Mono",ui-monospace,monospace;color:var(--c-ink-soft);
+  margin-top:9px;letter-spacing:.05em;max-width:34ch}
+
+/* ============ the device stage: a real scroll container ============ */
+.stage{position:relative;overflow:hidden;background:var(--lb-ground);
+  border:1px solid var(--c-rule);border-radius:var(--radius)}
+.stage.phone{width:375px;max-width:100%;height:460px;container-type:inline-size}
+.stage.desk{width:840px;max-width:100%;height:420px}
+.scroller{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain}
+
+.sitebar{position:sticky;top:0;z-index:60;background:var(--lb-navy);
+  display:flex;align-items:center;gap:12px;padding:9px 12px}
+/* the real lockup is a horizontal paddle with LUMMI BAY over it and MARKET below —
+   roughly 2.8:1, not the 4.5:1 slot that was reserved here before. sized to the
+   real artwork so the header's height is honest. */
+.logo-ph{height:34px;width:95px;border:1px dashed rgba(245,241,232,.55);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  font:400 7.5px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.1em;
+  color:var(--lb-bone);text-transform:uppercase}
+.sitenav{display:flex;gap:11px;flex-wrap:wrap;font:500 9.5px/1 Inter,sans-serif;
+  color:var(--lb-bone);letter-spacing:.03em;opacity:.9}
+.sitenav .nl{color:inherit;text-decoration:none;display:flex;align-items:center;
+  justify-content:center}
+.rewards-hit{display:inline-flex;align-items:center;text-decoration:none;margin-left:auto;
+  flex:0 0 auto}
+
+/* PHONE HEADER TAP TARGETS. vertical room is cheap, horizontal is the whole
+   problem: the bar had 33px of slack, so the padding is spent to the pixel.
+   nowrap, deliberately — a wrap must show as an overflow, not silently become a
+   second row of sticky header on every page. */
+.phone .sitebar,.stage.phone .sitebar{gap:7px;padding:6px 12px}
+.phone .sitenav,.stage.phone .sitenav{gap:4px;flex-wrap:nowrap}
+.phone .sitenav .nl,.stage.phone .sitenav .nl{min-width:44px;min-height:44px;padding:0 5px;
+  border-radius:7px}
+.phone .rewards-hit,.stage.phone .rewards-hit{min-height:44px}
+/* the pill's HIT area is the anchor; the cedar shape inside stays its own size */
+.phone .rewards-chip,.stage.phone .rewards-chip{margin-left:0}
+/* no room for the whole phrase on the narrowest phones — the same "drop the word
+   there is no room for" call already made for the condensed bar's affordance */
+@container (max-width:370px){.rewards-chip b{display:none}}
+.desk .logo-ph{width:112px;height:40px;font-size:8.5px}
+.desk .sitenav{font-size:11.5px;gap:18px;margin-left:auto}
+
+.pagebody{padding:16px 14px 40px;background:var(--lb-ground);min-height:520px}
+.pagebody.tall{min-height:1000px}  /* plate F frames must actually scroll — the sticky header is the point */
+
+/* ============ THE CONDENSED BAR (desktop) ============ */
+/* one component, two shapes. the block is sticky under the sticky header and
+   condenses to a single line when the page has scrolled through its middle.
+   the trigger is a scroll-driven animation — no javascript. */
+.wide{width:1280px;height:620px;flex:0 0 auto}
+.wide .sitebar{padding:12px 22px}
+.wide .logo-ph{width:112px;height:40px;font-size:8.5px}
+.wide .sitenav{font-size:12px;gap:20px;margin-left:auto}
+.wide .pagebody{padding:20px 22px 60px;min-height:1400px}
+.wide .ph{font-size:1.375rem}
+
+/* the condense is class-driven. the zero-javascript route was tried first and
+   does not hold here — see the plate. the sentinel is the observed element: it
+   sits in the block's slot and is the block's own height, so "half of it has
+   left the viewport" is literally "the page has scrolled through the middle of
+   the block". */
+.wide .pagebody{position:relative}
+/* the sentinel is the block's OWN resting height, so "scrolled halfway past the
+   block" is literal rather than a magic number. one table instead of two grouped
+   tables made the resting card shorter, so this moved with it. */
+.sentinel{position:absolute;top:0;left:0;width:1px;height:110px;visibility:hidden;
+  pointer-events:none}
+.phone .sentinel,.stage.phone .sentinel{height:102px}
+/* phones condense as well — the trigger and the shape are the same, the sizes
+   are not. this is the phone half of the same component. */
+/* on a phone the rail column must not box the block, or sticky has only the
+   block's own height to stick within and it scrolls away immediately. display:contents
+   dissolves the wrapper so the block sticks within the page body. */
+.phone .railcol,.stage.phone .railcol{display:contents}
+.phone .fuelblock,.stage.phone .fuelblock{position:sticky;top:62px;width:auto;margin:0}
+/* the affordance loses a word it has no room for — measured, it clipped at 375px */
+.phone .oneline .more .word,.stage.phone .oneline .more .word{display:none}
+.phone .promoslot,.stage.phone .promoslot{padding-top:12px}
+.fuelblock{position:sticky;top:72px;z-index:var(--z-strip);margin-left:auto;
+  width:400px;background:var(--lb-paper);border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal);border-radius:6px;
+  box-shadow:0 14px 30px -14px rgba(20,57,107,.34);
+  transition:width .22s cubic-bezier(.4,0,.2,1)}
+/* CONDENSED — one rule at every width. the block keeps its RESTING height so
+   nothing below it moves: the collapsed face and the cue stay in the layout and go
+   invisible, and the one-line bar is drawn over the space they reserve. measured
+   without this, a phone promo jumped 37px mid-scroll and a desktop one 10px — a
+   layout shift caused by scrolling, which counts against Core Web Vitals rather
+   than being excused by it. desktop was immune on Home only by luck, because the
+   hero happened to be the taller grid item. */
+.fuelblock.cond{background:transparent;border-color:transparent;box-shadow:none;
+  width:400px;min-width:0;max-width:none}
+.fuelblock.cond .stacked{display:grid;visibility:hidden;pointer-events:none}
+.fuelblock.cond>summary>.cue{display:flex;visibility:hidden}
+/* the bar carries ONE place, so it is narrower as well as shorter. content sets the
+   width; the floor and ceiling keep it from collapsing or sprawling. */
+.fuelblock.cond .oneline{display:flex;position:absolute;top:-1px;left:-1px;right:-1px;
+  width:auto;
+  background:var(--lb-paper);border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal);border-radius:6px;
+  box-shadow:0 10px 24px -14px rgba(20,57,107,.3);padding:9px 11px}
+.phone .fuelblock.cond,.stage.phone .fuelblock.cond{width:auto}
+.phone .fuelblock.cond .oneline,.stage.phone .fuelblock.cond .oneline{left:-1px;right:-1px;
+  width:auto;min-width:0}
+
+.fuelblock>summary{list-style:none;cursor:pointer;display:block}
+.fuelblock>summary::-webkit-details-marker{display:none}
+.fuelblock .cue{padding:8px 12px 0}
+.stacked{display:grid;gap:10px;padding:4px 12px 12px}
+.oneline{display:none;align-items:center;gap:0 12px;padding:4px 12px 12px;white-space:nowrap;
+  overflow:hidden;font-family:Inter,system-ui,sans-serif}
+.oneline .lp{font:700 .9375rem/1 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy)}
+.oneline .lg{font:600 .625rem/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--lb-ink);opacity:.6}
+.oneline .lv{font:700 1.0625rem/1 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy-deep);
+  font-variant-numeric:tabular-nums}
+.oneline .sep{width:1px;height:20px;background:rgba(28,78,143,.2)}
+.oneline .more{margin-left:auto;padding-left:14px;font:500 .6875rem/1 Inter,sans-serif;
+  color:var(--lb-navy);display:flex;align-items:center;gap:5px}
+
+/* the panel while condensed is pinned to the VIEWPORT, not anchored to the bar.
+   that is what makes a sticky block safe — see plate H. */
+/* OPEN IS ONE CARD. the panel butts straight onto the block above it — no gap,
+   no top border, no second radius — and the block gives up its own floor, so the
+   two read as a single card whose first row is the summary. a hairline separates
+   the rows, the way a table header is separated from its body. */
+.condpanel{position:absolute;left:-1px;right:-1px;width:auto;top:100%;margin-top:0;
+  background:var(--lb-paper);border:1px solid rgba(28,78,143,.16);border-top:0;
+  border-bottom:2px solid var(--lb-teal);border-radius:0 0 6px 6px;
+  box-shadow:0 18px 34px -12px rgba(20,57,107,.34);padding:9px 12px 12px;
+  border-top:1px solid rgba(28,78,143,.13);z-index:var(--z-panel)}
+.fuelblock[open]:not(.cond){border-bottom-color:transparent;border-radius:6px 6px 0 0}
+.fuelblock:not([open]) .condpanel{display:none}
+/* the bar is narrow, so its panel goes back to one column and hangs from the
+   bar's right edge, wider than the bar itself */
+.condpanel{left:-1px;right:-1px;width:auto}
+/* condensing CLOSES the panel (in script, below) — it must not make the panel
+   impossible. hiding it with display:none here killed the "All prices" affordance
+   in the one state the bar exists for. the panel hangs off the BAR, not off the
+   block's reserved box, so it needs the bar's height as its offset. */
+/* the panel hangs off the BAR, not off the block's reserved box. the bar is
+   pinned to the card's width so the two edges are flush and it is visibly one
+   card rather than a bar with a card under it. */
+.fuelblock.cond .condpanel{top:39px}
+.fuelblock.cond[open] .oneline{border-bottom-color:transparent;border-radius:6px 6px 0 0}
+/* on a phone 400px is wider than the block, so the panel would hang off the left
+   edge and clip. there it just spans the block. */
+.phone .condpanel,.stage.phone .condpanel{left:-1px;right:-1px;width:auto}
+/* THE PANEL CARRIES WHAT IS NOT ON SCREEN — including the Truck Stop. on desktop
+   the resting card already shows it, so the row (and the DEF column with it) is
+   dropped there; once the block condenses to one line the Truck Stop is off screen
+   and the row comes back. the table shows the union of the grades its rows sell,
+   which is why hiding the row hides the column. */
+.fuelblock:not(.cond) .condpanel .gh{display:none}
+.fuelblock:not(.cond) .condpanel .oncond{display:none}
+.ph{font:700 1.0625rem/1.25 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy);
+  margin:0 0 12px;letter-spacing:-.01em}
+.skel{height:7px;border-radius:99px;background:rgba(42,40,32,.15)}
+.skel+.skel{margin-top:8px}
+.skel.s{width:82%} .skel.xs{width:48%} .skel.m{width:66%}
+.gap{height:20px}
+.waterline{height:5px;background:linear-gradient(90deg,var(--lb-teal),var(--lb-navy))}
+
+/* ============ THE STRIP ============ */
+.slot{position:relative;z-index:var(--z-strip)}
+.strip{
+  position:relative;background:var(--lb-paper);border-bottom:2px solid var(--lb-teal);
+  font-family:Inter,system-ui,sans-serif;color:var(--lb-ink);
+  max-width:400px;                 /* the block is a card, never a full-bleed bar */
+  --cue-h:26px; --face-h:104px;
+}
+.desk .strip{width:400px;margin-left:14px;--cue-h:28px;--face-h:118px}
+.desk .slot .strip{border-left:1px solid rgba(28,78,143,.14);border-right:1px solid rgba(28,78,143,.14);
+  border-radius:0 0 6px 6px}
+
+.strip>summary{list-style:none;cursor:pointer;display:block;padding:7px 12px 9px;
+  position:relative;z-index:calc(var(--z-panel) + 5);background:transparent}
+.desk .strip>summary{padding:9px 20px 11px}
+.strip>summary::-webkit-details-marker{display:none}
+.strip>summary:focus-visible{outline:2px solid var(--lb-teal);outline-offset:-2px}
+
+/* ONE table. every place in the block is a row of the same grid under the same
+   header row — never a second group with its own headers. a place that does not
+   sell a grade gets an em-dash, which is information, not a gap. */
+.grp{display:grid;grid-template-columns:1fr 4.4em 4.4em;align-items:baseline;column-gap:8px;
+  row-gap:2px}
+.desk .grp{grid-template-columns:1fr 5.6em 5.6em;column-gap:16px}
+/* three grades wide — used wherever the Truck Stop is one of the rows */
+.grp.g3{grid-template-columns:1fr 3.9em 3.9em 3.9em;column-gap:7px}
+.desk .grp.g3{grid-template-columns:1fr 4.6em 4.6em 4.6em;column-gap:11px}
+.pr.na{opacity:.35;font-weight:500}
+.gh{font:600 9.5px/1.6 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--lb-navy);text-align:right}
+.desk .gh{font-size:10.5px}
+.place{font:700 .8125rem/1.5 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.desk .place{font-size:.9375rem}
+.pr{font:700 .9375rem/1.5 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy-deep);
+  text-align:right;font-variant-numeric:tabular-nums}
+.desk .pr{font-size:1.0625rem}
+
+.cue{display:flex;align-items:center;gap:5px;height:var(--cue-h);flex:0 0 auto;
+  font:500 .6875rem/1 Inter,sans-serif;color:var(--lb-navy);opacity:.82}
+.strip>summary:hover .cue{opacity:1}
+.chev{width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg) translateY(-1px);transition:transform .18s ease;flex:0 0 auto}
+details[open] .chev{transform:rotate(-135deg) translateY(-1px)}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+.lbl-open{display:none}
+details[open] .lbl-shut{display:none}
+details[open] .lbl-open{display:inline}
+/* the collapsed face stays in the layout when open — visibility, not display —
+   so the strip's box reserves its own real height. no magic number. */
+details[open] .face{visibility:hidden}
+
+/* the overlay panel: covers the reserved box, spills over page content, pushes nothing */
+.reveal{position:absolute;left:0;right:0;top:0;z-index:var(--z-panel);
+  background:var(--lb-paper);border-bottom:2px solid var(--lb-teal);
+  box-shadow:0 14px 30px -8px rgba(20,57,107,.34);
+  padding:calc(var(--cue-h) + 18px) 12px 12px}
+.desk .reveal{padding:calc(var(--cue-h) + 20px) 20px 14px}
+.panel-cap{font:600 9.5px/1 Inter,sans-serif;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--lb-cedar);margin-bottom:9px}
+
+/* in-flow variant: a block that LOADS expanded cannot overlay — it would cover the
+   hero on arrival. So on Home the panel occupies real space. */
+.strip.in-flow .reveal{position:static;background:transparent;box-shadow:none;border-bottom:none;
+  padding:0 14px 14px;z-index:auto}
+.strip.in-flow[open] .face{display:none}
+.strip.home{background:var(--lb-ground);border-bottom:none;max-width:400px}
+.strip.home .pr{font-size:1.375rem}
+.strip.home>summary{padding:14px 14px 8px}
+.blk-title{font:700 .625rem/1 Inter,sans-serif;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--lb-cedar);margin-bottom:9px}
+
+/* shipped placement: top-right corner, both widths */
+.slot.pos-corner{position:absolute;top:46px;left:10px;right:10px;width:auto}
+.desk .slot.pos-corner,.stage.desk .slot.pos-corner{top:52px;right:18px;left:auto;width:400px}
+.slot.pos-corner .strip{margin-left:0;border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal);border-radius:6px;
+  box-shadow:0 8px 22px -10px rgba(20,57,107,.3)}
+.slot.pos-corner .reveal{border-radius:6px}
+
+/* the real mechanism, at page scale: an actual HTML popover */
+.mech{position:relative;padding:26px;background:var(--c-board);border:1px solid var(--c-rule);
+  border-radius:var(--radius);margin-top:28px;min-height:300px}
+#fuelcard{anchor-name:--fuelcard;width:400px;max-width:100%;background:var(--lb-paper);
+  border:1px solid rgba(28,78,143,.16);border-bottom:2px solid var(--lb-teal);border-radius:6px;
+  box-shadow:0 8px 22px -10px rgba(20,57,107,.3);padding:7px 12px 9px;margin-left:auto;
+  font-family:Inter,system-ui,sans-serif}
+#fuelpanel{position:absolute;position-anchor:--fuelcard;top:anchor(top);left:anchor(left);
+  margin:0;width:400px;max-width:100%;border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal);border-radius:6px;background:var(--lb-paper);
+  box-shadow:0 16px 34px -10px rgba(20,57,107,.4);padding:7px 12px 12px;
+  font-family:Inter,system-ui,sans-serif}
+#fuelpanel:not(:popover-open){display:none}
+.popbtn{all:unset;cursor:pointer;display:flex;align-items:center;gap:5px;height:26px;
+  font:500 .6875rem/1 Inter,sans-serif;color:var(--lb-navy);opacity:.82}
+.popbtn:hover{opacity:1}
+.popbtn:focus-visible{outline:2px solid var(--lb-teal);outline-offset:2px;border-radius:2px}
+.mech-body{padding-right:430px;min-height:180px}
+.mech-body .ph{font:700 1.25rem/1.25 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy);margin:0 0 12px}
+@media (max-width:900px){.mech-body{padding-right:0}#fuelcard{margin-left:0}}
+
+
+/* ---- the right rail: Rewards on top, fuel prices beneath ---- */
+.rail{position:absolute;top:46px;right:10px;left:10px;display:grid;gap:10px;z-index:var(--z-strip)}
+.desk .rail,.stage.desk .rail{top:52px;right:18px;left:auto;width:400px}
+/* the card is sized to the rail's width only on phones; on desktop 400px would be
+   250px tall and shove the prices down the page */
+.desk .rail .rewards-ph,.stage.desk .rail .rewards-ph{width:260px}
+.rail .strip{margin-left:0;border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal);border-radius:6px;
+  box-shadow:0 8px 22px -10px rgba(20,57,107,.3)}
+.rail .reveal{border-radius:6px}
+/* supplied brand art — represented, never redrawn */
+.rewards-ph{aspect-ratio:1.6;border:1px dashed var(--lb-navy);border-radius:8px;
+  text-decoration:none;justify-self:end;width:100%;
+  background:var(--lb-paper);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:6px;text-align:center;padding:10px;
+  box-shadow:0 8px 22px -10px rgba(20,57,107,.3)}
+.rewards-ph b{font:700 .8125rem/1.2 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy);
+  letter-spacing:.02em}
+.rewards-ph span{font:400 9px/1.4 "IBM Plex Mono",ui-monospace,monospace;color:var(--lb-ink);
+  opacity:.7;letter-spacing:.06em;max-width:26ch}
+.rewards-chip{display:inline-flex;align-items:center;gap:6px;background:var(--lb-cedar);
+  color:#fff;border-radius:99px;padding:5px 11px;font:600 9.5px/1 Inter,sans-serif;
+  letter-spacing:.06em;margin-left:auto;flex:0 0 auto}
+.desk .rewards-chip{font-size:11px;padding:7px 14px}
+/* <b> here is a visibility hook, not emphasis — it must not change the weight */
+.rewards-chip b{font-weight:inherit}
+
+/* desktop nav is a mouse target, so 44px is not the bar — but a 12px-tall link is
+   under the 24px minimum for any input, and laptops have touchscreens. the bar has
+   the height to spare. */
+.desk .sitenav .nl,.stage.desk .sitenav .nl{min-height:40px;padding:0 6px;border-radius:7px}
+
+/* on a phone the price card is IN FLOW, not overlaid. absolute-positioned it
+   floats over whatever is beneath — measured: it covered the promo entirely.
+   the desktop rail keeps its reserved column. */
+.railflow{padding:10px 11px 0}
+.desk .railflow,.stage.desk .railflow{position:absolute;top:52px;right:18px;left:auto;
+  width:400px;padding:0;z-index:var(--z-strip)}
+.railflow .strip{margin-left:0;border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal);border-radius:6px;max-width:none;width:100%}
+.railflow .reveal{border-radius:6px}
+
+/* ============ HOME PAGE FURNITURE ============ */
+/* every colour here is a token from the locked brand system. nothing invented. */
+.hero{padding:16px 0 12px;text-align:center}
+.desk .hero,.stage.desk .hero{padding:18px 0 12px;text-align:left}
+.herologo{margin:0 auto 10px;height:44px;width:123px;border:1px dashed var(--lb-navy);
+  border-radius:3px;display:grid;place-items:center;
+  font:400 8px/1 "IBM Plex Mono",ui-monospace,monospace;color:var(--lb-navy);
+  letter-spacing:.1em;opacity:.75}
+.desk .herologo,.stage.desk .herologo{margin:0 0 10px;height:52px;width:146px}
+.herotitle{font:700 1.625rem/1.1 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy);
+  margin:0 0 6px;letter-spacing:-.015em}
+.desk .herotitle,.stage.desk .herotitle{font-size:2.25rem}
+.herosub{font:400 .9375rem/1.5 Inter,system-ui,sans-serif;color:var(--lb-ink);opacity:.8;
+  margin:0;max-width:46ch}
+.desk .herosub,.stage.desk .herosub{font-size:1.0625rem}
+
+/* the waterline — teal to navy, the theme's connective tissue.
+   TODO: replace with authentic/approved Lummi art */
+.waterline-band{height:10px;margin:20px 0 18px;border-radius:99px;
+  background:linear-gradient(90deg,var(--lb-teal),var(--lb-navy));opacity:.9}
+
+.seclabel{font:600 10px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--lb-navy);margin:0 0 12px;opacity:.85}
+.loccards{display:grid;gap:12px;grid-template-columns:1fr}
+/* ---- PHONE: the locations list is a LIST, not a stack of cards ----
+   three full cards ran 439px on a 375px screen: more than half a viewport spent
+   on three names. three-across was measured first and is worse — 88px columns,
+   "Fisherman's" 100px wide overflowing its own box, body copy at 8 lines. The
+   row is the link, so the per-row "VISIT" label goes: three redundant labels
+   for one destination each. See ADR 0009. */
+.phone .loccards,.stage.phone .loccards{gap:8px}
+.phone .loccard,.stage.phone .loccard{display:grid;
+  grid-template-columns:auto 1fr auto;column-gap:11px;align-items:center;
+  padding:10px 12px;border-radius:10px}
+.phone .loccard .motif,.stage.phone .loccard .motif{grid-row:1/span 2;
+  margin:0;width:30px;height:30px;align-self:center}
+.phone .loccard h4,.stage.phone .loccard h4{grid-column:2;margin:0;font-size:1rem}
+.phone .loccard p,.stage.phone .loccard p{grid-column:2;margin:1px 0 0;
+  font-size:.75rem;line-height:1.4;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.phone .loccard .go,.stage.phone .loccard .go{grid-column:3;grid-row:1/span 2;
+  align-self:center;margin:0;font-size:0;letter-spacing:0;width:18px;text-align:right}
+.phone .loccard .go::after,.stage.phone .loccard .go::after{content:"\203A";
+  font:400 22px/1 Inter,sans-serif;color:var(--lb-navy);opacity:.55}
+/* the description is one line and truncates rather than wrapping, so its length
+   is a COPY budget, not a layout one. measured slack from the end of the longest
+   string to the edge of its box: 74px at 375, 59px at 360, 19px at 320 — about
+   three characters on the narrowest common phone. below 340 the line steps down
+   one size, which buys back ~14px using the container query the header pill
+   already established. Hours must stay in the "6am-9pm" form; "6:00 AM - 9:00 PM"
+   does not fit. */
+/* a container query adds NO specificity, so `.loccard p` here loses to the
+   `.phone .loccard p` rule above it and silently does nothing. matched selector. */
+@container (max-width:340px){.phone .loccard p,.stage.phone .loccard p{font-size:.6875rem}}
+
+/* ---- BACK TO TOP ----
+   position:fixed on the real page; absolute here because every frame is its own
+   scroller. Appears only after a full screen of scrolling — any earlier and it
+   is a button sitting on top of a page the guest is still reading. */
+.totop{position:absolute;right:14px;bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  z-index:var(--z-top);width:46px;height:46px;border-radius:50%;border:0;
+  cursor:pointer;background:var(--lb-navy);color:#fff;padding:0;
+  font:400 19px/1 Inter,sans-serif;display:grid;place-items:center;
+  box-shadow:0 8px 20px -6px rgba(20,57,107,.55);
+  opacity:0;visibility:hidden;transform:translateY(8px);
+  transition:opacity .18s ease,transform .18s ease,visibility .18s}
+.totop.on{opacity:1;visibility:visible;transform:none}
+.totop:focus-visible{outline:3px solid var(--lb-teal);outline-offset:2px}
+.desk .totop,.stage.desk .totop{right:18px;bottom:18px;width:44px;height:44px}
+@media (prefers-reduced-motion:reduce){.totop{transition:none}}
+/* the row always FILLS the content column. auto-fit collapses the empty track,
+   so dropping the current page's own card widens the survivors to 50/50
+   instead of leaving a hole on the right */
+.desk .loccards,.stage.desk .loccards{
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+
+/* desktop cards run shorter: motif sits BESIDE the name, not above it */
+.desk .loccard{padding:12px 14px;display:grid;column-gap:10px;
+  grid-template-columns:auto 1fr;grid-template-rows:auto 1fr auto}
+.desk .loccard .motif{margin:0;grid-row:1/span 3;align-self:start}
+.desk .loccard h4{margin:0 0 3px}
+.desk .loccard p{margin:0 0 7px}
+/* VISIT sits on the card floor, so the links line up across cards whose
+   descriptions differ in length */
+.desk .loccard .go{align-self:end}
+.loccard{background:var(--lb-paper);border:1px solid rgba(28,78,143,.14);border-radius:12px;
+  padding:14px;border-top:3px solid var(--lb-teal)}
+.loccard h4{font:700 1.0625rem/1.2 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy);
+  margin:0 0 5px}
+.loccard p{font:400 .8125rem/1.5 Inter,sans-serif;color:var(--lb-ink);opacity:.75;margin:0 0 9px}
+.loccard .motif{width:26px;height:26px;border:1px dashed var(--lb-cedar);border-radius:4px;
+  margin-bottom:9px;display:grid;place-items:center;font-size:11px;color:var(--lb-cedar)}
+.loccard .go{font:600 .6875rem/1 Inter,sans-serif;letter-spacing:.07em;color:var(--lb-navy);
+  text-transform:uppercase}
+.truckcall{margin:0 0 14px;background:var(--lb-navy);border-radius:12px;padding:16px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.truckcall h4{font:700 1.0625rem/1.2 "Space Grotesk",Archivo,sans-serif;color:#fff;margin:0 0 4px}
+.truckcall p{font:400 .8125rem/1.45 Inter,sans-serif;color:var(--lb-bone);opacity:.85;margin:0;
+  max-width:44ch}
+.truckcall .go{margin-left:auto;background:var(--lb-cedar);color:#fff;border-radius:99px;
+  padding:8px 14px;font:600 .6875rem/1 Inter,sans-serif;letter-spacing:.07em;flex:0 0 auto}
+.homefoot{margin-top:22px;background:var(--lb-navy);border-radius:12px 12px 0 0;padding:16px;
+  display:grid;gap:10px;grid-template-columns:1fr}
+.desk .homefoot,.stage.desk .homefoot{grid-template-columns:repeat(4,1fr);gap:16px}
+.homefoot b{display:block;font:600 9.5px/1 Inter,sans-serif;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--lb-teal);margin-bottom:6px}
+.homefoot .fl{display:block;font:400 .75rem/1.7 Inter,sans-serif;color:var(--lb-bone);
+  opacity:.85;text-decoration:none}
+/* PHONE FOOTER: two columns, and every link padded to a real hit area. the text
+   is short but the TARGET is the full column width — a thumb aiming at a word
+   should not have to land on the word. */
+.phone .homefoot,.stage.phone .homefoot{grid-template-columns:repeat(2,1fr);
+  gap:14px 12px;padding:16px 14px 18px}
+.phone .homefoot .fl,.stage.phone .homefoot .fl{
+  min-height:44px;display:flex;align-items:center;padding:0 8px;margin:0 -8px;
+  border-radius:6px;line-height:1.3}
+.phone .homefoot .lcclink .fl,.stage.phone .homefoot .lcclink .fl{min-height:44px}
+/* the floating Back-to-top parks over the footer at full scroll. Measured
+   before this rule: the disc landed ON "Lummi Commercial Companies" with 0px
+   of clearance, and came within 2px of a footer link on desktop. The footer
+   reserves the gutter rather than the button dodging — a dodging button needs
+   a docked state, a threshold and a transition, and still covers something the
+   one time the threshold is wrong. */
+.phone .homefoot,.stage.phone .homefoot{padding-bottom:78px}
+.desk .homefoot,.stage.desk .homefoot{padding-bottom:74px}
+.lcclink{grid-column:1/-1;border-top:1px solid rgba(245,241,232,.18);padding-top:10px;
+  font:400 .6875rem/1.5 Inter,sans-serif;color:var(--lb-bone);opacity:.7}
+
+/* ============ THE PROMO SLOT ============ */
+/* deliberately NOT class="ad"/"advert"/"banner": those names are on every
+   ad-blocker filter list and would hide first-party promos. see plate I. */
+/* THE PROMO REGION IS THE ONE PLACE THE ART LAYER DOES NOT GO. No motif, no
+   waterline, no mascot — a promo already competes for attention, and decorating
+   it makes the page look like it is shouting twice. It gets a clean field and
+   the brand's type; the personality lives in the page's own furniture around it.
+   The tinted field stands in for photography: layout real, art still TBD. */
+.promo{position:relative;text-decoration:none;overflow:hidden;
+  border-radius:10px;border:1px solid rgba(28,78,143,.16);
+  background:linear-gradient(135deg,var(--lb-bone) 0%,#ECE5D8 55%,#DFD5C3 100%);
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+  text-align:left;padding:13px 14px;
+  aspect-ratio:5/1}                 /* reserved box — no layout shift on load */
+.promo .pe{font:600 8.5px/1 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--lb-cedar)}
+.promo .cta{margin-top:9px;font:600 9px/1 Inter,sans-serif;letter-spacing:.07em;
+  text-transform:uppercase;color:#fff;background:var(--lb-navy);border-radius:99px;
+  padding:6px 11px}
+/* honest about what is still missing, without looking unfinished */
+.promo::after{content:"ART TBD";position:absolute;top:8px;right:9px;
+  font:400 7px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.12em;
+  color:var(--lb-ink);opacity:.35;border:1px dashed rgba(42,40,32,.3);
+  border-radius:3px;padding:3px 5px}
+.phone .promo,.stage.phone .promo{aspect-ratio:16/9}
+.promo b{font:700 .9375rem/1.2 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy);
+  letter-spacing:-.01em;margin-top:4px}
+.desk .promoregion .promo b,.stage.desk .promoregion .promo b{font-size:1.0625rem}
+/* the promo REGION is full width, below the two-column top. each promo picks a
+   width from a fixed ladder on a 12-column grid, so any mix always tiles. no
+   free-typed percentages: those leave orphan gaps the moment the set changes. */
+.promoregion{display:grid;gap:12px;grid-template-columns:1fr;margin-top:4px}
+.desk .promoregion,.stage.desk .promoregion{gap:14px;grid-template-columns:repeat(12,1fr)}
+.desk .promoregion .promo,.stage.desk .promoregion .promo{aspect-ratio:auto;min-height:150px;
+  grid-column:span 12}
+.desk .promoregion .promo.w-two-thirds,.stage.desk .promoregion .promo.w-two-thirds{grid-column:span 8}
+.desk .promoregion .promo.w-half,.stage.desk .promoregion .promo.w-half{grid-column:span 6}
+.desk .promoregion .promo.w-third,.stage.desk .promoregion .promo.w-third{grid-column:span 4}
+.desk .promoregion .promo.w-quarter,.stage.desk .promoregion .promo.w-quarter{grid-column:span 3}
+/* phones ignore the ladder — a promo narrower than the screen is unreadable */
+.phone .promoregion .promo,.stage.phone .promoregion .promo{grid-column:auto}
+.wladder{font:400 9px/1.4 "IBM Plex Mono",ui-monospace,monospace;color:var(--lb-ink);
+  opacity:.55;letter-spacing:.06em;margin-top:5px}
+.promoslot{padding:12px 11px 0}
+/* desktop is a real two-column page: the price rail is a reserved grid column, so
+   the promo is left-aligned in the content column and the two cannot collide. the
+   14px gutter is the buffer. nothing floats over anything. */
+/* align-content:start — if the page body is ever taller than its rows (a short
+   page, a min-height), the surplus belongs at the foot, not shared out between
+   the rows where it opens a hole under the hero. */
+.desk .pagegrid,.stage.desk .pagegrid{display:grid;align-content:start;grid-template-columns:1fr 400px;
+  column-gap:14px;align-items:start}
+/* the rail column spans the WHOLE page, not just the top region — otherwise sticky
+   has only the hero's height to work in and the condensed bar vanishes a screen
+   later. it is pointer-transparent so the full-width sections beneath stay clickable
+   through it; only the block itself takes events. */
+/* span 2, not 1/-1: with no explicit grid-template-rows, -1 resolves to the end of
+   the EXPLICIT grid — which is row line 1 — so 1/-1 silently collapsed to row 1 and
+   the page lost half its height. */
+.desk .pagegrid .railcol,.stage.desk .pagegrid .railcol{grid-column:2;grid-row:1/span 2;
+  align-self:stretch;pointer-events:none;z-index:var(--z-strip)}
+.desk .pagegrid .railcol .fuelblock,.stage.desk .pagegrid .railcol .fuelblock{pointer-events:auto}
+.desk .pagegrid .maincol,.stage.desk .pagegrid .maincol{grid-column:1;grid-row:1;min-width:0}
+/* on Home the two-column region is the TOP of the page only. everything below the
+   promo — locations, truck stop, footer — is full width, as it should be. */
+.homerest{grid-column:1/-1}
+.desk .pagegrid .homerest,.stage.desk .pagegrid .homerest{grid-row:2}
+.desk .promoslot,.stage.desk .promoslot{padding:0}
+.desk .promo,.stage.desk .promo{aspect-ratio:3/1}
+.phone .promoslot,.stage.phone .promoslot{padding:12px 0 0}
+
+/* ============ THE BAND — interior-page fuel prices, read across ============ */
+/* thin and horizontal instead of a stacked card. one cell per place:
+   name | grade price grade price. collapsed = row 1, expanded adds row 2. */
+.band{position:relative;background:var(--lb-paper);border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal);border-radius:6px;
+  box-shadow:0 10px 24px -14px rgba(20,57,107,.3);
+  font-family:Inter,system-ui,sans-serif;color:var(--lb-ink)}
+.band>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;
+  padding:9px 12px}
+.band>summary::-webkit-details-marker{display:none}
+.band .rows{flex:1 1 auto;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 22px}
+/* the band loads collapsed, so its expansion overlays rather than pushes —
+   the same rule the card follows. costs the page zero pixels. */
+.band .r2{position:absolute;left:-1px;right:-1px;top:100%;margin-top:-2px;z-index:var(--z-panel);
+  padding:10px 88px 11px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px 22px;
+  background:var(--lb-paper);border:1px solid rgba(28,78,143,.16);border-top:none;
+  border-bottom:2px solid var(--lb-teal);border-radius:0 0 6px 6px;
+  box-shadow:0 16px 30px -12px rgba(20,57,107,.34)}
+.band:not([open]) .r2{display:none}
+.band[open]{border-bottom-color:rgba(28,78,143,.16);border-radius:6px 6px 0 0}
+/* phones do not fit two cells across — measured. one cell per line there. */
+.phone .band .rows,.phone .band .r2,.stage.phone .band .rows,.stage.phone .band .r2{
+  grid-template-columns:1fr}
+
+.cell{display:flex;align-items:baseline;gap:0 6px;white-space:nowrap;min-width:0}
+.cp{font:700 .8125rem/1.5 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy);
+  flex:0 0 auto}
+.desk .cp,.stage.desk .cp{font-size:.875rem}
+.cr{width:1px;align-self:stretch;background:rgba(28,78,143,.22);margin:2px 3px;flex:0 0 auto}
+.cg{font:600 .625rem/1.5 Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--lb-ink);opacity:.6;flex:0 0 auto}
+.cv{font:700 .9375rem/1.5 "Space Grotesk",Archivo,sans-serif;color:var(--lb-navy-deep);
+  font-variant-numeric:tabular-nums;flex:0 0 auto;margin-right:10px}
+.cv:last-child{margin-right:0}
+/* the cue is its own right-hand column so it never breaks the two rows apart */
+.bandcue{flex:0 0 auto;width:74px;display:flex;align-items:center;gap:5px;
+  font:500 .6875rem/1 Inter,sans-serif;color:var(--lb-navy);opacity:.82;
+  padding-left:11px;border-left:1px solid rgba(28,78,143,.14);align-self:stretch}
+.band>summary:hover .bandcue{opacity:1}
+.band[open] .lbl-shut,.band:not([open]) .lbl-open{display:none}
+.band .chev{transition:transform .15s ease}
+.band[open] .chev{transform:rotate(-135deg)}
+
+/* placement: full width on a phone, about half on desktop, still right-aligned */
+.bandslot{padding:0 11px}
+.desk .bandslot,.stage.desk .bandslot{padding:0 18px;display:flex;justify-content:flex-end}
+.desk .bandslot .band,.stage.desk .bandslot .band{width:50%;min-width:628px}
+.wide .bandslot{padding:0 22px;display:flex;justify-content:flex-end}
+.wide .bandslot .band{width:50%;min-width:628px}
+/* ---- the compact Rewards control, for interior pages ---- */
+/* cedar, not navy: rendered in navy it read as a second nav bar, because the site
+   header directly above it is the same navy. cedar is the brand accent and separates. */
+.rewards-slim{display:flex;align-items:center;gap:10px;text-decoration:none;width:100%;
+  background:var(--lb-cedar);border-radius:6px;padding:9px 11px;
+  box-shadow:0 8px 22px -12px rgba(20,57,107,.45)}
+.rewards-slim .mark{width:22px;height:22px;border-radius:4px;flex:0 0 auto;
+  border:1px dashed rgba(245,241,232,.6);display:grid;place-items:center;
+  font-size:10px;color:var(--lb-bone)}
+.rewards-slim b{font:700 .75rem/1.15 "Space Grotesk",Archivo,sans-serif;color:#fff;
+  letter-spacing:.03em;display:block}
+.rewards-slim i{font:400 9px/1.3 "IBM Plex Mono",ui-monospace,monospace;font-style:normal;
+  color:var(--lb-bone);opacity:.72;letter-spacing:.05em;display:block;margin-top:2px}
+.rewards-slim .go{margin-left:auto;font:600 9px/1 Inter,sans-serif;letter-spacing:.07em;
+  color:#fff;background:var(--lb-navy);border-radius:99px;padding:5px 9px;flex:0 0 auto}
+.desk .rewards-slim,.stage.desk .rewards-slim{padding:11px 13px}
+.desk .rewards-slim b,.stage.desk .rewards-slim b{font-size:.8125rem}
+.desk .rewards-slim .go,.stage.desk .rewards-slim .go{font-size:10px;padding:6px 11px}
+
+/* ---- placements. class-based so both explorers share one rule set ---- */
+.exp{display:block}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.exp input{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.seg label{font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--c-ink-soft);background:var(--c-chip);
+  border:1px solid var(--c-rule);border-radius:var(--radius);padding:8px 11px;cursor:pointer}
+.seg label:hover{color:var(--c-ink)}
+.r-docked:checked~.seg label[for$="docked"],
+.r-sticky:checked~.seg label[for$="sticky"],
+.r-corner:checked~.seg label[for$="corner"],
+.r-bottom:checked~.seg label[for$="bottom"]{
+  color:var(--c-bg);background:var(--c-accent);border-color:var(--c-accent)}
+.exp input:focus-visible~.seg label{outline:2px solid var(--c-accent);outline-offset:2px}
+
+/* sticky: pinned under the nav, in flow, scrolls with nothing */
+.r-sticky:checked~.stage .slot{position:sticky;top:38px}
+.desk-exp .r-sticky:checked~.stage .slot{top:42px}
+/* corner: out of flow, floating card top-right */
+.r-corner:checked~.stage .slot{position:absolute;top:46px;left:10px;right:10px;width:auto}
+.desk-exp .r-corner:checked~.stage .slot{top:52px;right:18px;left:auto;width:400px}
+.desk-exp .r-corner:checked~.stage .strip{margin-left:0}
+.r-corner:checked~.stage .strip{border:1px solid rgba(28,78,143,.16);border-bottom:2px solid var(--lb-teal);
+  border-radius:6px;overflow:visible;box-shadow:0 8px 22px -10px rgba(20,57,107,.3)}
+.r-corner:checked~.stage .reveal{border-radius:6px}
+/* bottom: out of flow, pinned to the bottom edge, panel opens upward */
+.r-bottom:checked~.stage .slot{position:absolute;bottom:0;left:0;right:0}
+.desk-exp .r-bottom:checked~.stage .strip{margin-bottom:14px}
+.r-bottom:checked~.stage .strip{border-bottom:none;border-top:2px solid var(--lb-teal)}
+.r-bottom:checked~.stage .strip>summary{display:flex;flex-direction:column-reverse}
+.r-bottom:checked~.stage .reveal{top:auto;bottom:0;border-bottom:none;border-top:2px solid var(--lb-teal);
+  box-shadow:0 -14px 30px -8px rgba(20,57,107,.34);
+  padding:14px 12px calc(var(--cue-h) + 16px)}
+
+/* ---------- verdict + calls ---------- */
+.verdict{margin-top:26px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(266px,1fr))}
+.findings{margin-top:24px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.find{border:1px solid var(--c-rule);border-radius:var(--radius);padding:18px 20px;
+  border-left-width:3px}
+.find.ok{border-left-color:var(--lb-teal)}
+.find.bad{border-left-color:var(--lb-cedar)}
+.find h3{font:600 .9375rem/1.3 "Space Grotesk",Archivo,sans-serif;color:var(--c-ink);margin:0 0 8px}
+.find p{margin:0;font-size:.9375rem;color:var(--c-ink-soft);text-wrap:pretty}
+.find p+p{margin-top:9px}
+.find p strong{color:var(--c-ink);font-weight:600}
+.find p.note{font-size:.875rem;opacity:.8;border-left:2px solid var(--c-rule);padding-left:10px}
+.vcard{border:1px solid var(--c-rule);border-radius:var(--radius);padding:16px 18px}
+.vcard h3{font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.14em;
+  text-transform:uppercase;margin:0 0 9px}
+.vcard p{margin:0;font-size:.9375rem;color:var(--c-ink-soft);text-wrap:pretty}
+.vcard p strong{color:var(--c-ink);font-weight:600}
+.vcard p+p{margin-top:8px}
+.keep h3{color:var(--c-good)} .drop h3{color:var(--c-warn)} .open h3{color:var(--c-accent)}
+
+.calls{padding:56px 0 0}
+.call{padding:22px 0;border-top:1px solid var(--c-rule-soft)}
+.call:first-of-type{border-top:1px solid var(--c-rule)}
+.tag{font:500 10px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--c-ink-soft)}
+.call-q{font:600 1.0625rem/1.35 Archivo,sans-serif;text-wrap:balance;margin:6px 0}
+.call-a{margin:0;color:var(--c-ink-soft);max-width:74ch;text-wrap:pretty}
+.call-a strong{color:var(--c-ink);font-weight:600}
+.call-a+.call-a{margin-top:8px}
+pre{background:var(--c-board);border:1px solid var(--c-rule);border-radius:var(--radius);
+  padding:14px 16px;overflow-x:auto;margin:12px 0 0;
+  font:400 12.5px/1.65 "IBM Plex Mono",ui-monospace,monospace;color:var(--c-ink)}
+.reg{padding:22px 0 24px;border-top:1px solid var(--c-rule-soft)}
+.reg:first-of-type{border-top:1px solid var(--c-rule)}
+.reg-head{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.cid{font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.14em;
+  color:var(--c-accent);border:1px solid var(--c-rule);border-radius:var(--radius);
+  padding:6px 8px;white-space:nowrap}
+.cid.hot{color:var(--c-warn);border-color:var(--c-warn)}
+.cid.done{color:var(--c-good);border-color:var(--c-good)}
+.reg.done .rec{border-left-color:var(--c-good)}
+.decided{display:block;font:600 .9375rem/1.5 Archivo,sans-serif;color:var(--c-ink);margin-bottom:8px}
+.reg h3{font:600 1.0625rem/1.35 Archivo,sans-serif;margin:0;text-wrap:balance}
+.why{margin:10px 0 0;color:var(--c-ink-soft);max-width:76ch;text-wrap:pretty}
+.why strong{color:var(--c-ink);font-weight:600}
+.opts{margin:14px 0 0;display:grid;gap:8px}
+.opt{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;
+  font-size:.9375rem;color:var(--c-ink-soft);max-width:76ch}
+.opt b{font:500 11px/1.5 "IBM Plex Mono",ui-monospace,monospace;color:var(--c-ink);
+  border:1px solid var(--c-rule);border-radius:var(--radius);text-align:center;padding:2px 0}
+.opt .cost{display:block;font:400 12.5px/1.5 "IBM Plex Mono",ui-monospace,monospace;
+  color:var(--c-ink-soft);opacity:.85;margin-top:2px}
+.rec{margin:14px 0 0;padding:12px 14px;border-left:2px solid var(--c-good);
+  background:var(--c-board);border-radius:0 var(--radius) var(--radius) 0;
+  max-width:76ch;font-size:.9375rem;color:var(--c-ink);text-wrap:pretty}
+.rec em{font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--c-good);font-style:normal;display:block;margin-bottom:6px}
+.reg.blocked .rec{border-left-color:var(--c-warn)}
+.reg.blocked .rec em{color:var(--c-warn)}
+footer.foot{margin-top:48px;padding-top:22px;border-top:1px solid var(--c-rule);
+  font:400 12.5px/1.6 "IBM Plex Mono",ui-monospace,monospace;color:var(--c-ink-soft)}
+@media (max-width:640px){.board{padding:22px 14px;gap:26px}header.top{padding:40px 0 28px}}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow"><span>Lummi Bay Market</span><span>Proof sheet</span><span>Rev 15</span></div>
+  <h1>The page</h1>
+  <p class="dek">One layout, both widths, everything settled so far. The fuel block
+  <strong>always loads collapsed</strong>, sits top-right, shows your Location plus the Truck
+  Stop, opens as an <strong>HTML popover</strong> carrying only the places not already on screen,
+  and <strong>condenses to one line</strong> once you scroll half its height past it. Earlier
+  plates that explored the alternatives have been removed; the reasoning survives in
+  <strong>ADR 0005&ndash;0008</strong>.</p>
+</header>
+
+<!-- ============ THE PAGE ============ -->
+<section class="plate">
+  <div class="plate-head">
+    <span class="plate-id settled">Current</span>
+    <h2>The page, at both widths</h2>
+  </div>
+  <p class="plate-note">Every page now works the same way. The fuel block <strong>always loads
+  collapsed</strong> and condenses to one line once you scroll about half its height past it
+  &mdash; Home included. The two-column region is the top of the page only; the promo region is
+  full width beneath it and <strong>grows with the number of promos</strong>. The Truck Stop
+  leads the location list, and <strong>a page never lists its own location</strong>.
+  <strong>Scroll a frame</strong> to watch the block condense.</p>
+
+  <div class="board">
+    <div class="spec">
+      <div class="spec-cap"><b>Desktop</b> &middot; Home &middot; two promos</div>
+      <div class="stage desk" id="j-desk" style="height:600px">
+        <div class="scroller">
+          <div class="sitebar"><div class="logo-ph">logo 2.8:1</div>
+            <div class="sitenav"><a class="nl" href="#">Home</a><a class="nl" href="#">Locations</a><a class="nl" href="#">Truck Stop</a></div><a class="rewards-hit" href="#"><span class="rewards-chip">&#9733;<span class="lbl"><b>Get the</b> App</span></span></a></div>
+          <div class="pagebody pagegrid homepage">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock">
+              <summary>
+                <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                <div class="stacked">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span></div>
+                </div>
+                <div class="oneline">
+                  <span class="lp">Exit 260</span><span class="sep"></span>
+                  <span class="lg">Reg</span><span class="lv">3.79</span>
+                  <span class="lg">Diesel</span><span class="lv">4.29</span>
+                  <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                </div>
+              </summary>
+              <div class="condpanel">
+                <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                  <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place oncond">Truck Stop</span><span class="pr na oncond">&mdash;</span><span class="pr oncond">4.55</span><span class="pr oncond">3.29</span></div>
+              </div>
+            </details>
+            </div>
+            <div class="maincol">
+              <div class="hero">
+                <div class="herologo">LOGO &mdash; MARKET LOCKUP</div>
+                <h3 class="herotitle">Three stops on the bay</h3>
+                <p class="herosub">Fuel, food and a full truck stop &mdash; open where you need us,
+                on Lummi land.</p>
+              </div>
+            </div>
+            <div class="homerest">
+              <div class="promoregion two">
+              <a class="promo w-half" href="#">
+                <span class="pe">In the store</span><b>Fresh coffee, all day</b><span class="cta">See details</span>
+              </a>
+              <a class="promo w-quarter" href="#">
+                <span class="pe">Rewards</span><b>Join in 60 seconds</b><span class="cta">See details</span>
+              </a>
+            <a class="promo w-quarter" href="#">
+                <span class="pe">At the Cove</span><b>The Cove Kitchen</b><span class="cta">See details</span>
+              </a>
+            </div>
+              <div class="waterline-band"></div>
+              <p class="seclabel">Our locations</p>
+              <div class="truckcall">
+                <div><h4>The Truck Stop at Exit 260</h4>
+                  <p>Diesel lanes, showers, driver lounge, secondary store and truck parking.</p></div>
+                <span class="go">See the truck stop</span>
+              </div>
+              <div class="loccards">
+                <div class="loccard"><div class="motif">&#9651;</div><h4>Exit 260</h4>
+                <p>4839 Rural Ave &middot; Open 24 hours</p>
+                <span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9671;</div><h4>Mini Mart</h4>
+                <p>4884 Haxton Way &middot; 6am&ndash;10pm</p>
+                <span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9675;</div><h4>Fisherman&rsquo;s Cove</h4>
+                <p>2570 Lummi View Dr &middot; 6am&ndash;9pm</p>
+                <span class="go">Visit &rarr;</span></div>
+              </div>
+              <div class="waterline-band"></div>
+            <div class="homefoot">
+              <div><b>About</b><a class="fl" href="#">Our story</a><a class="fl" href="#">Community</a></div>
+              <div><b>Visit</b><a class="fl" href="#">Hours &amp; phone</a><a class="fl" href="#">Contact us</a></div>
+              <div><b>Rewards</b><a class="fl" href="#">Get the app</a><a class="fl" href="#">Fuel prices</a></div>
+              <div><b>Work with us</b><a class="fl" href="#">Careers</a></div>
+              <div class="lcclink"><a class="fl" href="#">Lummi Commercial Companies</a></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dim">Promo widths from the ladder: half + quarter + quarter, measured 398 / 192 / 192 in an 810px region.</div>
+    </div>
+    <div class="spec">
+      <div class="spec-cap"><b>Desktop</b> &middot; Exit 260 page &middot; one promo</div>
+      <div class="stage desk" id="j-desk-int" style="height:600px">
+        <div class="scroller">
+          <div class="sitebar"><div class="logo-ph">logo 2.8:1</div>
+            <div class="sitenav"><a class="nl" href="#">Home</a><a class="nl" href="#">Locations</a><a class="nl" href="#">Truck Stop</a></div><a class="rewards-hit" href="#"><span class="rewards-chip">&#9733;<span class="lbl"><b>Get the</b> App</span></span></a></div>
+          <div class="pagebody pagegrid homepage">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock">
+              <summary>
+                <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                <div class="stacked">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span></div>
+                </div>
+                <div class="oneline">
+                  <span class="lp">Exit 260</span><span class="sep"></span>
+                  <span class="lg">Reg</span><span class="lv">3.79</span>
+                  <span class="lg">Diesel</span><span class="lv">4.29</span>
+                  <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                </div>
+              </summary>
+              <div class="condpanel">
+                <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                  <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place oncond">Truck Stop</span><span class="pr na oncond">&mdash;</span><span class="pr oncond">4.55</span><span class="pr oncond">3.29</span></div>
+              </div>
+            </details>
+            </div>
+            <div class="maincol">
+              <div class="hero">
+                <h3 class="herotitle">Exit 260 &middot; Salish Village</h3>
+                <p class="herosub">Open 24 hours. Fuel, a full convenience store, and the truck
+                stop &mdash; just off I-5 at Exit 260.</p>
+              </div>
+            </div>
+            <div class="homerest">
+              <div class="promoregion">
+              <a class="promo" href="#">
+                <span class="pe">In the store</span><b>Fresh coffee, all day</b><span class="cta">See details</span>
+              </a>
+            </div>
+              <div class="waterline-band"></div>
+              <p class="seclabel">Our other locations</p>
+              <div class="truckcall">
+                <div><h4>The Truck Stop at Exit 260</h4>
+                  <p>Diesel lanes, showers, driver lounge, secondary store and truck parking.</p></div>
+                <span class="go">See the truck stop</span>
+              </div>
+              <div class="loccards">
+                <div class="loccard"><div class="motif">&#9671;</div><h4>Mini Mart</h4>
+                <p>4884 Haxton Way &middot; 6am&ndash;10pm</p>
+                <span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9675;</div><h4>Fisherman&rsquo;s Cove</h4>
+                <p>2570 Lummi View Dr &middot; 6am&ndash;9pm</p>
+                <span class="go">Visit &rarr;</span></div>
+              </div>
+              <div class="waterline-band"></div>
+            <div class="homefoot">
+              <div><b>About</b><a class="fl" href="#">Our story</a><a class="fl" href="#">Community</a></div>
+              <div><b>Visit</b><a class="fl" href="#">Hours &amp; phone</a><a class="fl" href="#">Contact us</a></div>
+              <div><b>Rewards</b><a class="fl" href="#">Get the app</a><a class="fl" href="#">Fuel prices</a></div>
+              <div><b>Work with us</b><a class="fl" href="#">Careers</a></div>
+              <div class="lcclink"><a class="fl" href="#">Lummi Commercial Companies</a></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dim">One promo fills the width. Exit 260 is not listed &mdash; you are on it.</div>
+    </div>
+    <div class="spec">
+      <div class="spec-cap"><b>Desktop</b> &middot; Truck Stop page</div>
+      <div class="stage desk" id="j-desk-ts" style="height:600px">
+        <div class="scroller">
+          <div class="sitebar"><div class="logo-ph">logo 2.8:1</div>
+            <div class="sitenav"><a class="nl" href="#">Home</a><a class="nl" href="#">Locations</a><a class="nl" href="#">Truck Stop</a></div><a class="rewards-hit" href="#"><span class="rewards-chip">&#9733;<span class="lbl"><b>Get the</b> App</span></span></a></div>
+          <div class="pagebody pagegrid homepage">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock">
+              <summary>
+                <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                <div class="stacked">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span>
+                    <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span></div>
+                </div>
+                <div class="oneline">
+                  <span class="lp">Truck Stop</span><span class="sep"></span>
+                  <span class="lg">Diesel</span><span class="lv">4.55</span>
+                  <span class="lg">DEF</span><span class="lv">3.29</span>
+                  <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                </div>
+              </summary>
+              <div class="condpanel">
+                <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                  <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place oncond">Exit 260</span><span class="pr oncond">3.79</span><span class="pr oncond">4.29</span><span class="pr na oncond">&mdash;</span></div>
+              </div>
+            </details>
+            </div>
+            <div class="maincol">
+              <div class="hero">
+                <h3 class="herotitle">The Truck Stop at Exit 260</h3>
+                <p class="herosub">Diesel lanes, showers, a driver lounge, a second store and truck parking &mdash; open 24 hours, just off I-5.</p>
+              </div>
+            </div>
+            <div class="homerest">
+              <div class="promoregion">
+              <a class="promo" href="#">
+                <span class="pe">For drivers</span><b>Showers, lounge &amp; parking</b><span class="cta">See details</span>
+              </a>
+            </div>
+              <div class="waterline-band"></div>
+              <p class="seclabel">Our locations</p>
+              <div class="loccards">
+                <div class="loccard"><div class="motif">&#9651;</div><h4>Exit 260</h4>
+                  <p>4839 Rural Ave &middot; Open 24 hours</p><span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9671;</div><h4>Mini Mart</h4>
+                <p>4884 Haxton Way &middot; 6am&ndash;10pm</p>
+                <span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9675;</div><h4>Fisherman&rsquo;s Cove</h4>
+                <p>2570 Lummi View Dr &middot; 6am&ndash;9pm</p>
+                <span class="go">Visit &rarr;</span></div>
+              </div>
+              <div class="waterline-band"></div>
+            <div class="homefoot">
+              <div><b>About</b><a class="fl" href="#">Our story</a><a class="fl" href="#">Community</a></div>
+              <div><b>Visit</b><a class="fl" href="#">Hours &amp; phone</a><a class="fl" href="#">Contact us</a></div>
+              <div><b>Rewards</b><a class="fl" href="#">Get the app</a><a class="fl" href="#">Fuel prices</a></div>
+              <div><b>Work with us</b><a class="fl" href="#">Careers</a></div>
+              <div class="lcclink"><a class="fl" href="#">Lummi Commercial Companies</a></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dim">Truck Stop leads the table &mdash; diesel and DEF are the first numbers a driver hits. The callout is gone; all three Locations stay.</div>
+    </div>
+  </div>
+
+  <div class="board">
+    <div class="spec">
+      <div class="spec-cap"><b>Phone</b> &middot; Home</div>
+      <div class="stage phone" id="j-phone" style="height:820px">
+        <div class="scroller">
+          <div class="sitebar"><div class="logo-ph">logo 2.8:1</div>
+            <div class="sitenav"><a class="nl" href="#">Locations</a><a class="nl" href="#">Truck Stop</a></div><a class="rewards-hit" href="#"><span class="rewards-chip">&#9733;<span class="lbl"><b>Get the</b> App</span></span></a></div>
+          <div class="pagebody pagegrid homepage">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock">
+              <summary>
+                <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                <div class="stacked">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span></div>
+                </div>
+                <div class="oneline">
+                  <span class="lp">Exit 260</span><span class="sep"></span>
+                  <span class="lg">Reg</span><span class="lv">3.79</span>
+                  <span class="lg">Diesel</span><span class="lv">4.29</span>
+                  <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                </div>
+              </summary>
+              <div class="condpanel">
+                <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                  <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place oncond">Truck Stop</span><span class="pr na oncond">&mdash;</span><span class="pr oncond">4.55</span><span class="pr oncond">3.29</span></div>
+              </div>
+            </details>
+            </div>
+            <div class="maincol">
+              <div class="hero">
+                <div class="herologo">LOGO &mdash; MARKET LOCKUP</div>
+                <h3 class="herotitle">Three stops on the bay</h3>
+                <p class="herosub">Fuel, food and a full truck stop &mdash; open where you need us,
+                on Lummi land.</p>
+              </div>
+            </div>
+            <div class="homerest">
+              <div class="promoregion two">
+              <a class="promo" href="#">
+                <span class="pe">In the store</span><b>Fresh coffee, all day</b><span class="cta">See details</span>
+              </a>
+              <a class="promo" href="#">
+                <span class="pe">Rewards</span><b>Join in 60 seconds</b><span class="cta">See details</span>
+              </a>
+              <a class="promo" href="#">
+                <span class="pe">At the Cove</span><b>The Cove Kitchen</b><span class="cta">See details</span>
+              </a>
+            </div>
+              <div class="waterline-band"></div>
+              <p class="seclabel">Our locations</p>
+              <div class="truckcall">
+                <div><h4>The Truck Stop at Exit 260</h4>
+                  <p>Diesel lanes, showers, driver lounge, secondary store and truck parking.</p></div>
+                <span class="go">See the truck stop</span>
+              </div>
+              <div class="loccards">
+                <div class="loccard"><div class="motif">&#9651;</div><h4>Exit 260</h4>
+                <p>4839 Rural Ave &middot; Open 24 hours</p>
+                <span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9671;</div><h4>Mini Mart</h4>
+                <p>4884 Haxton Way &middot; 6am&ndash;10pm</p>
+                <span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9675;</div><h4>Fisherman&rsquo;s Cove</h4>
+                <p>2570 Lummi View Dr &middot; 6am&ndash;9pm</p>
+                <span class="go">Visit &rarr;</span></div>
+              </div>
+              <div class="waterline-band"></div>
+            <div class="homefoot">
+              <div><b>About</b><a class="fl" href="#">Our story</a><a class="fl" href="#">Community</a></div>
+              <div><b>Visit</b><a class="fl" href="#">Hours &amp; phone</a><a class="fl" href="#">Contact us</a></div>
+              <div><b>Rewards</b><a class="fl" href="#">Get the app</a><a class="fl" href="#">Fuel prices</a></div>
+              <div><b>Work with us</b><a class="fl" href="#">Careers</a></div>
+              <div class="lcclink"><a class="fl" href="#">Lummi Commercial Companies</a></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dim">Promos stack full width. Truck Stop leads the list.</div>
+    </div>
+    <div class="spec">
+      <div class="spec-cap"><b>Phone</b> &middot; Exit 260 page</div>
+      <div class="stage phone" id="j-phone-int" style="height:820px">
+        <div class="scroller">
+          <div class="sitebar"><div class="logo-ph">logo 2.8:1</div>
+            <div class="sitenav"><a class="nl" href="#">Locations</a><a class="nl" href="#">Truck Stop</a></div><a class="rewards-hit" href="#"><span class="rewards-chip">&#9733;<span class="lbl"><b>Get the</b> App</span></span></a></div>
+          <div class="pagebody pagegrid homepage">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock">
+              <summary>
+                <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                <div class="stacked">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span></div>
+                </div>
+                <div class="oneline">
+                  <span class="lp">Exit 260</span><span class="sep"></span>
+                  <span class="lg">Reg</span><span class="lv">3.79</span>
+                  <span class="lg">Diesel</span><span class="lv">4.29</span>
+                  <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                </div>
+              </summary>
+              <div class="condpanel">
+                <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                  <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place oncond">Truck Stop</span><span class="pr na oncond">&mdash;</span><span class="pr oncond">4.55</span><span class="pr oncond">3.29</span></div>
+              </div>
+            </details>
+            </div>
+            <div class="maincol">
+              <div class="hero">
+                <h3 class="herotitle">Exit 260 &middot; Salish Village</h3>
+                <p class="herosub">Open 24 hours. Fuel, a full convenience store, and the truck
+                stop &mdash; just off I-5 at Exit 260.</p>
+              </div>
+            </div>
+            <div class="homerest">
+              <div class="promoregion">
+              <a class="promo" href="#">
+                <span class="pe">In the store</span><b>Fresh coffee, all day</b><span class="cta">See details</span>
+              </a>
+            </div>
+              <div class="waterline-band"></div>
+              <p class="seclabel">Our other locations</p>
+              <div class="truckcall">
+                <div><h4>The Truck Stop at Exit 260</h4>
+                  <p>Diesel lanes, showers, driver lounge, secondary store and truck parking.</p></div>
+                <span class="go">See the truck stop</span>
+              </div>
+              <div class="loccards">
+                <div class="loccard"><div class="motif">&#9671;</div><h4>Mini Mart</h4>
+                <p>4884 Haxton Way &middot; 6am&ndash;10pm</p>
+                <span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9675;</div><h4>Fisherman&rsquo;s Cove</h4>
+                <p>2570 Lummi View Dr &middot; 6am&ndash;9pm</p>
+                <span class="go">Visit &rarr;</span></div>
+              </div>
+              <div class="waterline-band"></div>
+            <div class="homefoot">
+              <div><b>About</b><a class="fl" href="#">Our story</a><a class="fl" href="#">Community</a></div>
+              <div><b>Visit</b><a class="fl" href="#">Hours &amp; phone</a><a class="fl" href="#">Contact us</a></div>
+              <div><b>Rewards</b><a class="fl" href="#">Get the app</a><a class="fl" href="#">Fuel prices</a></div>
+              <div><b>Work with us</b><a class="fl" href="#">Careers</a></div>
+              <div class="lcclink"><a class="fl" href="#">Lummi Commercial Companies</a></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dim">Exit 260 omitted. Order is Truck Stop, then Mini Mart, then Fisherman&rsquo;s Cove.</div>
+    </div>
+    <div class="spec">
+      <div class="spec-cap"><b>Phone</b> &middot; Truck Stop page</div>
+      <div class="stage phone" id="j-phone-ts" style="height:820px">
+        <div class="scroller">
+          <div class="sitebar"><div class="logo-ph">logo 2.8:1</div>
+            <div class="sitenav"><a class="nl" href="#">Locations</a><a class="nl" href="#">Truck Stop</a></div><a class="rewards-hit" href="#"><span class="rewards-chip">&#9733;<span class="lbl"><b>Get the</b> App</span></span></a></div>
+          <div class="pagebody pagegrid homepage">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock">
+              <summary>
+                <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                <div class="stacked">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span>
+                    <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span></div>
+                </div>
+                <div class="oneline">
+                  <span class="lp">Truck Stop</span><span class="sep"></span>
+                  <span class="lg">Diesel</span><span class="lv">4.55</span>
+                  <span class="lg">DEF</span><span class="lv">3.29</span>
+                  <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                </div>
+              </summary>
+              <div class="condpanel">
+                <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                  <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                  <span class="place oncond">Exit 260</span><span class="pr oncond">3.79</span><span class="pr oncond">4.29</span><span class="pr na oncond">&mdash;</span></div>
+              </div>
+            </details>
+            </div>
+            <div class="maincol">
+              <div class="hero">
+                <h3 class="herotitle">The Truck Stop at Exit 260</h3>
+                <p class="herosub">Diesel lanes, showers, a driver lounge, a second store and truck parking &mdash; open 24 hours, just off I-5.</p>
+              </div>
+            </div>
+            <div class="homerest">
+              <div class="promoregion">
+              <a class="promo" href="#">
+                <span class="pe">For drivers</span><b>Showers, lounge &amp; parking</b><span class="cta">See details</span>
+              </a>
+            </div>
+              <div class="waterline-band"></div>
+              <p class="seclabel">Our locations</p>
+              <div class="loccards">
+                <div class="loccard"><div class="motif">&#9651;</div><h4>Exit 260</h4>
+                  <p>4839 Rural Ave &middot; Open 24 hours</p><span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9671;</div><h4>Mini Mart</h4>
+                <p>4884 Haxton Way &middot; 6am&ndash;10pm</p>
+                <span class="go">Visit &rarr;</span></div>
+                <div class="loccard"><div class="motif">&#9675;</div><h4>Fisherman&rsquo;s Cove</h4>
+                <p>2570 Lummi View Dr &middot; 6am&ndash;9pm</p>
+                <span class="go">Visit &rarr;</span></div>
+              </div>
+              <div class="waterline-band"></div>
+            <div class="homefoot">
+              <div><b>About</b><a class="fl" href="#">Our story</a><a class="fl" href="#">Community</a></div>
+              <div><b>Visit</b><a class="fl" href="#">Hours &amp; phone</a><a class="fl" href="#">Contact us</a></div>
+              <div><b>Rewards</b><a class="fl" href="#">Get the app</a><a class="fl" href="#">Fuel prices</a></div>
+              <div><b>Work with us</b><a class="fl" href="#">Careers</a></div>
+              <div class="lcclink"><a class="fl" href="#">Lummi Commercial Companies</a></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dim">Same rule at both widths. Condensed the bar carries Truck Stop, so Exit 260 moves into the panel.</div>
+    </div>
+  </div>
+
+
+  <div class="findings">
+    <div class="find ok">
+      <h3>Always loading collapsed removed a whole branch</h3>
+      <p>ADR 0005 carried two opening mechanisms and a rule to choose between them &mdash;
+      <em>a panel already open on arrival cannot overlay</em> &mdash; because Home and
+      <code>/fuel-prices</code> loaded expanded. Nothing loads expanded now, so
+      <strong>the in-flow disclosure variant is gone and every block opens the same way</strong>:
+      a popover over the page. One mechanism, one set of behaviours to test, and the rule that
+      picked between them is no longer needed.</p>
+      <p>It also unblocks Home. Condensing needs the resting height reserved, and an expanded
+      block was too tall to reserve; a collapsed one is not. <strong>Home condenses like every
+      other page now</strong>, which is what was asked for and is simpler than the exception it
+      replaces.</p>
+    </div>
+    <div class="find ok">
+      <h3>Promo widths: a ladder, not free percentages</h3>
+      <p>Each promo picks from <strong>full &middot; two-thirds &middot; half &middot; third
+      &middot; quarter</strong> on a 12-column grid, so any mix tiles exactly. The Home frame
+      above runs half + quarter + quarter &mdash; measured 398 / 192 / 192 in an 810px region.
+      Free-typed percentages were rejected: 45% + 45% leaves a 10% orphan, and staff editing a
+      set months later have no way to know what the other promos are using.</p>
+      <p><strong>A 20% promo is below the readable floor on most desktops.</strong> Measured:
+      20% of a 1280px viewport is <strong>247px</strong> of content and 279px at 1440 &mdash;
+      narrower than a 375px phone screen, for artwork meant to carry an offer. Only at 1920 does
+      it reach 375px. A quarter is what 20% usually means in practice, and it holds up. On a
+      phone the ladder is ignored entirely and every promo is full width.</p>
+    </div>
+    <div class="find bad">
+      <h3>Fixed: the condensed bar could not be expanded</h3>
+      <p>My bug, and in the one state the bar exists for. Condensing set
+      <code>display: none</code> on the panel to stop an already-open panel hanging off a bar
+      mid-scroll &mdash; which also made &ldquo;All prices&rdquo; do nothing once condensed. The
+      <code>&lt;details&gt;</code> element dutifully reported <code>open: true</code> with
+      nothing on screen, so it looked broken rather than blocked.</p>
+      <p>The right split: <strong>condensing closes the panel</strong> (in the observer, one
+      line) and never prevents it. The panel also has to hang off the <em>bar</em>, not off the
+      block&rsquo;s reserved box, or it opens level with the space the collapsed card left
+      behind. Verified in all four frames &mdash; auto-closes on condense, reopens on click,
+      8px under the bar, inside the viewport, carrying only the places not on screen.</p>
+    </div>
+    <div class="find bad">
+      <h3>Reserving the resting height is now a rule at every width</h3>
+      <p>It was a phone-only fix. Then the desktop interior page moved <strong>10px</strong> when
+      the block condensed, and the reason Home had not was luck &mdash; its hero happened to be
+      the taller grid item, so the row height did not depend on the block. Now the block keeps
+      its resting height everywhere: the collapsed face and the cue stay in the layout and go
+      invisible, and the one-line bar is drawn over the space they reserve. <strong>Measured at
+      0px on all four frames.</strong></p>
+    </div>
+    <div class="find bad">
+      <h3>Two structural traps in the pinned rail</h3>
+      <p>The rail column has to span the <strong>whole page</strong>, not the top region &mdash;
+      given only the hero's height to stick within, the condensed bar vanished a screen later.
+      And it must be <code>pointer-events: none</code> with the block itself re-enabled, or an
+      empty column swallows clicks on the full-width sections beneath it.</p>
+      <p>The trap that cost the most time: <code>grid-row: 1 / -1</code> <strong>silently
+      collapsed to row 1</strong>. With no explicit <code>grid-template-rows</code>,
+      <code>-1</code> resolves to the end of the <em>explicit</em> grid &mdash; which is line 1
+      &mdash; so the page quietly lost half its height rather than erroring.
+      <code>1 / span 2</code> is what was meant.</p>
+    </div>
+    <div class="find ok">
+      <h3>A page never advertises itself &mdash; including the Truck Stop</h3>
+      <p><strong>Decided:</strong> the callout drops on <code>/truck-stop</code> and stays on the
+      Exit 260 page. So Exit 260 carries both the callout and its own truck-stop summary &mdash;
+      deliberately, since that page is the truck stop&rsquo;s home and two routes to it is not a
+      duplication problem. The rule is now the same shape as the Location one: a page never
+      advertises itself.</p>
+    </div>
+    <div class="find ok">
+      <h3>The location row now fills the column at 50/50</h3>
+      <p>The cards were on a fixed three-track grid, so a Location page &mdash; which drops its
+      own card &mdash; left <strong>288px of dead space</strong> on the right. Switched to
+      <code>repeat(auto-fit, minmax(220px,1fr))</code>: the vacated track collapses and the two
+      survivors split the column, measured <strong>398px each in 810px</strong>. Home still
+      renders thirds at 261px. Moving the motif beside the name instead of above it took the
+      desktop card from <strong>151px to 108px</strong> tall, and <code>VISIT</code> is
+      floor-aligned so the links line up when the descriptions differ in length.</p>
+      <p class="note">Worth naming: the fixed grid looked right on Home and wrong on every
+      Location page. Home is what gets reviewed, so that is the class of bug that ships.</p>
+    </div>
+    <div class="find ok">
+      <h3>One table, and the Truck Stop where it belongs</h3>
+      <p>The block was two stacked tables with their own header rows, plus an
+      <code>ALSO AT</code> caption on the panel &mdash; three separated blocks of numbers reading
+      as three objects. Now it is <strong>one grid, one header row, a column per grade</strong>,
+      with an em-dash where a place does not sell one. The panel is a
+      <em>continuation</em> of the card&rsquo;s table: no caption, no repeated headers, just a
+      hairline between the rows already on the page and the rest.</p>
+      <p>The desktop condensed view was also <strong>dropping truck prices entirely</strong>. The
+      rule was already right &mdash; the panel carries whatever is not on screen &mdash; but it
+      had only ever been applied to Locations. The one-line bar carries a single Location, so the
+      Truck Stop is off screen there and belongs in the panel. It now appears, DEF column and
+      all, and disappears again at rest where the card shows it.</p>
+      <p><strong>The phone card is now the desktop card.</strong> It carries the Location
+      <em>and</em> the Truck Stop on arrival at both widths, and condenses to the Exit 260 line at
+      the same point &mdash; half the card&rsquo;s height. That deletes a per-width branch rather
+      than adding one: truck prices are the reason a whole class of guests is on the site, and a
+      phone is what they are holding.</p>
+      <p><strong>The column set follows the rows that are on screen</strong>, not the rows that
+      exist. DEF is a Truck Stop grade, so the DEF column lives wherever the Truck Stop is a row
+      &mdash; the resting card at both widths, and the panel once the block condenses and the
+      Truck Stop moves into it. Printing a grade column that no visible row sells is a column of
+      em-dashes pretending to be data.</p>
+      <p class="note">The card&rsquo;s height is not a constant and the sentinel has to follow it,
+      or &ldquo;halfway past the block&rdquo; stops meaning that. Three moves so far: 148 &rarr;
+      122 (one table instead of two), &rarr; 110 (row label dropped), phone &rarr; 102 (Truck Stop
+      row added). Measured after: condenses at <strong>56px of scroll on a 110px card</strong> and
+      <strong>52px on a 102px card</strong> &mdash; half, to within one scroll step.</p>
+      <p class="note">Two geometry facts made &ldquo;one card&rdquo; real rather than nearly:
+      an absolutely positioned panel resolves <code>left:0</code> against the
+      <em>padding</em> box, so it sat 1px inside and jogged down both edges &mdash;
+      <code>left:-1px;right:-1px</code> fixes it. And the <code>max-content</code> bar measured
+      365px against a 400px panel, so the bar is now pinned to the card&rsquo;s width. Measured
+      after: block, bar and panel all at left 425, width 400; page shift on condense still 0px at
+      both widths.</p>
+    </div>
+    <div class="find ok">
+      <h3>Two footer columns on a phone are no harder to hit than one</h3>
+      <p>The footer went from <strong>515px to 324px</strong> &mdash; 191px shorter &mdash; with
+      every link padded to a <strong>169&times;44</strong> hit area. The packing worry is
+      testable, so it was tested: aim at the centre of each link&rsquo;s visible text, offset by
+      every point within a radius, and hit-test what the browser actually returns.</p>
+      <p>One column and two columns give an <strong>identical curve</strong>: 0% wrong at
+      &plusmn;18px of aim error, 0.1% at &plusmn;22, 2.6% at &plusmn;26, 5.9% at &plusmn;30.
+      Identical because <strong>the failure mode is vertical and vertical spacing did not
+      change</strong>. Classifying every wrong hit at &plusmn;30px across 22,568 samples:
+      <strong>5.9% vertical neighbours, 0.0% horizontal</strong>. Not one crossed the gutter, and
+      none can &mdash; the smallest sideways error that leaves a target is 29px, and the next
+      column is that plus a 12px gutter away.</p>
+      <p class="note">The 14px row gap stays. At &plusmn;30px, 9.3% of touches land on it and do
+      nothing &mdash; which is the gap earning its place. A touch that does nothing beats a touch
+      that navigates somewhere the guest did not ask for; closing the gap would convert those
+      no-ops into wrong destinations.</p>
+    </div>
+    <div class="find ok">
+      <h3>The Truck Stop page proves the rules are rules, not cases</h3>
+      <p>Built from the same component with nothing added. The Truck Stop leads the table, so
+      diesel and DEF are the first numbers a driver hits; it owns the condensed bar; and
+      <strong>Exit 260</strong> is what moves into the panel on condense. That falls out of
+      &ldquo;the panel carries what is not on screen&rdquo; once you read <em>the page&rsquo;s
+      own</em> as the page&rsquo;s <strong>subject</strong> rather than always a Location. The
+      callout is gone (a page never advertises itself) and all three Location cards stay &mdash;
+      <code>/truck-stop</code>&rsquo;s self is the callout, not the Exit 260 Location.</p>
+      <p>Same condense point as every other page: <strong>56px of scroll on the 110px desktop
+      card, 52px on the 102px phone card</strong>. Zero page shift, edges aligned, panel inside
+      the viewport &mdash; all six frames.</p>
+      <p class="note">Building it found a real defect in the phone interior page. The panel
+      carried the condensed-only class on the Truck Stop&rsquo;s <em>label</em> but not its price
+      cells, so at rest the label vanished and <strong>three orphan prices stayed in the
+      grid</strong>, shifting every row after them. Hide a row by hiding all of its cells, or it
+      is not a row. Renaming that class from <code>ts</code> to <code>oncond</code> is what
+      surfaced it &mdash; a class named for a place hides the fact that it means a
+      <em>state</em>.</p>
+    </div>
+    <div class="find ok">
+      <h3>The header nav now passes the same touch test</h3>
+      <p>It failed before: items <strong>26 / 43 / 48px</strong> wide against a 44px guideline.
+      Fixed by spending the bar&rsquo;s height, which is cheap, and its width, which is not. Nav
+      items and the Rewards pill are <strong>44px-tall targets</strong>, nav items
+      <strong>53 and 58px wide</strong>, and the phone bar grows <strong>52 &rarr; 56px</strong>.
+      That 4px is the whole cost, once, on a sticky header.</p>
+      <p>Same simulation as the footer: <strong>0% wrong at &plusmn;30px</strong> of aim error,
+      0.9% at &plusmn;34. Better than the footer&rsquo;s 2.6% at &plusmn;26, for a structural
+      reason &mdash; the footer&rsquo;s neighbours are above and below, the header&rsquo;s are
+      beside, split by a 4px gutter with nothing above or below the bar. Vertical overshoot
+      leaves the bar and hits nothing: 16% of touches at &plusmn;30px land on no target, which is
+      the right outcome for a slip.</p>
+      <p>Width budget, <code>available / needed</code>: <strong>375px &rarr; 349/325</strong>,
+      360 &rarr; 334/279, 320 &rarr; 294/279. No overflow at any of them &mdash; 320px phones
+      were previously broken. The pill drops &ldquo;Get the&rdquo; below 370px, the same call
+      already made for the condensed bar&rsquo;s affordance.</p>
+      <p class="note">Two things worth keeping. The phone nav is <code>flex-wrap:nowrap</code>
+      now: it wrapped <em>silently</em> to a second row before, which is the worst failure mode
+      for a sticky header &mdash; double chrome on every page, and nobody notices in review. And
+      the pill&rsquo;s hit area is the anchor, not the cedar shape, so the button keeps its size
+      while the target gets its 44px.</p>
+    </div>
+    <div class="find bad">
+      <h3>The phone header has no room for a three-item nav</h3>
+      <p>Measured at 375px &mdash; the <em>widest</em> common phone &mdash; the 52px bar needs
+      <strong>exactly its 349px</strong> of usable width for logo + three nav items + the
+      &ldquo;Get the App&rdquo; pill. Zero slack, so at 360px or 320px it wraps to a second row,
+      and a two-row sticky header costs that height on every page and every scroll.</p>
+      <p><strong>Decided:</strong> on a phone the Market lockup carries Home &mdash; it already
+      links there &mdash; and the nav shows Locations &middot; Truck Stop. All three destinations
+      stay reachable. An icon-only Rewards pill also fits (59px to spare) but strips the words off
+      a decision made to keep Rewards prominent; a hamburger hides three destinations behind a
+      tap.</p>
+      <p class="note">The tap targets that were open here are fixed &mdash; see the card above.
+      The bar is 56px now, and the width budget it left is what the pill&rsquo;s narrow-screen
+      label is spending.</p>
+    </div>
+    <div class="find ok">
+      <h3>Surplus page height belongs at the foot, not between the rows</h3>
+      <p>Home carried a 65px hole under the headline. The frame had a min-height taller than its
+      content, and CSS grid shared that surplus <em>between</em> the rows rather than leaving it
+      at the bottom. <code>align-content:start</code> on the page grid is the rule; the hole was
+      the symptom. Worth knowing because it looks like a spacing bug in the hero and is not.</p>
+    </div>
+    <div class="find bad">
+      <h3>A promo with real copy must not carry an aria-label</h3>
+      <p>The promos carried <code>aria-label</code> text from when they were empty dashed boxes.
+      An <code>aria-label</code> <strong>overrides</strong> an element&rsquo;s own text, so the
+      moment they gained a real eyebrow and headline a screen reader would have announced the
+      placeholder instead of the offer &mdash; on every promo, sitewide. Removed. ADR 0007&rsquo;s
+      rule stands with one correction: it applies to image-only promos, and the accessible name
+      must be the offer and must not be two things.</p>
+    </div>
+    <div class="find ok">
+      <h3>The card line is where it is and when it is open &mdash; nothing else</h3>
+      <p>One line: <strong>street, then hours</strong>. The sentence it replaced described what
+      each place sells, which is the <code>amenities</code> list&rsquo;s job on the detail page
+      &mdash; a list view is for choosing between places. Rows go <strong>78 &rarr; 61px</strong>,
+      the three-row list <strong>439 &rarr; 199px</strong> against where it started, and the
+      desktop card <strong>108 &rarr; 89px</strong>, because this is a change to the field rather
+      than a phone-only string.</p>
+      <p>The line truncates rather than wrapping, so <strong>its length is a copy budget</strong>.
+      Slack past the longest current string: <strong>74px at 375, 59px at 360, 33px at 320</strong>
+      &mdash; about five characters on the narrowest common phone. Hours must stay in the
+      <code>6am&ndash;9pm</code> form; <code>6:00 AM &ndash; 9:00 PM</code> does not fit, and the
+      hours are what get cut because the street comes first.</p>
+      <p class="note">A container query adds <strong>no specificity</strong>. The narrow-screen
+      step-down was written as <code>.loccard p</code> and silently lost to the
+      <code>.phone .loccard p</code> rule above it &mdash; measured no change at 320px, which is
+      the only reason it was caught. Matching the selector inside the query took the slack from
+      19px to 33px.</p>
+    </div>
+    <div class="find ok">
+      <h3>The obvious fix was measured first, and it lost</h3>
+      <p>Three location cards ran <strong>439px</strong> on a 375px screen. Three-across is the
+      reflex answer and it is worse: <strong>88px columns</strong>, &ldquo;Fisherman&rsquo;s&rdquo;
+      rendering <strong>100px wide inside an 88px box</strong>, body copy at <strong>8 lines</strong>,
+      and only a 150px saving. Compact rows &mdash; motif, name, two clamped lines, chevron &mdash;
+      give <strong>78px a row, 249px for three</strong> and stay readable &mdash; and 61px a row once
+      the description became one line. Building the rejected option for ten minutes is cheaper
+      than arguing about it.</p>
+    </div>
+    <div class="find bad">
+      <h3>The float landed on the one link the brand rules protect</h3>
+      <p>Measured at full scroll before any gutter, the Back-to-top disc sat <strong>directly on
+      &ldquo;Lummi Commercial Companies&rdquo;</strong> with <strong>0px</strong> of clearance, and
+      came within <strong>2px</strong> of a footer link on all three desktop pages. That is the
+      only place other Lummi companies appear anywhere on the site. The footer now reserves 78px
+      rather than the button learning to dodge &mdash; a dodging button needs a docked state, a
+      threshold and a transition, and still covers something the one time the threshold is wrong.
+      After: <strong>52&ndash;60px</strong> clear on every page.</p>
+    </div>
+    <div class="find ok">
+      <h3>A control that arrives after you do is worse than no control</h3>
+      <p>Back-to-top at a 0.5-viewport threshold appears for the final <strong>3%</strong> of two
+      of these pages. At 1.0 it reaches only the last <strong>19%</strong> of the one page long
+      enough to want it. <strong>0.75</strong> covers 39% of Home and stays silent on the other
+      five &mdash; which run 1.38&ndash;1.56 screens and genuinely do not need it. The threshold
+      is the feature; the button is the easy part.</p>
+    </div>
+    <div class="find ok">
+      <h3>An ADR asserted two things that cannot both be built</h3>
+      <p>ADR 0007 said the promo sits <em>above the page title</em> and that it is a full-width
+      region <em>below the two-column top</em>. The title lives inside that two-column top, so on
+      desktop the second sentence makes the first impossible &mdash; measured, title at 92px and
+      promo at 205px, with no arrangement that reverses it. On a phone the choice was real and
+      the numbers settle it: title at <strong>388px</strong> with the promo above, <strong>190px</strong>
+      below. Found while correcting stale pixel counts, which is usually how.</p>
+    </div>
+    <div class="find bad">
+      <h3>Still placeholder, still blocking</h3>
+      <p>The logo lockup, the three motifs and the promo artwork are dashed boxes on purpose.
+      Coast Salish formline is specific to Lummi Nation and the guardrail is that final art must
+      be authentic, commissioned, or tribe-approved. The copy is first-draft placeholder &mdash;
+      copy-editor&rsquo;s work against the three source sites. And the header still cannot carry
+      the real logo: a navy wordmark on a navy bar (ADR 0006).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DECISION REGISTER ============ -->
+<section class="calls">
+  <div class="plate-head"><span class="plate-id">Register</span><h2>The register</h2></div>
+  <p class="plate-note">The nine concerns the design pulled in. <strong>C1&ndash;C4 are decided
+  and written into ADR 0005</strong>, which is committed. C5, C7 and C9 stay open with
+  recommendations &mdash; C7 is a business call, not a design one. <strong>C6 and C8 are settled
+  by later ADRs</strong> and kept here for the reasoning. None of them causes rework if settled
+  later.</p>
+
+  <div class="reg done">
+    <div class="reg-head"><span class="cid done">C1 &middot; decided</span>
+      <h3>Dismissing the panel, against the zero-JavaScript goal</h3></div>
+    <p class="why">Native <code>&lt;details&gt;</code> closes only from its own control. A guest who
+    opens the panel, sees it cover the page, and taps the page behind it expects it to go away.
+    Nothing happens. <strong>Escape does nothing either.</strong> The skill currently promises
+    &ldquo;expand, collapse and keyboard access with zero JavaScript&rdquo; — that promise is what
+    is in tension, not the feature.</p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>Leave it. The control toggles both ways and that is all.
+        <span class="cost">Cost: an overlay a guest cannot dismiss the way every other overlay
+        on the web is dismissed.</span></span></div>
+      <div class="opt"><b>B</b><span>Add ~10 lines of script for outside-click and Escape.
+        <span class="cost">Cost: breaks the zero-JS promise. Still server-rendered; still works
+        with script off, minus the two conveniences.</span></span></div>
+      <div class="opt"><b>C</b><span>Swap <code>&lt;details&gt;</code> for the HTML Popover API —
+        <code>popover="auto"</code> plus a <code>popovertarget</code> button.
+        <span class="cost">Cost: a newer platform feature, and pinning the panel to the block
+        needs CSS anchor positioning.</span></span></div>
+    </div>
+    <p class="rec"><em>Decided &mdash; C, the popover</em><span class="decided">Plate D above is it, running for real.</span>
+    I tested C in this container&rsquo;s Chromium 141: <strong>outside-click and Escape both close
+    the panel with no script at all</strong>, the page does not reflow, and anchor positioning
+    keeps the panel glued to the block through a scroll. It also makes C2 mostly disappear, since
+    a popover renders in the browser&rsquo;s top layer above every z-index.
+    <strong>I could only test Chromium here</strong> — this container has no Safari or Firefox.
+    Popover itself is broadly supported; <strong>CSS anchor positioning is the risky half</strong>
+    and needs a real check on Safari and Firefox before we commit. If anchor positioning is not
+    safe, the bottom-sheet placement sidesteps it entirely (a viewport-pinned panel needs no
+    anchor), otherwise fall back to B.</p>
+  </div>
+
+  <div class="reg done">
+    <div class="reg-head"><span class="cid done">C2 &middot; decided</span>
+      <h3>&ldquo;A z-index high enough&rdquo; needs a written scale</h3></div>
+    <p class="why">Without one, the next person who needs something on top writes
+    <code>9999</code> and the one after that writes <code>10000</code>. The substantive question is
+    the last line: <strong>a mobile nav menu should cover the price panel, not lose to it</strong> —
+    one is navigation, the other is information.</p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>Add four layer tokens to skill <code>brand-system</code>.
+        <span class="cost">Cost: that skill is LOCKED, and stacking order is not brand.</span></span></div>
+      <div class="opt"><b>B</b><span>Record the scale in the ADR and the display skill; leave
+        <code>brand-system</code> untouched.
+        <span class="cost">Cost: none that I can find.</span></span></div>
+      <div class="opt"><b>C</b><span>No scale.
+        <span class="cost">Cost: the bidding war above.</span></span></div>
+    </div>
+    <p class="rec"><em>Decided &mdash; B, recorded in ADR 0005</em>
+    <code>brand-system</code> governs colour, type and spacing. <strong>Stacking order is structure,
+    not brand</strong>, so it does not belong there even if the file were open. Putting it in the
+    ADR resolves the &ldquo;touches a locked file&rdquo; problem rather than working around it.
+    Scale: waterline 1, block 40, panel 50, header and nav 60. If C1 lands on the popover, the
+    panel line becomes advisory — the top layer outranks all of it.</p>
+  </div>
+
+  <div class="reg done">
+    <div class="reg-head"><span class="cid done">C3 &middot; decided</span>
+      <h3>Home&rsquo;s panel sits in the layout; every other page&rsquo;s overlays</h3></div>
+    <p class="why">Home loads expanded. An overlay drawn on arrival would cover the hero before
+    anyone touched it, so on Home the panel takes real space and collapsing it lets the page rise
+    80px. That is <strong>one component with two panel behaviours</strong>, selected by whether the
+    block loads open.</p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>Accept it: loads-open means in flow, loads-shut means overlay.
+        <span class="cost">Cost: one branch in the component, and a rule to remember.</span></span></div>
+      <div class="opt"><b>B</b><span>Home loads collapsed like everywhere else.
+        <span class="cost">Cost: loses the prominence you asked for on the main page.</span></span></div>
+      <div class="opt"><b>C</b><span>Home gets a separate hero component.
+        <span class="cost">Cost: two components to keep in sync — the thing we have been
+        avoiding all session.</span></span></div>
+    </div>
+    <p class="rec"><em>Decided &mdash; A, accepted</em>
+    The branch is one CSS class and it follows from a rule that states itself:
+    <strong>a panel that is already open on arrival cannot overlay anything.</strong> B throws away
+    a requirement you gave me; C reintroduces duplication.</p>
+  </div>
+
+  <div class="reg done">
+    <div class="reg-head"><span class="cid done">C4 &middot; decided</span>
+      <h3>Which placement ships</h3></div>
+    <p class="why">Plate C is the exploration you asked for and nothing is chosen yet. The
+    measurements: a sticky block holds <strong>134px of every phone screen permanently</strong>;
+    docked costs nothing but is gone once a guest scrolls; corner covers the page headline even
+    when shut and wants the top-right slot the locked architecture reserves for Rewards; bottom
+    puts the control in thumb reach and opens upward.</p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>Docked everywhere.
+        <span class="cost">Cost: a driver deep in a page scrolls back up to check a price.</span></span></div>
+      <div class="opt"><b>B</b><span>Docked on desktop, bottom sheet on phones.
+        <span class="cost">Cost: two placements to build; reads app-like on phones.</span></span></div>
+      <div class="opt"><b>C</b><span>Sticky everywhere.
+        <span class="cost">Cost: the permanent 134px, on the screen size that can least afford it.</span></span></div>
+    </div>
+    <p class="rec"><em>Decided &mdash; corner, on both widths</em><span class="decided">Overrides my bottom-sheet recommendation. Two consequences follow, both now recorded in ADR 0005.</span>First, <strong>corner is the one placement that cannot avoid CSS anchor positioning</strong> — a bottom sheet is pinned to the viewport, a corner card has to be told where its corner is. That makes anchor positioning a hard dependency, and only Chromium was testable here. The ten-line script remains the fallback and the component&rsquo;s shape does not change if we need it. Second, at 375px the card is <strong>353px wide and floats over the page content shut as well as open</strong>, so it obscures the page&rsquo;s own headline persistently rather than only while expanded. The Rewards collision that sat here is <strong>resolved in Plate E</strong> — see below.</p>
+  </div>
+
+  <div class="reg">
+    <div class="reg-head"><span class="cid">C5</span>
+      <h3>The panel can outgrow the screen</h3></div>
+    <p class="why">Four places and two grades fit today at 212px. They stop fitting when a guest
+    turns text size up — which the people most likely to squint at a fuel price are most likely to
+    have done — or if a fifth place or third grade ever appears.</p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>Cap the panel at <code>min(70vh, 26rem)</code> with
+        <code>overflow-y:auto</code>.
+        <span class="cost">Cost: a scrollbar inside the panel in the rare tall case.</span></span></div>
+      <div class="opt"><b>B</b><span>Nothing; four places always fit.
+        <span class="cost">Cost: at 200% text the panel runs off the bottom of the phone and the
+        last rows are unreachable.</span></span></div>
+    </div>
+    <p class="rec"><em>Recommend — A</em>
+    Two lines of CSS against a failure that is invisible in normal testing and total for the
+    guest who hits it.</p>
+  </div>
+
+  <div class="reg">
+    <div class="reg-head"><span class="cid">C6</span>
+      <h3>The block duplicates the Fuel Prices page</h3></div>
+    <p class="why"><code>/fuel-prices</code> is a page whose whole content is all
+    locations in one view &mdash; reached from the footer and the &ldquo;All prices&rdquo; panel
+    rather than the nav, since ADR 0008 took the nav to three items. The block shows the same thing. Nobody has said what happens when they
+    meet — today the spec puts the block on <em>every</em> page, so that page gets prices twice.</p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>On <code>/fuel-prices</code> the block <em>is</em> the page —
+        expanded, in flow, no separate strip above it.
+        <span class="cost">Cost: reuses the Home in-flow behaviour from C3, so nothing new.</span></span></div>
+      <div class="opt"><b>B</b><span>Suppress the block on that page and hand-build the page.
+        <span class="cost">Cost: a second thing rendering prices — the duplication we killed in ADR 0004.</span></span></div>
+      <div class="opt"><b>C</b><span>Leave both.
+        <span class="cost">Cost: the same prices twice on one screen.</span></span></div>
+    </div>
+    <p class="rec"><em>Recommend — A</em>
+    It falls straight out of C3: a block that loads expanded sits in the layout. The Fuel Prices
+    page is then <strong>the same component with a different default</strong>, plus whatever copy
+    and hours belong around it. One renderer of prices, sitewide.</p>
+  </div>
+
+  <div class="reg">
+    <div class="reg-head"><span class="cid">C7</span>
+      <h3>A posted price the pump does not honour</h3></div>
+    <p class="why">The site is static. A price changes in TinaCMS, the rebuild takes a minute or
+    two, and a CDN-cached page can lag further. For most content that is fine. <strong>A fuel price
+    is a number a customer drives across town for</strong>, and the three sites we are merging are
+    a retail business, not a blog.</p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>Show the <code>updated</code> stamp in the expanded panel and
+        carry a short &ldquo;prices subject to change&rdquo; line.
+        <span class="cost">Cost: one row of small type; makes the stamp question C9 load-bearing.</span></span></div>
+      <div class="opt"><b>B</b><span>Stamp only, no disclaimer.
+        <span class="cost">Cost: the date implies currency without saying prices can move.</span></span></div>
+      <div class="opt"><b>C</b><span>Neither.
+        <span class="cost">Cost: a stale price reads as a promise.</span></span></div>
+    </div>
+    <p class="rec"><em>Recommend — A</em>
+    This is the one concern on the page that is not a design question. <strong>Worth putting to
+    whoever owns pricing at the company</strong> rather than deciding in a build session — I am
+    flagging it, not settling it.</p>
+  </div>
+
+  <div class="reg">
+    <div class="reg-head"><span class="cid">C8</span>
+      <h3>A block on every page is a block a screen reader meets on every page</h3></div>
+    <p class="why">The block sits above the page&rsquo;s own heading sitewide. Someone navigating by
+    landmark or heading hits fuel prices before the content they came for, on every single
+    navigation.</p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>Wrap it in <code>&lt;aside aria-label="Fuel prices"&gt;</code>
+        so it is one skippable landmark, and keep the control a real button.
+        <span class="cost">Cost: none. It is the correct element regardless.</span></span></div>
+      <div class="opt"><b>B</b><span>A generic <code>&lt;div&gt;</code>.
+        <span class="cost">Cost: four unlabelled price rows before the page content, every page.</span></span></div>
+    </div>
+    <p class="rec"><em>Recommend — A</em>
+    Free, and it is what the markup should have been anyway. Add a 375px check that the collapsed
+    block reads as one landmark to a screen reader.</p>
+  </div>
+
+  <div class="reg">
+    <div class="reg-head"><span class="cid">C9</span>
+      <h3>The <code>updated</code> stamp: stored or derived</h3></div>
+    <p class="why">Carried over from ADR 0004 and still open. C7 turns it load-bearing — if the
+    stamp goes on the page, it has to be right. Deriving it from the commit is the honest source,
+    but <strong>Vercel builds from a shallow clone by default</strong>, so the commit history the
+    build can see may not reach back far enough.</p>
+    <div class="opts">
+      <div class="opt"><b>A</b><span>Store it per place, written on save.
+        <span class="cost">Cost: a direct file edit that forgets to update it silently lies.</span></span></div>
+      <div class="opt"><b>B</b><span>Derive it from the commit that last touched the file.
+        <span class="cost">Cost: needs the shallow-clone question answered first — a spike, not a decision.</span></span></div>
+    </div>
+    <p class="rec"><em>Recommend — A now, B later if the spike says it is clean</em>
+    A ships today and the skill already tells Claude and developers to set it by hand. Do not block
+    the build on B. <strong>The spike is small</strong>: one Vercel build, check whether
+    <code>git log</code> can see the file&rsquo;s history.</p>
+  </div>
+
+  <footer class="foot">
+    Locked palette and type throughout (skill brand-system): prices --lb-navy-deep, labels
+    --lb-navy, waterline --lb-teal &rarr; --lb-navy, Space Grotesk on Inter. Dashed box = where the
+    locked logo goes; not drawn here. Sample prices; Fisherman&rsquo;s Cove set 6&cent; apart on
+    purpose. This page is the proof, not the record: the decisions on it are committed as
+    <strong>ADR 0005&ndash;0011</strong> and the <code>fuel-price-update</code> and
+    <code>location-content-model</code> skills.
+  </footer>
+</section>
+
+</div>
+
+<script>
+/* condense the desktop fuel block once the page has scrolled through its middle.
+   ~10 lines, no library. the CSS-only route is discussed on plate H. */
+document.querySelectorAll('.stage').forEach(function(stage){
+  var sc = stage.querySelector('.scroller'),
+      sentinel = stage.querySelector('.sentinel'),
+      block = stage.querySelector('.fuelblock');
+  if(!sc || !sentinel || !block) return;
+  new IntersectionObserver(function(entries){
+    var next = entries[0].intersectionRatio < 0.5;
+    // closing on the way in, so an open panel does not hang off a bar mid-scroll
+    if (next !== block.classList.contains('cond')) block.open = false;
+    block.classList.toggle('cond', next);
+  }, {root: sc, threshold: [0, 0.5, 1]}).observe(sentinel);
+});
+
+/* ---- BACK TO TOP ----
+   The real page renders this once in the layout:
+     <button type="button" class="totop" aria-label="Back to top">&uarr;</button>
+   Focus moves to the header on activation. Without that a keyboard guest is
+   returned to the top of the page with their tab position still at the bottom
+   of it, and the next Tab drops them back into the footer.
+
+   Threshold is 0.75 of a viewport, so a page shorter than 1.75 screens never
+   grows one. Measured against these six pages: at 1.0 the button reaches only
+   the last 19% of Home's scroll; at 0.5 it flickers in for the final 3% of two
+   pages, which is worse than absent. 0.75 covers 39% of Home and nothing else
+   qualifies. See ADR 0011. */
+document.querySelectorAll('.stage[id^="j-"]').forEach(function(stage){
+  var sc = stage.querySelector('.scroller'); if(!sc) return;
+  var btn = document.createElement('button');
+  btn.type = 'button'; btn.className = 'totop';
+  btn.setAttribute('aria-label','Back to top');
+  btn.innerHTML = '&#8593;';
+  stage.appendChild(btn);
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  btn.addEventListener('click', function(){
+    sc.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+    var first = stage.querySelector('.sitebar a, .sitebar .logo-ph');
+    if (first){ first.setAttribute('tabindex','-1'); first.focus({preventScroll:true}); }
+  });
+  var tick = false;
+  sc.addEventListener('scroll', function(){
+    if (tick) return; tick = true;
+    requestAnimationFrame(function(){
+      btn.classList.toggle('on', sc.scrollTop > sc.clientHeight * 0.75);
+      tick = false;
+    });
+  }, {passive:true});
+});
+</script>

@@ -1,0 +1,13 @@
+import {chromium} from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const b=await chromium.launch();const pg=await b.newPage({viewport:{width:1500,height:1200},deviceScaleFactor:1.5});
+await pg.goto('file://'+process.cwd()+'/fuel-strip-proof.html');await pg.waitForTimeout(800);
+await pg.locator('#i-desk').screenshot({path:'v-k-desk-rest.png'});
+await pg.evaluate(()=>{document.querySelector('#i-desk .scroller').scrollTop=340;
+  document.querySelector('#i-phone .scroller').scrollTop=340;});
+await pg.waitForTimeout(500);
+await pg.evaluate(()=>{document.querySelector('#i-desk .fuelblock').open=true;
+  document.querySelector('#i-phone .fuelblock').open=true;});
+await pg.waitForTimeout(350);
+await pg.locator('#i-desk').screenshot({path:'v-k-desk-open.png'});
+await pg.locator('#i-phone').screenshot({path:'v-k-phone-open.png'});
+await b.close();

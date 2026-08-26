@@ -1,0 +1,440 @@
+<title>Lummi Bay Launch Plan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --navy:#1C4E8F; --navy-deep:#14396B; --teal:#0FB5C4; --cedar:#C9772E;
+  --ground:#FBF9F4; --paper:#FFFFFF; --ink:#22262E; --ink-soft:#5A6673;
+  --rule:#D9DFE8; --rule-soft:#E8ECF2; --chip:#F1F4F8;
+  --good:#15603F; --accent:var(--navy);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --navy:#7FB2EC; --navy-deep:#A8CCF5; --teal:#2FD0DE; --cedar:#E0A063;
+    --ground:#11161D; --paper:#1A212B; --ink:#DFE5EC; --ink-soft:#96A3B2;
+    --rule:#2B3441; --rule-soft:#212934; --chip:#222B36;
+    --good:#69C89C; --accent:var(--navy);
+  }
+}
+:root[data-theme="dark"]{
+  --navy:#7FB2EC; --navy-deep:#A8CCF5; --teal:#2FD0DE; --cedar:#E0A063;
+  --ground:#11161D; --paper:#1A212B; --ink:#DFE5EC; --ink-soft:#96A3B2;
+  --rule:#2B3441; --rule-soft:#212934; --chip:#222B36;
+  --good:#69C89C; --accent:var(--navy);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font:400 16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:940px;margin:0 auto;padding:0 24px 100px}
+h1,h2,h3{font-family:"Space Grotesk",Archivo,sans-serif;text-wrap:balance;margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+
+/* the teal rule is the site's own waterline device, used here as the only flourish */
+.tide{height:4px;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--navy));
+  border:0;margin:0}
+
+header{padding:72px 0 0}
+.kicker{font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-soft);display:flex;gap:16px;flex-wrap:wrap}
+h1{font-weight:700;font-size:clamp(2.1rem,5.4vw,3rem);letter-spacing:-.025em;
+  line-height:1.04;margin:20px 0 0;color:var(--navy-deep)}
+.dek{margin:16px 0 0;max-width:60ch;font-size:1.0625rem;color:var(--ink-soft);text-wrap:pretty}
+.dek strong{color:var(--ink);font-weight:600}
+
+/* the state of things — the most important fact goes first and biggest */
+.state{margin-top:36px;border:1px solid var(--rule);border-radius:10px;background:var(--paper);
+  padding:4px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr))}
+.stat{padding:20px 22px;border-left:1px solid var(--rule-soft)}
+.stat:first-child{border-left:0}
+.stat .n{font:700 2rem/1 "Space Grotesk",sans-serif;color:var(--navy);
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat.hot .n{color:var(--cedar)}
+.stat .l{margin-top:7px;font:500 10.5px/1.45 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+
+section{padding:56px 0 0}
+.shead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.pnum{font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.16em;
+  color:var(--navy);border:1px solid var(--rule);border-radius:4px;padding:6px 8px;
+  white-space:nowrap}
+h2{font-weight:700;font-size:1.5rem;letter-spacing:-.015em;color:var(--navy-deep)}
+.snote{margin:8px 0 0;max-width:68ch;color:var(--ink-soft);text-wrap:pretty}
+.snote strong{color:var(--ink);font-weight:600}
+
+/* phases */
+.phase{margin-top:26px;border-top:1px solid var(--rule);padding-top:18px}
+.phase-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+h3{font-weight:700;font-size:1.0625rem;letter-spacing:-.01em}
+.tag{font:500 9.5px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.12em;
+  text-transform:uppercase;padding:5px 7px;border-radius:4px;white-space:nowrap;
+  background:var(--chip);color:var(--ink-soft);border:1px solid var(--rule-soft)}
+.tag.client{color:var(--cedar);border-color:color-mix(in srgb,var(--cedar) 40%,transparent)}
+.tag.now{color:var(--good);border-color:color-mix(in srgb,var(--good) 40%,transparent)}
+ol.steps,ul.plain{margin:12px 0 0;padding-left:20px;display:grid;gap:9px}
+ol.steps li,ul.plain li{padding-left:3px;text-wrap:pretty}
+ol.steps li::marker{font-family:"IBM Plex Mono",monospace;font-size:.8em;color:var(--ink-soft)}
+li strong{font-weight:600}
+
+/* tables */
+.tw{overflow-x:auto;margin-top:20px;border:1px solid var(--rule);border-radius:10px;
+  background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.9375rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule-soft);
+  vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font:500 10px/1.3 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-soft);background:var(--chip);
+  border-bottom:1px solid var(--rule)}
+td.id{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.8125rem;
+  color:var(--ink-soft);white-space:nowrap;width:1%}
+td.money{font-variant-numeric:tabular-nums;white-space:nowrap}
+tfoot td{font-weight:600;background:var(--chip);border-top:1px solid var(--rule)}
+
+/* the diagram */
+figure{margin:26px 0 0;border:1px solid var(--rule);border-radius:10px;background:var(--paper);
+  padding:22px 20px 16px;overflow-x:auto}
+figure svg{display:block;width:100%;min-width:600px;max-width:900px;height:auto;margin:0 auto;
+  color:var(--ink)}
+figcaption{margin-top:14px;font-size:.875rem;color:var(--ink-soft);text-wrap:pretty;
+  max-width:70ch}
+figcaption strong{color:var(--ink);font-weight:600}
+
+/* callout for the one honest trade-off */
+.flag{margin-top:22px;border-left:3px solid var(--cedar);background:var(--paper);
+  border-radius:0 8px 8px 0;padding:15px 18px;max-width:74ch}
+.flag b{display:block;font:500 10px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--cedar);margin-bottom:8px}
+.flag p{margin:0;text-wrap:pretty}
+.flag p+p{margin-top:9px}
+
+.cols{margin-top:22px;display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{border:1px solid var(--rule);border-radius:10px;background:var(--paper);padding:18px 20px}
+.card h3{margin-bottom:9px}
+.card p{margin:0;color:var(--ink-soft);font-size:.9375rem;text-wrap:pretty}
+.card p+p{margin-top:8px}
+.card strong{color:var(--ink)}
+
+footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--rule);
+  font:400 13px/1.65 "IBM Plex Mono",ui-monospace,monospace;color:var(--ink-soft)}
+a{color:var(--navy)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+@media (max-width:560px){.stat{border-left:0;border-top:1px solid var(--rule-soft)}
+  .stat:first-child{border-top:0}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="kicker"><span>Lummi Bay Market</span><span>Project briefing</span><span>25 Aug 2026</span></div>
+  <h1>What is built, what is missing, and how it gets updated</h1>
+  <p class="dek">Three locations merging into one site. The decisions are made and written down;
+  <strong>the application is not built yet</strong>. This is the honest state, the work in order,
+  and the publishing model staff will actually use.</p>
+
+  <div class="state">
+    <div class="stat"><div class="n">13</div><div class="l">Decisions recorded</div></div>
+    <div class="stat"><div class="n">93</div><div class="l">Files in the repo</div></div>
+    <div class="stat hot"><div class="n">0</div><div class="l">Lines of app code</div></div>
+    <div class="stat hot"><div class="n">10</div><div class="l">Things only you can supply</div></div>
+    <div class="stat"><div class="n">$20</div><div class="l">Monthly running cost</div></div>
+  </div>
+</header>
+
+<section>
+  <div class="shead"><span class="pnum">Part 1</span><h2>Next steps</h2></div>
+  <p class="snote">Phase 0 is not engineering, and that is the point: those items have lead times
+  and they gate everything after them. <strong>Start them now, in parallel.</strong></p>
+
+  <div class="phase">
+    <div class="phase-h"><h3>Phase 0 — Unblock</h3><span class="tag client">Mostly not engineering</span><span class="tag now">Start now</span></div>
+    <ol class="steps">
+      <li><strong>Logo vector files</strong>, including a reversed / light lockup. Today it exists
+      only as a chat image.</li>
+      <li><strong>Resolve the navy-on-navy header.</strong> The wordmark is navy and the sticky
+      header is navy, so the header cannot currently carry the logo at all. Either an approved
+      reversed lockup or a light header ground — and the header is on every page.</li>
+      <li><strong>Confirm addresses, hours and phone numbers.</strong> Present values were pulled
+      from the old site and are marked unconfirmed. Hours need the short form (<span class="mono">6am–9pm</span>)
+      — there is a measured character budget on the Location card line.</li>
+      <li><strong>Decide art direction.</strong> The site has no illustration or photography of any
+      kind. Commissioned Lummi art, photography of the three stores, the sasquatch, or a mix — this
+      carries a budget and a lead time.</li>
+      <li><strong>Answer the pricing question.</strong> A posted price can be a minute or two stale
+      after an edit. Acceptable? And does the site show an "updated" stamp? This belongs with
+      whoever owns pricing, not with the build.</li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-h"><h3>Phase 1 — Scaffold</h3></div>
+    <ol class="steps" start="6">
+      <li>Next.js app, brand tokens, fonts.</li>
+      <li>Vercel project connected to the repo, preview deploy on every branch.</li>
+      <li>The layout shell: sticky header, footer, waterline, Rewards pill, Back-to-top.</li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-h"><h3>Phase 2 — Data and the CMS</h3></div>
+    <ol class="steps" start="9">
+      <li>Location files and the single fuel-price file. <strong>Data first, pages second</strong>
+      — every page reads from these and nothing is typed into a page.</li>
+      <li>TinaCMS collections, plain-English field labels, visual editing, two editor logins.</li>
+      <li><strong>Watch a real staff member change a fuel price unaided and see it go live.</strong>
+      If that fails, nothing built on top of it matters — it is the project's first requirement.</li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="phase-h"><h3>Phase 3 — Pages</h3></div>
+    <ol class="steps" start="12">
+      <li>The fuel price block — the largest component, and the one with the most decisions behind it.</li>
+      <li>Home · Locations · three Location pages · Truck Stop · Rewards · Fuel Prices · About.</li>
+      <li>Promos, including scheduling.</li>
+      <li>Real copy, merged from the three old sites into one voice. Everything on screen today is
+      first-draft placeholder.</li>
+    </ol>
+  </div>
+</section>
+
+<hr class="tide" style="margin-top:56px">
+
+<section>
+  <div class="shead"><span class="pnum">Part 2</span><h2>What it takes to go live</h2></div>
+  <p class="snote">Two columns of work, and <strong>the one you own usually sets the date</strong>.
+  Engineering can be scheduled; a commissioned artwork and a cultural approval cannot be
+  compressed by working faster.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>&nbsp;</th><th>Only you can supply</th><th>What it blocks</th></tr></thead>
+      <tbody>
+        <tr><td class="id">A1</td><td>Logo vectors + reversed lockup</td><td>The header, on every page</td></tr>
+        <tr><td class="id">A2</td><td>Confirmed addresses, hours, phones</td><td>Location pages, footer</td></tr>
+        <tr><td class="id">A3</td><td>Art direction and budget</td><td>Every page's finished look</td></tr>
+        <tr><td class="id">A4</td><td>Cultural approval for any Coast Salish art</td><td>Launch, unconditionally</td></tr>
+        <tr><td class="id">A5</td><td>Pricing sign-off and disclaimer wording</td><td>The fuel block's footnote</td></tr>
+        <tr><td class="id">A6</td><td>Domain control — lummibay.com, exit260.com</td><td>DNS cutover and the redirect</td></tr>
+        <tr><td class="id">A7</td><td>Two staff emails for editor logins</td><td>Staff being able to edit at all</td></tr>
+        <tr><td class="id">A8</td><td>Real Rewards app store links</td><td>The pill on every page</td></tr>
+        <tr><td class="id">A9</td><td>Careers link destination</td><td>Footer</td></tr>
+        <tr><td class="id">A10</td><td>Contact form inbox, and who monitors it</td><td>The footer form</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>&nbsp;</th><th>Engineering</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td class="id">B1</td><td>The application itself</td><td>Phases 1–3. Nothing is built yet</td></tr>
+        <tr><td class="id">B2</td><td>Vercel project and build pipeline</td><td>Previews per branch</td></tr>
+        <tr><td class="id">B3</td><td>TinaCMS configured and editors provisioned</td><td>Verified by a real staff member</td></tr>
+        <tr><td class="id">B4</td><td>exit260.com → the Exit 260 page, as a <strong>301</strong></td><td>Permanent. A 302 keeps the old domain in search results</td></tr>
+        <tr><td class="id">B5</td><td>Redirect map from all three old sites</td><td>Every indexed URL needs a target or it 404s</td></tr>
+        <tr><td class="id">B6</td><td>Technical SEO and structured data</td><td>Per-location LocalBusiness markup</td></tr>
+        <tr><td class="id">B7</td><td>Analytics</td><td>Which product, and who reads it</td></tr>
+        <tr><td class="id">B8</td><td>Rebuild strategy for prices</td><td>Scheduled rebuild vs revalidation</td></tr>
+        <tr><td class="id">B9</td><td>Accessibility audit of the built site</td><td>Targets and contrast are designed, not yet audited</td></tr>
+        <tr><td class="id">B10</td><td>Performance budget</td><td>Images are what will break it</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h3>Verify before cutover</h3>
+      <p><strong>A staff member changes a price unaided</strong> and sees it live. Real 320px phone,
+      real iPhone, real Android. Every old URL resolves or redirects. exit260.com lands on the Exit
+      260 page with lummibay.com in the address bar.</p>
+      <p>And on launch morning: <strong>the prices on the site match the pumps</strong> at all four
+      points of sale.</p>
+    </div>
+    <div class="card">
+      <h3>What could move the date</h3>
+      <p><strong>Art and photography</strong> — the largest unknown, entirely outside engineering.
+      <strong>The logo contrast blocker</strong> — small, but it sits on every page.
+      <strong>The redirect map</strong> — boring, and the thing most likely to be found late; crawl
+      the old sites early. <strong>Copy</strong> — all placeholder today.</p>
+    </div>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Running cost</th><th>Per month</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Vercel Pro</strong> — required, not chosen: Hobby is non-commercial use only</td><td class="money">$20</td></tr>
+        <tr><td>TinaCMS — free tier, 2 editor logins</td><td class="money">$0</td></tr>
+        <tr><td>Promos that expire at a set time</td><td class="money">included</td></tr>
+        <tr><td>Domains</td><td class="money">existing renewals</td></tr>
+        <tr><td>Later, only if a third person must edit</td><td class="money">+ $24</td></tr>
+        <tr><td>Later, only if staff edits need approval first</td><td class="money">+ $41</td></tr>
+      </tbody>
+      <tfoot><tr><td>At launch — all of it Vercel; the CMS is genuinely free</td><td class="money">$20 / mo</td></tr></tfoot>
+    </table>
+  </div>
+</section>
+
+<hr class="tide" style="margin-top:56px">
+
+<section>
+  <div class="shead"><span class="pnum">Part 3</span><h2>How the site gets updated</h2></div>
+  <p class="snote">There is <strong>no database and no admin server</strong>. Content is a set of
+  text files in the project's repository. Editing content changes a file; changing a file rebuilds
+  the site; the rebuild publishes. The three ways in are three doors onto that same act.</p>
+
+  <figure>
+    <svg viewBox="0 0 900 566" role="img" aria-label="Three editing routes — staff in the visual editor, Claude in chat, and a developer in git — all converge on a single commit in the git repository, which triggers an automatic rebuild that publishes the live site in one to two minutes.">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 10 5 0 10z" fill="currentColor"/>
+        </marker>
+        <marker id="art" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 10 5 0 10z" fill="#0FB5C4"/>
+        </marker>
+      </defs>
+
+      <!-- three doors -->
+      <g fill="none" stroke="currentColor" stroke-width="1.5" opacity=".9">
+        <rect x="8" y="10" width="270" height="104" rx="8"/>
+        <rect x="315" y="10" width="270" height="104" rx="8"/>
+        <rect x="622" y="10" width="270" height="104" rx="8"/>
+      </g>
+      <g font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="1.6" fill="currentColor" opacity=".62">
+        <text x="26" y="36">STAFF</text><text x="333" y="36">CLAUDE</text><text x="640" y="36">DEVELOPER</text>
+      </g>
+      <g font-family="Space Grotesk, sans-serif" font-size="15" font-weight="700" fill="currentColor">
+        <text x="26" y="60">The visual editor</text>
+        <text x="333" y="60">A chat message</text>
+        <text x="640" y="60">Git directly</text>
+      </g>
+      <g font-family="Inter, sans-serif" font-size="12" fill="currentColor" opacity=".72">
+        <text x="26" y="80">Sign in by email — no GitHub</text>
+        <text x="26" y="98">account. Click the price, Publish.</text>
+        <text x="333" y="80">“Set Cove diesel to 4.19.”</text>
+        <text x="333" y="98">Claude edits the file and pushes.</text>
+        <text x="640" y="80">Edit, commit, push. For bulk</text>
+        <text x="640" y="98">and structural changes.</text>
+      </g>
+
+      <!-- converge -->
+      <g fill="none" stroke="#0FB5C4" stroke-width="2" marker-end="url(#art)">
+        <path d="M143 114 V150 Q143 166 159 166 H420 Q436 166 436 182 V196"/>
+        <path d="M450 114 V196"/>
+        <path d="M757 114 V150 Q757 166 741 166 H480 Q464 166 464 182 V196"/>
+      </g>
+      <rect x="336" y="133" width="228" height="17" fill="var(--paper)"/>
+      <text x="450" y="146" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5"
+            letter-spacing="1.2" fill="#0FB5C4">ALL THREE PRODUCE ONE COMMIT</text>
+
+      <!-- the repository -->
+      <rect x="150" y="200" width="600" height="132" rx="9" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <text x="172" y="226" font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="1.6"
+            fill="currentColor" opacity=".62">THE REPOSITORY — GITHUB</text>
+      <g font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">
+        <text x="172" y="252">content/fuel-prices.json</text>
+        <text x="172" y="272">content/locations/*.md</text>
+        <text x="172" y="292">content/promos/*.md</text>
+      </g>
+      <g font-family="Inter, sans-serif" font-size="12" fill="currentColor" opacity=".72">
+        <text x="440" y="252">Every change is a commit:</text>
+        <text x="440" y="270">who, what, when — and one-click undo.</text>
+        <text x="440" y="294">This file set is the only copy. Nothing</text>
+        <text x="440" y="312">can drift out of sync with it.</text>
+      </g>
+
+      <line x1="450" y1="332" x2="450" y2="384" stroke="currentColor" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="464" y="362" font-family="Inter, sans-serif" font-size="12" fill="currentColor" opacity=".72">a push starts the build</text>
+
+      <!-- build -->
+      <rect x="272" y="388" width="356" height="62" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <text x="450" y="413" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="15"
+            font-weight="700" fill="currentColor">Vercel rebuilds the site</text>
+      <text x="450" y="434" text-anchor="middle" font-family="Inter, sans-serif" font-size="12"
+            fill="currentColor" opacity=".72">automatic — nobody presses deploy</text>
+
+      <line x1="450" y1="450" x2="450" y2="500" stroke="#C9772E" stroke-width="2" marker-end="url(#ar)" opacity=".95"/>
+      <text x="464" y="478" font-family="IBM Plex Mono, monospace" font-size="12" fill="#C9772E">1–2 min</text>
+
+      <!-- live -->
+      <rect x="272" y="504" width="356" height="52" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <text x="450" y="527" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="15"
+            font-weight="700" fill="currentColor">lummibay.com</text>
+      <text x="450" y="546" text-anchor="middle" font-family="Inter, sans-serif" font-size="12"
+            fill="currentColor" opacity=".72">static pages on a CDN — no database behind them</text>
+    </svg>
+    <figcaption><strong>Three doors, one commit.</strong> The teal paths are the thing that matters:
+    the visual editor, a chat message and a developer's push all end up as the same kind of change to
+    the same files, so there is no separate "CMS content" that can disagree with the repository. The
+    cedar arrow is the one cost of the model — publishing is not instant.</figcaption>
+  </figure>
+
+  <div class="cols">
+    <div class="card">
+      <h3>What the model buys you</h3>
+      <p><strong>Every change is a commit</strong> — who, what, when, and a one-click revert. A wrong
+      fuel price is undone by reverting, not by remembering the old number.</p>
+      <p><strong>Nothing to back up</strong>, because the repository is the backup. No database, no
+      CMS server, no patching, no monthly database bill.</p>
+      <p><strong>The site cannot go down because the CMS did.</strong> Published pages are static
+      files. If the editor is unreachable, staff cannot edit — visitors never notice.</p>
+    </div>
+    <div class="card">
+      <h3>Limits to know before training staff</h3>
+      <p><strong>Two editor logins</strong> on the free tier; a third person costs $29/mo. Pick the
+      two before provisioning — shared logins destroy the per-person history that is half the point.</p>
+      <p><strong>Staff edit content, not layout.</strong> Prices, hours, copy, promos, the Careers
+      link. Not sections, colours, or new pages. That is deliberate: handing layout to non-designers
+      is harder for them, not easier.</p>
+      <p><strong>A failed build leaves the old site up.</strong> Visitors see the previous page rather
+      than an error — but someone has to notice, so build failures need to reach a human.</p>
+    </div>
+  </div>
+
+  <div class="flag">
+    <b>The one real trade-off</b>
+    <p>Publishing takes <strong>one to two minutes</strong>, and a cached page can lag a little
+    further. For hours, promos and store copy that is irrelevant.</p>
+    <p><strong>For fuel prices it is a genuine constraint.</strong> If a posted price has to be
+    correct to the minute, this stack is the wrong shape — and that is worth saying now rather than
+    discovering it at launch. Everything else about the git-backed model is upside; this is the part
+    that costs something.</p>
+  </div>
+
+  <h3 style="margin-top:34px">Scheduling: can a promo take itself down at noon?</h3>
+  <p class="snote" style="margin-top:8px"><strong>Yes — but it costs $20/mo, and that is worth
+  knowing before it is promised to anyone.</strong> A static page does not know what time it is;
+  it was rendered when someone last saved. Something has to <em>happen</em> at noon.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Mechanism</th><th>Precision at noon</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td>Scheduled job on <strong>Vercel Pro</strong></td><td>Exact, to the minute</td><td class="money">$20/mo</td></tr>
+        <tr><td>The same job on <strong>Vercel Hobby</strong></td><td><strong>Not possible</strong> — one run per day, ±59 min</td><td class="money">$0</td></tr>
+        <tr><td>Timed page refresh (ISR)</td><td>Late by the interval, <em>plus one stale view</em></td><td class="money">$0</td></tr>
+        <tr><td>Promo slot rendered per visitor</td><td>Exact</td><td class="money">$0 + compute</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="snote" style="margin-top:14px"><strong>Settled: this is included.</strong> The free
+  plan cannot do it — one run a day, landing anywhere inside the hour — but the free plan is not
+  available to us anyway: Vercel restricts it to non-commercial use, and this is a commercial
+  site. Pro is required for that reason alone, and per-minute scheduling comes with it. Verified
+  against Vercel's documentation, August 2026.</p>
+
+  <div class="flag" style="border-left-color:var(--navy)">
+    <b>Why fuel prices only exist once</b>
+    <p>All eight prices live in a single file. The price block, the condensed bar, the panel and the
+    Fuel Prices page all read from it, so <strong>changing the number once changes it everywhere</strong>.
+    There is no second copy anywhere in the site, and that is enforced by the data model rather than by
+    anyone remembering to update both places.</p>
+  </div>
+</section>
+
+<footer>
+  Full detail in the repository: <span class="mono">docs/roadmap.md</span> ·
+  <span class="mono">docs/launch-checklist.md</span> · <span class="mono">docs/content-updates.md</span> ·
+  thirteen decisions in <span class="mono">docs/adr/</span>. Branch <span class="mono">claude/grill-with-docs-0twl4v</span>.
+</footer>
+
+</div>

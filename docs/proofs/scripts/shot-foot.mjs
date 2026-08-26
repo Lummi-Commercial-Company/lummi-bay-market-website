@@ -1,0 +1,12 @@
+import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const b = await chromium.launch();
+const pg = await b.newPage({viewport:{width:900,height:2600}, deviceScaleFactor:2});
+await pg.goto('file://'+process.cwd()+'/fuel-strip-proof.html');
+await pg.waitForTimeout(500);
+await pg.evaluate(()=>{const st=document.getElementById('j-phone');
+  st.style.height=st.querySelector('.scroller').scrollHeight+'px';});
+await pg.waitForTimeout(300);
+const el = await pg.$('#j-phone .homefoot');
+await el.scrollIntoViewIfNeeded(); await pg.waitForTimeout(200);
+await el.screenshot({path:'foot-2col.png'});
+await b.close();

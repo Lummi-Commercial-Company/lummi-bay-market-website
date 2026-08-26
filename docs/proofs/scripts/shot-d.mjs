@@ -1,0 +1,11 @@
+import {chromium} from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const b=await chromium.launch();const p=await b.newPage({viewport:{width:1400,height:1100},deviceScaleFactor:2});
+await p.goto('file://'+process.cwd()+'/fuel-strip-proof.html');
+await p.waitForTimeout(500);
+await p.evaluate(async()=>{const st=document.querySelector('#j-desk');
+  st.scrollIntoView({block:'center'});
+  st.querySelector('.scroller').scrollTop=430;
+  await new Promise(r=>setTimeout(r,300));});
+await p.waitForTimeout(300);
+await p.locator('#j-desk').screenshot({path:'cards-desk.png'});
+console.log('cards-desk.png');await b.close();
