@@ -82,7 +82,7 @@
     format when its colours are right.</p>
   </div>
 
-  <h2>Two files, named for the background they sit on</h2>
+  <h2>Three files, named for the background they sit on</h2>
   <p class="note">Both are the Market lockup. The filename says which <em>background</em> the file
   is for, never what colour its own wordmark is — <span class="mono">on-dark</span> holds the white
   wordmark. Naming these "reversed" and "light" got them swapped once already, because both words
@@ -91,6 +91,8 @@
     <tr><th>Ground</th><th>File</th><th>Canvas</th><th>Ink</th><th>Where</th></tr>
     <tr><td>Dark background</td><td class="n">logo-market-on-dark.png</td><td class="n">336 &times; 120</td>
         <td class="n">334 &times; 109 &middot; 3.06:1</td><td>The sticky header, every page</td></tr>
+    <tr><td>Dark, high density</td><td class="n">logo-market-on-dark@3x.png</td><td class="n">1008 &times; 360</td>
+        <td class="n">1002 &times; 323 &middot; 3.10:1</td><td>Same slot, via <span class="mono">srcset</span> &mdash; 3&times; screens only</td></tr>
     <tr><td>Light background</td><td class="n">logo-market-on-light.png</td><td class="n">512 &times; 512</td>
         <td class="n">503 &times; 162 &middot; 3.10:1</td><td>Home hero, /rewards, print</td></tr>
   </table>
@@ -99,6 +101,8 @@
   <div class="vp">
     <header class="sitebar">
       <a class="lock" href="#"><img src="../../public/brand/logo-market-on-dark.png"
+         srcset="../../public/brand/logo-market-on-dark.png 1x,
+                 ../../public/brand/logo-market-on-dark@3x.png 3x"
          alt="Lummi Bay Market — home"></a>
       <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck Stop</a></nav>
       <a class="pill" href="#">Get the App</a>
@@ -119,6 +123,8 @@
   <div class="vp phone">
     <header class="sitebar">
       <a class="lock" href="#"><img src="../../public/brand/logo-market-on-dark.png"
+         srcset="../../public/brand/logo-market-on-dark.png 1x,
+                 ../../public/brand/logo-market-on-dark@3x.png 3x"
          alt="Lummi Bay Market — home"></a>
       <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck&nbsp;Stop</a></nav>
       <a class="pill" href="#">Get the App</a>
@@ -138,6 +144,8 @@
   <div class="vp">
     <header class="sitebar">
       <a class="lock" href="#"><img src="../../public/brand/logo-market-on-dark.png"
+         srcset="../../public/brand/logo-market-on-dark.png 1x,
+                 ../../public/brand/logo-market-on-dark@3x.png 3x"
          alt="Lummi Bay Market — home"></a>
       <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck Stop</a></nav>
       <a class="pill" href="#">Get the App</a>
@@ -158,10 +166,10 @@
   it is displayed at.</p>
   <table>
     <tr><th>Surface</th><th>CSS width</th><th>3&times; needs</th><th>File</th><th>Ink available</th><th>Verdict</th></tr>
-    <tr><td>Phone header</td><td class="n">95px</td><td class="n">285px</td><td class="n">on-dark</td>
-        <td class="n">334px</td><td class="n ok">OK &mdash; 1.17&times; spare</td></tr>
-    <tr><td>Desktop header</td><td class="n">112px</td><td class="n">336px</td><td class="n">on-dark</td>
-        <td class="n">334px</td><td class="n ok">OK &mdash; 99.4%</td></tr>
+    <tr><td>Phone header</td><td class="n">95px</td><td class="n">285px</td><td class="n">on-dark@3x</td>
+        <td class="n">1002px</td><td class="n ok">OK &mdash; 3.52&times; spare</td></tr>
+    <tr><td>Desktop header</td><td class="n">112px</td><td class="n">336px</td><td class="n">on-dark@3x</td>
+        <td class="n">1002px</td><td class="n ok">OK &mdash; 2.98&times; spare</td></tr>
     <tr><td>Phone hero</td><td class="n">123px</td><td class="n">369px</td><td class="n">on-light</td>
         <td class="n">503px</td><td class="n ok">OK &mdash; 1.36&times; spare</td></tr>
     <tr><td>Desktop hero</td><td class="n">146px</td><td class="n">438px</td><td class="n">on-light</td>
