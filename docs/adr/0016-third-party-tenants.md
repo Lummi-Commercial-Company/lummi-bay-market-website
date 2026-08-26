@@ -6,13 +6,45 @@ Terms (Location, Truck Stop): `CONTEXT.md`. Bounded by ADR 0001 (what stays off 
 and the hard rules in CLAUDE.md. Built on the collection mechanism in ADR 0015.
 
 ## Context
-Three independent businesses rent space at Exit 260 / Salish Village today:
+Independent businesses operate at Exit 260 / Salish Village. Lummi Bay Market owns,
+operates and manages none of them — but **they are not all our tenants**, and that turns out
+to matter more than it first appears.
 
-- **Wendy's**, in its own building on the property,
-- **High Tide Coffee**, a drive-through on the property,
-- the **piroshki counter**, inside the Exit 260 store. *Trading name to confirm.*
+| Business | Where | Rents from | Status |
+|---|---|---|---|
+| **Piroshky Piroshky** | A counter **inside** the Exit 260 convenience store | **Lummi Bay Market** | Open |
+| **Wendy's** | Its own building on the property | **Lummi Commercial Company** — space *and* building | Open |
+| **High Tide Coffee** *(name to confirm)* | A coffee **truck** outside Exit 260, in a rental space | To confirm — presumed LCC | Open |
+| **Black Bear Diner** | Its own building on the property, same arrangement as Wendy's | **Lummi Commercial Company** | Planned, not yet built |
 
-Lummi Bay Market does not own or operate any of them.
+Lummi Commercial Company owns, operates and manages Lummi Bay Market. So LCC is both this
+brand's parent and, for the freestanding buildings, the landlord.
+
+### The part that needs a decision, not just a schema
+
+**Only Piroshky Piroshky is a Lummi Bay Market tenant.** Wendy's and Black Bear Diner rent
+building and land from LCC. The coffee truck's landlord is unconfirmed.
+
+That runs into ADR 0001, which keeps LCC's own business — the Salish Village development,
+billboard leasing, the rest of the portfolio — off this site. A page advertising LCC's
+commercial tenants is, read strictly, LCC's leasing business appearing on a retail brand
+site, which is the thing ADR 0001 was written to prevent.
+
+Two consequences follow, and both are worth stating before anyone builds anything:
+
+1. **A contract requiring a listing would most likely be an LCC contract, not a Lummi Bay
+   Market one.** If Wendy's franchise terms oblige the landlord to list the business, the
+   obligation sits with LCC and could equally be met on lcc-lummi.com. Whether it lands on
+   *this* site is a choice, not a requirement. That should be checked before it is assumed.
+2. **The justification for putting them here has to be the guest, not the lease.** There is a
+   good one: a driver stopping for fuel reasonably wants to know what else is on the
+   property to eat. That is a Lummi Bay Market service to a Lummi Bay Market customer, and
+   it holds regardless of who collects the rent. If that is the reason, the page is about
+   *what is here*, not about who leases from whom — and no page should describe a leasing
+   relationship at all.
+
+This ADR takes the second reading. **The site never says who rents from whom.** It says what
+is on the property and that we do not operate it.
 
 **Whether to advertise them at all is undecided, and this ADR does not decide it.** The
 ask is narrower and worth stating plainly: the *ability* to publish such a page should
@@ -49,6 +81,11 @@ header image for the business, its hours, and a short description — the same s
 **The index is called "Also at Exit 260", not "Salish Village".** The property is named in
 market terms, which is how a guest thinks of it and which cannot be confused with the LCC
 development. `aka: Salish Village` stays on the Location record; it is not the page title.
+
+**Landlord is recorded, and never published.** Each record carries
+`landlord: lummi-bay-market | lummi-commercial-company`, because the distinction is real and
+someone will ask. It drives nothing on the page and is never rendered. A guest does not care,
+and publishing it would put LCC's leasing business on the site through the back door.
 
 **A tenant is never a Location.** It goes in `content/tenants/`, not `content/locations/`.
 This is the load-bearing part of the decision, because Location is not just a label: the
@@ -90,15 +127,22 @@ that is a nav decision to take then, on its own merits.
 - A tenant that leaves is unpublished; no code changes, no dead route in the nav.
 - Tenants never enter the fuel table, the Locations index, or the footer's location list —
   they are not in the folder those read from.
-- The piroshki counter is *inside* the Exit 260 store and Wendy's is a separate building on
-  the same property. The schema records that as `placement: inside | on-property`, because
-  "where is it" is the guest's actual question and the two answers are different errands.
+- `placement: inside-store | freestanding-building | mobile-unit` — because "where is it" is
+  the guest's real question, and walking to a counter inside the shop, driving round to a
+  building, and finding a truck in the lot are three different errands. Two values would have
+  collapsed the coffee truck into Wendy's.
+- `status: open | planned` — Black Bear Diner is not built yet. A planned tenant is a record
+  that exists and does not render, so the page can be written in advance and published on
+  opening day rather than written on opening day.
 - This site now has a place where non-Lummi-Bay businesses appear. That is a real widening
   of scope, and ADR 0001's boundary is what keeps it narrow: **tenants of a Lummi Bay
   property, not businesses in the LCC portfolio.** A future request to add Silver Reef,
   Loomis Trail or the development itself is still refused by ADR 0001.
 - **Nothing here obliges the business to advertise anyone.** If the answer is that tenants
   stay off the site, the cost of this decision is one unused collection definition.
-- Two things to confirm when convenient: the piroshki counter's exact trading name, and
-  whether any current tenant contract already requires listing. If one does, this stops
-  being speculative and joins Phase 0.
+- To confirm: the coffee truck's exact trading name (**High Tide Coffee** or **Tide's In
+  Coffee** — both have been said, and a tenant's name is the one thing on their page that
+  cannot be approximately right), and who its landlord is.
+- To confirm, and it is the one that could change this ADR: **whether any tenant contract
+  requires a listing, and on whose website.** If the obligation is LCC's and lcc-lummi.com
+  satisfies it, this collection stays a convenience rather than a compliance mechanism.
