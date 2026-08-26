@@ -218,7 +218,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   border-bottom:2px solid var(--lb-teal); border-radius:6px;
   box-shadow:0 14px 30px -14px rgba(20,57,107,.34);
 }
-.d .fuelblock{top:73px; --cue-h:28px}
+.d .fuelblock{top:65px; --cue-h:28px; border-radius:0 0 6px 6px}
 .p .fuelblock{top:69px; width:auto; margin:0; --cue-h:26px}
 /* on a phone the rail must not box the block, or sticky has only the block's own
    height to stick within and it scrolls away immediately */
@@ -293,6 +293,9 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   border-bottom:2px solid var(--lb-teal); border-radius:6px;
   box-shadow:0 10px 24px -14px rgba(20,57,107,.3); padding:9px 11px;
 }
+.d .fuelblock.cond .oneline{border-radius:0 0 6px 6px}
+.d .fuelblock[open]:not(.cond){border-radius:0}
+.d .fuelblock.cond[open] .oneline{border-radius:0}
 
 /* open is ONE card: the panel butts onto the block, no gap and no second radius */
 .condpanel{
@@ -313,8 +316,12 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 /* the two-column top region; everything below the hero is full width */
 .d .pagegrid{
   display:grid; align-content:start; grid-template-columns:1fr 400px;
-  column-gap:14px; align-items:start; padding:30px 26px 0;
+  column-gap:14px; align-items:start; padding:0 26px;
 }
+/* the top offset belongs to the content column, not the grid — the rail has to start
+   flush against the header or the block drops in and then jumps up on first scroll */
+.d .pagegrid .maincol{padding-top:30px}
+.d .pagegrid .homerest{padding-top:30px}
 .d .pagegrid .railcol{
   grid-column:2; grid-row:1/span 2; align-self:stretch;
   pointer-events:none; z-index:40;
@@ -872,10 +879,17 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
       blk.classList.toggle('cond', on);
     }
     var natural = false;
+    /* The sticky header covers the top of the scroller, so a sentinel measured against
+       the raw viewport is still "visible" long after the guest has stopped seeing it.
+       Pull the root's top edge down to the underside of the header and the trigger
+       matches what is actually on screen — which is also what makes a short page
+       condense at all. */
+    var hdH = Math.round(hd.parentNode.getBoundingClientRect().height);
     new IntersectionObserver(function(entries){
       natural = entries[0].intersectionRatio < 0.5;
       setCond(natural || condF.checked);
-    }, {root: vp, threshold: [0, 0.5, 1]}).observe(sentinel);
+    }, {root: vp, rootMargin: '-' + hdH + 'px 0px 0px 0px', threshold: [0, 0.5, 1]})
+      .observe(sentinel);
 
     /* BACK TO TOP — ADR 0011, 0.75 of a viewport, proportional not pixel */
     var tick = false;
