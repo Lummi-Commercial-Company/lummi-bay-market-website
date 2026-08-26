@@ -77,3 +77,30 @@ of a footer costs nothing. After: **52–60px** of clearance on every page, no o
   position 0, block back to its full card, button hidden itself, focus on the header lockup.
   No code in the button knows about the fuel block; ADR 0005 keys the condense to scroll
   position, so returning the scroll position returns the block. One less coupling to maintain.
+
+## Revision — the gutter is only needed where the disc can reach the footer's last row
+
+The decision above reserves `padding-bottom: 78px` on a phone and `74px` on desktop
+unconditionally. Re-measured against the Home layout in `docs/proofs/home-review.html`,
+that is right on a phone and wrong on desktop.
+
+The disc is bottom-right. What it can land on is whatever the footer's last row puts
+under it — and that is a function of width:
+
+| Width | Right edge of "Lummi Commercial Companies" | Left edge of the disc | Overlap |
+|---|---|---|---|
+| Desktop 1180 | 381px | 1003px | none — 622px of clearance |
+| Phone 375 | 747px | 745px | 2px |
+
+So the phone gutter is load-bearing exactly as the original measurement found, and the
+desktop gutter reserves 74px against a collision that cannot occur while the footer's
+bottom row stays left-aligned.
+
+**Desktop drops to the footer's own `30px`. The phone goes to `72px`** — the true floor:
+a 46px disc, 16px off the bottom, plus 10px of breathing. Below that the disc touches the
+one link the brand rules constrain most tightly.
+
+The rule is better stated as **reserve the gutter where the footer's last row can
+horizontally reach the disc**, rather than as two fixed numbers. If that row ever
+centres, right-aligns, or grows wide enough to run under the disc on desktop, the
+desktop gutter comes back — and the check is one measurement, not a judgement.
