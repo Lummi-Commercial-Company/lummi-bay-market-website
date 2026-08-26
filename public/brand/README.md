@@ -21,10 +21,16 @@ to white yourself — that needs an approved reversed lockup from the brand owne
 
 The three favicons are RealFaviconGenerator output and they carry **the full lockup**, a ~3:1
 horizontal band. Rendered down to a browser tab it is a smear at 32px and unreadable at 16px. The
-files are correctly formed; the artwork inside them is the wrong crop for the job. A favicon needs
-the **mark alone** — the paddle, or a monogram — and skill `brand-system` names the Market lockup
-as the master mark without authorising the paddle as a standalone, so ownership must approve one
-before it ships.
+files are correctly formed; the artwork inside them is the wrong crop for the job.
+
+**Ownership has ruled that the paddle alone is not acceptable as a standalone mark.** That closes
+the obvious escape route — there is no croppable element in the lockup that may stand on its own —
+so a favicon needs **new art**: a monogram, or another device, designed and approved. Do not crop
+one out of the lockup to fill the gap in the meantime; it would be exactly the unauthorised
+standalone mark that was just ruled out.
+
+Until that art exists the current set stays. It is wrong-but-harmless: browsers render something
+rather than nothing, and nothing else depends on it. Tracked as A11 in `docs/launch-checklist.md`.
 
 **Watch for wrapped bitmaps.** `favicon.svg` looks like vector from its extension and is not. To
 check any `.svg` in five seconds, open it in a text editor: `<path`, `<polygon` and friends mean
@@ -101,7 +107,7 @@ ruled that vector masters stay with the designer rather than living here.
 
 | File | Why |
 |---|---|
-| A favicon built from the **mark alone** | The present set carries the full lockup and is illegible at tab size. Needs ownership to approve a standalone mark — `brand-system` names only the full lockup |
+| A favicon mark — **new art** | See below. Not a crop of anything that exists |
 
 Masters (`.ai`, `.eps`) belong in `assets/brand-source/`, which is empty.
 

@@ -16,11 +16,15 @@ design rests on. `HANDOFF.md` names it the most important file for deciding what
 ## Phase 0 — unblock (parallel, mostly not engineering)
 These gate later phases and none of them are code. Start them now because they have lead times.
 
-1. **The logo files.** Still not in the repo — it arrived as a chat image. Needs the real vector
-   (SVG preferred, EPS/AI acceptable) plus a **reversed / light version**, because of item 2.
-2. **Resolve the navy-on-navy header** (ADR 0006). The wordmark is navy and the sticky header is
-   navy, so today the header cannot carry the logo at all. Either an approved reversed lockup or
-   a light header ground. **This blocks the header, which is on every page.**
+1. ~~**The logo files.**~~ **Done.** In the repo at `public/brand/`, as PNG — a supplied vector
+   was rejected because its paddle did not match the approved art. Vector masters stay with the
+   designer by decision, not oversight.
+2. ~~**Resolve the navy-on-navy header.**~~ **Done — the header stays navy.** A reversed lockup
+   was supplied, so the light-ground alternative was never needed. See the amendment to ADR 0006.
+2a. **A favicon mark.** The one logo item still open, and it needs *new art*. The supplied set
+   carries the full lockup, which is a 3:1 band and unreadable at 16px, and ownership has ruled
+   the paddle alone unacceptable as a standalone mark. So a monogram or another device has to be
+   designed and approved. This has a lead time; it blocks nothing but ships visibly.
 3. **Confirm addresses, hours and phone numbers.** Everything in `location-content-model` was
    pulled from lcc-lummi.com and is marked unconfirmed. Hours must come back in the short form
    (`6am–9pm`) — there is a measured length budget on the Location card line (ADR 0009).
