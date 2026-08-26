@@ -7,7 +7,7 @@ compressed by working faster.
 ## A. Only the client can provide these
 | # | Item | Blocks | Notes |
 |---|---|---|---|
-| A1 | **Logo vector files** — including a reversed/light lockup | The header, on every page | Currently a chat image; not in the repo. See ADR 0006 |
+| ~~A1~~ | ~~**Logo vector files** — including a reversed/light lockup~~ **Done** | — | Delivered as PNG in `public/brand/`. The vector was rejected on colour fidelity; masters stay with the designer. ADR 0006, amended |
 | A2 | **Confirmed addresses, hours, phone numbers** | Every Location page, the footer | Present values were scraped and are marked unconfirmed |
 | A3 | **Art direction + budget** — commissioned Lummi art, photography, or both | Every page's finished look | Site has no imagery at all today (ADR 0012). Note the CMS free tier caps assets at **100 MB** — a real photo set exceeds it |
 | A4 | **Cultural approval** for any Coast Salish art | Launch, unconditionally | Final art must be authentic, commissioned, or tribe-approved |
@@ -17,6 +17,7 @@ compressed by working faster.
 | A8 | **Rewards app links** — the real App Store / Play URLs | The Rewards pill, on every page | Currently `#` |
 | A9 | **Careers link destination** | Footer | Editable field, needs a target |
 | A10 | **Contact form destination** — which inbox, and who monitors it | The footer form | Also decides whether spam protection is needed |
+| A11 | **A favicon mark** — new art, not a crop | The browser tab, every page | The supplied set carries the full 3:1 lockup, illegible at 16px. Paddle-alone ruled out by ownership, so a monogram or other device must be designed and approved |
 
 ## B. Engineering
 | # | Item | Notes |
