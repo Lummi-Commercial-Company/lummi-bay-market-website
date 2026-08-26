@@ -82,21 +82,23 @@
     format when its colours are right.</p>
   </div>
 
-  <h2>Two files, two grounds</h2>
-  <p class="note">Both are the Market lockup. Which one a surface takes is decided by its
-  background, not by page or breakpoint — there is no other rule to remember.</p>
+  <h2>Two files, named for the background they sit on</h2>
+  <p class="note">Both are the Market lockup. The filename says which <em>background</em> the file
+  is for, never what colour its own wordmark is — <span class="mono">on-dark</span> holds the white
+  wordmark. Naming these "reversed" and "light" got them swapped once already, because both words
+  can be read either way.</p>
   <table>
     <tr><th>Ground</th><th>File</th><th>Canvas</th><th>Ink</th><th>Where</th></tr>
-    <tr><td>Navy / dark</td><td class="n">logo-market-reversed.png</td><td class="n">336 &times; 120</td>
+    <tr><td>Dark background</td><td class="n">logo-market-on-dark.png</td><td class="n">336 &times; 120</td>
         <td class="n">334 &times; 109 &middot; 3.06:1</td><td>The sticky header, every page</td></tr>
-    <tr><td>Light</td><td class="n">logo-market.png</td><td class="n">512 &times; 512</td>
+    <tr><td>Light background</td><td class="n">logo-market-on-light.png</td><td class="n">512 &times; 512</td>
         <td class="n">503 &times; 162 &middot; 3.10:1</td><td>Home hero, /rewards, print</td></tr>
   </table>
 
   <h2>Desktop — 112px logo on a navy bar</h2>
   <div class="vp">
     <header class="sitebar">
-      <a class="lock" href="#"><img src="../../public/brand/logo-market-reversed.png"
+      <a class="lock" href="#"><img src="../../public/brand/logo-market-on-dark.png"
          alt="Lummi Bay Market — home"></a>
       <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck Stop</a></nav>
       <a class="pill" href="#">Get the App</a>
@@ -116,7 +118,7 @@
   its words. Zero horizontal slack by design — ADR 0006 measured it.</p>
   <div class="vp phone">
     <header class="sitebar">
-      <a class="lock" href="#"><img src="../../public/brand/logo-market-reversed.png"
+      <a class="lock" href="#"><img src="../../public/brand/logo-market-on-dark.png"
          alt="Lummi Bay Market — home"></a>
       <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck&nbsp;Stop</a></nav>
       <a class="pill" href="#">Get the App</a>
@@ -131,18 +133,18 @@
   </div>
 
   <h2>Light ground — the navy lockup, 146px hero</h2>
-  <p class="note">The reversed file cannot appear here: a white wordmark on
+  <p class="note">The on-dark file cannot appear here: a white wordmark on
   <span class="mono">--lb-bone</span> all but vanishes. This is why PNG-only still needs both files.</p>
   <div class="vp">
     <header class="sitebar">
-      <a class="lock" href="#"><img src="../../public/brand/logo-market-reversed.png"
+      <a class="lock" href="#"><img src="../../public/brand/logo-market-on-dark.png"
          alt="Lummi Bay Market — home"></a>
       <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck Stop</a></nav>
       <a class="pill" href="#">Get the App</a>
     </header>
     <div class="waterline"></div>
     <div class="hero">
-      <img src="../../public/brand/logo-market.png" alt="Lummi Bay Market">
+      <img src="../../public/brand/logo-market-on-light.png" alt="Lummi Bay Market">
       <p>Three locations on the Lummi Peninsula</p>
     </div>
   </div>
@@ -156,19 +158,19 @@
   it is displayed at.</p>
   <table>
     <tr><th>Surface</th><th>CSS width</th><th>3&times; needs</th><th>File</th><th>Ink available</th><th>Verdict</th></tr>
-    <tr><td>Phone header</td><td class="n">95px</td><td class="n">285px</td><td class="n">reversed</td>
+    <tr><td>Phone header</td><td class="n">95px</td><td class="n">285px</td><td class="n">on-dark</td>
         <td class="n">334px</td><td class="n ok">OK &mdash; 1.17&times; spare</td></tr>
-    <tr><td>Desktop header</td><td class="n">112px</td><td class="n">336px</td><td class="n">reversed</td>
+    <tr><td>Desktop header</td><td class="n">112px</td><td class="n">336px</td><td class="n">on-dark</td>
         <td class="n">334px</td><td class="n ok">OK &mdash; 99.4%</td></tr>
-    <tr><td>Phone hero</td><td class="n">123px</td><td class="n">369px</td><td class="n">navy</td>
+    <tr><td>Phone hero</td><td class="n">123px</td><td class="n">369px</td><td class="n">on-light</td>
         <td class="n">503px</td><td class="n ok">OK &mdash; 1.36&times; spare</td></tr>
-    <tr><td>Desktop hero</td><td class="n">146px</td><td class="n">438px</td><td class="n">navy</td>
+    <tr><td>Desktop hero</td><td class="n">146px</td><td class="n">438px</td><td class="n">on-light</td>
         <td class="n">503px</td><td class="n ok">OK &mdash; 1.15&times; spare</td></tr>
   </table>
   <p class="note" style="margin-top:14px"><b>PNG is sufficient everywhere the logo currently
   appears, to 3&times;.</b> Two things to know rather than fix. The desktop header lands at 99.4% of
   a true 3&times; sample — 334px of ink against 336px wanted, a 0.6% shortfall no eye resolves. And
-  the reversed file has no headroom beyond that: any future use of the reversed lockup larger than
+  the on-dark file has no headroom beyond that: any future use of the on-dark lockup larger than
   ~111px CSS (a dark hero, a footer lockup, an OG image) would upscale. The cheap insurance is one
   more export at <span class="mono">1008 &times; 360</span> &mdash; 3&times; the current canvas, same
   art.</p>
@@ -180,7 +182,7 @@
   <p class="note"><b>Recolouring and masking.</b> A PNG cannot be tinted in CSS or used as a
   <span class="mono">mask-image</span>. Nothing in the locked architecture asks for that — and the
   logo may not be recoloured anyway, so the constraint costs nothing here.</p>
-  <p class="note"><b>Weight.</b> 15.6 KB reversed, 27.6 KB navy. Both trivial, both cacheable, both
+  <p class="note"><b>Weight.</b> 15.6 KB on-dark, 27.6 KB on-light. Both trivial, both cacheable, both
   served once per visit.</p>
 
   <p class="legend" style="margin-top:34px">Rendered in Chromium 141. Logo files loaded unmodified

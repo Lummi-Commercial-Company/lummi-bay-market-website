@@ -12,8 +12,8 @@ to white yourself — that needs an approved reversed lockup from the brand owne
 
 | File | What it actually is | Status |
 |---|---|---|
-| `logo-market.png` | 512 x 512, the Market lockup in navy `#1D3D7C` on transparency, letterboxed with ~65% empty vertical space | Primary raster for light grounds. Uploaded as `icon.png`; renamed, because it is the lockup, not an icon |
-| `logo-market-reversed.png` | 336 x 120, the **reversed** lockup — white wordmark, navy outline, saturated cedar paddle with visible grain | The reversed raster. Uploaded as `logo-market.png.png`; renamed |
+| `logo-market-on-dark.png` | 336 x 120, **white** wordmark, navy outline, cedar paddle with visible grain | Goes on dark backgrounds — the sticky header |
+| `logo-market-on-light.png` | 512 x 512, **navy** `#1D3D7C` wordmark, letterboxed with ~65% empty vertical space | Goes on light backgrounds — home hero, `/rewards` |
 | `favicon.svg` | **Not a vector.** An SVG wrapper around one embedded base64 PNG — zero `<path>` elements. The payload is byte-identical to `logo-market.png` (sha256 `ff999899…`, 27,566 bytes) | Works, but does not scale |
 | `favicon.ico` | Multi-size ICO, 48px and 32px | Fine as a file |
 | `favicon-96x96.png` | 96 x 96 | Fine as a file |
@@ -38,15 +38,24 @@ ownership ruled the vector out. It is archived at `assets/brand-source/logo-mark
 never served; nothing here references it. If a corrected vector arrives, revisit this — vector is
 the better format when its colours are right.
 
-Which file a surface takes is decided by its **background**, and by nothing else:
+### The filename names the background, never the ink
 
-| Ground | File | Ink |
-|---|---|---|
-| Navy / dark — the sticky header, every page | `logo-market-reversed.png` | 334 x 109, 3.06:1 |
-| Light — home hero, `/rewards`, print | `logo-market.png` | 503 x 162, 3.10:1 |
+`on-dark` holds the **white** wordmark. `on-light` holds the **navy** one. The name answers "what
+do I put this on", and never "what colour is it" — those two readings are opposites, and getting
+them backwards puts an invisible logo on every page.
+
+| Background | File | Ink | Where |
+|---|---|---|---|
+| Dark | `logo-market-on-dark.png` | 334 x 109, 3.06:1 | The sticky header, every page |
+| Light | `logo-market-on-light.png` | 503 x 162, 3.10:1 | Home hero, `/rewards` |
+
+This pair was called `logo-market.png` and `logo-market-reversed.png` and got swapped, because
+"reversed" and "light" can each be read as either the ink or the ground. If these are ever renamed
+again, keep the property that the name states the background.
 
 Neither file can cover for the other. A white wordmark on `--lb-bone` all but vanishes; a navy
-wordmark on `--lb-navy` measures 1.6:1 and disappears outright.
+wordmark on `--lb-navy` measures 1.6:1 and disappears outright. **Check a rename by opening the
+file, not by reading its name.**
 
 ### PNG is sufficient at 3x DPR — measured, not assumed
 
@@ -55,27 +64,26 @@ Rendered evidence and the full table: `docs/proofs/header-logo-proof.html`.
 
 | Surface | CSS | 3x wants | File | Ink | Verdict |
 |---|---|---|---|---|---|
-| Phone header | 95px | 285px | reversed | 334px | OK, 1.17x spare |
-| Desktop header | 112px | 336px | reversed | 334px | OK, 99.4% |
-| Phone hero | 123px | 369px | navy | 503px | OK, 1.36x spare |
-| Desktop hero | 146px | 438px | navy | 503px | OK, 1.15x spare |
+| Phone header | 95px | 285px | on-dark | 334px | OK, 1.17x spare |
+| Desktop header | 112px | 336px | on-dark | 334px | OK, 99.4% |
+| Phone hero | 123px | 369px | on-light | 503px | OK, 1.36x spare |
+| Desktop hero | 146px | 438px | on-light | 503px | OK, 1.15x spare |
 
 Two things to know rather than fix. The desktop header lands at 99.4% of a true 3x sample — a 0.6%
-shortfall no eye resolves. And the reversed file has no headroom past that: any future reversed use
+shortfall no eye resolves. And the on-dark file has no headroom past that: any future on-dark use
 wider than ~111px CSS (a dark hero, a footer lockup, an OG image) would upscale. Cheap insurance is
 one more export of the same art at **1008 x 360**.
 
-What PNG gives up: print and large format above ~500px, which is what `assets/brand-source/` is
-for; and CSS tinting or `mask-image`, which the locked logo may not be subjected to anyway.
+What PNG gives up: CSS tinting and `mask-image`, which a locked logo may not be subjected to
+anyway; and print or large format above ~500px, which is out of this repo's scope — ownership has
+ruled that vector masters stay with the designer rather than living here.
 
 ## Still needed
 
 | File | Why |
 |---|---|
-| A favicon set built from the **mark alone** | The present set carries the full lockup and is illegible at tab size. Needs an approved standalone mark first |
-| `logo-market-reversed.png` at **1008 x 360** | Optional. Gives the reversed lockup headroom above ~111px CSS at 3x |
-| The `.ai` / `.eps` masters in `assets/brand-source/` | Still empty apart from the rejected vector. Print and signage need them |
-| A corrected vector, eventually | Not blocking anything. Would let the PNG decision above be revisited |
+| A favicon built from the **mark alone** | The present set carries the full lockup and is illegible at tab size. Needs ownership to approve a standalone mark — `brand-system` names only the full lockup |
+| `logo-market-on-dark.png` at **1008 x 360** | Optional. Only needed if the on-dark lockup is ever used wider than ~111px CSS |
 
 Masters (`.ai`, `.eps`) belong in `assets/brand-source/`, which is empty.
 
