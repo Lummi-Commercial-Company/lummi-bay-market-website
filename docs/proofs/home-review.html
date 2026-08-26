@@ -1,0 +1,862 @@
+<title>Lummi Bay Home Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap">
+<style>
+/* ============================================================
+   REVIEW CHROME — deliberately not the brand.
+   Cool slate + a violet marker, so an annotation can never be
+   mistaken for site copy. Themed for the viewer.
+   ============================================================ */
+:root{
+  --c-bg:#EDEEF1; --c-surface:#FFFFFF; --c-sunk:#E3E5EA;
+  --c-text:#191C22; --c-dim:#5A616E; --c-line:#D3D7DE;
+  --c-mark:#6B4FA8; --c-mark-soft:#EFE9FA;
+  --c-warn:#9A5B12; --c-warn-soft:#FBEFDD;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --c-bg:#14161B; --c-surface:#1D2027; --c-sunk:#0F1115;
+    --c-text:#E7E9ED; --c-dim:#99A1AE; --c-line:#2E323B;
+    --c-mark:#A78BE8; --c-mark-soft:#241D33;
+    --c-warn:#E0A75E; --c-warn-soft:#2A2114;
+  }
+}
+:root[data-theme="dark"]{
+  --c-bg:#14161B; --c-surface:#1D2027; --c-sunk:#0F1115;
+  --c-text:#E7E9ED; --c-dim:#99A1AE; --c-line:#2E323B;
+  --c-mark:#A78BE8; --c-mark-soft:#241D33;
+  --c-warn:#E0A75E; --c-warn-soft:#2A2114;
+}
+
+/* LOCKED BRAND TOKENS — skill `brand-system`. Fixed in both themes on
+   purpose: this is a review of a light-ground site, so the frames must
+   render the site's own palette whatever theme the reviewer is using. */
+:root{
+  --lb-navy:#1C4E8F; --lb-navy-deep:#14396B; --lb-teal:#0FB5C4;
+  --lb-cedar:#C9772E; --lb-ground:#FBF9F4; --lb-paper:#FFFFFF;
+  --lb-ink:#2A2820; --lb-bone:#F5F1E8;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--c-bg); color:var(--c-text);
+  font:400 15px/1.6 "IBM Plex Sans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px; margin:0 auto; padding:40px 24px 80px}
+.lede{max-width:62ch}
+h1{
+  font:600 30px/1.2 "IBM Plex Sans",system-ui,sans-serif;
+  letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance;
+}
+.eyebrow{
+  font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--c-mark);
+  margin:0 0 14px;
+}
+p{margin:0 0 14px; color:var(--c-dim)}
+p strong{color:var(--c-text); font-weight:600}
+a{color:var(--c-mark)}
+code{
+  font:500 .88em/1 "IBM Plex Mono",ui-monospace,monospace;
+  background:var(--c-sunk); padding:2px 5px; border-radius:4px; color:var(--c-text);
+}
+hr.rule{border:0; border-top:1px solid var(--c-line); margin:44px 0}
+
+/* controls */
+.controls{
+  display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center;
+  background:var(--c-surface); border:1px solid var(--c-line);
+  border-radius:10px; padding:14px 18px; margin:26px 0 0;
+}
+.controls .ctl-lab{
+  font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--c-dim);
+}
+.sw{display:inline-flex; align-items:center; gap:9px; cursor:pointer; font-size:14px}
+.sw input{width:16px; height:16px; accent-color:var(--c-mark); cursor:pointer; margin:0}
+.sw:focus-within{outline:2px solid var(--c-mark); outline-offset:3px; border-radius:4px}
+
+/* frame furniture */
+.stage{margin:32px 0 0}
+.stage-hd{
+  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:0 0 14px;
+}
+.stage-hd h2{
+  font:600 19px/1.2 "IBM Plex Sans",system-ui,sans-serif; margin:0; letter-spacing:-.01em;
+}
+.stage-hd .dims{
+  font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;
+  color:var(--c-dim); letter-spacing:.06em;
+}
+.frame{
+  background:var(--c-sunk); border:1px solid var(--c-line); border-radius:12px;
+  overflow:hidden; position:relative; margin:0 auto;
+}
+.scaler{transform-origin:0 0; position:relative}
+.vp{
+  overflow-y:auto; overflow-x:hidden; position:relative;
+  background:var(--lb-ground); scrollbar-width:thin;
+}
+.scrollhint{
+  font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--c-dim);
+  margin:10px 0 0; text-align:center;
+}
+
+/* annotation callouts */
+.notes{display:grid; gap:12px; margin:22px 0 0; grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.note{
+  background:var(--c-surface); border:1px solid var(--c-line);
+  border-left:3px solid var(--c-mark); border-radius:8px; padding:14px 16px;
+}
+.note.warn{border-left-color:var(--c-warn)}
+.note h3{
+  font:500 10.5px/1.3 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--c-mark);
+  margin:0 0 7px;
+}
+.note.warn h3{color:var(--c-warn)}
+.note p{margin:0; font-size:13.5px; line-height:1.55}
+.note p + p{margin-top:8px}
+
+/* legend */
+.legend{display:flex; flex-wrap:wrap; gap:8px 22px; margin:18px 0 0; align-items:center}
+.legend span{display:inline-flex; align-items:center; gap:8px; font-size:13px; color:var(--c-dim)}
+.chip{
+  display:inline-block; width:22px; height:11px; border-radius:3px; flex:0 0 auto;
+}
+.chip-ph{background:transparent; border-bottom:2px dotted var(--c-mark); height:8px}
+.chip-todo{background:transparent; border:1px dashed var(--c-warn); height:14px}
+
+/* data table */
+table.audit{border-collapse:collapse; width:100%; margin:6px 0 0; font-size:13.5px}
+table.audit th,table.audit td{
+  text-align:left; padding:7px 12px 7px 0; border-bottom:1px solid var(--c-line);
+}
+table.audit th{
+  font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--c-dim);
+}
+table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono",monospace; font-size:12.5px}
+.tag{
+  display:inline-block; font:500 10px/1 "IBM Plex Mono",monospace; letter-spacing:.08em;
+  padding:4px 7px; border-radius:4px;
+}
+.tag.bad{background:var(--c-warn-soft); color:var(--c-warn)}
+.tag.good{background:var(--c-mark-soft); color:var(--c-mark)}
+.tbl-scroll{overflow-x:auto}
+
+/* ============================================================
+   THE SITE ITSELF — locked tokens only.
+   ============================================================ */
+.vp .site{min-height:100%; display:flex; flex-direction:column}
+.vp a{text-decoration:none}
+
+/* placeholder copy marker (review aid, not a site style) */
+.ph{
+  text-decoration:underline dotted; text-decoration-thickness:2px;
+  text-underline-offset:3px; text-decoration-color:#6B4FA8;
+}
+.site-ft .ph,.truckcall .ph{text-decoration-color:var(--lb-teal)}
+.todo{border:1px dashed var(--lb-cedar); border-radius:4px}
+
+/* header — sticky, navy */
+.hdwrap{position:sticky; top:0; z-index:40}
+.site-hd{
+  background:var(--lb-navy); display:flex; align-items:center; gap:22px;
+}
+.lock{display:flex; align-items:center; gap:9px; flex:0 0 auto}
+.lock .mark{
+  display:grid; place-items:center; color:var(--lb-bone);
+  font:700 10px/1 Inter,sans-serif; letter-spacing:.06em; text-align:center;
+}
+.lock .wm{
+  font:700 15px/1 "Space Grotesk",Inter,sans-serif; color:var(--lb-bone);
+  letter-spacing:-.01em;
+}
+.site-nav{display:flex; align-items:center; gap:4px}
+.site-nav a{
+  color:var(--lb-bone); font:500 13px/1 Inter,sans-serif; border-radius:6px;
+  display:inline-flex; align-items:center;
+}
+.site-nav a[aria-current]{background:rgba(245,241,232,.16); font-weight:600}
+.site-nav a:hover{background:rgba(245,241,232,.10)}
+/* ADR 0014: bone fill + navy label. Was cedar fill + #fff. */
+.pill{
+  margin-left:auto; background:var(--lb-bone); color:var(--lb-navy);
+  border-radius:99px; display:inline-flex; align-items:center; gap:6px;
+  font-family:Inter,sans-serif; font-weight:600; letter-spacing:.03em; flex:0 0 auto;
+}
+.pill.legacy{background:var(--lb-cedar); color:#fff}
+
+/* waterline */
+.waterline{height:5px; background:var(--lb-teal); flex:0 0 auto}
+
+/* hero */
+.hero h1{
+  font-family:"Space Grotesk",Inter,sans-serif; font-weight:700; color:var(--lb-navy);
+  margin:0 0 10px; line-height:1.1; letter-spacing:-.02em;
+}
+.hero p{color:var(--lb-ink); opacity:.75; margin:0; font-family:Inter,sans-serif}
+
+/* fuel block */
+.strip{
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.16);
+  border-radius:12px; overflow:hidden;
+}
+.blk-title{
+  font:700 .625rem/1 Inter,sans-serif; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--lb-navy); /* ADR 0014: was cedar at 3.24:1 */
+}
+.ftab{width:100%; border-collapse:collapse; font-family:Inter,sans-serif}
+.ftab th{
+  font:600 9px/1 Inter,sans-serif; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--lb-ink); opacity:.62; text-align:right; padding:0 0 6px;
+}
+.ftab th.pl{text-align:left}
+.ftab td{
+  font:600 12px/1.25 Inter,sans-serif; color:var(--lb-ink); text-align:right;
+  padding:5px 0; font-variant-numeric:tabular-nums;
+}
+.ftab td.pl{text-align:left; font-weight:500; opacity:.9}
+.ftab td.pr{color:var(--lb-navy-deep); font-weight:700; font-size:13.5px}
+.ftab td.dash{opacity:.34; font-weight:500}
+.panel-sep{border-top:1px solid rgba(28,78,143,.16)}
+.allp{
+  display:flex; align-items:center; gap:6px; cursor:pointer; list-style:none;
+  font:600 10px/1 Inter,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--lb-navy);
+}
+.allp::-webkit-details-marker{display:none}
+.stamp{
+  font:500 9px/1 Inter,sans-serif; color:var(--lb-ink); opacity:.55; letter-spacing:.04em;
+}
+/* condensed bar */
+.condbar{
+  display:none; position:sticky; z-index:30; background:var(--lb-paper);
+  border:1px solid rgba(28,78,143,.16); border-radius:8px;
+  align-items:center; gap:10px; font-family:Inter,sans-serif;
+}
+.condbar.on{display:flex}
+.condbar .cb-loc{font:600 11px/1 Inter,sans-serif; color:var(--lb-navy)}
+.condbar .cb-p{font:700 12px/1 Inter,sans-serif; color:var(--lb-navy-deep); font-variant-numeric:tabular-nums}
+.condbar .cb-g{font:600 8.5px/1 Inter,sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--lb-ink); opacity:.6}
+
+/* truck stop callout */
+.truckcall{
+  background:var(--lb-navy); border-radius:12px; display:flex; align-items:center;
+  gap:14px; color:var(--lb-bone); font-family:Inter,sans-serif;
+}
+.truckcall h3{font:700 15px/1.2 "Space Grotesk",Inter,sans-serif; margin:0 0 3px; color:var(--lb-bone)}
+.truckcall p{margin:0; font:400 12px/1.45 Inter,sans-serif; color:var(--lb-bone); opacity:.86}
+.truckcall .go{
+  margin-left:auto; background:var(--lb-bone); color:var(--lb-navy); border-radius:99px;
+  font:600 11px/1 Inter,sans-serif; flex:0 0 auto; display:inline-flex; align-items:center;
+}
+
+/* location cards / rows */
+.sec-h{
+  font:700 .625rem/1 Inter,sans-serif; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--lb-navy);
+}
+.loccard{
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.14); border-radius:12px;
+  display:flex; flex-direction:column;
+}
+.loccard h4{
+  font:700 1.0625rem/1.2 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy); margin:0 0 5px;
+}
+.loccard p{
+  font:400 .8125rem/1.5 Inter,sans-serif; color:var(--lb-ink); opacity:.75; margin:0 0 9px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.loccard .motif{
+  width:26px; height:26px; border-radius:4px; display:grid; place-items:center;
+  font:500 9px/1 Inter,sans-serif; color:var(--lb-cedar); margin-bottom:9px;
+}
+.loccard .go{
+  font:600 .6875rem/1 Inter,sans-serif; letter-spacing:.07em; color:var(--lb-navy);
+  margin-top:auto;
+}
+.locrow{
+  display:flex; align-items:center; gap:11px; background:var(--lb-paper);
+  border:1px solid rgba(28,78,143,.14); border-radius:10px;
+}
+.locrow .motif{
+  width:24px; height:24px; border-radius:4px; display:grid; place-items:center;
+  font:500 8px/1 Inter,sans-serif; color:var(--lb-cedar); flex:0 0 auto;
+}
+.locrow .nm{font:700 13px/1.2 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy)}
+.locrow .cl{
+  font:400 11px/1.35 Inter,sans-serif; color:var(--lb-ink); opacity:.75;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.locrow .chev{margin-left:auto; color:var(--lb-navy); font-size:15px; flex:0 0 auto}
+
+/* footer */
+.site-ft{background:var(--lb-navy); color:var(--lb-bone); margin-top:auto; font-family:Inter,sans-serif}
+.ft-cols{display:grid; gap:22px}
+.ft-cols h5{
+  font:700 9px/1 Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--lb-bone); opacity:.68; margin:0 0 10px;
+}
+.ft-cols a{display:block; color:var(--lb-bone); font:400 12px/1 Inter,sans-serif; opacity:.92}
+.ft-cols a:hover{opacity:1; text-decoration:underline}
+.ft-hours{border-top:1px solid rgba(245,241,232,.2); display:grid; gap:12px}
+.ft-hours div{font:400 11px/1.5 Inter,sans-serif; color:var(--lb-bone); opacity:.82}
+.ft-hours b{display:block; font-weight:600; opacity:1}
+.ft-form{border-top:1px solid rgba(245,241,232,.2)}
+.ft-form h5{
+  font:700 9px/1 Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--lb-bone); opacity:.68; margin:0 0 4px;
+}
+.ft-form .sub{font:400 11.5px/1.5 Inter,sans-serif; color:var(--lb-bone); opacity:.8; margin:0 0 12px}
+.ft-form .fields{display:grid; gap:9px}
+.ft-form input,.ft-form textarea{
+  width:100%; background:rgba(245,241,232,.10); border:1px solid rgba(245,241,232,.28);
+  border-radius:7px; color:var(--lb-bone); font:400 12px/1.4 Inter,sans-serif; padding:9px 11px;
+}
+.ft-form input::placeholder,.ft-form textarea::placeholder{color:var(--lb-bone); opacity:.55}
+.ft-form textarea{resize:none}
+.ft-form button{
+  background:var(--lb-bone); color:var(--lb-navy); border:0; border-radius:99px;
+  font:600 11.5px/1 Inter,sans-serif; padding:11px 20px; cursor:pointer; justify-self:start;
+}
+.d .ft-form{margin-top:24px; padding-top:22px}
+.d .ft-form .fields{grid-template-columns:1fr 1fr; max-width:620px}
+.d .ft-form .wide{grid-column:1 / -1}
+.p .ft-form{margin-top:20px; padding-top:18px}
+.p .ft-form .fields{grid-template-columns:1fr}
+.ft-base{
+  border-top:1px solid rgba(245,241,232,.2); display:flex; flex-wrap:wrap;
+  gap:8px 18px; align-items:center;
+}
+.ft-base span{font:400 10.5px/1 Inter,sans-serif; color:var(--lb-bone); opacity:.7}
+.ft-base a{font:600 10.5px/1 Inter,sans-serif; color:var(--lb-bone); text-decoration:underline}
+
+/* back to top */
+.totop{
+  position:absolute; right:16px; border:0; border-radius:99px; cursor:pointer;
+  background:var(--lb-navy); color:var(--lb-bone); display:grid; place-items:center;
+  visibility:hidden; box-shadow:0 3px 12px rgba(20,57,107,.32); font-size:17px;
+  /* ADR 0014 discipline: the disc scrolls over ground AND over the navy footer.
+     Navy fill carries it on ground (7.87); the bone ring carries it on the
+     footer (7.35). A plain navy disc measures 1:1 against the footer. */
+  border:2px solid var(--lb-bone);
+}
+.totop.on{visibility:visible}
+.totop:focus-visible{outline:3px solid var(--lb-teal); outline-offset:2px}
+
+/* ---- desktop frame metrics ---- */
+.d .site-hd{height:60px; padding:0 26px}
+.d .lock .mark{width:34px; height:34px}
+.d .site-nav a{height:38px; padding:0 13px}
+.d .pill{font-size:11px; padding:8px 15px}
+.d .hero{padding:30px 26px 0}
+.d .hero h1{font-size:2.25rem}
+.d .hero p{font-size:1rem; max-width:46ch}
+.d .home-grid{display:grid; grid-template-columns:1fr 400px; gap:34px; padding:0 26px; align-items:start}
+.d .strip{max-width:400px; padding:14px 16px 13px}
+.d .condbar{top:65px; width:400px; align-self:flex-end; margin:0 26px; padding:9px 14px; height:39px}
+.d .sec{padding:34px 26px 0}
+.d .truckcall{padding:16px 18px; margin-bottom:14px}
+.d .truckcall .go{padding:9px 16px}
+.d .loc-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px}
+.d .loccard{padding:15px 16px 14px}
+.d .site-ft{margin-top:40px; padding:30px 26px 74px}
+.d .ft-cols{grid-template-columns:repeat(4,1fr)}
+.d .ft-hours{grid-template-columns:repeat(3,1fr); margin-top:24px; padding-top:20px}
+.d .ft-form{border-top:1px solid rgba(245,241,232,.2)}
+.ft-form h5{
+  font:700 9px/1 Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--lb-bone); opacity:.68; margin:0 0 4px;
+}
+.ft-form .sub{font:400 11.5px/1.5 Inter,sans-serif; color:var(--lb-bone); opacity:.8; margin:0 0 12px}
+.ft-form .fields{display:grid; gap:9px}
+.ft-form input,.ft-form textarea{
+  width:100%; background:rgba(245,241,232,.10); border:1px solid rgba(245,241,232,.28);
+  border-radius:7px; color:var(--lb-bone); font:400 12px/1.4 Inter,sans-serif; padding:9px 11px;
+}
+.ft-form input::placeholder,.ft-form textarea::placeholder{color:var(--lb-bone); opacity:.55}
+.ft-form textarea{resize:none}
+.ft-form button{
+  background:var(--lb-bone); color:var(--lb-navy); border:0; border-radius:99px;
+  font:600 11.5px/1 Inter,sans-serif; padding:11px 20px; cursor:pointer; justify-self:start;
+}
+.d .ft-form{margin-top:24px; padding-top:22px}
+.d .ft-form .fields{grid-template-columns:1fr 1fr; max-width:620px}
+.d .ft-form .wide{grid-column:1 / -1}
+.p .ft-form{margin-top:20px; padding-top:18px}
+.p .ft-form .fields{grid-template-columns:1fr}
+.ft-base{margin-top:20px; padding-top:16px}
+#tt-d{width:44px; height:44px; bottom:18px}
+
+/* ---- phone frame metrics ---- */
+.p .site-hd{height:56px; padding:0 14px; gap:10px}
+.p .lock .mark{width:30px; height:30px}
+.p .lock .wm{font-size:13px}
+.p .site-nav{display:none}
+.p .pill{font-size:10.5px; padding:7px 12px}
+.p .hero{padding:20px 14px 0}
+.p .hero h1{font-size:1.75rem}
+.p .hero p{font-size:.875rem}
+.p .strip{margin:18px 14px 0; max-width:345px; padding:12px 13px 11px}
+.p .condbar{top:61px; margin:0 14px; padding:8px 12px; height:39px}
+.p .sec{padding:26px 14px 0}
+.p .truckcall{padding:14px; margin-bottom:12px; gap:11px}
+.p .truckcall .go{padding:8px 13px}
+.p .loc-list{display:flex; flex-direction:column; gap:8px}
+.p .locrow{padding:0 11px; height:61px}
+.p .site-ft{margin-top:32px; padding:26px 14px 78px}
+.p .ft-cols{grid-template-columns:1fr 1fr}
+.p .ft-hours{grid-template-columns:1fr; margin-top:20px; padding-top:18px}
+.p .ft-form{border-top:1px solid rgba(245,241,232,.2)}
+.ft-form h5{
+  font:700 9px/1 Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--lb-bone); opacity:.68; margin:0 0 4px;
+}
+.ft-form .sub{font:400 11.5px/1.5 Inter,sans-serif; color:var(--lb-bone); opacity:.8; margin:0 0 12px}
+.ft-form .fields{display:grid; gap:9px}
+.ft-form input,.ft-form textarea{
+  width:100%; background:rgba(245,241,232,.10); border:1px solid rgba(245,241,232,.28);
+  border-radius:7px; color:var(--lb-bone); font:400 12px/1.4 Inter,sans-serif; padding:9px 11px;
+}
+.ft-form input::placeholder,.ft-form textarea::placeholder{color:var(--lb-bone); opacity:.55}
+.ft-form textarea{resize:none}
+.ft-form button{
+  background:var(--lb-bone); color:var(--lb-navy); border:0; border-radius:99px;
+  font:600 11.5px/1 Inter,sans-serif; padding:11px 20px; cursor:pointer; justify-self:start;
+}
+.d .ft-form{margin-top:24px; padding-top:22px}
+.d .ft-form .fields{grid-template-columns:1fr 1fr; max-width:620px}
+.d .ft-form .wide{grid-column:1 / -1}
+.p .ft-form{margin-top:20px; padding-top:18px}
+.p .ft-form .fields{grid-template-columns:1fr}
+.ft-base{margin-top:18px; padding-top:14px}
+#tt-p{width:46px; height:46px; bottom:16px}
+.p .nav-btn{
+  margin-left:auto; color:var(--lb-bone); font-size:19px; width:40px; height:40px;
+  display:grid; place-items:center; flex:0 0 auto;
+}
+.p .pill{margin-left:0}
+
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto !important}}
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Design review · Phase 0 · no application code</p>
+  <h1>Home page, desktop and phone</h1>
+  <div class="lede">
+    <p>Both frames are <strong>live, not screenshots</strong>. Scroll inside either one: the fuel
+    price block condenses to its one-line bar, the panel picks up the places that left the screen,
+    and the back-to-top button obeys its real threshold. Everything is built from the locked
+    tokens and the fourteen ADRs — no code from the proof sheet was carried over.</p>
+    <p>Two things you are looking at have <strong>changed since the last review</strong>, both from
+    ADR 0014: the Rewards pill and the small uppercase labels. The notes under each frame say where.</p>
+  </div>
+
+  <div class="controls">
+    <span class="ctl-lab">Review controls</span>
+    <label class="sw"><input type="checkbox" id="force"> Reveal back-to-top on desktop</label>
+    <label class="sw"><input type="checkbox" id="legacy"> Show the old cedar pill</label>
+    <label class="sw"><input type="checkbox" id="marks" checked> Mark placeholder content</label>
+  </div>
+
+  <div class="legend">
+    <span><i class="chip chip-ph"></i> Placeholder copy — written to fill a layout</span>
+    <span><i class="chip chip-todo"></i> Art placeholder — <code>TODO: approved Lummi art</code></span>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ============ DESKTOP ============ -->
+  <section class="stage">
+    <div class="stage-hd">
+      <h2>Desktop</h2>
+      <span class="dims">1180 × 740 viewport · scaled to fit</span>
+    </div>
+    <div class="frame" id="fr-d"><div class="scaler" id="sc-d">
+      <div class="vp d" id="vp-d" tabindex="0" aria-label="Desktop home page preview, scrollable">
+        <div class="site">
+          <div class="hdwrap"><header class="site-hd" id="hd-d">
+            <a class="lock" href="#"><span class="mark todo">LOGO</span><span class="wm">Lummi Bay Market</span></a>
+            <nav class="site-nav">
+              <a href="#" aria-current="page">Home</a><a href="#">Locations</a><a href="#">Truck Stop</a>
+            </nav>
+            <a class="pill" href="#">Get the App</a>
+          </header>
+          <div class="waterline"></div></div>
+          <div class="condbar" id="cb-d">
+            <span class="cb-loc">Exit 260</span>
+            <span class="cb-g">Reg</span><span class="cb-p">3.79</span>
+            <span class="cb-g">Diesel</span><span class="cb-p">4.29</span>
+            <span style="margin-left:auto; font-size:11px; color:var(--lb-navy)">All prices ⌄</span>
+          </div>
+          <section class="hero">
+            <div class="home-grid">
+              <div>
+                <h1 class="mk">Three stops on the bay</h1>
+                <p class="mk">Fuel, food and a full truck stop — open where you need us, on Lummi land.</p>
+              </div>
+              <div class="strip" id="blk-d">
+                <div class="blk-title" style="margin-bottom:9px">Today's fuel prices</div>
+                <table class="ftab">
+                  <thead><tr><th class="pl"></th><th>Regular</th><th>Diesel</th><th>DEF</th></tr></thead>
+                  <tbody>
+                    <tr><td class="pl">Exit 260</td><td class="pr">3.79</td><td class="pr">4.29</td><td class="dash">—</td></tr>
+                    <tr><td class="pl">Truck Stop</td><td class="dash">—</td><td class="pr">4.55</td><td class="pr">3.29</td></tr>
+                  </tbody>
+                </table>
+                <details style="margin-top:9px">
+                  <summary class="allp">All prices <span aria-hidden="true">⌄</span></summary>
+                  <table class="ftab panel-sep" style="margin-top:8px; padding-top:2px">
+                    <tbody>
+                      <tr><td class="pl">Mini Mart</td><td class="pr">3.79</td><td class="pr">4.29</td><td class="dash">—</td></tr>
+                      <tr><td class="pl">The Cove</td><td class="pr">3.85</td><td class="pr">4.29</td><td class="dash">—</td></tr>
+                    </tbody>
+                  </table>
+                </details>
+                <div class="stamp" style="margin-top:9px">Updated today · prices subject to change</div>
+              </div>
+            </div>
+          </section>
+          <section class="sec">
+            <div class="sec-h" style="margin-bottom:12px">Our locations</div>
+            <div class="truckcall">
+              <div>
+                <h3>Truck Stop at Exit 260</h3>
+                <p class="mk">Diesel lanes, DEF, showers, driver lounge and truck parking. Open 24 hours.</p>
+              </div>
+              <a class="go" href="#">Truck Stop →</a>
+            </div>
+            <div class="loc-list">
+              <article class="loccard">
+                <span class="motif todo">ART</span>
+                <h4>Exit 260</h4>
+                <p class="mk">4839 Rural Ave · Open 24 hours</p>
+                <span class="go">VISIT →</span>
+              </article>
+              <article class="loccard">
+                <span class="motif todo">ART</span>
+                <h4>Mini Mart</h4>
+                <p class="mk">4884 Haxton Way · 6am–10pm</p>
+                <span class="go">VISIT →</span>
+              </article>
+              <article class="loccard">
+                <span class="motif todo">ART</span>
+                <h4>Fisherman's Cove</h4>
+                <p class="mk">2570 Lummi View Dr · 6am–9pm</p>
+                <span class="go">VISIT →</span>
+              </article>
+            </div>
+          </section>
+          <footer class="site-ft">
+            <div class="ft-cols">
+              <div><h5 class="mk">About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact us</a></div>
+              <div><h5 class="mk">Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a><a href="#">Truck Stop</a></div>
+              <div><h5 class="mk">Rewards</h5><a href="#">Get the app</a><a href="#">How it works</a><a href="#">All fuel prices</a></div>
+              <div><h5 class="mk">Work with us</h5><a href="#">Careers</a><a href="#">Contact form</a></div>
+            </div>
+            <div class="ft-hours">
+              <div><b>Exit 260</b>4839 Rural Ave, Bellingham<br>Open 24 hours · 360-778-1894</div>
+              <div><b>Mini Mart</b>4884 Haxton Way, Ferndale<br>6am–10pm · 360-380-2049</div>
+              <div><b>Fisherman's Cove</b>2570 Lummi View Dr, Bellingham<br>6am–9pm · 360-758-2448</div>
+            </div>
+            <div class="ft-form">
+              <h5 class="mk">Get in touch</h5>
+              <p class="sub mk">Questions about a location, fuel, or the truck stop.</p>
+              <div class="fields">
+                <input type="text" placeholder="Your name" aria-label="Your name">
+                <input type="email" placeholder="Email address" aria-label="Email address">
+                <textarea class="wide" rows="2" placeholder="How can we help?" aria-label="How can we help?"></textarea>
+                <button type="button" class="wide">Send message</button>
+              </div>
+            </div>
+            <div class="ft-base">
+              <span>© 2026 Lummi Bay Market</span>
+              <a href="#">Lummi Commercial Companies</a>
+            </div>
+          </footer>
+        </div>
+      </div>
+      <button type="button" class="totop" id="tt-d" aria-label="Back to top">↑</button>
+    </div></div>
+    <p class="scrollhint">Scroll inside the frame</p>
+
+    <div class="notes">
+      <div class="note">
+        <h3>Changed · Rewards pill</h3>
+        <p>Now <strong>bone fill, navy label</strong>. It was cedar with white 11px text — that
+        measured 3.41:1 for the label and 2.43:1 for the fill against the navy header, so it failed
+        twice on every page of the site. Tick “Show the old cedar pill” to compare.</p>
+      </div>
+      <div class="note">
+        <h3>Changed · uppercase labels</h3>
+        <p>“Today's fuel prices” and “Our locations” are <strong>navy, not cedar</strong>. At 10px
+        cedar measured 3.24:1. Navy measures 7.87:1 at any size.</p>
+      </div>
+      <div class="note warn">
+        <h3>Blocked · the header logo</h3>
+        <p>The real vector has never reached the repo, and the wordmark is navy on a navy header —
+        Phase 0 items 1 and 2. What you see is a stand-in. <strong>This is the one thing that
+        blocks the layout shell</strong>, since the header is on every page.</p>
+      </div>
+      <div class="note">
+        <h3>Back-to-top is absent here, correctly</h3>
+        <p>ADR 0011 shows it only after 0.75 of a viewport of scrolling, so a page under 1.75
+        screens never grows one. Desktop Home is about 1.6. Use the control above to reveal it
+        anyway — real copy will push this page over the line on its own.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- ============ PHONE ============ -->
+  <section class="stage">
+    <div class="stage-hd">
+      <h2>Phone</h2>
+      <span class="dims">375 × 667 viewport · actual size</span>
+    </div>
+    <div class="frame" id="fr-p" style="width:375px; height:667px"><div class="scaler" id="sc-p">
+      <div class="vp p" id="vp-p" tabindex="0" aria-label="Phone home page preview, scrollable"
+           style="width:375px; height:667px">
+        <div class="site">
+          <div class="hdwrap"><header class="site-hd" id="hd-p">
+            <a class="lock" href="#"><span class="mark todo">LOGO</span><span class="wm">Lummi Bay</span></a>
+            <a class="pill" href="#">Get the App</a>
+            <span class="nav-btn" aria-hidden="true">☰</span>
+          </header>
+          <div class="waterline"></div></div>
+          <div class="condbar" id="cb-p">
+            <span class="cb-loc">Exit 260</span>
+            <span class="cb-g">Reg</span><span class="cb-p">3.79</span>
+            <span class="cb-g">Dsl</span><span class="cb-p">4.29</span>
+            <span style="margin-left:auto; font-size:10.5px; color:var(--lb-navy)">All ⌄</span>
+          </div>
+          <section class="hero">
+            <h1 class="mk">Three stops on the bay</h1>
+            <p class="mk">Fuel, food and a full truck stop — open where you need us, on Lummi land.</p>
+          </section>
+          <div class="strip" id="blk-p">
+            <div class="blk-title" style="margin-bottom:8px">Today's fuel prices</div>
+            <table class="ftab">
+              <thead><tr><th class="pl"></th><th>Regular</th><th>Diesel</th><th>DEF</th></tr></thead>
+              <tbody>
+                <tr><td class="pl">Exit 260</td><td class="pr">3.79</td><td class="pr">4.29</td><td class="dash">—</td></tr>
+                <tr><td class="pl">Truck Stop</td><td class="dash">—</td><td class="pr">4.55</td><td class="pr">3.29</td></tr>
+              </tbody>
+            </table>
+            <details style="margin-top:8px">
+              <summary class="allp">All prices <span aria-hidden="true">⌄</span></summary>
+              <table class="ftab panel-sep" style="margin-top:7px">
+                <tbody>
+                  <tr><td class="pl">Mini Mart</td><td class="pr">3.79</td><td class="pr">4.29</td><td class="dash">—</td></tr>
+                  <tr><td class="pl">The Cove</td><td class="pr">3.85</td><td class="pr">4.29</td><td class="dash">—</td></tr>
+                </tbody>
+              </table>
+            </details>
+            <div class="stamp" style="margin-top:8px">Updated today · prices subject to change</div>
+          </div>
+          <section class="sec">
+            <div class="sec-h" style="margin-bottom:11px">Our locations</div>
+            <div class="truckcall">
+              <div>
+                <h3>Truck Stop</h3>
+                <p class="mk">Diesel, DEF, showers, parking. 24 hours.</p>
+              </div>
+              <a class="go" href="#">Go →</a>
+            </div>
+            <div class="loc-list">
+              <a class="locrow" href="#">
+                <span class="motif todo">A</span>
+                <span style="min-width:0"><span class="nm">Exit 260</span><br><span class="cl mk">4839 Rural Ave · Open 24 hours</span></span>
+                <span class="chev" aria-hidden="true">›</span>
+              </a>
+              <a class="locrow" href="#">
+                <span class="motif todo">A</span>
+                <span style="min-width:0"><span class="nm">Mini Mart</span><br><span class="cl mk">4884 Haxton Way · 6am–10pm</span></span>
+                <span class="chev" aria-hidden="true">›</span>
+              </a>
+              <a class="locrow" href="#">
+                <span class="motif todo">A</span>
+                <span style="min-width:0"><span class="nm">Fisherman's Cove</span><br><span class="cl mk">2570 Lummi View Dr · 6am–9pm</span></span>
+                <span class="chev" aria-hidden="true">›</span>
+              </a>
+            </div>
+          </section>
+          <footer class="site-ft">
+            <div class="ft-cols">
+              <div><h5 class="mk">About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact us</a></div>
+              <div><h5 class="mk">Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a><a href="#">Truck Stop</a></div>
+              <div><h5 class="mk">Rewards</h5><a href="#">Get the app</a><a href="#">How it works</a></div>
+              <div><h5 class="mk">Work with us</h5><a href="#">Careers</a><a href="#">All fuel prices</a></div>
+            </div>
+            <div class="ft-hours">
+              <div><b>Exit 260</b>4839 Rural Ave · 24 hours · 360-778-1894</div>
+              <div><b>Mini Mart</b>4884 Haxton Way · 6am–10pm · 360-380-2049</div>
+              <div><b>Fisherman's Cove</b>2570 Lummi View Dr · 6am–9pm · 360-758-2448</div>
+            </div>
+            <div class="ft-form">
+              <h5 class="mk">Get in touch</h5>
+              <p class="sub mk">Questions about a location, fuel, or the truck stop.</p>
+              <div class="fields">
+                <input type="text" placeholder="Your name" aria-label="Your name">
+                <input type="email" placeholder="Email address" aria-label="Email address">
+                <textarea rows="3" placeholder="How can we help?" aria-label="How can we help?"></textarea>
+                <button type="button">Send message</button>
+              </div>
+            </div>
+            <div class="ft-base">
+              <span>© 2026 Lummi Bay Market</span>
+              <a href="#">Lummi Commercial Companies</a>
+            </div>
+          </footer>
+        </div>
+      </div>
+      <button type="button" class="totop" id="tt-p" aria-label="Back to top">↑</button>
+    </div></div>
+    <p class="scrollhint">Scroll to about a third of the way down</p>
+
+    <div class="notes">
+      <div class="note">
+        <h3>Back-to-top, live</h3>
+        <p>Appears after 500px — 0.75 of this 667px viewport. Press it: the scroll returns to zero
+        <em>and</em> focus moves to the header, so the next Tab does not drop back into the footer.
+        The footer reserves a 78px gutter rather than the button dodging.</p>
+      </div>
+      <div class="note">
+        <h3>One flick restores the fuel block</h3>
+        <p>Nothing in the button knows the block exists. ADR 0005 keys the condense to scroll
+        position, so returning the position returns the card. Watch the bar under the header
+        disappear as you go back up.</p>
+      </div>
+      <div class="note">
+        <h3>Rows, not cards</h3>
+        <p>61px a row against 148px a card. The whole row is the link, so there is no per-row
+        “VISIT”. Same component as desktop, one breakpoint.</p>
+      </div>
+      <div class="note warn">
+        <h3>Every address and hour here is unconfirmed</h3>
+        <p>Pulled from lcc-lummi.com and never checked with the client — Phase 0 item 3. The card
+        line truncates rather than wraps, and slack past the longest string is 33px at 320px, so
+        hours must come back as <code>6am–9pm</code>, never <code>6:00 AM – 9:00 PM</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <h2 style="font:600 19px/1.2 'IBM Plex Sans',system-ui,sans-serif; margin:0 0 6px">The contrast audit behind the two changes</h2>
+  <p style="max-width:62ch">Run it yourself with <code>node docs/proofs/scripts/contrast.mjs</code>.
+  Only the pairs that moved are listed.</p>
+  <div class="tbl-scroll">
+    <table class="audit">
+      <thead><tr><th>Pair</th><th>Ratio</th><th>Needs</th><th>Where</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>White label on cedar fill</td><td class="num">3.41</td><td class="num">4.5</td><td>Rewards pill, every page</td><td><span class="tag bad">replaced</span></td></tr>
+        <tr><td>Cedar fill vs navy header</td><td class="num">2.43</td><td class="num">3.0</td><td>Rewards pill, every page</td><td><span class="tag bad">replaced</span></td></tr>
+        <tr><td>Navy label on bone fill</td><td class="num">7.35</td><td class="num">4.5</td><td>Rewards pill, now</td><td><span class="tag good">passes</span></td></tr>
+        <tr><td>Cedar on ground, 10px</td><td class="num">3.24</td><td class="num">4.5</td><td>Section labels</td><td><span class="tag bad">replaced</span></td></tr>
+        <tr><td>Navy on ground</td><td class="num">7.87</td><td class="num">4.5</td><td>Section labels, now</td><td><span class="tag good">passes</span></td></tr>
+        <tr><td>Ink at .75 opacity on ground</td><td class="num">6.36</td><td class="num">4.5</td><td>Body copy — the old worry</td><td><span class="tag good">passes</span></td></tr>
+        <tr><td>Navy-deep on paper</td><td class="num">11.49</td><td class="num">4.5</td><td>Every posted price</td><td><span class="tag good">passes</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="notes" style="margin-top:26px">
+    <div class="note warn">
+      <h3>Not shown, because it does not exist</h3>
+      <p>There is <strong>no illustration or photography anywhere on this page</strong>. The
+      illustrated layer was built and rejected (ADR 0012), and no art direction has been chosen —
+      Phase 0 item 4, the longest lead time on the critical path. The dashed boxes are where art
+      would land, not a proposal for what it should be.</p>
+      <p>No Coast Salish motifs have been generated, deliberately. Final art must be authentic or
+      tribe-approved.</p>
+    </div>
+    <div class="note warn">
+      <h3>Copy is placeholder, and reads as finished</h3>
+      <p>The headline, the sub, and the footer's four column names were all written to fill a
+      layout — <code>loose-ends.md</code> §6 warns someone will ship them by accident. Turn on
+      “Mark placeholder content” to see how much of the page that is.</p>
+    </div>
+    <div class="note">
+      <h3>No promo region on Home</h3>
+      <p>ADR 0007 put the promo on interior pages only; whether Home carries one was never asked
+      and is still open. Home renders none today.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function wire(vp, blk, cb, tt, hd, forceEl){
+    var ticking = false;
+    function read(){
+      ticking = false;
+      var y = vp.scrollTop, vh = vp.clientHeight;
+      /* condense once the page has scrolled roughly halfway past the resting card */
+      var trigger = blk.offsetTop + (blk.offsetHeight / 2);
+      cb.classList.toggle('on', y > trigger);
+      blk.style.visibility = y > trigger ? 'hidden' : '';
+      /* ADR 0011 — 0.75 of a viewport, proportional not pixel */
+      var want = y > vh * 0.75;
+      if (forceEl && forceEl.checked) want = true;
+      tt.classList.toggle('on', want);
+    }
+    vp.addEventListener('scroll', function(){
+      if (!ticking){ ticking = true; requestAnimationFrame(read); }
+    }, {passive:true});
+    if (forceEl) forceEl.addEventListener('change', read);
+    tt.addEventListener('click', function(){
+      vp.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+      hd.querySelector('.lock').focus({preventScroll:true});
+    });
+    read();
+  }
+
+  var force = document.getElementById('force');
+  wire(document.getElementById('vp-d'), document.getElementById('blk-d'),
+       document.getElementById('cb-d'), document.getElementById('tt-d'),
+       document.getElementById('hd-d'), force);
+  wire(document.getElementById('vp-p'), document.getElementById('blk-p'),
+       document.getElementById('cb-p'), document.getElementById('tt-p'),
+       document.getElementById('hd-p'), null);
+
+  /* scale the 1180px desktop frame down to whatever room the page has */
+  var fr = document.getElementById('fr-d'), sc = document.getElementById('sc-d'),
+      vpd = document.getElementById('vp-d'), W = 1180, H = 740;
+  vpd.style.width = W + 'px'; vpd.style.height = H + 'px';
+  function fit(){
+    var avail = fr.parentNode.clientWidth, s = Math.min(1, avail / W);
+    sc.style.transform = 'scale(' + s + ')';
+    fr.style.width = Math.round(W * s) + 'px';
+    fr.style.height = Math.round(H * s) + 'px';
+  }
+  addEventListener('resize', fit); fit();
+
+  /* review toggles */
+  document.getElementById('legacy').addEventListener('change', function(e){
+    document.querySelectorAll('.pill').forEach(function(p){
+      p.classList.toggle('legacy', e.target.checked);
+    });
+  });
+  var marks = document.getElementById('marks');
+  function applyMarks(){
+    document.querySelectorAll('.mk').forEach(function(n){
+      n.classList.toggle('ph', marks.checked);
+    });
+    document.querySelectorAll('.motif, .mark').forEach(function(n){
+      n.classList.toggle('todo', marks.checked);
+    });
+  }
+  marks.addEventListener('change', applyMarks); applyMarks();
+})();
+</script>
