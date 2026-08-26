@@ -63,15 +63,31 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
 - **Rewards**: a "Get the App" pill in the header's right-hand utility slot on **every** page,
   plus the `/rewards` app-promo page and the footer. Nowhere else — see ADR 0006.
 - **Promos**: a full-width graphic promo region below the page title on interior pages, linking
-  to a product info page (ADR 0007). Product info pages are a new page type, not yet designed.
+  to a product info page (ADR 0007). Product info pages are the `infoPages` collection — ADR 0015.
 - Header is **sticky** on every page; the fuel-price rail is **not** — ADR 0006 records why the
   rail must never be sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
   carries the Rewards "Get the App" pill on every page.
 Footer: **About** (brand story grounded in the Lummi values + light community note; LCC
-corporate/enterprise content stays out), contact form, per-location hours/phone,
-**Rewards**, **Careers** (editable link), and the single **Lummi Commercial Companies**
-link → lcc-lummi.com.
+corporate/enterprise content stays out), **Contact**, **Rewards**, **Careers** (editable
+link), and the single **Lummi Commercial Companies** link → lcc-lummi.com.
+The contact form and the per-location hours/phone block are **not** in the footer. There is
+no form anywhere on the site; hours, addresses, phone and a per-Location synopsis live on
+`/contact`, derived from the Location data — ADR 0015.
 Note: `/about` still exists as a page — it is reached from the footer, not the top nav.
+
+## Page types (ADR 0015, ADR 0016)
+Pages are **documents in TinaCMS collections**, not hand-written routes — staff add a page
+without an engineer, and the header, footer, waterline, fuel block and back-to-top come from
+the layout and cannot be lost or moved by a page.
+- `pages` — general pages, including `/contact` (no form).
+- `mainPages` — more than one main page may exist; a settings singleton points at the live one,
+  so a replacement is built in full and switched over by changing one field.
+- `infoPages` — what a promo links to.
+- `tenants` — third-party businesses renting space on a Lummi Bay property (Wendy's, the
+  piroshki counter, the drive-through coffee). **A tenant is never a Location** — it would
+  otherwise land in the Locations index and the fuel price table. Indexed as "Also at Exit 260",
+  never "Salish Village" (ADR 0001 collision). Not in the nav.
+A new page never appears in the nav on its own — the nav stays three items (ADR 0008).
 
 ## Specialist agents (delegate to keep context lean)
 - `design-director` — visual system, art direction; applies brand + tribal-art skills.

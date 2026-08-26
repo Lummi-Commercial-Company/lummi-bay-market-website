@@ -1,7 +1,7 @@
 # Next steps
 
 Where this actually stands: **93 tracked files, none of them application code.** No
-`package.json`, no Next.js app, no components. What exists is a locked stack, fourteen decisions
+`package.json`, no Next.js app, no components. What exists is a locked stack, sixteen decisions
 (`docs/adr/`), a content model, and a browser-verified interaction proof for the hardest
 component on the site. That is real work and it de-risks the build — but the build has not
 started, and nothing on this list should read as "nearly done."
@@ -65,8 +65,6 @@ These gate later phases and none of them are code. Start them now because they h
 See `docs/launch-checklist.md`.
 
 ## Still undecided, and cheap to leave that way
-- **Product info pages** — promos link to them, and the page type does not exist. IA work,
-  outside the locked three-item nav. Needed before promos can go live, not before the site can.
 - **Register C5** (panel height at 200% text) and **C9** (`updated` stamp stored vs derived).
   Both have recommendations; neither causes rework if settled later.
 - **Safari/Firefox verification of CSS anchor positioning.** Only Chromium was testable here.

@@ -74,6 +74,12 @@ that file is easy to miss.
 | `output: 'export'` | Kills ISR *and* on-demand revalidation — silently removes every promo-scheduling mechanism except the rejected one. (ADR 0007) |
 
 ## 5. Pages that are referenced but have never been designed
+
+> **Mostly closed by ADR 0015.** Page types are TinaCMS collections now, so `/rewards`,
+> `/about`, `/fuel-prices` and product info pages all have a shape. The contact form is
+> **dropped** — `/contact` carries hours, addresses, phone and a per-Location synopsis, and
+> nothing on the site collects submissions, so its destination, spam handling and states are
+> moot. ADR 0016 adds third-party tenant pages.
 Named in the locked architecture or in ADRs, and not thought about since:
 - **`/rewards`** — the app-promo page. A pill links to it from every page.
 - **`/about`** — brand story, the Lummi values, the community note.
