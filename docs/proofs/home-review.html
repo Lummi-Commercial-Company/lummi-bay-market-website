@@ -201,48 +201,173 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 }
 .hero p{color:var(--lb-ink); opacity:.75; margin:0; font-family:Inter,sans-serif}
 
-/* fuel block */
-.strip{
+
+
+/* ===== fuel block — ported from the approved proof, artifact 9af4c540 =====
+   One <details>. The summary carries BOTH the resting table and the one-line
+   bar; condensing swaps which one is painted and leaves the resting height in
+   the layout, so nothing below the block moves. */
+.pagebody{position:relative}
+.sentinel{position:absolute; top:0; left:0; width:1px; visibility:hidden; pointer-events:none}
+.d .sentinel{height:110px}
+.p .sentinel{height:102px}
+
+.fuelblock{
+  position:sticky; z-index:40; margin-left:auto; width:400px;
   background:var(--lb-paper); border:1px solid rgba(28,78,143,.16);
-  border-radius:12px; overflow:hidden;
+  border-bottom:2px solid var(--lb-teal); border-radius:6px;
+  box-shadow:0 14px 30px -14px rgba(20,57,107,.34);
 }
-.blk-title{
-  font:700 .625rem/1 Inter,sans-serif; letter-spacing:.15em; text-transform:uppercase;
-  color:var(--lb-navy); /* ADR 0014: was cedar at 3.24:1 */
+.d .fuelblock{top:73px; --cue-h:28px}
+.p .fuelblock{top:69px; width:auto; margin:0; --cue-h:26px}
+/* on a phone the rail must not box the block, or sticky has only the block's own
+   height to stick within and it scrolls away immediately */
+.p .railcol{display:contents}
+
+.fuelblock>summary{list-style:none; cursor:pointer; display:block}
+.fuelblock>summary::-webkit-details-marker{display:none}
+.fuelblock>summary:focus-visible{outline:3px solid var(--lb-teal); outline-offset:2px}
+.cue{
+  display:flex; align-items:center; gap:5px; height:var(--cue-h); padding:8px 12px 0;
+  font:500 .6875rem/1 Inter,sans-serif; color:var(--lb-navy); opacity:.82;
 }
-.ftab{width:100%; border-collapse:collapse; font-family:Inter,sans-serif}
-.ftab th{
-  font:600 9px/1 Inter,sans-serif; letter-spacing:.11em; text-transform:uppercase;
-  color:var(--lb-ink); opacity:.62; text-align:right; padding:0 0 6px;
+.fuelblock>summary:hover .cue{opacity:1}
+.lbl-open{display:none}
+.fuelblock[open] .lbl-shut{display:none}
+.fuelblock[open] .lbl-open{display:inline}
+.chev{
+  width:8px; height:8px; border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor; transform:rotate(45deg) translateY(-1px);
+  flex:0 0 auto;
 }
-.ftab th.pl{text-align:left}
-.ftab td{
-  font:600 12px/1.25 Inter,sans-serif; color:var(--lb-ink); text-align:right;
-  padding:5px 0; font-variant-numeric:tabular-nums;
+.fuelblock[open] .chev{transform:rotate(-135deg) translateY(-1px)}
+
+.stacked{display:grid; gap:10px; padding:4px 12px 12px}
+.grp{display:grid; align-items:baseline; row-gap:2px}
+.grp.g3{grid-template-columns:1fr 3.9em 3.9em 3.9em; column-gap:7px}
+.d .grp.g3{grid-template-columns:1fr 4.6em 4.6em 4.6em; column-gap:11px}
+.gh{
+  font:600 9.5px/1.6 Inter,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--lb-navy); text-align:right;
 }
-.ftab td.pl{text-align:left; font-weight:500; opacity:.9}
-.ftab td.pr{color:var(--lb-navy-deep); font-weight:700; font-size:13.5px}
-.ftab td.dash{opacity:.34; font-weight:500}
-.panel-sep{border-top:1px solid rgba(28,78,143,.16)}
-.allp{
-  display:flex; align-items:center; gap:6px; cursor:pointer; list-style:none;
-  font:600 10px/1 Inter,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+.d .gh{font-size:10.5px}
+.place{
+  font:700 .8125rem/1.5 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.d .place{font-size:.9375rem}
+.pr{
+  font:700 .9375rem/1.5 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy-deep);
+  text-align:right; font-variant-numeric:tabular-nums;
+}
+.d .pr{font-size:1.0625rem}
+.pr.na{opacity:.35; font-weight:500}
+
+.oneline{
+  display:none; align-items:center; gap:0 12px; padding:4px 12px 12px;
+  white-space:nowrap; overflow:hidden; font-family:Inter,sans-serif;
+}
+.oneline .lp{font:700 .9375rem/1 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy)}
+.oneline .lg{
+  font:600 .625rem/1 Inter,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--lb-ink); opacity:.6;
+}
+.oneline .lv{
+  font:700 1.0625rem/1 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy-deep);
+  font-variant-numeric:tabular-nums;
+}
+.oneline .sep{width:1px; height:20px; background:rgba(28,78,143,.2)}
+.oneline .more{
+  margin-left:auto; padding-left:14px; font:500 .6875rem/1 Inter,sans-serif;
+  color:var(--lb-navy); display:flex; align-items:center; gap:5px;
+}
+.p .oneline .more .word{display:none}
+
+/* CONDENSED — the block keeps its resting height, the bar is drawn over it */
+.fuelblock.cond{background:transparent; border-color:transparent; box-shadow:none}
+.fuelblock.cond .stacked{visibility:hidden; pointer-events:none}
+.fuelblock.cond>summary>.cue{visibility:hidden}
+.fuelblock.cond .oneline{
+  display:flex; position:absolute; top:-1px; left:-1px; right:-1px; width:auto;
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal); border-radius:6px;
+  box-shadow:0 10px 24px -14px rgba(20,57,107,.3); padding:9px 11px;
+}
+
+/* open is ONE card: the panel butts onto the block, no gap and no second radius */
+.condpanel{
+  position:absolute; left:-1px; right:-1px; width:auto; top:100%;
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.16);
+  border-top:1px solid rgba(28,78,143,.13); border-bottom:2px solid var(--lb-teal);
+  border-radius:0 0 6px 6px; box-shadow:0 18px 34px -12px rgba(20,57,107,.34);
+  padding:9px 12px 12px; z-index:50;
+}
+.fuelblock:not([open]) .condpanel{display:none}
+.fuelblock[open]:not(.cond){border-bottom-color:transparent; border-radius:6px 6px 0 0}
+.fuelblock.cond .condpanel{top:39px}
+.fuelblock.cond[open] .oneline{border-bottom-color:transparent; border-radius:6px 6px 0 0}
+/* the panel carries only what is NOT on screen — hide the row, hide its column */
+.fuelblock:not(.cond) .condpanel .gh{display:none}
+.fuelblock:not(.cond) .condpanel .oncond{display:none}
+
+/* the two-column top region; everything below the hero is full width */
+.d .pagegrid{
+  display:grid; align-content:start; grid-template-columns:1fr 400px;
+  column-gap:14px; align-items:start; padding:30px 26px 0;
+}
+.d .pagegrid .railcol{
+  grid-column:2; grid-row:1/span 2; align-self:stretch;
+  pointer-events:none; z-index:40;
+}
+.d .pagegrid .railcol .fuelblock{pointer-events:auto}
+.d .pagegrid .maincol{grid-column:1; grid-row:1; min-width:0}
+.homerest{grid-column:1/-1}
+.d .pagegrid .homerest{grid-row:2}
+.p .pagebody{padding:16px 14px 0}
+
+
+/* ===== promo region + waterline band — approved proof, artifact 9af4c540 =====
+   The region is full width below the two-column top. Each promo takes a width
+   from a fixed 12-column ladder so any mix tiles without orphan gaps. */
+.promoregion{display:grid; gap:12px; grid-template-columns:1fr; margin-top:4px}
+.d .promoregion{gap:14px; grid-template-columns:repeat(12,1fr)}
+.d .promoregion .promo{grid-column:span 12; min-height:150px; aspect-ratio:auto}
+.d .promoregion .promo.w-half{grid-column:span 6}
+.d .promoregion .promo.w-quarter{grid-column:span 3}
+.p .promoregion .promo{grid-column:auto; aspect-ratio:16/9}
+.promo{
+  position:relative; text-decoration:none; overflow:hidden; border-radius:10px;
+  border:1px solid rgba(28,78,143,.16);
+  background:linear-gradient(135deg,var(--lb-bone) 0%,#ECE5D8 55%,#DFD5C3 100%);
+  display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-end;
+  text-align:left; padding:13px 14px; aspect-ratio:5/1;
+}
+/* ADR 0014: the approved proof sets this eyebrow in cedar at 8.5px (3.24:1). Navy. */
+.promo .pe{
+  font:600 8.5px/1 Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase;
   color:var(--lb-navy);
 }
-.allp::-webkit-details-marker{display:none}
-.stamp{
-  font:500 9px/1 Inter,sans-serif; color:var(--lb-ink); opacity:.55; letter-spacing:.04em;
+.promo b{
+  font:700 .9375rem/1.2 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy);
+  letter-spacing:-.01em; margin-top:4px;
 }
-/* condensed bar */
-.condbar{
-  display:none; position:sticky; z-index:30; background:var(--lb-paper);
-  border:1px solid rgba(28,78,143,.16); border-radius:8px;
-  align-items:center; gap:10px; font-family:Inter,sans-serif;
+.d .promo b{font-size:1.0625rem}
+.promo .cta{
+  margin-top:9px; font:600 9px/1 Inter,sans-serif; letter-spacing:.07em;
+  text-transform:uppercase; color:#fff; background:var(--lb-navy); border-radius:99px;
+  padding:6px 11px;
 }
-.condbar.on{display:flex}
-.condbar .cb-loc{font:600 11px/1 Inter,sans-serif; color:var(--lb-navy)}
-.condbar .cb-p{font:700 12px/1 Inter,sans-serif; color:var(--lb-navy-deep); font-variant-numeric:tabular-nums}
-.condbar .cb-g{font:600 8.5px/1 Inter,sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--lb-ink); opacity:.6}
+.promo::after{
+  content:"ART TBD"; position:absolute; top:8px; right:9px;
+  font:400 7px/1 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.12em;
+  color:var(--lb-ink); opacity:.45; border:1px dashed rgba(42,40,32,.35);
+  border-radius:3px; padding:3px 5px;
+}
+/* TODO: replace with approved Lummi art */
+.waterline-band{
+  height:10px; margin:20px 0 18px; border-radius:99px;
+  background:linear-gradient(90deg,var(--lb-teal),var(--lb-navy)); opacity:.9;
+}
 
 /* truck stop callout */
 .truckcall{
@@ -293,7 +418,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   font:400 11px/1.35 Inter,sans-serif; color:var(--lb-ink); opacity:.75;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
-.locrow .chev{margin-left:auto; color:var(--lb-navy); font-size:15px; flex:0 0 auto}
+.locrow .rowchev{margin-left:auto; color:var(--lb-navy); font-size:15px; flex:0 0 auto}
 
 /* footer */
 .site-ft{background:var(--lb-navy); color:var(--lb-bone); margin-top:auto; font-family:Inter,sans-serif}
@@ -329,13 +454,10 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 .d .lock .mark{width:34px; height:34px}
 .d .site-nav a{height:38px; padding:0 13px}
 .d .pill{font-size:11px; padding:8px 15px}
-.d .hero{padding:30px 26px 0}
+.d .hero{padding:0}
 .d .hero h1{font-size:2.25rem}
 .d .hero p{font-size:1rem; max-width:46ch}
-.d .home-grid{display:grid; grid-template-columns:1fr 400px; gap:34px; padding:0 26px; align-items:start}
-.d .strip{max-width:400px; padding:14px 16px 13px}
-.d .condbar{top:65px; width:400px; align-self:flex-end; margin:0 26px; padding:9px 14px; height:39px}
-.d .sec{padding:34px 26px 0}
+.d .d .d .sec{padding:34px 0 0}
 .d .truckcall{padding:16px 18px; margin-bottom:14px}
 .d .truckcall .go{padding:9px 16px}
 .d .loc-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px}
@@ -351,12 +473,10 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 .p .lock .wm{font-size:13px}
 .p .site-nav{display:none}
 .p .pill{font-size:10.5px; padding:7px 12px}
-.p .hero{padding:20px 14px 0}
+.p .hero{padding:18px 0 0}
 .p .hero h1{font-size:1.75rem}
 .p .hero p{font-size:.875rem}
-.p .strip{margin:18px 14px 0; max-width:345px; padding:12px 13px 11px}
-.p .condbar{top:61px; margin:0 14px; padding:8px 12px; height:39px}
-.p .sec{padding:26px 14px 0}
+.p .p .p .sec{padding:26px 0 0}
 .p .truckcall{padding:14px; margin-bottom:12px; gap:11px}
 .p .truckcall .go{padding:8px 13px}
 .p .loc-list{display:flex; flex-direction:column; gap:8px}
@@ -381,11 +501,13 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   <div class="lede">
     <p>Both frames are <strong>live, not screenshots</strong>. Everything is built from the locked
     tokens and the fourteen ADRs — no code from the proof sheet was carried over.</p>
-    <p><strong>The footer's hours block and contact form are gone in this version.</strong> That
-    removed about 440px from the phone and 330px from desktop, and two designed behaviours went
-    with it: neither width is now long enough to grow a back-to-top button, and desktop Home is
-    too short for the price block to condense at all. Use the two controls below to see either
-    behaviour anyway — but the lengths are the real finding, not a display problem.</p>
+    <p><strong>The fuel block is now the approved component</strong>, ported from the proof sheet
+    rather than rebuilt from the ADR prose. One <code>&lt;details&gt;</code>: the summary carries
+    both the resting table and the one-line bar, and condensing swaps which is painted while the
+    resting height stays in the layout — so nothing below the block moves. Scroll either frame.</p>
+    <p>The footer's hours block and contact form are gone as requested. The promo region is back,
+    because the approved Home carries three promos and without them desktop Home was too short for
+    the block to condense at all.</p>
     <p>Two things you are looking at have <strong>changed since the last review</strong>, both from
     ADR 0014: the Rewards pill and the small uppercase labels. The notes under each frame say where.</p>
   </div>
@@ -422,40 +544,45 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
             <a class="pill" href="#">Get the App</a>
           </header>
           <div class="waterline"></div></div>
-          <div class="condbar" id="cb-d">
-            <span class="cb-loc">Exit 260</span>
-            <span class="cb-g">Reg</span><span class="cb-p">3.79</span>
-            <span class="cb-g">Diesel</span><span class="cb-p">4.29</span>
-            <span style="margin-left:auto; font-size:11px; color:var(--lb-navy)">All prices ⌄</span>
-          </div>
-          <section class="hero">
-            <div class="home-grid">
-              <div>
+          <div class="pagebody pagegrid">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock" id="blk-d">
+                <summary>
+                  <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                  <div class="stacked">
+                    <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                      <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                      <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span></div>
+                  </div>
+                  <div class="oneline">
+                    <span class="lp">Exit 260</span><span class="sep"></span>
+                    <span class="lg">Reg</span><span class="lv">3.79</span>
+                    <span class="lg">Diesel</span><span class="lv">4.29</span>
+                    <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                  </div>
+                </summary>
+                <div class="condpanel">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place oncond">Truck Stop</span><span class="pr na oncond">&mdash;</span><span class="pr oncond">4.55</span><span class="pr oncond">3.29</span></div>
+                </div>
+              </details>
+            </div>
+            <div class="maincol">
+              <div class="hero">
                 <h1 class="mk">Three stops on the bay</h1>
-                <p class="mk">Fuel, food and a full truck stop — open where you need us, on Lummi land.</p>
-              </div>
-              <div class="strip" id="blk-d">
-                <div class="blk-title" style="margin-bottom:9px">Today's fuel prices</div>
-                <table class="ftab">
-                  <thead><tr><th class="pl"></th><th>Regular</th><th>Diesel</th><th>DEF</th></tr></thead>
-                  <tbody>
-                    <tr><td class="pl">Exit 260</td><td class="pr">3.79</td><td class="pr">4.29</td><td class="dash">—</td></tr>
-                    <tr><td class="pl">Truck Stop</td><td class="dash">—</td><td class="pr">4.55</td><td class="pr">3.29</td></tr>
-                  </tbody>
-                </table>
-                <details style="margin-top:9px">
-                  <summary class="allp">All prices <span aria-hidden="true">⌄</span></summary>
-                  <table class="ftab panel-sep" style="margin-top:8px; padding-top:2px">
-                    <tbody>
-                      <tr><td class="pl">Mini Mart</td><td class="pr">3.79</td><td class="pr">4.29</td><td class="dash">—</td></tr>
-                      <tr><td class="pl">The Cove</td><td class="pr">3.85</td><td class="pr">4.29</td><td class="dash">—</td></tr>
-                    </tbody>
-                  </table>
-                </details>
-                <div class="stamp" style="margin-top:9px">Updated today · prices subject to change</div>
+                <p class="mk">Fuel, food and a full truck stop &mdash; open where you need us, on Lummi land.</p>
               </div>
             </div>
-          </section>
+            <div class="homerest">
+              <div class="promoregion">
+                <a class="promo w-half" href="#"><span class="pe mk">In the store</span><b class="mk">Fresh coffee, all day</b><span class="cta">See details</span></a>
+                <a class="promo w-quarter" href="#"><span class="pe mk">Rewards</span><b class="mk">Join in 60 seconds</b><span class="cta">See details</span></a>
+                <a class="promo w-quarter" href="#"><span class="pe mk">At the Cove</span><b class="mk">The Cove Kitchen</b><span class="cta">See details</span></a>
+              </div>
+              <div class="waterline-band"></div>
           <section class="sec">
             <div class="sec-h" style="margin-bottom:12px">Our locations</div>
             <div class="truckcall">
@@ -486,6 +613,8 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
               </article>
             </div>
           </section>
+            </div>
+          </div>
           <footer class="site-ft">
             <div class="ft-cols">
               <div><h5 class="mk">About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact us</a></div>
@@ -513,8 +642,9 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
       </div>
       <div class="note">
         <h3>Changed · uppercase labels</h3>
-        <p>“Today's fuel prices” and “Our locations” are <strong>navy, not cedar</strong>. At 10px
-        cedar measured 3.24:1. Navy measures 7.87:1 at any size.</p>
+        <p>“Our locations” and the promo eyebrows are <strong>navy, not cedar</strong>. At 8.5–10px
+        cedar measured 3.24:1. Navy measures 7.87:1 at any size. The approved proof sets these in
+        cedar; that is the one place this page deliberately departs from it.</p>
       </div>
       <div class="note warn">
         <h3>Blocked · the header logo</h3>
@@ -522,15 +652,18 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
         Phase 0 items 1 and 2. What you see is a stand-in. <strong>This is the one thing that
         blocks the layout shell</strong>, since the header is on every page.</p>
       </div>
+      <div class="note">
+        <h3>The block is sticky; the rail is a real grid column</h3>
+        <p>The rail spans <code>grid-row: 1 / span 2</code> so the block stays with the guest past
+        the hero, and it is pointer-transparent so the full-width sections beneath stay clickable
+        through it. Only the block itself takes events.</p>
+        <p>Condense is an IntersectionObserver on a 110px sentinel — the block's own resting height
+        — so “scrolled halfway past the block” is literal rather than a tuned number.</p>
+      </div>
       <div class="note warn">
-        <h3>Desktop Home no longer scrolls</h3>
-        <p>With the footer sections removed this page is <strong>1.05 screens</strong> — 39px of
-        scroll range on a 740px viewport. The price block's condense needs 172px before it fires,
-        so on desktop Home <strong>it never fires</strong>, and the back-to-top button needs 555px,
-        so it never appears either.</p>
-        <p>Both rules are working as written; the page simply stopped being long enough to trigger
-        them. Real copy will lengthen it — but the promo region Home does not carry, and the
-        footer content just removed, were most of the height.</p>
+        <h3>Desktop is 1.21 screens, so no back-to-top</h3>
+        <p>154px of scroll against a 555px threshold. Condense fires (it needs the sentinel's
+        110px); the button does not. Restoring the footer sections, or real copy, puts it back.</p>
       </div>
     </div>
   </section>
@@ -553,36 +686,45 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
             <span class="nav-btn" aria-hidden="true">☰</span>
           </header>
           <div class="waterline"></div></div>
-          <div class="condbar" id="cb-p">
-            <span class="cb-loc">Exit 260</span>
-            <span class="cb-g">Reg</span><span class="cb-p">3.79</span>
-            <span class="cb-g">Dsl</span><span class="cb-p">4.29</span>
-            <span style="margin-left:auto; font-size:10.5px; color:var(--lb-navy)">All ⌄</span>
-          </div>
-          <section class="hero">
-            <h1 class="mk">Three stops on the bay</h1>
-            <p class="mk">Fuel, food and a full truck stop — open where you need us, on Lummi land.</p>
-          </section>
-          <div class="strip" id="blk-p">
-            <div class="blk-title" style="margin-bottom:8px">Today's fuel prices</div>
-            <table class="ftab">
-              <thead><tr><th class="pl"></th><th>Regular</th><th>Diesel</th><th>DEF</th></tr></thead>
-              <tbody>
-                <tr><td class="pl">Exit 260</td><td class="pr">3.79</td><td class="pr">4.29</td><td class="dash">—</td></tr>
-                <tr><td class="pl">Truck Stop</td><td class="dash">—</td><td class="pr">4.55</td><td class="pr">3.29</td></tr>
-              </tbody>
-            </table>
-            <details style="margin-top:8px">
-              <summary class="allp">All prices <span aria-hidden="true">⌄</span></summary>
-              <table class="ftab panel-sep" style="margin-top:7px">
-                <tbody>
-                  <tr><td class="pl">Mini Mart</td><td class="pr">3.79</td><td class="pr">4.29</td><td class="dash">—</td></tr>
-                  <tr><td class="pl">The Cove</td><td class="pr">3.85</td><td class="pr">4.29</td><td class="dash">—</td></tr>
-                </tbody>
-              </table>
-            </details>
-            <div class="stamp" style="margin-top:8px">Updated today · prices subject to change</div>
-          </div>
+          <div class="pagebody">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock" id="blk-p">
+                <summary>
+                  <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                  <div class="stacked">
+                    <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                      <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                      <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span></div>
+                  </div>
+                  <div class="oneline">
+                    <span class="lp">Exit 260</span><span class="sep"></span>
+                    <span class="lg">Reg</span><span class="lv">3.79</span>
+                    <span class="lg">Diesel</span><span class="lv">4.29</span>
+                    <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                  </div>
+                </summary>
+                <div class="condpanel">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place oncond">Truck Stop</span><span class="pr na oncond">&mdash;</span><span class="pr oncond">4.55</span><span class="pr oncond">3.29</span></div>
+                </div>
+              </details>
+            </div>
+            <div class="maincol">
+              <div class="hero">
+                <h1 class="mk">Three stops on the bay</h1>
+                <p class="mk">Fuel, food and a full truck stop &mdash; open where you need us, on Lummi land.</p>
+              </div>
+            </div>
+            <div class="homerest">
+              <div class="promoregion">
+                <a class="promo w-half" href="#"><span class="pe mk">In the store</span><b class="mk">Fresh coffee, all day</b><span class="cta">See details</span></a>
+                <a class="promo w-quarter" href="#"><span class="pe mk">Rewards</span><b class="mk">Join in 60 seconds</b><span class="cta">See details</span></a>
+                <a class="promo w-quarter" href="#"><span class="pe mk">At the Cove</span><b class="mk">The Cove Kitchen</b><span class="cta">See details</span></a>
+              </div>
+              <div class="waterline-band"></div>
           <section class="sec">
             <div class="sec-h" style="margin-bottom:11px">Our locations</div>
             <div class="truckcall">
@@ -596,20 +738,22 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
               <a class="locrow" href="#">
                 <span class="motif todo">A</span>
                 <span style="min-width:0"><span class="nm">Exit 260</span><br><span class="cl mk">4839 Rural Ave · Open 24 hours</span></span>
-                <span class="chev" aria-hidden="true">›</span>
+                <span class="rowchev" aria-hidden="true">›</span>
               </a>
               <a class="locrow" href="#">
                 <span class="motif todo">A</span>
                 <span style="min-width:0"><span class="nm">Mini Mart</span><br><span class="cl mk">4884 Haxton Way · 6am–10pm</span></span>
-                <span class="chev" aria-hidden="true">›</span>
+                <span class="rowchev" aria-hidden="true">›</span>
               </a>
               <a class="locrow" href="#">
                 <span class="motif todo">A</span>
                 <span style="min-width:0"><span class="nm">Fisherman's Cove</span><br><span class="cl mk">2570 Lummi View Dr · 6am–9pm</span></span>
-                <span class="chev" aria-hidden="true">›</span>
+                <span class="rowchev" aria-hidden="true">›</span>
               </a>
             </div>
           </section>
+            </div>
+          </div>
           <footer class="site-ft">
             <div class="ft-cols">
               <div><h5 class="mk">About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact us</a></div>
@@ -629,20 +773,20 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
     <p class="scrollhint">Scroll to about a third of the way down</p>
 
     <div class="notes">
-      <div class="note warn">
-        <h3>Back-to-top no longer qualifies here either</h3>
-        <p>Phone Home was 2.14 screens and is now <strong>1.45</strong> — 300px of scroll against a
-        500px threshold. ADR 0011 measured this page at 2.25 screens and called it the only page on
-        the site long enough to want the button; it is now under the line with the rest.</p>
-        <p>Tick “Reveal back-to-top” to see it behave: the scroll returns to zero <em>and</em> focus
-        moves to the header, so the next Tab does not drop back into the footer. The footer still
-        reserves its 78px gutter.</p>
+      <div class="note">
+        <h3>Back-to-top, live again</h3>
+        <p>Phone Home is <strong>2.34 screens</strong> with the promo region back — close to the
+        2.25 ADR 0011 measured — so the button appears at 500px on its own. Press it: the scroll
+        returns to zero <em>and</em> focus moves to the header, so the next Tab does not drop back
+        into the footer.</p>
       </div>
       <div class="note">
-        <h3>Condense still fires on the phone</h3>
-        <p>259px in, comfortably inside the 300px this page has left. Nothing in the back-to-top
-        button knows the block exists — ADR 0005 keys the condense to scroll position, so returning
-        the position returns the card.</p>
+        <h3>The union rule, live</h3>
+        <p>Open “All prices” at rest and the panel shows Mini Mart and The Cove only — no repeated
+        header row, no caption, because it is a continuation of the card's table. Scroll until the
+        bar appears and open it again: <strong>the Truck Stop is now in the panel</strong>, and the
+        DEF column comes back with it. The bar carries one Location, so the row it displaced moves
+        below.</p>
       </div>
       <div class="note">
         <h3>Rows, not cards</h3>
@@ -704,9 +848,9 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
       Location in <code>location-content-model</code>; only the footer copy of them is gone.</p>
     </div>
     <div class="note">
-      <h3>No promo region on Home</h3>
-      <p>ADR 0007 put the promo on interior pages only; whether Home carries one was never asked
-      and is still open. Home renders none today.</p>
+      <h3>Promos on Home</h3>
+      <p>ADR 0007 left this open. The approved proof answers it: Home carries three, on the
+      12-column ladder — half, quarter, quarter. That is what is rendered here.</p>
     </div>
   </div>
 
@@ -715,68 +859,68 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 <script>
 (function(){
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var force  = document.getElementById('force');
+  var condF  = document.getElementById('cond');
+  var frames = [];
 
-  var force = document.getElementById('force');
-  var condF = document.getElementById('cond');
+  function wire(vp, blk, sentinel, tt, hd){
+    /* CONDENSE — ported from the approved proof. The sentinel IS the block's own
+       resting height, so "scrolled halfway past the block" is literal rather than
+       a magic number. */
+    function setCond(on){
+      if (on !== blk.classList.contains('cond')) blk.open = false;  // never leave a panel hanging off a bar
+      blk.classList.toggle('cond', on);
+    }
+    var natural = false;
+    new IntersectionObserver(function(entries){
+      natural = entries[0].intersectionRatio < 0.5;
+      setCond(natural || condF.checked);
+    }, {root: vp, threshold: [0, 0.5, 1]}).observe(sentinel);
 
-  function wire(vp, blk, cb, tt, hd){
-    var ticking = false;
+    /* BACK TO TOP — ADR 0011, 0.75 of a viewport, proportional not pixel */
+    var tick = false;
     function read(){
-      ticking = false;
-      var y = vp.scrollTop, vh = vp.clientHeight;
-      /* condense once the page has scrolled roughly halfway past the resting card */
-      var trigger = blk.offsetTop + (blk.offsetHeight / 2);
-      var condensed = y > trigger || condF.checked;
-      cb.classList.toggle('on', condensed);
-      blk.style.visibility = condensed ? 'hidden' : '';
-      /* ADR 0011 — 0.75 of a viewport, proportional not pixel */
-      tt.classList.toggle('on', y > vh * 0.75 || force.checked);
+      tick = false;
+      tt.classList.toggle('on', vp.scrollTop > vp.clientHeight * 0.75 || force.checked);
     }
     vp.addEventListener('scroll', function(){
-      if (!ticking){ ticking = true; requestAnimationFrame(read); }
+      if (!tick){ tick = true; requestAnimationFrame(read); }
     }, {passive:true});
-    force.addEventListener('change', read);
-    condF.addEventListener('change', read);
     tt.addEventListener('click', function(){
       vp.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
       hd.querySelector('.lock').focus({preventScroll:true});
     });
     read();
+    frames.push({read:read, apply:function(){ setCond(natural || condF.checked); }});
   }
 
-  wire(document.getElementById('vp-d'), document.getElementById('blk-d'),
-       document.getElementById('cb-d'), document.getElementById('tt-d'),
-       document.getElementById('hd-d'));
-  wire(document.getElementById('vp-p'), document.getElementById('blk-p'),
-       document.getElementById('cb-p'), document.getElementById('tt-p'),
-       document.getElementById('hd-p'));
+  function get(id){ return document.getElementById(id); }
+  ['d','p'].forEach(function(k){
+    var vp = get('vp-'+k);
+    wire(vp, get('blk-'+k), vp.querySelector('.sentinel'), get('tt-'+k), get('hd-'+k));
+  });
+  force.addEventListener('change', function(){ frames.forEach(function(f){ f.read(); }); });
+  condF.addEventListener('change', function(){ frames.forEach(function(f){ f.apply(); }); });
 
   /* scale the 1180px desktop frame down to whatever room the page has */
-  var fr = document.getElementById('fr-d'), sc = document.getElementById('sc-d'),
-      vpd = document.getElementById('vp-d'), W = 1180, H = 740;
+  var fr = get('fr-d'), sc = get('sc-d'), vpd = get('vp-d'), W = 1180, H = 740;
   vpd.style.width = W + 'px'; vpd.style.height = H + 'px';
   function fit(){
     var avail = fr.parentNode.clientWidth, s = Math.min(1, avail / W);
     sc.style.transform = 'scale(' + s + ')';
-    fr.style.width = Math.round(W * s) + 'px';
+    fr.style.width  = Math.round(W * s) + 'px';
     fr.style.height = Math.round(H * s) + 'px';
   }
   addEventListener('resize', fit); fit();
 
   /* review toggles */
-  document.getElementById('legacy').addEventListener('change', function(e){
-    document.querySelectorAll('.pill').forEach(function(p){
-      p.classList.toggle('legacy', e.target.checked);
-    });
+  get('legacy').addEventListener('change', function(e){
+    document.querySelectorAll('.pill').forEach(function(n){ n.classList.toggle('legacy', e.target.checked); });
   });
-  var marks = document.getElementById('marks');
+  var marks = get('marks');
   function applyMarks(){
-    document.querySelectorAll('.mk').forEach(function(n){
-      n.classList.toggle('ph', marks.checked);
-    });
-    document.querySelectorAll('.motif, .mark').forEach(function(n){
-      n.classList.toggle('todo', marks.checked);
-    });
+    document.querySelectorAll('.mk').forEach(function(n){ n.classList.toggle('ph', marks.checked); });
+    document.querySelectorAll('.motif, .mark').forEach(function(n){ n.classList.toggle('todo', marks.checked); });
   }
   marks.addEventListener('change', applyMarks); applyMarks();
 })();
