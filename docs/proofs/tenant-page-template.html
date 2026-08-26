@@ -1,0 +1,931 @@
+<title>Tenant Page Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap">
+<style>
+/* ============================================================
+   REVIEW CHROME — deliberately not the brand.
+   Cool slate + a violet marker, so an annotation can never be
+   mistaken for site copy. Themed for the viewer.
+   ============================================================ */
+:root{
+  --c-bg:#EDEEF1; --c-surface:#FFFFFF; --c-sunk:#E3E5EA;
+  --c-text:#191C22; --c-dim:#5A616E; --c-line:#D3D7DE;
+  --c-mark:#6B4FA8; --c-mark-soft:#EFE9FA;
+  --c-warn:#9A5B12; --c-warn-soft:#FBEFDD;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --c-bg:#14161B; --c-surface:#1D2027; --c-sunk:#0F1115;
+    --c-text:#E7E9ED; --c-dim:#99A1AE; --c-line:#2E323B;
+    --c-mark:#A78BE8; --c-mark-soft:#241D33;
+    --c-warn:#E0A75E; --c-warn-soft:#2A2114;
+  }
+}
+:root[data-theme="dark"]{
+  --c-bg:#14161B; --c-surface:#1D2027; --c-sunk:#0F1115;
+  --c-text:#E7E9ED; --c-dim:#99A1AE; --c-line:#2E323B;
+  --c-mark:#A78BE8; --c-mark-soft:#241D33;
+  --c-warn:#E0A75E; --c-warn-soft:#2A2114;
+}
+
+/* LOCKED BRAND TOKENS — skill `brand-system`. Fixed in both themes on
+   purpose: this is a review of a light-ground site, so the frames must
+   render the site's own palette whatever theme the reviewer is using. */
+:root{
+  --lb-navy:#1C4E8F; --lb-navy-deep:#14396B; --lb-teal:#0FB5C4;
+  --lb-cedar:#C9772E; --lb-ground:#FBF9F4; --lb-paper:#FFFFFF;
+  --lb-ink:#2A2820; --lb-bone:#F5F1E8;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--c-bg); color:var(--c-text);
+  font:400 15px/1.6 "IBM Plex Sans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px; margin:0 auto; padding:40px 24px 80px}
+.lede{max-width:62ch}
+h1{
+  font:600 30px/1.2 "IBM Plex Sans",system-ui,sans-serif;
+  letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance;
+}
+.eyebrow{
+  font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--c-mark);
+  margin:0 0 14px;
+}
+p{margin:0 0 14px; color:var(--c-dim)}
+p strong{color:var(--c-text); font-weight:600}
+a{color:var(--c-mark)}
+code{
+  font:500 .88em/1 "IBM Plex Mono",ui-monospace,monospace;
+  background:var(--c-sunk); padding:2px 5px; border-radius:4px; color:var(--c-text);
+}
+hr.rule{border:0; border-top:1px solid var(--c-line); margin:44px 0}
+
+/* controls */
+.controls{
+  display:flex; flex-wrap:wrap; gap:10px 20px; align-items:center;
+  background:var(--c-surface); border:1px solid var(--c-line);
+  border-radius:10px; padding:14px 18px; margin:26px 0 0;
+}
+.controls .ctl-lab{
+  font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--c-dim);
+}
+.sw{display:inline-flex; align-items:center; gap:9px; cursor:pointer; font-size:14px}
+.sw input{width:16px; height:16px; accent-color:var(--c-mark); cursor:pointer; margin:0}
+.sw:focus-within{outline:2px solid var(--c-mark); outline-offset:3px; border-radius:4px}
+
+/* frame furniture */
+.stage{margin:32px 0 0}
+.stage-hd{
+  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:0 0 14px;
+}
+.stage-hd h2{
+  font:600 19px/1.2 "IBM Plex Sans",system-ui,sans-serif; margin:0; letter-spacing:-.01em;
+}
+.stage-hd .dims{
+  font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;
+  color:var(--c-dim); letter-spacing:.06em;
+}
+.frame{
+  background:var(--c-sunk); border:1px solid var(--c-line); border-radius:12px;
+  overflow:hidden; position:relative; margin:0 auto;
+}
+.scaler{transform-origin:0 0; position:relative}
+.vp{
+  overflow-y:auto; overflow-x:hidden; position:relative;
+  background:var(--lb-ground); scrollbar-width:thin;
+}
+.scrollhint{
+  font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--c-dim);
+  margin:10px 0 0; text-align:center;
+}
+
+/* annotation callouts */
+.notes{display:grid; gap:12px; margin:22px 0 0; grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.note{
+  background:var(--c-surface); border:1px solid var(--c-line);
+  border-left:3px solid var(--c-mark); border-radius:8px; padding:14px 16px;
+}
+.note.warn{border-left-color:var(--c-warn)}
+.note h3{
+  font:500 10.5px/1.3 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--c-mark);
+  margin:0 0 7px;
+}
+.note.warn h3{color:var(--c-warn)}
+.note p{margin:0; font-size:13.5px; line-height:1.55}
+.note p + p{margin-top:8px}
+
+/* legend */
+.legend{display:flex; flex-wrap:wrap; gap:8px 22px; margin:18px 0 0; align-items:center}
+.legend span{display:inline-flex; align-items:center; gap:8px; font-size:13px; color:var(--c-dim)}
+.chip{
+  display:inline-block; width:22px; height:11px; border-radius:3px; flex:0 0 auto;
+}
+.chip-ph{background:transparent; border-bottom:2px dotted var(--c-mark); height:8px}
+.chip-todo{background:transparent; border:1px dashed var(--c-warn); height:14px}
+
+/* data table */
+table.audit{border-collapse:collapse; width:100%; margin:6px 0 0; font-size:13.5px}
+table.audit th,table.audit td{
+  text-align:left; padding:7px 12px 7px 0; border-bottom:1px solid var(--c-line);
+}
+table.audit th{
+  font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--c-dim);
+}
+table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono",monospace; font-size:12.5px}
+.tag{
+  display:inline-block; font:500 10px/1 "IBM Plex Mono",monospace; letter-spacing:.08em;
+  padding:4px 7px; border-radius:4px;
+}
+.tag.bad{background:var(--c-warn-soft); color:var(--c-warn)}
+.tag.good{background:var(--c-mark-soft); color:var(--c-mark)}
+.tbl-scroll{overflow-x:auto}
+
+/* ============================================================
+   THE SITE ITSELF — locked tokens only.
+   ============================================================ */
+.vp .site{min-height:100%; display:flex; flex-direction:column}
+.vp a{text-decoration:none}
+
+/* placeholder copy marker (review aid, not a site style) */
+.ph{
+  text-decoration:underline dotted; text-decoration-thickness:2px;
+  text-underline-offset:3px; text-decoration-color:#6B4FA8;
+}
+.site-ft .ph,.truckcall .ph{text-decoration-color:var(--lb-teal)}
+.todo{border:1px dashed var(--lb-cedar); border-radius:4px}
+
+/* header — sticky, navy */
+.hdwrap{position:sticky; top:0; z-index:40}
+.site-hd{
+  background:var(--lb-navy); display:flex; align-items:center; gap:22px;
+}
+.lock{display:flex; align-items:center; gap:9px; flex:0 0 auto}
+.lock .mark{
+  display:grid; place-items:center; color:var(--lb-bone);
+  font:700 10px/1 Inter,sans-serif; letter-spacing:.06em; text-align:center;
+}
+.lock .wm{
+  font:700 15px/1 "Space Grotesk",Inter,sans-serif; color:var(--lb-bone);
+  letter-spacing:-.01em;
+}
+.site-nav{display:flex; align-items:center; gap:4px}
+.site-nav a{
+  color:var(--lb-bone); font:500 13px/1 Inter,sans-serif; border-radius:6px;
+  display:inline-flex; align-items:center;
+}
+.site-nav a[aria-current]{background:rgba(245,241,232,.16); font-weight:600}
+.site-nav a:hover{background:rgba(245,241,232,.10)}
+/* ADR 0014: bone fill + navy label. Was cedar fill + #fff. */
+.pill{
+  margin-left:auto; background:var(--lb-bone); color:var(--lb-navy);
+  border-radius:99px; display:inline-flex; align-items:center; gap:6px;
+  font-family:Inter,sans-serif; font-weight:600; letter-spacing:.03em; flex:0 0 auto;
+}
+.pill.legacy{background:var(--lb-cedar); color:#fff}
+
+/* waterline */
+.waterline{height:5px; background:var(--lb-teal); flex:0 0 auto}
+
+/* hero */
+.hero h1{
+  font-family:"Space Grotesk",Inter,sans-serif; font-weight:700; color:var(--lb-navy);
+  margin:0 0 10px; line-height:1.1; letter-spacing:-.02em;
+}
+.hero p{color:var(--lb-ink); opacity:.75; margin:0; font-family:Inter,sans-serif}
+
+
+
+/* ===== fuel block — ported from the approved proof, artifact 9af4c540 =====
+   One <details>. The summary carries BOTH the resting table and the one-line
+   bar; condensing swaps which one is painted and leaves the resting height in
+   the layout, so nothing below the block moves. */
+.pagebody{position:relative}
+.sentinel{position:absolute; top:0; left:0; width:1px; visibility:hidden; pointer-events:none}
+.d .sentinel{height:110px}
+.p .sentinel{height:102px}
+
+.fuelblock{
+  position:sticky; z-index:40; margin-left:auto; width:400px;
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal); border-radius:6px;
+  box-shadow:0 14px 30px -14px rgba(20,57,107,.34);
+}
+.d .fuelblock{top:73px; --cue-h:28px}
+.p .fuelblock{top:69px; width:auto; margin:0; --cue-h:26px}
+/* on a phone the rail must not box the block, or sticky has only the block's own
+   height to stick within and it scrolls away immediately */
+.p .railcol{display:contents}
+
+.fuelblock>summary{list-style:none; cursor:pointer; display:block}
+.fuelblock>summary::-webkit-details-marker{display:none}
+.fuelblock>summary:focus-visible{outline:3px solid var(--lb-teal); outline-offset:2px}
+.cue{
+  display:flex; align-items:center; gap:5px; height:var(--cue-h); padding:8px 12px 0;
+  font:500 .6875rem/1 Inter,sans-serif; color:var(--lb-navy); opacity:.82;
+}
+.fuelblock>summary:hover .cue{opacity:1}
+.lbl-open{display:none}
+.fuelblock[open] .lbl-shut{display:none}
+.fuelblock[open] .lbl-open{display:inline}
+.chev{
+  width:8px; height:8px; border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor; transform:rotate(45deg) translateY(-1px);
+  flex:0 0 auto;
+}
+.fuelblock[open] .chev{transform:rotate(-135deg) translateY(-1px)}
+
+.stacked{display:grid; gap:10px; padding:4px 12px 12px}
+.grp{display:grid; align-items:baseline; row-gap:2px}
+.grp.g3{grid-template-columns:1fr 3.9em 3.9em 3.9em; column-gap:7px}
+.d .grp.g3{grid-template-columns:1fr 4.6em 4.6em 4.6em; column-gap:11px}
+.gh{
+  font:600 9.5px/1.6 Inter,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--lb-navy); text-align:right;
+}
+.d .gh{font-size:10.5px}
+.place{
+  font:700 .8125rem/1.5 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.d .place{font-size:.9375rem}
+.pr{
+  font:700 .9375rem/1.5 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy-deep);
+  text-align:right; font-variant-numeric:tabular-nums;
+}
+.d .pr{font-size:1.0625rem}
+.pr.na{opacity:.35; font-weight:500}
+
+.oneline{
+  display:none; align-items:center; gap:0 12px; padding:4px 12px 12px;
+  white-space:nowrap; overflow:hidden; font-family:Inter,sans-serif;
+}
+.oneline .lp{font:700 .9375rem/1 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy)}
+.oneline .lg{
+  font:600 .625rem/1 Inter,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--lb-ink); opacity:.6;
+}
+.oneline .lv{
+  font:700 1.0625rem/1 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy-deep);
+  font-variant-numeric:tabular-nums;
+}
+.oneline .sep{width:1px; height:20px; background:rgba(28,78,143,.2)}
+.oneline .more{
+  margin-left:auto; padding-left:14px; font:500 .6875rem/1 Inter,sans-serif;
+  color:var(--lb-navy); display:flex; align-items:center; gap:5px;
+}
+.p .oneline .more .word{display:none}
+
+/* CONDENSED — the block keeps its resting height, the bar is drawn over it */
+.fuelblock.cond{background:transparent; border-color:transparent; box-shadow:none}
+.fuelblock.cond .stacked{visibility:hidden; pointer-events:none}
+.fuelblock.cond>summary>.cue{visibility:hidden}
+.fuelblock.cond .oneline{
+  display:flex; position:absolute; top:-1px; left:-1px; right:-1px; width:auto;
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.16);
+  border-bottom:2px solid var(--lb-teal); border-radius:6px;
+  box-shadow:0 10px 24px -14px rgba(20,57,107,.3); padding:9px 11px;
+}
+
+/* open is ONE card: the panel butts onto the block, no gap and no second radius */
+.condpanel{
+  position:absolute; left:-1px; right:-1px; width:auto; top:100%;
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.16);
+  border-top:1px solid rgba(28,78,143,.13); border-bottom:2px solid var(--lb-teal);
+  border-radius:0 0 6px 6px; box-shadow:0 18px 34px -12px rgba(20,57,107,.34);
+  padding:9px 12px 12px; z-index:50;
+}
+.fuelblock:not([open]) .condpanel{display:none}
+.fuelblock[open]:not(.cond){border-bottom-color:transparent; border-radius:6px 6px 0 0}
+.fuelblock.cond .condpanel{top:39px}
+.fuelblock.cond[open] .oneline{border-bottom-color:transparent; border-radius:6px 6px 0 0}
+/* the panel carries only what is NOT on screen — hide the row, hide its column */
+.fuelblock:not(.cond) .condpanel .gh{display:none}
+.fuelblock:not(.cond) .condpanel .oncond{display:none}
+
+/* the two-column top region; everything below the hero is full width */
+.d .pagegrid{
+  display:grid; align-content:start; grid-template-columns:1fr 400px;
+  column-gap:14px; align-items:start; padding:30px 26px 0;
+}
+.d .pagegrid .railcol{
+  grid-column:2; grid-row:1/span 2; align-self:stretch;
+  pointer-events:none; z-index:40;
+}
+.d .pagegrid .railcol .fuelblock{pointer-events:auto}
+.d .pagegrid .maincol{grid-column:1; grid-row:1; min-width:0}
+.homerest{grid-column:1/-1}
+.d .pagegrid .homerest{grid-row:2}
+.p .pagebody{padding:16px 14px 0}
+
+
+/* ===== promo region + waterline band — approved proof, artifact 9af4c540 =====
+   The region is full width below the two-column top. Each promo takes a width
+   from a fixed 12-column ladder so any mix tiles without orphan gaps. */
+.promoregion{display:grid; gap:12px; grid-template-columns:1fr; margin-top:4px}
+.d .promoregion{gap:14px; grid-template-columns:repeat(12,1fr)}
+.d .promoregion .promo{grid-column:span 12; min-height:150px; aspect-ratio:auto}
+.d .promoregion .promo.w-half{grid-column:span 6}
+.d .promoregion .promo.w-quarter{grid-column:span 3}
+.p .promoregion .promo{grid-column:auto; aspect-ratio:16/9}
+.promo{
+  position:relative; text-decoration:none; overflow:hidden; border-radius:10px;
+  border:1px solid rgba(28,78,143,.16);
+  background:linear-gradient(135deg,var(--lb-bone) 0%,#ECE5D8 55%,#DFD5C3 100%);
+  display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-end;
+  text-align:left; padding:13px 14px; aspect-ratio:5/1;
+}
+/* ADR 0014: the approved proof sets this eyebrow in cedar at 8.5px (3.24:1). Navy. */
+.promo .pe{
+  font:600 8.5px/1 Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--lb-navy);
+}
+.promo b{
+  font:700 .9375rem/1.2 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy);
+  letter-spacing:-.01em; margin-top:4px;
+}
+.d .promo b{font-size:1.0625rem}
+.promo .cta{
+  margin-top:9px; font:600 9px/1 Inter,sans-serif; letter-spacing:.07em;
+  text-transform:uppercase; color:#fff; background:var(--lb-navy); border-radius:99px;
+  padding:6px 11px;
+}
+.promo::after{
+  content:"ART TBD"; position:absolute; top:8px; right:9px;
+  font:400 7px/1 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.12em;
+  color:var(--lb-ink); opacity:.45; border:1px dashed rgba(42,40,32,.35);
+  border-radius:3px; padding:3px 5px;
+}
+/* TODO: replace with approved Lummi art */
+.waterline-band{
+  height:10px; margin:20px 0 18px; border-radius:99px;
+  background:linear-gradient(90deg,var(--lb-teal),var(--lb-navy)); opacity:.9;
+}
+
+/* truck stop callout */
+.truckcall{
+  background:var(--lb-navy); border-radius:12px; display:flex; align-items:center;
+  gap:14px; color:var(--lb-bone); font-family:Inter,sans-serif;
+}
+.truckcall h3{font:700 15px/1.2 "Space Grotesk",Inter,sans-serif; margin:0 0 3px; color:var(--lb-bone)}
+.truckcall p{margin:0; font:400 12px/1.45 Inter,sans-serif; color:var(--lb-bone); opacity:.86}
+.truckcall .go{
+  margin-left:auto; background:var(--lb-bone); color:var(--lb-navy); border-radius:99px;
+  font:600 11px/1 Inter,sans-serif; flex:0 0 auto; display:inline-flex; align-items:center;
+}
+
+/* location cards / rows */
+.sec-h{
+  font:700 .625rem/1 Inter,sans-serif; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--lb-navy);
+}
+.loccard{
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.14); border-radius:12px;
+  display:flex; flex-direction:column;
+}
+.loccard h4{
+  font:700 1.0625rem/1.2 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy); margin:0 0 5px;
+}
+.loccard p{
+  font:400 .8125rem/1.5 Inter,sans-serif; color:var(--lb-ink); opacity:.75; margin:0 0 9px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.loccard .motif{
+  width:26px; height:26px; border-radius:4px; display:grid; place-items:center;
+  font:500 9px/1 Inter,sans-serif; color:var(--lb-cedar); margin-bottom:9px;
+}
+.loccard .go{
+  font:600 .6875rem/1 Inter,sans-serif; letter-spacing:.07em; color:var(--lb-navy);
+  margin-top:auto;
+}
+.locrow{
+  display:flex; align-items:center; gap:11px; background:var(--lb-paper);
+  border:1px solid rgba(28,78,143,.14); border-radius:10px;
+}
+.locrow .motif{
+  width:24px; height:24px; border-radius:4px; display:grid; place-items:center;
+  font:500 8px/1 Inter,sans-serif; color:var(--lb-cedar); flex:0 0 auto;
+}
+.locrow .nm{font:700 13px/1.2 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy)}
+.locrow .cl{
+  font:400 11px/1.35 Inter,sans-serif; color:var(--lb-ink); opacity:.75;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.locrow .rowchev{margin-left:auto; color:var(--lb-navy); font-size:15px; flex:0 0 auto}
+
+/* footer */
+.site-ft{background:var(--lb-navy); color:var(--lb-bone); margin-top:auto; font-family:Inter,sans-serif}
+.ft-cols{display:grid; gap:22px}
+.ft-cols h5{
+  font:700 9px/1 Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--lb-bone); opacity:.68; margin:0 0 10px;
+}
+.ft-cols a{display:block; color:var(--lb-bone); font:400 12px/1 Inter,sans-serif; opacity:.92}
+.ft-cols a:hover{opacity:1; text-decoration:underline}
+.ft-base{
+  border-top:1px solid rgba(245,241,232,.2); display:flex; flex-wrap:wrap;
+  gap:8px 18px; align-items:center;
+}
+.ft-base span{font:400 10.5px/1 Inter,sans-serif; color:var(--lb-bone); opacity:.7}
+.ft-base a{font:600 10.5px/1 Inter,sans-serif; color:var(--lb-bone); text-decoration:underline}
+
+/* back to top */
+.totop{
+  position:absolute; right:16px; border:0; border-radius:99px; cursor:pointer;
+  background:var(--lb-navy); color:var(--lb-bone); display:grid; place-items:center;
+  visibility:hidden; box-shadow:0 3px 12px rgba(20,57,107,.32); font-size:17px;
+  /* ADR 0014 discipline: the disc scrolls over ground AND over the navy footer.
+     Navy fill carries it on ground (7.87); the bone ring carries it on the
+     footer (7.35). A plain navy disc measures 1:1 against the footer. */
+  border:2px solid var(--lb-bone);
+}
+.totop.on{visibility:visible}
+.totop:focus-visible{outline:3px solid var(--lb-teal); outline-offset:2px}
+
+/* ---- desktop frame metrics ---- */
+.d .site-hd{height:60px; padding:0 26px}
+.d .lock .mark{width:34px; height:34px}
+.d .site-nav a{height:38px; padding:0 13px}
+.d .pill{font-size:11px; padding:8px 15px}
+.d .hero{padding:0}
+.d .hero h1{font-size:2.25rem}
+.d .hero p{font-size:1rem; max-width:46ch}
+.d .d .d .sec{padding:34px 0 0}
+.d .truckcall{padding:16px 18px; margin-bottom:14px}
+.d .truckcall .go{padding:9px 16px}
+.d .loc-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px}
+.d .loccard{padding:15px 16px 14px}
+.d .site-ft{margin-top:40px; padding:30px 26px 30px}
+.d .ft-cols{grid-template-columns:repeat(4,1fr)}
+.d .ft-base{margin-top:20px; padding-top:16px}
+#tt-d{width:44px; height:44px; bottom:18px}
+
+/* ---- phone frame metrics ---- */
+.p .site-hd{height:56px; padding:0 14px; gap:10px}
+.p .lock .mark{width:30px; height:30px}
+.p .lock .wm{font-size:13px}
+.p .site-nav{display:none}
+.p .pill{font-size:10.5px; padding:7px 12px}
+.p .hero{padding:18px 0 0}
+.p .hero h1{font-size:1.75rem}
+.p .hero p{font-size:.875rem}
+.p .p .p .sec{padding:26px 0 0}
+.p .truckcall{padding:14px; margin-bottom:12px; gap:11px}
+.p .truckcall .go{padding:8px 13px}
+.p .loc-list{display:flex; flex-direction:column; gap:8px}
+.p .locrow{padding:0 11px; height:61px}
+.p .site-ft{margin-top:32px; padding:26px 14px 72px}
+.p .ft-cols{grid-template-columns:1fr 1fr}
+.p .ft-base{margin-top:18px; padding-top:14px}
+#tt-p{width:46px; height:46px; bottom:16px}
+.p .nav-btn{
+  margin-left:auto; color:var(--lb-bone); font-size:19px; width:40px; height:40px;
+  display:grid; place-items:center; flex:0 0 auto;
+}
+.p .pill{margin-left:0}
+
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto !important}}
+
+/* ===== tenant page ===== */
+.backlink{
+  display:inline-flex; align-items:center; gap:6px; font:600 .6875rem/1 Inter,sans-serif;
+  letter-spacing:.07em; text-transform:uppercase; color:var(--lb-navy); margin-bottom:12px;
+}
+.tenant-hero{
+  position:relative; border-radius:12px; overflow:hidden; border:1px solid rgba(28,78,143,.16);
+  background:linear-gradient(135deg,var(--lb-bone) 0%,#ECE5D8 55%,#DFD5C3 100%);
+  display:grid; place-items:center;
+}
+.d .tenant-hero{height:190px}
+.p .tenant-hero{height:132px}
+.tenant-hero::after{
+  content:"ART TBD"; position:absolute; top:9px; right:10px;
+  font:400 7px/1 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.12em;
+  color:var(--lb-ink); opacity:.45; border:1px dashed rgba(42,40,32,.35);
+  border-radius:3px; padding:3px 5px;
+}
+.tenant-hero .ph-label{
+  font:600 10px/1 Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--lb-ink); opacity:.5;
+}
+.tenant-hd{margin:16px 0 0}
+.tenant-hd h1{
+  font-family:"Space Grotesk",Inter,sans-serif; font-weight:700; color:var(--lb-navy);
+  margin:0 0 8px; line-height:1.1; letter-spacing:-.02em;
+}
+.d .tenant-hd h1{font-size:2rem}
+.p .tenant-hd h1{font-size:1.5rem}
+.chiprow{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px}
+.chip-where{
+  display:inline-flex; align-items:center; gap:5px; background:var(--lb-bone);
+  border:1px solid rgba(28,78,143,.18); border-radius:99px;
+  font:600 10.5px/1 Inter,sans-serif; color:var(--lb-navy); padding:6px 11px;
+}
+.tenant-body{font:400 .9375rem/1.6 Inter,sans-serif; color:var(--lb-ink); max-width:60ch}
+.p .tenant-body{font-size:.875rem}
+.tenant-body p{margin:0 0 10px}
+.hourscard{
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.16); border-radius:12px;
+  padding:14px 16px; margin-top:16px; max-width:400px;
+}
+.hourscard h3{
+  font:700 .625rem/1 Inter,sans-serif; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--lb-navy); margin:0 0 10px;
+}
+.hrow{
+  display:flex; justify-content:space-between; gap:16px;
+  font:400 .8125rem/1.9 Inter,sans-serif; color:var(--lb-ink);
+}
+.hrow b{font-weight:600; color:var(--lb-navy)}
+.hrow span{font-variant-numeric:tabular-nums}
+.hstamp{
+  margin-top:9px; padding-top:9px; border-top:1px solid rgba(28,78,143,.13);
+  font:500 9.5px/1.4 Inter,sans-serif; color:var(--lb-ink); opacity:.6;
+}
+.tenant-cta{display:flex; flex-wrap:wrap; gap:9px; margin-top:16px}
+.btn-primary{
+  background:var(--lb-navy); color:var(--lb-bone); border-radius:99px;
+  font:600 11.5px/1 Inter,sans-serif; letter-spacing:.04em; padding:11px 18px;
+  display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box;
+}
+.btn-ghost{
+  background:transparent; color:var(--lb-navy); border:1px solid rgba(28,78,143,.35);
+  border-radius:99px; font:600 11.5px/1 Inter,sans-serif; letter-spacing:.04em;
+  padding:11px 18px; display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box;
+}
+/* rendered by the template, never by an editor — ADR 0016 */
+.disclosure{
+  margin-top:18px; padding:11px 13px; border-left:3px solid var(--lb-teal);
+  background:var(--lb-bone); border-radius:0 8px 8px 0;
+  font:500 .75rem/1.5 Inter,sans-serif; color:var(--lb-ink); max-width:60ch;
+}
+/* index */
+.tenant-grid{display:grid; gap:12px}
+.d .tenant-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.tcard{
+  background:var(--lb-paper); border:1px solid rgba(28,78,143,.14); border-radius:12px;
+  padding:13px 14px; display:flex; flex-direction:column; gap:5px;
+}
+.tcard .thumb{
+  height:64px; border-radius:8px; margin-bottom:6px;
+  background:linear-gradient(135deg,var(--lb-bone) 0%,#ECE5D8 100%);
+  border:1px dashed rgba(201,119,46,.55);
+}
+.tcard h4{font:700 .9375rem/1.2 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy); margin:0}
+.tcard p{font:400 .75rem/1.45 Inter,sans-serif; color:var(--lb-ink); opacity:.78; margin:0}
+.tcard .soon{
+  align-self:flex-start; font:600 8.5px/1 Inter,sans-serif; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--lb-navy); background:var(--lb-bone);
+  border:1px solid rgba(28,78,143,.2); border-radius:99px; padding:4px 8px;
+}
+/* CMS field badges */
+.fieldwrap{position:relative}
+body:not(.showfields) .fieldtag{display:none}
+.fieldtag{
+  position:absolute; top:-9px; left:8px; z-index:5;
+  font:500 8.5px/1 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.06em;
+  color:#fff; background:#6B4FA8; border-radius:3px; padding:3px 5px; white-space:nowrap;
+}
+.showfields .fieldwrap{outline:1px dashed rgba(107,79,168,.75); outline-offset:3px; border-radius:4px}
+.fieldtag.locked{background:#8A6D1F}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Template &middot; ADR 0016 &middot; tenants collection</p>
+  <h1>A page for a business on the property</h1>
+  <div class="lede">
+    <p>One template, one page per company. Everything outside the middle column &mdash; header,
+    fuel prices, waterline, footer, back-to-top &mdash; comes from the layout and is identical
+    on every page of the site. <strong>Staff fill in the middle and nothing else.</strong></p>
+    <p>Turn on <em>Show CMS fields</em> to see exactly which parts are typed in. The example is
+    Piroshky Piroshky; the roster below it shows how the four sit together.</p>
+  </div>
+
+  <div class="controls">
+    <span class="ctl-lab">Review controls</span>
+    <label class="sw"><input type="checkbox" id="fields" checked> Show CMS fields</label>
+    <label class="sw"><input type="checkbox" id="force"> Reveal back-to-top</label>
+    <label class="sw"><input type="checkbox" id="cond"> Force the condensed price bar</label>
+  </div>
+
+  <hr class="rule">
+
+  <section class="stage">
+    <div class="stage-hd"><h2>Desktop</h2><span class="dims">1180 &times; 740 viewport &middot; scaled to fit</span></div>
+    <div class="frame" id="fr-d"><div class="scaler" id="sc-d">
+      <div class="vp d" id="vp-d" tabindex="0" aria-label="Desktop tenant page preview, scrollable">
+        <div class="site">
+          <div class="hdwrap"><header class="site-hd" id="hd-d">
+            <a class="lock" href="#"><span class="mark todo">LOGO</span><span class="wm">Lummi Bay Market</span></a>
+            <nav class="site-nav"><a href="#">Home</a><a href="#">Locations</a><a href="#">Truck Stop</a></nav>
+            <a class="pill" href="#">Get the App</a>
+            
+          </header>
+          <div class="waterline"></div></div>
+          <div class="pagebody pagegrid">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock" id="blk-d">
+                <summary>
+                  <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                  <div class="stacked">
+                    <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                      <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                      <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span></div>
+                  </div>
+                  <div class="oneline">
+                    <span class="lp">Exit 260</span><span class="sep"></span>
+                    <span class="lg">Reg</span><span class="lv">3.79</span>
+                    <span class="lg">Diesel</span><span class="lv">4.29</span>
+                    <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                  </div>
+                </summary>
+                <div class="condpanel">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place oncond">Truck Stop</span><span class="pr na oncond">&mdash;</span><span class="pr oncond">4.55</span><span class="pr oncond">3.29</span></div>
+                </div>
+              </details>
+            </div>
+            <div class="maincol">
+              <a class="backlink" href="#">&larr; Also at Exit 260</a>
+              <div class="fieldwrap"><span class="fieldtag">headerImage + alt</span>
+                <div class="tenant-hero"><span class="ph-label">Company header image</span></div>
+              </div>
+              <div class="tenant-hd">
+                <div class="fieldwrap" style="display:inline-block"><span class="fieldtag">name</span>
+                  <h1>Piroshky Piroshky</h1>
+                </div>
+                <div class="chiprow">
+                  <div class="fieldwrap"><span class="fieldtag">placement</span>
+                    <span class="chip-where">Inside the Exit&nbsp;260 store</span>
+                  </div>
+                  <div class="fieldwrap"><span class="fieldtag">status</span>
+                    <span class="chip-where">Open now</span>
+                  </div>
+                </div>
+              </div>
+              <div class="fieldwrap"><span class="fieldtag">description &mdash; richText</span>
+                <div class="tenant-body">
+                  <p>Hand-shaped Russian pastries baked fresh through the day &mdash; savoury
+                  beef and cheese, smoked salmon p&acirc;t&eacute;, and a rotating sweet case.
+                  The counter is just inside the main doors, to the left of the coffee.</p>
+                </div>
+              </div>
+              <div class="fieldwrap"><span class="fieldtag">hours[] + hoursConfirmed</span>
+                <div class="hourscard">
+                  <h3>Hours</h3>
+                  <div class="hrow"><b>Mon &ndash; Fri</b><span>6am &ndash; 6pm</span></div>
+                  <div class="hrow"><b>Saturday</b><span>7am &ndash; 6pm</span></div>
+                  <div class="hrow"><b>Sunday</b><span>7am &ndash; 4pm</span></div>
+                  <div class="hstamp">Hours provided by the business &middot; confirmed 12 Aug 2026</div>
+                </div>
+              </div>
+              <div class="fieldwrap"><span class="fieldtag">links[]</span>
+                <div class="tenant-cta">
+                  <a class="btn-primary" href="#">Visit their website</a>
+                  <a class="btn-ghost" href="#">Directions to Exit&nbsp;260</a>
+                </div>
+              </div>
+              <div class="fieldwrap"><span class="fieldtag locked">rendered by the template &mdash; not editable</span>
+                <p class="disclosure">Independently owned and operated. Not part of Lummi Bay Market.</p>
+              </div>
+            </div>
+            <div class="homerest">
+              <div class="waterline-band"></div>
+              <div class="sec-h" style="margin-bottom:11px">Also at Exit 260</div>
+              <div class="tenant-grid">
+                <a class="tcard" href="#"><span class="thumb"></span><h4>Piroshky Piroshky</h4><p>Inside the store</p></a>
+                <a class="tcard" href="#"><span class="thumb"></span><h4>Wendy's</h4><p>On the property</p></a>
+                <a class="tcard" href="#"><span class="thumb"></span><h4>High Tide Coffee</h4><p>Coffee truck in the lot</p></a>
+                <a class="tcard" href="#"><span class="thumb"></span><h4>Black Bear Diner</h4><p>On the property</p><span class="soon">Opening soon</span></a>
+              </div>
+            </div>
+          </div>
+          <footer class="site-ft">
+            <div class="ft-cols">
+              <div><h5>About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact</a></div>
+              <div><h5>Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a><a href="#">Truck Stop</a></div>
+              <div><h5>Rewards</h5><a href="#">Get the app</a><a href="#">All fuel prices</a></div>
+              <div><h5>Work with us</h5><a href="#">Careers</a></div>
+            </div>
+            <div class="ft-base"><span>&copy; 2026 Lummi Bay Market</span><a href="#">Lummi Commercial Companies</a></div>
+          </footer>
+        </div>
+      </div>
+      <button type="button" class="totop" id="tt-d" aria-label="Back to top">&uarr;</button>
+    </div></div>
+    <p class="scrollhint">Scroll inside the frame</p>
+  </section>
+
+  <hr class="rule">
+
+  <section class="stage">
+    <div class="stage-hd"><h2>Phone</h2><span class="dims">375 &times; 667 viewport &middot; actual size</span></div>
+    <div class="frame" id="fr-p" style="width:375px; height:667px"><div class="scaler" id="sc-p">
+      <div class="vp p" id="vp-p" tabindex="0" aria-label="Phone tenant page preview, scrollable">
+        <div class="site">
+          <div class="hdwrap"><header class="site-hd" id="hd-p">
+            <a class="lock" href="#"><span class="mark todo">LOGO</span><span class="wm">Lummi Bay</span></a>
+            
+            <a class="pill" href="#">Get the App</a>
+            <span class="nav-btn" aria-hidden="true">☰</span>
+          </header>
+          <div class="waterline"></div></div>
+          <div class="pagebody">
+            <div class="sentinel"></div>
+            <div class="railcol">
+              <details class="fuelblock" id="blk-p">
+                <summary>
+                  <div class="cue"><span class="chev"></span><span class="lbl-shut">View all prices</span><span class="lbl-open">Hide</span></div>
+                  <div class="stacked">
+                    <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                      <span class="place">Exit 260</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                      <span class="place">Truck Stop</span><span class="pr na">&mdash;</span><span class="pr">4.55</span><span class="pr">3.29</span></div>
+                  </div>
+                  <div class="oneline">
+                    <span class="lp">Exit 260</span><span class="sep"></span>
+                    <span class="lg">Reg</span><span class="lv">3.79</span>
+                    <span class="lg">Diesel</span><span class="lv">4.29</span>
+                    <span class="more"><span class="chev"></span><span>All<span class="word"> prices</span></span></span>
+                  </div>
+                </summary>
+                <div class="condpanel">
+                  <div class="grp g3"><span class="gh"></span><span class="gh">Regular</span><span class="gh">Diesel</span><span class="gh">DEF</span>
+                    <span class="place">Mini Mart</span><span class="pr">3.79</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place">The Cove</span><span class="pr">3.85</span><span class="pr">4.29</span><span class="pr na">&mdash;</span>
+                    <span class="place oncond">Truck Stop</span><span class="pr na oncond">&mdash;</span><span class="pr oncond">4.55</span><span class="pr oncond">3.29</span></div>
+                </div>
+              </details>
+            </div>
+            <div class="maincol">
+              <a class="backlink" href="#">&larr; Also at Exit 260</a>
+              <div class="fieldwrap"><span class="fieldtag">headerImage + alt</span>
+                <div class="tenant-hero"><span class="ph-label">Company header image</span></div>
+              </div>
+              <div class="tenant-hd">
+                <div class="fieldwrap" style="display:inline-block"><span class="fieldtag">name</span>
+                  <h1>Piroshky Piroshky</h1>
+                </div>
+                <div class="chiprow">
+                  <div class="fieldwrap"><span class="fieldtag">placement</span>
+                    <span class="chip-where">Inside the Exit&nbsp;260 store</span>
+                  </div>
+                  <div class="fieldwrap"><span class="fieldtag">status</span>
+                    <span class="chip-where">Open now</span>
+                  </div>
+                </div>
+              </div>
+              <div class="fieldwrap"><span class="fieldtag">description &mdash; richText</span>
+                <div class="tenant-body">
+                  <p>Hand-shaped Russian pastries baked fresh through the day &mdash; savoury
+                  beef and cheese, smoked salmon p&acirc;t&eacute;, and a rotating sweet case.
+                  The counter is just inside the main doors, to the left of the coffee.</p>
+                </div>
+              </div>
+              <div class="fieldwrap"><span class="fieldtag">hours[] + hoursConfirmed</span>
+                <div class="hourscard">
+                  <h3>Hours</h3>
+                  <div class="hrow"><b>Mon &ndash; Fri</b><span>6am &ndash; 6pm</span></div>
+                  <div class="hrow"><b>Saturday</b><span>7am &ndash; 6pm</span></div>
+                  <div class="hrow"><b>Sunday</b><span>7am &ndash; 4pm</span></div>
+                  <div class="hstamp">Hours provided by the business &middot; confirmed 12 Aug 2026</div>
+                </div>
+              </div>
+              <div class="fieldwrap"><span class="fieldtag">links[]</span>
+                <div class="tenant-cta">
+                  <a class="btn-primary" href="#">Visit their website</a>
+                  <a class="btn-ghost" href="#">Directions to Exit&nbsp;260</a>
+                </div>
+              </div>
+              <div class="fieldwrap"><span class="fieldtag locked">rendered by the template &mdash; not editable</span>
+                <p class="disclosure">Independently owned and operated. Not part of Lummi Bay Market.</p>
+              </div>
+            </div>
+            <div class="homerest">
+              <div class="waterline-band"></div>
+              <div class="sec-h" style="margin-bottom:11px">Also at Exit 260</div>
+              <div class="tenant-grid">
+                <a class="tcard" href="#"><span class="thumb"></span><h4>Piroshky Piroshky</h4><p>Inside the store</p></a>
+                <a class="tcard" href="#"><span class="thumb"></span><h4>Wendy's</h4><p>On the property</p></a>
+                <a class="tcard" href="#"><span class="thumb"></span><h4>High Tide Coffee</h4><p>Coffee truck in the lot</p></a>
+                <a class="tcard" href="#"><span class="thumb"></span><h4>Black Bear Diner</h4><p>On the property</p><span class="soon">Opening soon</span></a>
+              </div>
+            </div>
+          </div>
+          <footer class="site-ft">
+            <div class="ft-cols">
+              <div><h5>About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact</a></div>
+              <div><h5>Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a><a href="#">Truck Stop</a></div>
+              <div><h5>Rewards</h5><a href="#">Get the app</a><a href="#">All fuel prices</a></div>
+              <div><h5>Work with us</h5><a href="#">Careers</a></div>
+            </div>
+            <div class="ft-base"><span>&copy; 2026 Lummi Bay Market</span><a href="#">Lummi Commercial Companies</a></div>
+          </footer>
+        </div>
+      </div>
+      <button type="button" class="totop" id="tt-p" aria-label="Back to top">&uarr;</button>
+    </div></div>
+    <p class="scrollhint">Scroll inside the frame</p>
+  </section>
+
+  <hr class="rule">
+
+  <div class="notes">
+    <div class="note">
+      <h3>What staff type</h3>
+      <p><code>name</code>, <code>headerImage</code> and its alt text, <code>placement</code>,
+      <code>status</code>, a short <code>description</code>, <code>hours</code> with a confirmed
+      date, and any <code>links</code>. That is the whole form.</p>
+    </div>
+    <div class="note">
+      <h3>What they cannot touch</h3>
+      <p>The disclosure line is a property of the template, not a block. A page in our theme
+      carrying another company's name is exactly where forgetting it would be easiest, so it is
+      not available to forget.</p>
+    </div>
+    <div class="note">
+      <h3>The header image is gated</h3>
+      <p>A <code>markApproved</code> flag has to be set before any third-party logo or supplied
+      photograph renders. Until then the page falls back to the business name in our own type,
+      which is always safe to publish.</p>
+    </div>
+    <div class="note">
+      <h3>Adding a company</h3>
+      <p>Create a document in the tenants collection. The page exists at its own URL
+      immediately, with every piece of site furniture already in place. Nothing is rebuilt and
+      no engineer is involved.</p>
+    </div>
+    <div class="note warn">
+      <h3>Opening soon is a status, not a separate page</h3>
+      <p>Black Bear Diner is not built yet. <code>status: planned</code> lets its page be
+      written now and shown as a card that does not link anywhere until you flip it to open.</p>
+    </div>
+    <div class="note warn">
+      <h3>Placeholder content</h3>
+      <p>The Piroshky Piroshky description and hours are written to fill the layout. Real copy
+      and real hours come from the business.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var force  = document.getElementById('force');
+  var condF  = document.getElementById('cond');
+  var frames = [];
+  function wire(vp, blk, sentinel, tt, hd){
+    function setCond(on){
+      if (on !== blk.classList.contains('cond')) blk.open = false;
+      blk.classList.toggle('cond', on);
+    }
+    var natural = false;
+    new IntersectionObserver(function(e){
+      natural = e[0].intersectionRatio < 0.5;
+      setCond(natural || condF.checked);
+    }, {root: vp, threshold:[0,0.5,1]}).observe(sentinel);
+    var tick = false;
+    function read(){
+      tick = false;
+      tt.classList.toggle('on', vp.scrollTop > vp.clientHeight * 0.75 || force.checked);
+    }
+    vp.addEventListener('scroll', function(){ if(!tick){ tick=true; requestAnimationFrame(read); } }, {passive:true});
+    tt.addEventListener('click', function(){
+      vp.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'});
+      hd.querySelector('.lock').focus({preventScroll:true});
+    });
+    read();
+    frames.push({read:read, apply:function(){ setCond(natural || condF.checked); }});
+  }
+  function g(id){ return document.getElementById(id); }
+  ['d','p'].forEach(function(k){
+    var vp = g('vp-'+k);
+    wire(vp, g('blk-'+k), vp.querySelector('.sentinel'), g('tt-'+k), g('hd-'+k));
+  });
+  force.addEventListener('change', function(){ frames.forEach(function(f){ f.read(); }); });
+  condF.addEventListener('change', function(){ frames.forEach(function(f){ f.apply(); }); });
+
+  var vpp = g('vp-p'); vpp.style.width = '375px'; vpp.style.height = '667px';
+  var fr = g('fr-d'), sc = g('sc-d'), vpd = g('vp-d'), W = 1180, H = 740;
+  vpd.style.width = W+'px'; vpd.style.height = H+'px';
+  function fit(){
+    var avail = fr.parentNode.clientWidth, s = Math.min(1, avail / W);
+    sc.style.transform = 'scale('+s+')';
+    fr.style.width = Math.round(W*s)+'px'; fr.style.height = Math.round(H*s)+'px';
+  }
+  addEventListener('resize', fit); fit();
+
+  var fld = g('fields');
+  function applyFields(){ document.body.classList.toggle('showfields', fld.checked); }
+  fld.addEventListener('change', applyFields); applyFields();
+})();
+</script>

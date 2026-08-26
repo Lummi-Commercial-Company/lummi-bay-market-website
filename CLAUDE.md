@@ -83,9 +83,9 @@ the layout and cannot be lost or moved by a page.
 - `mainPages` — more than one main page may exist; a settings singleton points at the live one,
   so a replacement is built in full and switched over by changing one field.
 - `infoPages` — what a promo links to.
-- `tenants` — independent businesses renting space on a Lummi Bay property. Four are known at
-  Exit 260: Piroshky Piroshky (inside the store, our tenant), Wendy's and Black Bear Diner
-  (freestanding buildings, LCC's tenants — Black Bear not yet built), and a coffee truck. **Whether to advertise them
+- `tenants` — independent businesses renting space on a Lummi Bay property. Known at Exit 260:
+  Piroshky Piroshky (inside the store), Wendy's and Black Bear Diner (freestanding buildings;
+  Black Bear not yet built), and a coffee truck. All rent from LCC; the site never says so. **Whether to advertise them
   is undecided** — the collection ships empty and nothing renders until a page is published
   (ADR 0016). **A tenant is never a Location** (it would land in the Locations index and the
   fuel price table) and never an Amenity (the Cove Kitchen is one; ownership decides).

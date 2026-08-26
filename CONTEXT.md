@@ -29,13 +29,12 @@ ethanol-free fuel.
 **Amenity** — A service offered at a Location (e.g., showers, driver lounge). A café or
 deli, if one exists at a Location, is an Amenity — not a separate brand or site section.
 
-**Tenant** — An independent business operating at a Lummi Bay Market property. Not owned,
-operated or managed by Lummi Bay Market. Four are known at Exit 260 / Salish Village:
-**Piroshky Piroshky** (a counter inside the Exit 260 store, renting from Lummi Bay Market),
-**Wendy's** and **Black Bear Diner** (freestanding buildings, renting building and land from
-Lummi Commercial Company — Black Bear not yet built), and a coffee truck outside the store
-(**High Tide Coffee** / **Tide's In Coffee**, name and landlord to confirm). The landlord
-differs between them and is recorded but never published — see ADR 0016. A Tenant is **not a Location**
+**Tenant** — An independent business operating at a Lummi Bay Market property, renting from
+Lummi Commercial Company. Not owned, operated or managed by Lummi Bay Market. Known at
+Exit 260 / Salish Village: **Piroshky Piroshky** (a counter inside the store), **Wendy's**
+and **Black Bear Diner** (freestanding buildings; Black Bear not yet built), and a coffee
+truck outside the store. The site never mentions renting, leasing or landlords — see
+ADR 0016. A Tenant is **not a Location**
 — Locations are the three Lummi Bay stores and nothing else, and the Locations index and
 the fuel price table both read from that set. A Tenant is also **not an Amenity**: the Cove
 Kitchen is an Amenity because Lummi Bay Market runs it, while the piroshki counter sits
