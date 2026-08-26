@@ -33,6 +33,11 @@ will use it. **Phase 2 step 11 tests whether they can work the tool we built; it
 whether we built the right tool.** Half an hour of watching beats both.
 
 ## 3. Colour contrast has never been measured
+
+> **Closed — measured, and recorded as ADR 0014.** The opacity worry below was unfounded
+> (`.70`/`.75` body copy passes at 5.38/6.36). Cedar failed as predicted, and the audit also
+> caught the header's Rewards pill failing twice over on every page. Re-run the proof with
+> `node docs/proofs/scripts/contrast.mjs`.
 Tap targets and layout were measured to the pixel. **Contrast was not measured at all.** The
 brand palette is locked, which makes this more urgent rather than less — if something fails, the
 fix has to be a usage rule, since the tokens cannot move.

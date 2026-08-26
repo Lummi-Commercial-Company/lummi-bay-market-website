@@ -1,7 +1,7 @@
 # Next steps
 
 Where this actually stands: **93 tracked files, none of them application code.** No
-`package.json`, no Next.js app, no components. What exists is a locked stack, twelve decisions
+`package.json`, no Next.js app, no components. What exists is a locked stack, fourteen decisions
 (`docs/adr/`), a content model, and a browser-verified interaction proof for the hardest
 component on the site. That is real work and it de-risks the build — but the build has not
 started, and nothing on this list should read as "nearly done."
@@ -9,6 +9,9 @@ started, and nothing on this list should read as "nearly done."
 The proof sheet is a standalone HTML page used to settle behaviour. **It is not the site and no
 part of it ships.** Its CSS was written to make one file demonstrate six frames; the React
 components get written fresh against the ADRs.
+
+See also `docs/loose-ends.md` — the gaps that never became decisions, and the assumptions the
+design rests on. `HANDOFF.md` names it the most important file for deciding what to do next.
 
 ## Phase 0 — unblock (parallel, mostly not engineering)
 These gate later phases and none of them are code. Start them now because they have lead times.
