@@ -24,6 +24,10 @@ compressed by working faster.
 | ~~A13~~ | ~~**The coffee truck's trading name**~~ **Done** | — | **Hi-Tide Coffee**, confirmed by the client after three variant spellings |
 | A14 | **Whether to advertise tenants at all** | Nothing — the collection ships empty | Undecided by design (ADR 0016). If the answer is no, the cost is one unused collection |
 
+| A16 | **How the Locations map is embedded** | `/contact` | The free Maps Embed API cannot show several chosen pins (ADR 0019). My Maps, the billed JavaScript API, or a static image — each with a different catch |
+| A17 | **A company Google account, if My Maps is used** | The map, permanently | A map built in a personal account leaves with that person. Same failure as A6, and consumer-product ownership transfer is not reliable — create it in the right account first |
+| A18 | **Cookie/consent decision** | Any third-party embed | The site tracks nobody today and has no banner. An embedded Google map loads third-party code and sets cookies; a static image does not |
+
 ## B. Engineering
 | # | Item | Notes |
 |---|---|---|

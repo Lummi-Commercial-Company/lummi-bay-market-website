@@ -460,6 +460,48 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 .promoregion{display:flex; flex-direction:column; gap:12px}
 .d .promoregion{gap:14px}
 
+
+/* ===== the locations map ===== */
+.mapwrap{margin-top:22px}
+.mapwrap > .lab{
+  font:700 .625rem/1 Inter,sans-serif; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--lb-navy); display:block; margin-bottom:10px;
+}
+.mapbox{
+  position:relative; border:1px solid rgba(28,78,143,.16); border-radius:12px; overflow:hidden;
+  background:
+    repeating-linear-gradient(0deg,  rgba(28,78,143,.05) 0 1px, transparent 1px 46px),
+    repeating-linear-gradient(90deg, rgba(28,78,143,.05) 0 1px, transparent 1px 46px),
+    linear-gradient(160deg, #EDF1F5 0%, #E4EBF1 100%);
+}
+.d .mapbox{height:320px}
+.p .mapbox{height:240px}
+.mapbox .stamp{
+  position:absolute; top:10px; right:11px; font:400 8px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.12em; color:var(--lb-ink); opacity:.5;
+  border:1px dashed rgba(42,40,32,.32); border-radius:3px; padding:4px 6px; background:rgba(255,255,255,.6);
+}
+.mapbox .centre{
+  position:absolute; inset:0; display:grid; place-items:center; text-align:center; padding:0 24px;
+}
+.mapbox .centre b{
+  display:block; font:700 .9375rem/1.3 "Space Grotesk",Inter,sans-serif; color:var(--lb-navy);
+}
+.mapbox .centre span{
+  display:block; margin-top:5px; font:400 .75rem/1.5 Inter,sans-serif; color:var(--lb-ink); opacity:.7;
+  max-width:46ch;
+}
+.pinlist{display:grid; gap:9px; margin-top:12px}
+.d .pinlist{grid-template-columns:repeat(3,1fr)}
+.pin{display:flex; align-items:flex-start; gap:9px}
+.pin .num{
+  flex:0 0 auto; width:22px; height:22px; border-radius:50%; background:var(--lb-navy);
+  color:var(--lb-bone); display:grid; place-items:center;
+  font:700 11px/1 Inter,sans-serif;
+}
+.pin .who{font:600 .8125rem/1.35 Inter,sans-serif; color:var(--lb-navy)}
+.pin .where{display:block; font:400 .75rem/1.4 Inter,sans-serif; color:var(--lb-ink); opacity:.72; font-weight:400}
+
 /* truck stop callout */
 .truckcall{
   background:var(--lb-navy); border-radius:12px; display:flex; align-items:center;
@@ -761,17 +803,6 @@ body:not(.showfields) .fieldtag{display:none}
   </div>
 
 
-  <div class="rowbuild">
-    <div class="hd">
-      <span class="lab">Promo rows on this page</span>
-      <label class="setting">Max rows &mdash; a settings field, not a constant
-        <input type="number" id="maxrows" min="1" max="12" value="6">
-      </label>
-    </div>
-    <div class="rowlist" id="rowlist"></div>
-    <button class="addrow" id="addrow" type="button">+ Add a row</button>
-    <p class="rowhint" id="rowhint"></p>
-  </div>
 
   <div class="controls">
     <span class="ctl-lab">Review controls</span>
@@ -928,13 +959,24 @@ body:not(.showfields) .fieldtag{display:none}
                 </div>
               </article>
               </div>
+              <div class="mapwrap">
+                <span class="lab">Find us</span>
+                <div class="mapbox">
+                  <span class="stamp">MAP EMBED &mdash; blocked in this preview</span>
+                  <span class="centre"><b>One map, three pins</b>
+                    <span>The live page embeds an interactive map here. It cannot load in the
+                    review sandbox, which blocks outside hosts &mdash; this block shows the size
+                    and position it occupies.</span></span>
+                </div>
+                <div class="pinlist">
+                  <span class="pin"><span class="num">1</span><span class="who">Exit 260<span class="where">4839 Rural Ave, Bellingham &middot; the Truck Stop shares this pin</span></span></span>
+                  <span class="pin"><span class="num">2</span><span class="who">Mini Mart<span class="where">4884 Haxton Way, Ferndale</span></span></span>
+                  <span class="pin"><span class="num">3</span><span class="who">Fisherman&rsquo;s Cove<span class="where">2570 Lummi View Dr, Bellingham</span></span></span>
+                </div>
+              </div>
               <p class="noform"><b>No contact form.</b> Nothing on this site collects messages,
               so there is nothing to go unanswered. Phone and address are the contact routes,
               and both are kept current in one place.</p>
-              <div class="promowrap" data-promowrap>
-                <div class="waterline-band"></div>
-                <div class="promoregion" data-promoslot></div>
-              </div>
             </div>
           </div>
           <footer class="site-ft">
@@ -1099,13 +1141,24 @@ body:not(.showfields) .fieldtag{display:none}
                 </div>
               </article>
               </div>
+              <div class="mapwrap">
+                <span class="lab">Find us</span>
+                <div class="mapbox">
+                  <span class="stamp">MAP EMBED &mdash; blocked in this preview</span>
+                  <span class="centre"><b>One map, three pins</b>
+                    <span>The live page embeds an interactive map here. It cannot load in the
+                    review sandbox, which blocks outside hosts &mdash; this block shows the size
+                    and position it occupies.</span></span>
+                </div>
+                <div class="pinlist">
+                  <span class="pin"><span class="num">1</span><span class="who">Exit 260<span class="where">4839 Rural Ave, Bellingham &middot; the Truck Stop shares this pin</span></span></span>
+                  <span class="pin"><span class="num">2</span><span class="who">Mini Mart<span class="where">4884 Haxton Way, Ferndale</span></span></span>
+                  <span class="pin"><span class="num">3</span><span class="who">Fisherman&rsquo;s Cove<span class="where">2570 Lummi View Dr, Bellingham</span></span></span>
+                </div>
+              </div>
               <p class="noform"><b>No contact form.</b> Nothing on this site collects messages,
               so there is nothing to go unanswered. Phone and address are the contact routes,
               and both are kept current in one place.</p>
-              <div class="promowrap" data-promowrap>
-                <div class="waterline-band"></div>
-                <div class="promoregion" data-promoslot></div>
-              </div>
             </div>
           </div>
           <footer class="site-ft">
@@ -1225,79 +1278,6 @@ body:not(.showfields) .fieldtag{display:none}
   }
   addEventListener('resize', fit); fit();
 
-  /* ---- promo rows (ADR 0018). The row owns the layout; 12 divides by 1,2,3,4 and 6,
-     so a row that loses a promo to expiry re-divides evenly instead of leaving a hole. ---- */
-  var LIVE = [{"e": "In the store", "t": "Fresh coffee, all day"}, {"e": "At Exit 260", "t": "Long weekend fuel"}, {"e": "At the Cove", "t": "Friday fish fry"}, {"e": "Truck Stop", "t": "Showers open 24 hours"}, {"e": "Mini Mart", "t": "New grab-and-go case"}, {"e": "At all three", "t": "Firewood by the bundle"}, {"e": "Rewards", "t": "Fuel discount in the app"}, {"e": "At the Cove", "t": "Chowder on Fridays"}, {"e": "At Exit 260", "t": "Drive-thru open late"}, {"e": "Rewards", "t": "Double points Tuesday"}];
-  var LAYOUTS = {
-    '1':  {label:'1 across \u2014 full width',    spans:[12]},
-    '2':  {label:'2 across \u2014 halves',        spans:[6,6]},
-    '3':  {label:'3 across \u2014 thirds',        spans:[4,4,4]},
-    '4':  {label:'4 across \u2014 quarters',      spans:[3,3,3,3]},
-    'wn': {label:'2 across \u2014 wide + narrow', spans:[8,4]},
-    'nw': {label:'2 across \u2014 narrow + wide', spans:[4,8]},
-    'l3': {label:'3 across \u2014 lead + two',    spans:[6,3,3]}
-  };
-  var rows = ['1','2','3','4'];
-  function maxRows(){ return Math.max(1, Math.min(12, +document.getElementById('maxrows').value || 6)); }
-  function spansFor(key, n){
-    var want = LAYOUTS[key].spans;
-    if (n === want.length) return want;
-    var even = []; for (var i=0;i<n;i++) even.push(12/n);
-    return even;
-  }
-  var filled = [];
-  function computeFilled(liveCount){
-    filled = []; var c = 0;
-    rows.forEach(function(k){
-      var take = Math.max(0, Math.min(LAYOUTS[k].spans.length, liveCount - c));
-      filled.push(take > 0); c += take;
-    });
-  }
-  function drawBuilder(){
-    var rl = document.getElementById('rowlist');
-    rl.innerHTML = rows.map(function(key, i){
-      var opts = Object.keys(LAYOUTS).map(function(k){
-        return '<option value="'+k+'"'+(k===key?' selected':'')+'>'+LAYOUTS[k].label+'</option>'; }).join('');
-      var mini = LAYOUTS[key].spans.map(function(sp){ return '<i style="flex:'+sp+'"></i>'; }).join('');
-      return '<div class="rowitem'+(filled[i]?'':' dry')+'"><span class="n">Row '+(i+1)+'</span>'+
-             '<select data-row="'+i+'">'+opts+'</select><span class="mini">'+mini+'</span>'+
-             (filled[i] ? '' : '<span class="dry-note">no live promo &mdash; renders nothing</span>')+
-             '<button type="button" data-del="'+i+'">Remove</button></div>';
-    }).join('');
-    [].slice.call(rl.querySelectorAll('select')).forEach(function(sel){
-      sel.addEventListener('change', function(){ rows[+sel.dataset.row]=sel.value; computeFilled(LIVE.length); drawBuilder(); drawRows(); }); });
-    [].slice.call(rl.querySelectorAll('[data-del]')).forEach(function(btn){
-      btn.addEventListener('click', function(){ rows.splice(+btn.dataset.del,1); computeFilled(LIVE.length); drawBuilder(); drawRows(); }); });
-    document.getElementById('addrow').disabled = rows.length >= maxRows();
-  }
-  function drawRows(){
-    var cursor = 0, html = '', shown = 0;
-    rows.forEach(function(key){
-      var take = LIVE.slice(cursor, cursor + LAYOUTS[key].spans.length);
-      cursor += take.length;
-      if (!take.length) return;
-      var spans = spansFor(key, take.length); shown += take.length;
-      html += '<div class="promorow">' + take.map(function(p,i){
-        return '<a class="promo" style="grid-column:span '+spans[i]+'" href="#"><span class="pe">'+p.e+
-               '</span><b>'+p.t+'</b><span class="cta">See details</span></a>'; }).join('') + '</div>';
-    });
-    var capacity = rows.reduce(function(a,k){ return a + LAYOUTS[k].spans.length; }, 0);
-    [].slice.call(document.querySelectorAll('[data-promowrap]')).forEach(function(w){
-      w.style.display = html ? '' : 'none';
-      w.querySelector('[data-promoslot]').innerHTML = html;
-    });
-    document.getElementById('rowhint').textContent = rows.length
-      ? capacity + ' slot' + (capacity===1?'':'s') + ' across ' + rows.length + ' row' + (rows.length===1?'':'s') +
-        ' \u00b7 ' + LIVE.length + ' promos live \u00b7 ' + shown + ' shown' +
-        (LIVE.length > capacity ? ' \u00b7 ' + (LIVE.length-capacity) + ' waiting for a slot' : '')
-      : 'No rows \u2014 the region does not render at all.';
-  }
-  document.getElementById('addrow').addEventListener('click', function(){
-    if (rows.length < maxRows()){ rows.push('2'); computeFilled(LIVE.length); drawBuilder(); drawRows(); } });
-  document.getElementById('maxrows').addEventListener('input', function(){
-    if (rows.length > maxRows()) rows = rows.slice(0, maxRows());
-    computeFilled(LIVE.length); drawBuilder(); drawRows(); });
-  computeFilled(LIVE.length); drawBuilder(); drawRows();
 
 
 

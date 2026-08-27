@@ -704,9 +704,13 @@ body:not(.showfields) .fieldtag{display:none}
 }
 .idx-group > .gh-sub{font:400 .8125rem/1.5 Inter,sans-serif; color:var(--lb-ink); opacity:.7; display:block; margin-bottom:12px}
 .idx-grid{display:grid; gap:14px}
-/* auto-fill with a max track, not auto-fit with 1fr: a group holding one tenant then keeps
-   a card-sized card instead of stretching one across the page. */
-.d .idx-grid{grid-template-columns:repeat(auto-fill,minmax(250px,340px)); justify-content:start}
+/* Tenant cards divide the page exactly as promo rows do (ADR 0018): the row owns the
+   layout and its cards split 12 columns evenly. A group of one is full width, two are
+   halves, three thirds, four quarters — so the index and the promo region below it read
+   as the same page rather than two different grids. */
+.idx-row{display:grid; gap:14px; grid-template-columns:repeat(12,1fr)}
+.p .idx-row{grid-template-columns:1fr}
+.idx-grid{display:flex; flex-direction:column; gap:14px}
 .tcard2{
   background:var(--lb-paper); border:1px solid rgba(28,78,143,.16); border-radius:12px;
   border-left:3px solid var(--lb-teal); padding:15px 16px; display:flex; flex-direction:column; gap:7px;
@@ -1170,6 +1174,28 @@ body:not(.showfields) .fieldtag{display:none}
     if (rows.length > maxRows()) rows = rows.slice(0, maxRows());
     computeFilled(LIVE.length); drawBuilder(); drawRows(); });
   computeFilled(LIVE.length); drawBuilder(); drawRows();
+
+  /* ---- the tenant index divides like a promo row ----
+     Rows hold at most four, split as evenly as possible, and each row's cards share 12
+     columns equally. 12 divides by 1, 2, 3 and 4, so no count leaves an orphan track. */
+  [].slice.call(document.querySelectorAll('.idx-grid')).forEach(function(grid){
+    var cards = [].slice.call(grid.children).filter(function(n){ return n.classList.contains('tcard2'); });
+    if (!cards.length) return;
+    var n = cards.length, perRow = Math.min(4, n), nRows = Math.ceil(n / perRow);
+    var base = Math.floor(n / nRows), extra = n % nRows, i = 0;
+    grid.innerHTML = '';
+    for (var r = 0; r < nRows; r++){
+      var count = base + (r < extra ? 1 : 0);
+      var row = document.createElement('div');
+      row.className = 'idx-row';
+      for (var c = 0; c < count; c++){
+        var card = cards[i++];
+        card.style.gridColumn = 'span ' + (12 / count);
+        row.appendChild(card);
+      }
+      grid.appendChild(row);
+    }
+  });
 
 
 
