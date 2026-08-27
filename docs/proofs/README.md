@@ -10,6 +10,7 @@ trust — or catch them when a change makes them stale.
 | File | What it is |
 |---|---|
 | `fuel-strip-proof.html` | The interaction proof sheet. Six live frames — Home, Exit 260 and Truck Stop, at desktop and phone — plus the findings and the open decision register. |
+| `logo-in-use.html` | The logo specimen. The Market lockup on every surface it lands on — header at both widths, hero, footer, favicon at true tab sizes — with the file each takes and what it measures. Loads the real art from `public/brand/`, so it goes stale when the art does. |
 | `launch-plan.html` | The client briefing: state of the project, launch requirements, and the content-update model. |
 | `scripts/*.mjs` | The Playwright measurement scripts. Each one answers a specific question and prints JSON. |
 

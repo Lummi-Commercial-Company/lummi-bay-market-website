@@ -85,7 +85,7 @@ file, not by reading its name.**
 ### PNG is sufficient at 3x DPR — measured, not assumed
 
 A raster is sufficient when its **ink** width is at least three times the CSS width it renders at.
-Rendered evidence and the full table: `docs/proofs/header-logo-proof.html`.
+Rendered evidence and the full table: `docs/proofs/logo-in-use.html`.
 
 | Surface | CSS | 3x wants | File | Ink | Verdict |
 |---|---|---|---|---|---|
