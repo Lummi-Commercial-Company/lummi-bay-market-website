@@ -79,6 +79,21 @@ page shows an `hoursConfirmed` date beside them, or omits hours entirely and lin
 tenant's own site. Stale hours for someone else's business is a complaint we would have
 volunteered for.
 
+**The index is a page of its own, grouped by where the business is.** "Also at Exit 260" is
+somewhere a guest goes deliberately — parked, deciding where to eat — not only a strip at the
+foot of a tenant page. It is generated from the collection, so it grows and shrinks with the
+list and nothing is hand-listed.
+
+Grouping is by `placement`, not alphabetical: **inside the store**, **on the property**,
+**in the lot**. Someone choosing between four places is really choosing how far to walk, and
+walking twenty feet to a counter, driving round to a building, and finding a truck in the lot
+are three different errands. A group with nothing in it does not render, so the page never
+shows an empty heading.
+
+The disclosure runs **once, at the foot of the index**, rather than on every card — repeated
+four times it reads as a warning about the tenants rather than a statement of fact. Each
+tenant's own page still carries its own.
+
 **Nothing appears while the collection is empty.** The "Also at Exit 260" index and the link
 to it render only when at least one tenant page is published. An empty collection is
 invisible to a guest — no stub page, no empty index, no dead link. Publishing the first

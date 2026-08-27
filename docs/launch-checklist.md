@@ -21,7 +21,7 @@ compressed by working faster.
 | A11 | **A favicon mark** — new art, not a crop | The browser tab, every page | The supplied set carries the full 3:1 lockup, illegible at 16px. Paddle-alone ruled out by ownership, so a monogram or other device must be designed and approved |
 
 | A12 | **Real copy, everywhere** | Nothing technically — which is the danger | Every word on the site today was written to fill a layout and reads as finished. Named in `loose-ends.md` §6. Specifically: the home headline and sub, all promo eyebrows and titles, `summary` on each Location, the tenant descriptions, the promo landing page body, and the footer's four column names — About / Visit / Rewards / Work with us — which were invented, not specified |
-| A13 | **The coffee truck's trading name** | Its tenant page, if tenants are ever published | Heard as both "High Tide Coffee" and "Tide's In Coffee". A tenant's own name is the one thing on their page that cannot be approximately right |
+| A13 | **The coffee truck's trading name** | Its tenant page, if tenants are ever published | Heard three ways now — "High Tide Coffee", "Tide's In Coffee" and "Hi-Tide Coffee". A tenant's own name is the one thing on their page that cannot be approximately right |
 | A14 | **Whether to advertise tenants at all** | Nothing — the collection ships empty | Undecided by design (ADR 0016). If the answer is no, the cost is one unused collection |
 
 ## B. Engineering

@@ -98,7 +98,7 @@ the layout and cannot be lost or moved by a page.
   is undecided** — the collection ships empty and nothing renders until a page is published
   (ADR 0016). **A tenant is never a Location** (it would land in the Locations index and the
   fuel price table) and never an Amenity (the Cove Kitchen is one; ownership decides).
-  Indexed as "Also at Exit 260", never "Salish Village" (ADR 0001 collision). Not in the nav.
+  The index is its own page, "Also at Exit 260" — never "Salish Village" (ADR 0001 collision) — grouped by where each business is rather than alphabetically. Not in the nav.
 A new page never appears in the nav on its own — the nav stays three items (ADR 0008).
 
 ## Specialist agents (delegate to keep context lean)
