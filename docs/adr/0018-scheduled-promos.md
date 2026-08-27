@@ -164,6 +164,14 @@ staff can see and set, rather than a number in the code.
 
 **On a phone every row is one column**, whatever its desktop layout. Unchanged.
 
+**The region is full page width.** It belongs to the full-width area below the two-column top
+region, not inside the content column. Only the top region is two columns — the page title
+beside the price rail — and everything under it, promos included, spans the page. Putting the
+region in the content column leaves a dead block of ground to the right of every promo row,
+under the rail, on every page that has one. Home already did this correctly; the tenant, contact
+and promo templates did not, and were corrected. Verified by measurement rather than by eye: a
+promo row's right edge and the price rail's right edge are the same pixel.
+
 ## Addendum — where the region sits, and how a short set tiles
 
 The promo region is now on the tenant and contact templates too. Two things settled while
