@@ -8,7 +8,7 @@ compressed by working faster.
 | # | Item | Blocks | Notes |
 |---|---|---|---|
 | ~~A1~~ | ~~**Logo vector files** — including a reversed/light lockup~~ **Done** | — | Delivered as PNG in `public/brand/`. The vector was rejected on colour fidelity; masters stay with the designer. ADR 0006, amended |
-| A2 | **Confirmed addresses, hours, phone numbers** | Every Location page, the footer | Present values were scraped and are marked unconfirmed |
+| A2 | **Confirmed addresses, hours, phone numbers** | Every Location page, `/contact` | Present values were scraped and are marked unconfirmed. **One exception: the Truck Stop's own number, 360-778-1696, is confirmed.** `/contact` is where a wrong number costs most |
 | A3 | **Art direction + budget** — commissioned Lummi art, photography, or both | Every page's finished look | Site has no imagery at all today (ADR 0012). Note the CMS free tier caps assets at **100 MB** — a real photo set exceeds it |
 | A4 | **Cultural approval** for any Coast Salish art | Launch, unconditionally | Final art must be authentic, commissioned, or tribe-approved |
 | A5 | **Pricing sign-off** — is a short stale window acceptable, and what disclaimer runs | The fuel block's footnote | Register C7. A business decision |
@@ -16,8 +16,12 @@ compressed by working faster.
 | A7 | **Two staff emails** for CMS editor logins | Staff being able to edit | Free tier is 2 seats (ADR 0002) |
 | A8 | **Rewards app links** — the real App Store / Play URLs | The Rewards pill, on every page | Currently `#` |
 | A9 | **Careers link destination** | Footer | Editable field, needs a target |
-| A10 | **Contact form destination** — which inbox, and who monitors it | The footer form | Also decides whether spam protection is needed |
+| ~~A10~~ | ~~**Contact form destination**~~ **Dropped** | — | There is no form anywhere on the site (ADR 0015). Phone and address are the contact routes, so there is no inbox to nominate and no spam handling to build |
 | A11 | **A favicon mark** — new art, not a crop | The browser tab, every page | The supplied set carries the full 3:1 lockup, illegible at 16px. Paddle-alone ruled out by ownership, so a monogram or other device must be designed and approved |
+
+| A12 | **Real copy, everywhere** | Nothing technically — which is the danger | Every word on the site today was written to fill a layout and reads as finished. Named in `loose-ends.md` §6. Specifically: the home headline and sub, all promo eyebrows and titles, `summary` on each Location, the tenant descriptions, the promo landing page body, and the footer's four column names — About / Visit / Rewards / Work with us — which were invented, not specified |
+| A13 | **The coffee truck's trading name** | Its tenant page, if tenants are ever published | Heard as both "High Tide Coffee" and "Tide's In Coffee". A tenant's own name is the one thing on their page that cannot be approximately right |
+| A14 | **Whether to advertise tenants at all** | Nothing — the collection ships empty | Undecided by design (ADR 0016). If the answer is no, the cost is one unused collection |
 
 ## B. Engineering
 | # | Item | Notes |
