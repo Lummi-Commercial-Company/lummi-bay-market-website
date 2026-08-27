@@ -1,0 +1,126 @@
+# 0018 — Promos are scheduled documents; pages compose them
+
+Status: Accepted. Supersedes the promo-region parts of ADR 0007 and demotes `mainPages`
+from ADR 0015.
+
+Terms (Location, Truck Stop): `CONTEXT.md`. Depends on the site never being
+`output: 'export'` (ADR 0007, ADR 0017).
+
+## Context
+Four asks, and the first one is a good question rather than a request:
+
+1. Is a main-page swap needed at all, if promo slots can be scheduled to the minute?
+2. Promo slots should be addable and removable on **any** page, not three fixed ones on Home.
+3. When a promo expires, the info page it points at should leave the site too.
+4. An expired promo should be reactivatable, from somewhere that lists the old ones.
+
+## Decision
+
+### 1. The main-page swap is demoted, not deleted
+
+**It is not needed for campaigns, and it will not be scheduled.**
+
+A main-page swap and a scheduled promo overlap almost completely. What the swap could do that
+a promo cannot is change the **hero** — so the hero gets the same treatment as a promo, and the
+overlap becomes total:
+
+**`heroVariants`** — a list on the home document, each with a headline, a sub, and a date
+window. The one whose window contains "now" wins; the last entry has no window and is the
+fallback, so there is always a hero. Same engine as promos, no second mechanism.
+
+With that, `mainPages` has one job left: **a genuine redesign**, a different layout rather than
+different words. That is a build activity, it happens rarely, and it does not want a scheduler.
+So the settings pointer from ADR 0015 stays — it is a few lines and it is the escape hatch —
+and nothing schedules it.
+
+This removes the preview-URL question ADR 0015 left open, and it removes the awkward fact that
+a whole-page swap needed a rebuild while everything around it was exact to the minute.
+
+### 2. `promos` is a collection, and placement is a field
+
+`content/promos/*.md`, one document per promo:
+
+| Field | Purpose |
+|---|---|
+| `title`, `eyebrow`, `image` + alt | What it says |
+| `link` | A reference to an `infoPages` document |
+| `startsAt`, `endsAt` | The window. Both optional — no `startsAt` means "already running", no `endsAt` means "until turned off" |
+| `active` | A manual kill switch. **False beats any date**; true never overrides a date |
+| `placement` | Which pages it appears on: `home`, `all-interior`, or references to specific pages |
+| `width` | From the ladder — full, two-thirds, half, third, quarter |
+| `priority` | Ties broken by soonest `endsAt`, then by title |
+
+**A page renders whatever is live for it.** No fixed count, no fixed slots, nothing reserved.
+Adding a promo is creating a document; removing one is setting `active: false` or letting
+`endsAt` pass.
+
+**Live means:** `active` is true, AND `startsAt` is absent or past, AND `endsAt` is absent or
+future — evaluated per visitor at request time, in `America/Los_Angeles`. That is ADR 0007's
+dynamic slot, unchanged: nothing is scheduled, so nothing can fail to fire.
+
+**A display cap of four per page**, ordered by `priority`. Past that the region stops rendering
+and the CMS says so. Not a data limit — a page with eleven promos on it is not a page anyone
+reads, and an unbounded region is a design failure that arrives silently on a busy week.
+
+**Zero live promos renders nothing.** No region, no gap, no empty grid — the same rule the
+tenants index follows.
+
+### 3. Expiry hides the info page; it does not delete it
+
+The ask is right and the literal implementation is a trap. If the info page is *removed* at
+expiry, every link to it breaks: a Facebook post, a printed QR code, a bookmark, a search
+result. The guest gets a 404, which reads as a broken site rather than a finished offer. And
+requirement 4 needs the page back if the promo is reactivated, so it cannot be gone.
+
+**When its promo is not live, an info page:**
+- **stops being linked** — nothing on the site points at it,
+- **leaves the sitemap** and is served `noindex`, so search drops it,
+- **keeps its URL**, and serves an unambiguous ended state: *"This offer has ended."* plus a
+  link to what is running now.
+
+That satisfies "removed from the website" in every sense that matters — undiscoverable,
+unindexed, not advertised — without turning shared links into errors. It is also reversible in
+one field, which requirement 4 needs.
+
+An info page can still be deleted outright when it is genuinely finished. That is a separate,
+deliberate act, not something expiry does behind your back.
+
+### 4. The list of old promos already exists
+
+**It is the TinaCMS promos collection.** Tina lists every document in a collection with create,
+edit and delete. Building a second admin screen would mean a second thing to secure, a second
+login, and a second place for the truth to live.
+
+What it gains is a **`state` shown on each promo, derived and never stored**:
+
+| State | Means |
+|---|---|
+| **Live** | Showing now |
+| **Scheduled** | `startsAt` is in the future |
+| **Ended** | `endsAt` has passed |
+| **Off** | `active` is false, whatever the dates say |
+
+Derived, because a stored status drifts from the dates the moment one of them changes, and then
+two fields disagree about the same fact.
+
+- **Reactivate** — clear or extend `endsAt`, set `active` true. The promo returns and its info
+  page comes back with it.
+- **Deactivate** — `active: false`. Immediate, no date maths, the obvious panic button.
+- **Delete permanently** — Tina's delete. And because the CMS is git-backed (ADR 0002),
+  **deleted is not gone**: the document is in the history and recoverable. Worth telling staff,
+  because it makes delete a safe button rather than a frightening one.
+
+## Consequences
+- ADR 0007's fixed three-promo Home region is superseded. The 12-column ladder survives as the
+  width vocabulary; what changes is that the set is composed at request time rather than
+  authored into the page.
+- The promo region and the hero are now the only dynamic parts of an otherwise static page.
+  Both sit behind their own boundary so the shell still serves from the CDN.
+- **A promo pointing at a deleted info page must not render.** The link is a reference; if the
+  target is missing the promo is skipped rather than shipping a dead card. Cheap to enforce,
+  and it will happen eventually.
+- Two editor logins on the free tier (ADR 0002/0013) still applies. Scheduling reduces how often
+  someone has to be at a keyboard, which is the point.
+- `output: 'export'` remains forbidden — it takes this with it, along with the emergency notice.
+- Timezone is `America/Los_Angeles`, stored explicitly. Staff typing "Friday 5pm" mean Friday
+  5pm here, and a server in another region must not decide otherwise.

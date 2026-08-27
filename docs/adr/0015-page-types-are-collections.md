@@ -63,7 +63,8 @@ pages and any future index can use it too.
 
 This also gives the hours and addresses removed from the footer a proper home.
 
-**2. `mainPages` — the swappable main page.** `content/main-pages/*.mdx`.
+**2. `mainPages` — the swappable main page.** *(Demoted by ADR 0018: kept as the escape hatch
+for a genuine redesign, never scheduled. Campaign-level changes are promos and hero variants.)* `content/main-pages/*.mdx`.
 More than one may exist. `/` renders whichever one a `content/settings/site.json` singleton
 points at, through a `reference` field. A seasonal or campaign main page is therefore built
 in full, reviewed on its own URL, and switched live by changing one field — with the

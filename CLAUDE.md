@@ -85,7 +85,12 @@ the layout and cannot be lost or moved by a page.
 - `pages` — general pages, including `/contact` (no form).
 - `mainPages` — more than one main page may exist; a settings singleton points at the live one,
   so a replacement is built in full and switched over by changing one field.
-- `infoPages` — what a promo links to.
+- `infoPages` — what a promo links to. When its promo is not live the page keeps its URL, drops
+  out of the sitemap, goes `noindex` and says the offer has ended — never deleted, or shared
+  links break and it could not be reactivated (ADR 0018).
+- `promos` — documents with a date window and a `placement`. **Any number, on any page**, capped
+  at four rendered per page. Live is computed per visitor, so expiry is exact without a
+  scheduler. `mainPages` is demoted to a redesign escape hatch and is never scheduled (ADR 0018).
 - `tenants` — independent businesses renting space on a Lummi Bay property. Known at Exit 260:
   Piroshky Piroshky (inside the store), Wendy's and Black Bear Diner (freestanding buildings;
   Black Bear not yet built), and a coffee truck. All rent from LCC; the site never says so. **Whether to advertise them
