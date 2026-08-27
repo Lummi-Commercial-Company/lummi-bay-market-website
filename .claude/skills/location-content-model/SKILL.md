@@ -35,26 +35,55 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
 - `hero`: image + alt (mark placeholder if art not final)
 
 ## The three locations
-(Addresses/hours below pulled from lcc-lummi.com — copy-editor should confirm with the
-client before launch.)
+**All three Locations are now CONFIRMED by the client** — every address, every phone, every
+opening time. Worth recording: the values originally scraped from lcc-lummi.com were correct
+in every particular. The scrape was right; it simply had no standing until someone said so.
+
+Two **naming** questions came back with them and are not settled — see the note under the
+list.
 
 1. **exit-260** — "Lummi Bay Market at Exit 260"; nav "Exit 260"; aka Salish Village.
-   4839 Rural Ave, Bellingham WA 98226 · open 24 hours · 360-778-1894. The flagship.
+   **CONFIRMED by the client.** 4839 Rural Ave, Bellingham WA 98226 · open daily, 24 hours ·
+   **C-Store 360-778-1894** · **Truck Stop 360-778-1696**. The flagship.
+   The client's own wording distinguishes the two numbers as *C-Store* and *Truck Stop*; use
+   those labels rather than inventing "main" or "store". The card line keeps the short
+   `Open 24 hours` form — the length budget below is measured and unchanged by this.
    Amenities: 24-hr convenience store, ~16 fuel lanes, tobacco & liquor drive-thru,
    quick-serve food, and a separate TRUCK STOP (diesel lanes, driver store, showers,
    lounge, truck parking). truckStop: true.
-   **The Truck Stop's own phone is 360-778-1696** — confirmed, unlike everything else on this
-   page. A driver asking about showers or the diesel lanes should reach the truck side, not
-   the main store, so `/contact` and the Truck Stop page both use it.
+   **The Truck Stop's own phone is 360-778-1696.** A driver asking about showers or the diesel
+   lanes should reach the truck side, not the C-Store, so `/contact` and the Truck Stop page
+   both use it.
 
-2. **mini-mart** — "Lummi Bay Market Mini Mart"; nav "Mini Mart".
-   4884 Haxton Way, Ferndale WA 98248 · ~6AM–10PM · 360-380-2049. Next to Silver Reef
-   Casino. Amenities: fuel + convenience store. truckStop: false.
+2. **mini-mart** — nav "Mini Mart". **CONFIRMED.** 4884 Haxton Way, Ferndale WA 98248 ·
+   open daily 6am–10pm · 360-380-2049. Next to Silver Reef Casino.
+   Amenities: fuel + convenience store. truckStop: false.
+   *Name unsettled:* the client writes **"Lummi Bay Market Minimart"** — one word, no space.
+   This document had "Mini Mart". See the naming note.
 
-3. **fishermans-cove** — "Lummi Bay Market at Fisherman's Cove"; nav "Fisherman's Cove";
-   shortLabel "The Cove"; aka The Cove. 2570 Lummi View Drive, Bellingham WA 98226 · ~6AM–9PM · 360-758-2448.
-   Amenities: fuel + convenience store, the Cove Kitchen, ethanol-free fuel.
+3. **fishermans-cove** — nav "Fisherman's Cove"; shortLabel "The Cove"; aka The Cove.
+   **CONFIRMED.** 2570 Lummi View Drive, Bellingham WA 98226 · open daily 6am–9pm ·
+   360-758-2448. Amenities: fuel + convenience store, the Cove Kitchen, ethanol-free fuel.
    truckStop: false.
+   *Name unsettled:* the client writes **"Lummi Bay Market Fisherman's Cove"** — no "at".
+   This document had "at". See the naming note.
+
+### The naming note — two open questions, worth one answer each
+The client supplied all three names alongside the confirmed details, and two differ from what
+this document carried:
+
+| | This document had | The client wrote |
+|---|---|---|
+| Mini Mart | Lummi Bay Market Mini Mart | **Lummi Bay Market Minimart** |
+| Fisherman's Cove | Lummi Bay Market **at** Fisherman's Cove | **Lummi Bay Market Fisherman's Cove** |
+
+Exit 260 came back as "Lummi Bay Market **at** Exit 260", matching. So "at" is used for Exit
+260 and not for the Cove, which may be deliberate or may be shorthand in the message.
+
+**Neither has been changed.** A business's own name printed wrong is not a detail, and guessing
+between "Minimart" and "Mini Mart" on every page of the site is the wrong way to settle it.
+The `navLabel` field is separate and can stay "Mini Mart" for the nav whatever the full name
+turns out to be — that is what the field is for.
 
 ## Rules
 - **The location list is derived, never authored per page** (ADR 0009). Order is Truck Stop
