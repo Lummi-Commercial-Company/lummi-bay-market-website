@@ -84,15 +84,18 @@ row of sticky header.
   Accepted: it buys the primary destinations from anywhere on the page. It has grown twice for
   reasons, not for taste: 47px → 52px when the logo lockup was measured at its real ratio (see
   below), and 52px → 56px to seat a row of 44px tap targets (ADR 0010).
-- **The supplied logo cannot sit on a navy header.** The Lummi Bay Market lockup is a navy
-  wordmark over a cedar paddle on a light ground, and the header is `--lb-navy`. Navy on navy
-  is not a contrast to tune — the wordmark disappears — and the logo is locked, so it may not
-  be recoloured or knocked out to white to fix it. Two ways out, both the client's call: ask
-  for an approved reversed lockup, or make the header a light ground (`--lb-bone` or
-  `--lb-paper`) with a navy rule beneath it. The second needs no new art but changes the whole
-  page's weight. **This is unresolved and blocks the header's final styling.**
+- ~~**The supplied logo cannot sit on a navy header.**~~ **Resolved — the header stays navy.**
+  This ADR recorded the lockup as a navy wordmark on a light ground against a `--lb-navy`
+  header: navy on navy, 1.6:1, and a locked logo that may not be recoloured to fix it. Two
+  ways out were offered, both the client's call — an approved reversed lockup, or a light
+  header ground. **A reversed lockup was supplied**, so the first option carried and the
+  header's ground never had to change. The white wordmark measures **8.28:1** against
+  `--lb-navy`. The header's final styling is no longer blocked.
 - The lockup is roughly **2.8:1**, not the 4.5:1 slot the mockups had assumed. Correcting it is
-  what moved the phone header from 47px to 52px, before tap targets took it to 56px.
+  what moved the phone header from 47px to 52px, before tap targets took it to 56px. **The
+  supplied files confirm 2.8:1** — both 336 x 120 rasters match it exactly. What varies between
+  files is the *ink* inside that canvas (3.06:1 in the on-dark lockup, 3.10:1 in the on-light
+  one), which is a per-file cropping difference, not a reason to revisit the header height.
 - **Chromium 141 only.** It is the one engine available in the build container. The sticky
   failure is an anchor-positioning interop bug of exactly the kind that varies by engine, so
   Safari and Firefox still need checking. The decision is safe either way — not making the
@@ -103,8 +106,8 @@ row of sticky header.
 - In-page anchor links need `scroll-margin-top` equal to the header height, or targets land
   underneath the pinned header.
 - The header is now permanently over page content, so its contrast against every background
-  it crosses is fixed, not incidental. It is `--lb-navy` throughout — pending the logo
-  question above, which may change that ground.
+  it crosses is fixed, not incidental. It is `--lb-navy` throughout, and now settled: the
+  reversed lockup resolved the logo question without changing that ground.
 - The compact Rewards control is cedar partly because of this decision: directly beneath a
   permanently visible navy header, a navy control reads as a second nav bar (ADR 0005).
 
@@ -117,3 +120,31 @@ row of sticky header.
 - ~~**Rewards as a header pill.**~~ Rejected twice, then adopted — see the Decision above.
   It costs no page height, which is what it was always worth; the objection was about
   emphasis, and the "Get the App" wording answers it.
+
+## Amendment — the logo question, closed
+
+*Recorded after the real logo files reached the repo. The decision above is unchanged; only its
+one open consequence is.*
+
+**The header stays `--lb-navy`.** A reversed lockup was supplied, so the light-ground alternative
+this ADR offered was never needed. Rendered evidence: `docs/proofs/header-logo-proof.html`.
+
+Three things about the supplied art that the header depends on:
+
+- **It ships as PNG, not vector.** A vector arrived and was rejected by ownership: its paddle
+  rendered pale and ungrained where the approved raster's is saturated cedar with visible grain,
+  and a locked logo cannot ship art that does not match. The file is archived, unserved, at
+  `assets/brand-source/logo-market.svg`. This costs the header nothing — measured, the rasters
+  clear 3x device pixel ratio at every size the logo appears at.
+- **Two files, named for the background they sit on.** `logo-market-on-dark.png` carries the
+  white wordmark and is the header's; `logo-market-on-light.png` carries the navy one. They were
+  briefly named `logo-market.png` and `logo-market-reversed.png`, and got swapped, because
+  "reversed" and "light" each read as either the ink or the ground. The name states the
+  background so it cannot be read backwards. `logo-market-on-dark@3x.png` is a density variant,
+  referenced only from `srcset`.
+- **2.8:1 held up.** See the amended consequence above.
+
+What is *not* resolved by this: the favicon. The supplied set carries the full lockup, which is a
+3:1 band and unreadable at 16px, and ownership has ruled that the paddle alone is not acceptable
+as a standalone mark. A favicon therefore needs new art. That is a brand item with a lead time,
+not a header question, and it does not block anything this ADR decides.

@@ -1,0 +1,199 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Header logo — PNG, in the real header</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --lb-navy:#1C4E8F; --lb-navy-deep:#14396B; --lb-teal:#0FB5C4; --lb-cedar:#C9772E;
+    --lb-ground:#FBF9F4; --lb-paper:#FFFFFF; --lb-ink:#2A2820; --lb-bone:#F5F1E8;
+    --rule:#DCD6C8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--lb-ground);color:var(--lb-ink);
+    font:400 15px/1.55 Inter,system-ui,-apple-system,sans-serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:34px 22px 90px}
+  h1{font:600 26px/1.2 Inter,system-ui,sans-serif;color:var(--lb-navy);margin:0 0 6px}
+  .sub{color:#6B6656;margin:0 0 30px;max-width:64ch}
+  h2{font:600 16px/1.3 Inter,system-ui,sans-serif;color:var(--lb-navy);
+    margin:38px 0 4px;padding-top:20px;border-top:1px solid var(--rule)}
+  .note{max-width:68ch;margin:0 0 16px;color:#4A4636}
+  .mono{font:400 12.5px/1.5 "IBM Plex Mono",ui-monospace,monospace}
+  .cap{font:500 10.5px/1.4 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.13em;
+    text-transform:uppercase;color:#8A8472;margin:0 0 8px}
+  .decision{background:#EDF3FA;border-left:3px solid var(--lb-navy);
+    padding:14px 18px;margin:0 0 26px;max-width:70ch}
+  .decision p{margin:0 0 8px}
+  .decision p:last-child{margin:0}
+
+  .vp{border:1px solid var(--rule);background:var(--lb-ground);overflow:hidden;margin-bottom:6px}
+  .sitebar{background:var(--lb-navy);display:flex;align-items:center;gap:12px;padding:12px 22px}
+  .lock{flex:0 0 auto;display:block}
+  .lock img{display:block;width:112px;height:auto}
+  .sitenav{display:flex;gap:20px;margin-left:auto;
+    font:500 12px/1 Inter,sans-serif;color:var(--lb-bone);letter-spacing:.03em}
+  .sitenav a{color:inherit;text-decoration:none}
+  .pill{flex:0 0 auto;background:var(--lb-bone);color:var(--lb-navy);text-decoration:none;
+    font:600 11px/1 Inter,sans-serif;padding:9px 12px;border-radius:999px;white-space:nowrap}
+  .waterline{height:6px;background:linear-gradient(90deg,var(--lb-teal),#0a8f9c)}
+  .body{padding:22px;min-height:110px}
+  .body h3{font:600 20px/1.25 Inter,sans-serif;color:var(--lb-navy);margin:0}
+
+  .vp.phone{width:375px}
+  .phone .sitebar{gap:7px;padding:6px 12px}
+  .phone .lock img{width:95px}
+  .phone .sitenav{gap:4px;flex-wrap:nowrap}
+  .phone .sitenav a{min-width:44px;min-height:44px;padding:0 5px;display:flex;
+    align-items:center;justify-content:center;font-size:11px}
+  .phone .pill{min-height:44px;display:flex;align-items:center}
+
+  /* the light-ground hero, which takes the navy lockup */
+  .hero{background:var(--lb-bone);padding:26px 22px;text-align:center}
+  .hero img{width:146px;height:auto;display:block;margin:0 auto 10px}
+  .hero p{margin:0;font:400 13px/1.5 Inter,sans-serif;color:#6B6656}
+
+  .measure{display:flex;gap:26px;flex-wrap:wrap;margin:14px 0 0}
+  .m{font:400 12px/1.5 "IBM Plex Mono",ui-monospace,monospace;color:#4A4636}
+  .m b{color:var(--lb-navy);font-weight:600}
+
+  table{border-collapse:collapse;width:100%;margin:12px 0 0;
+    font:400 13px/1.5 Inter,system-ui,sans-serif}
+  th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-weight:600;color:var(--lb-navy);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
+  td.n{font:400 12.5px/1.5 "IBM Plex Mono",ui-monospace,monospace;white-space:nowrap}
+  .ok{color:#1E6B3A;font-weight:600}
+  .flag{color:#8A3B1F;font-weight:600}
+  .legend{font:400 11.5px/1.5 "IBM Plex Mono",ui-monospace,monospace;color:#6B6656;margin-top:7px}
+</style>
+
+<div class="wrap">
+  <h1>Header logo — PNG, in the real header</h1>
+  <p class="sub">The logo ships as PNG. This page loads the approved rasters unmodified from
+  <span class="mono">/public/brand/</span> into the header the site actually uses, at the
+  dimensions ADR 0006 and ADR 0010 fix.</p>
+
+  <div class="decision">
+    <p><b>Decision — PNG only, no SVG.</b> The supplied vector's paddle rendered pale, with a
+    smooth gradient and no wood grain, where the approved raster's paddle is saturated cedar with
+    visible grain. The logo is locked, so a mismatch is disqualifying rather than a preference,
+    and ownership ruled the vector out.</p>
+    <p>The vector is kept as a master in <span class="mono">assets/brand-source/logo-market.svg</span>,
+    which is never served. Nothing under <span class="mono">public/brand/</span> references it. If a
+    corrected vector arrives later this decision is worth revisiting — vector is still the better
+    format when its colours are right.</p>
+  </div>
+
+  <h2>Three files, named for the background they sit on</h2>
+  <p class="note">Both are the Market lockup. The filename says which <em>background</em> the file
+  is for, never what colour its own wordmark is — <span class="mono">on-dark</span> holds the white
+  wordmark. Naming these "reversed" and "light" got them swapped once already, because both words
+  can be read either way.</p>
+  <table>
+    <tr><th>Ground</th><th>File</th><th>Canvas</th><th>Ink</th><th>Where</th></tr>
+    <tr><td>Dark background</td><td class="n">logo-market-on-dark.png</td><td class="n">336 &times; 120</td>
+        <td class="n">334 &times; 109 &middot; 3.06:1</td><td>The sticky header, every page</td></tr>
+    <tr><td>Dark, high density</td><td class="n">logo-market-on-dark@3x.png</td><td class="n">1008 &times; 360</td>
+        <td class="n">1002 &times; 323 &middot; 3.10:1</td><td>Same slot, via <span class="mono">srcset</span> &mdash; 3&times; screens only</td></tr>
+    <tr><td>Light background</td><td class="n">logo-market-on-light.png</td><td class="n">512 &times; 512</td>
+        <td class="n">503 &times; 162 &middot; 3.10:1</td><td>Home hero, /rewards, print</td></tr>
+  </table>
+
+  <h2>Desktop — 112px logo on a navy bar</h2>
+  <div class="vp">
+    <header class="sitebar">
+      <a class="lock" href="#"><img src="../../public/brand/logo-market-on-dark.png"
+         srcset="../../public/brand/logo-market-on-dark.png 1x,
+                 ../../public/brand/logo-market-on-dark@3x.png 3x"
+         alt="Lummi Bay Market — home"></a>
+      <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck Stop</a></nav>
+      <a class="pill" href="#">Get the App</a>
+    </header>
+    <div class="waterline"></div>
+    <div class="body"><h3>Salish Village</h3></div>
+  </div>
+  <div class="measure">
+    <span class="m">box <b>112 &times; 40</b></span>
+    <span class="m">ink <b>111.3 &times; 36.3</b></span>
+    <span class="m">bar height <b>64px</b></span>
+    <span class="m">wordmark on navy <b>8.28:1</b></span>
+  </div>
+
+  <h2>Phone — 375px, 95px logo, 44px tap targets</h2>
+  <p class="note">The logo carries Home; the nav carries the other two destinations; the pill keeps
+  its words. Zero horizontal slack by design — ADR 0006 measured it.</p>
+  <div class="vp phone">
+    <header class="sitebar">
+      <a class="lock" href="#"><img src="../../public/brand/logo-market-on-dark.png"
+         srcset="../../public/brand/logo-market-on-dark.png 1x,
+                 ../../public/brand/logo-market-on-dark@3x.png 3x"
+         alt="Lummi Bay Market — home"></a>
+      <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck&nbsp;Stop</a></nav>
+      <a class="pill" href="#">Get the App</a>
+    </header>
+    <div class="waterline"></div>
+    <div class="body"><h3>Salish Village</h3></div>
+  </div>
+  <div class="measure">
+    <span class="m">box <b>95 &times; 33.9</b></span>
+    <span class="m">ink <b>94.4 &times; 30.8</b></span>
+    <span class="m">bar height <b>56px</b></span>
+  </div>
+
+  <h2>Light ground — the navy lockup, 146px hero</h2>
+  <p class="note">The on-dark file cannot appear here: a white wordmark on
+  <span class="mono">--lb-bone</span> all but vanishes. This is why PNG-only still needs both files.</p>
+  <div class="vp">
+    <header class="sitebar">
+      <a class="lock" href="#"><img src="../../public/brand/logo-market-on-dark.png"
+         srcset="../../public/brand/logo-market-on-dark.png 1x,
+                 ../../public/brand/logo-market-on-dark@3x.png 3x"
+         alt="Lummi Bay Market — home"></a>
+      <nav class="sitenav"><a href="#">Locations</a><a href="#">Truck Stop</a></nav>
+      <a class="pill" href="#">Get the App</a>
+    </header>
+    <div class="waterline"></div>
+    <div class="hero">
+      <img src="../../public/brand/logo-market-on-light.png" alt="Lummi Bay Market">
+      <p>Three locations on the Lummi Peninsula</p>
+    </div>
+  </div>
+  <p class="legend">Navy wordmark on bone measures 8.00:1. The 512px file's ~65% vertical padding is
+  cropped by the browser only if the CSS does it — sized by width it simply renders with air above
+  and below, which the hero can absorb but the header could not.</p>
+
+  <h2>Does PNG hold up at 3&times; device pixel ratio?</h2>
+  <p class="note">This is the only real cost of dropping vector, so it is measured rather than
+  assumed. A file is sufficient when its <em>ink</em> width is at least three times the CSS width
+  it is displayed at.</p>
+  <table>
+    <tr><th>Surface</th><th>CSS width</th><th>3&times; needs</th><th>File</th><th>Ink available</th><th>Verdict</th></tr>
+    <tr><td>Phone header</td><td class="n">95px</td><td class="n">285px</td><td class="n">on-dark@3x</td>
+        <td class="n">1002px</td><td class="n ok">OK &mdash; 3.52&times; spare</td></tr>
+    <tr><td>Desktop header</td><td class="n">112px</td><td class="n">336px</td><td class="n">on-dark@3x</td>
+        <td class="n">1002px</td><td class="n ok">OK &mdash; 2.98&times; spare</td></tr>
+    <tr><td>Phone hero</td><td class="n">123px</td><td class="n">369px</td><td class="n">on-light</td>
+        <td class="n">503px</td><td class="n ok">OK &mdash; 1.36&times; spare</td></tr>
+    <tr><td>Desktop hero</td><td class="n">146px</td><td class="n">438px</td><td class="n">on-light</td>
+        <td class="n">503px</td><td class="n ok">OK &mdash; 1.15&times; spare</td></tr>
+  </table>
+  <p class="note" style="margin-top:14px"><b>PNG is sufficient everywhere the logo currently
+  appears, to 3&times;.</b> Two things to know rather than fix. The desktop header lands at 99.4% of
+  a true 3&times; sample — 334px of ink against 336px wanted, a 0.6% shortfall no eye resolves. And
+  the on-dark file has no headroom beyond that: any future use of the on-dark lockup larger than
+  ~111px CSS (a dark hero, a footer lockup, an OG image) would upscale. The cheap insurance is one
+  more export at <span class="mono">1008 &times; 360</span> &mdash; 3&times; the current canvas, same
+  art.</p>
+
+  <h2>What PNG gives up, honestly</h2>
+  <p class="note"><b>Print and large format.</b> Signage, vehicle wraps and anything above ~500px
+  need the vector. Keep <span class="mono">assets/brand-source/</span> populated for that; it is a
+  separate problem from the website.</p>
+  <p class="note"><b>Recolouring and masking.</b> A PNG cannot be tinted in CSS or used as a
+  <span class="mono">mask-image</span>. Nothing in the locked architecture asks for that — and the
+  logo may not be recoloured anyway, so the constraint costs nothing here.</p>
+  <p class="note"><b>Weight.</b> 15.6 KB on-dark, 27.6 KB on-light. Both trivial, both cacheable, both
+  served once per visit.</p>
+
+  <p class="legend" style="margin-top:34px">Rendered in Chromium 141. Logo files loaded unmodified
+  from <span class="mono">/public/brand/</span>. TODO: replace the waterline gradient with the real
+  <span class="mono">&lt;Waterline /&gt;</span> component; placeholder motifs are absent here on purpose.</p>
+</div>
