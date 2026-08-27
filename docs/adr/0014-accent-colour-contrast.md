@@ -91,3 +91,37 @@ In the components they are set in navy, which measures 7.87 on ground at any siz
   cheaper to apply while the component is being written than to retrofit across a built site.
 - `--lb-cedar` on the navy header is still available for **non-informational** decoration, where
   1.4.11 does not apply. Only the pill is constrained here.
+
+
+## Revision — the pill goes back to cedar, on the owner's call
+
+The decision above moved the Rewards pill to a bone fill because cedar failed twice. Ownership
+has ruled that cedar is the on-brand colour and asked for it back. Recorded here rather than
+quietly reversed, with what it costs.
+
+Every label colour was measured against a cedar fill first, looking for one that clears 4.5:1:
+
+| Label on cedar | Ratio |
+|---|---|
+| white | 3.41 |
+| bone | 3.02 |
+| **ink** | **4.33** |
+| navy | 2.43 |
+| navy-deep | 3.37 |
+
+**None reaches 4.5:1.** Ink is the best the locked palette offers and is 4% short. A cedar fill
+cannot carry an accessible small label, and no amount of arranging changes that — the only
+remedies are a darker cedar, which the locked palette forbids, or type at 18.66px bold, which
+would make the pill the loudest thing in the header and undo ADR 0006's intent.
+
+**What is fixed:** the pill takes a **bone ring**. Cedar against navy is 2.43:1 and fails
+WCAG 1.4.11's 3:1 for a component boundary; bone against navy is 7.35:1 and against the cedar
+fill 3.02:1, so the ring carries the boundary from both sides. That failure is gone.
+
+**What is accepted:** the label is ink on cedar at **4.33:1 against a 4.5:1 requirement**, at
+11px desktop and 10.5px phone. One control, one word pair, on every page. It is a knowing
+exception, not an oversight, and it is the only one in the palette.
+
+The fully-passing variant — bone fill, navy label — is kept one toggle away in the review pages
+so the comparison stays available rather than becoming a memory. If accessibility is ever
+audited formally, this is the finding that will come back, and this section is the answer to it.

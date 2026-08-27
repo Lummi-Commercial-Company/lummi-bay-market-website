@@ -1,7 +1,7 @@
 # Next steps
 
 Where this actually stands: **93 tracked files, none of them application code.** No
-`package.json`, no Next.js app, no components. What exists is a locked stack, sixteen decisions
+`package.json`, no Next.js app, no components. What exists is a locked stack, seventeen decisions
 (`docs/adr/`), a content model, and a browser-verified interaction proof for the hardest
 component on the site. That is real work and it de-risks the build — but the build has not
 started, and nothing on this list should read as "nearly done."

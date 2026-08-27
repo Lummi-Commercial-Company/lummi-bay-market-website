@@ -199,6 +199,37 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 .d .lock .lockmark{height:34px}
 .p .lock .lockmark{height:28px}
 
+
+/* Rewards pill — cedar, on the owner's call. See the ADR 0014 revision.
+   Cedar fill measures 2.43:1 against the navy header, so the bone ring supplies the
+   1.4.11 boundary (7.35:1 against navy, 3.02:1 against the fill). The ink label is the
+   best the locked palette offers on cedar at 4.33:1, which is short of 4.5. */
+.pill{
+  background:var(--lb-cedar); color:var(--lb-ink);
+  box-shadow:0 0 0 1.5px var(--lb-bone);
+}
+.pill.safe{background:var(--lb-bone); color:var(--lb-navy); box-shadow:none}
+
+/* ===== emergency notice — ADR 0017 =====
+   Rides inside the sticky header wrapper, so it cannot be scrolled past. Off by
+   default; nothing renders when the notice is inactive. */
+.alertbar{display:none; background:var(--lb-navy-deep); border-top:3px solid var(--lb-cedar)}
+.showalert .alertbar{display:flex; align-items:center; gap:10px}
+.d .alertbar{padding:10px 26px}
+.p .alertbar{padding:9px 14px; align-items:flex-start}
+.alertbar .ico{
+  flex:0 0 auto; width:18px; height:18px; border-radius:50%; display:grid; place-items:center;
+  background:var(--lb-cedar); color:var(--lb-ink); font:700 12px/1 Inter,sans-serif;
+}
+.alertbar .txt{font:500 .8125rem/1.4 Inter,sans-serif; color:var(--lb-bone)}
+.p .alertbar .txt{font-size:.75rem}
+.alertbar .txt b{font-weight:700}
+.alertbar .when{
+  margin-left:auto; flex:0 0 auto; font:500 10px/1 Inter,sans-serif; color:var(--lb-bone);
+  opacity:.75; letter-spacing:.04em;
+}
+.p .alertbar .when{display:none}
+
 /* waterline */
 .waterline{height:5px; background:var(--lb-teal); flex:0 0 auto}
 
@@ -226,8 +257,8 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   border-bottom:2px solid var(--lb-teal); border-radius:6px;
   box-shadow:0 14px 30px -14px rgba(20,57,107,.34);
 }
-.d .fuelblock{top:65px; --cue-h:28px; border-radius:0 0 6px 6px}
-.p .fuelblock{top:69px; width:auto; margin:0; --cue-h:26px}
+.d .fuelblock{top:var(--hd-h,65px); --cue-h:28px; border-radius:0 0 6px 6px}
+.p .fuelblock{top:var(--hd-h,61px); width:auto; margin:0; --cue-h:26px}
 /* on a phone the rail must not box the block, or sticky has only the block's own
    height to stick within and it scrolls away immediately */
 .p .railcol{display:contents}
@@ -529,9 +560,10 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 
   <div class="controls">
     <span class="ctl-lab">Review controls</span>
+    <label class="sw"><input type="checkbox" id="alertsw"> Show the emergency notice</label>
+    <label class="sw"><input type="checkbox" id="safepill"> Use the fully-passing pill</label>
     <label class="sw"><input type="checkbox" id="force"> Reveal back-to-top</label>
     <label class="sw"><input type="checkbox" id="cond"> Force the condensed price bar</label>
-    <label class="sw"><input type="checkbox" id="legacy"> Show the old cedar pill</label>
     <label class="sw"><input type="checkbox" id="marks" checked> Mark placeholder content</label>
   </div>
 
@@ -558,7 +590,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
             </nav>
             <a class="pill" href="#">Get the App</a>
           </header>
-          <div class="waterline"></div></div>
+          <div class="waterline"></div><div class="alertbar"><span class="ico" aria-hidden="true">!</span><span class="txt"><b>All three stores are open.</b> Haxton Way is icy &mdash; Mini Mart is best reached from Slater Road.</span><span class="when">Updated 6:40am</span></div></div>
           <div class="pagebody pagegrid">
             <div class="sentinel"></div>
             <div class="railcol">
@@ -703,7 +735,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
             <a class="pill" href="#">Get the App</a>
             <span class="nav-btn" aria-hidden="true">☰</span>
           </header>
-          <div class="waterline"></div></div>
+          <div class="waterline"></div><div class="alertbar"><span class="ico" aria-hidden="true">!</span><span class="txt"><b>All three stores are open.</b> Haxton Way is icy &mdash; Mini Mart is best reached from Slater Road.</span><span class="when">Updated 6:40am</span></div></div>
           <div class="pagebody">
             <div class="sentinel"></div>
             <div class="railcol">
@@ -880,6 +912,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   var force  = document.getElementById('force');
   var condF  = document.getElementById('cond');
   var frames = [];
+  var frameSync = [];
 
   function wire(vp, blk, sentinel, tt, hd){
     /* CONDENSE — ported from the approved proof. The sentinel IS the block's own
@@ -895,7 +928,14 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
        Pull the root's top edge down to the underside of the header and the trigger
        matches what is actually on screen — which is also what makes a short page
        condense at all. */
-    var hdH = Math.round(hd.parentNode.getBoundingClientRect().height);
+    var wrap = hd.parentNode, site = vp.querySelector('.site');
+    function syncHd(){
+      var h = Math.round(wrap.getBoundingClientRect().height);
+      site.style.setProperty('--hd-h', h + 'px');
+      return h;
+    }
+    var hdH = syncHd();
+    frameSync.push(syncHd);
     new IntersectionObserver(function(entries){
       natural = entries[0].intersectionRatio < 0.5;
       setCond(natural || condF.checked);
@@ -938,10 +978,21 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   }
   addEventListener('resize', fit); fit();
 
-  /* review toggles */
-  get('legacy').addEventListener('change', function(e){
-    document.querySelectorAll('.pill').forEach(function(n){ n.classList.toggle('legacy', e.target.checked); });
+  /* review toggles for the notice and the pill */
+  var alertsw = get('alertsw'), safepill = get('safepill');
+  alertsw.addEventListener('change', function(){
+    document.body.classList.toggle('showalert', alertsw.checked);
+    frameSync.forEach(function(f){ f(); });
+    fit();
   });
+  safepill.addEventListener('change', function(){
+    [].slice.call(document.querySelectorAll('.pill')).forEach(function(n){
+      n.classList.toggle('safe', safepill.checked);
+    });
+  });
+
+
+  /* review toggles */
   var marks = get('marks');
   function applyMarks(){
     document.querySelectorAll('.mk').forEach(function(n){ n.classList.toggle('ph', marks.checked); });

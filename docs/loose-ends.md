@@ -71,7 +71,7 @@ that file is easy to miss.
 | `elementFromPoint` | Viewport coordinates. Scroll the target into view first or every probe returns null. |
 | CSS masks with no `@supports` guard | Unsupported masks render as **solid coloured blocks**, which is far worse than no decoration. (ADR 0012) |
 | `aria-label` on an element with real text | **Overrides** the text. A promo with a headline announced its placeholder label instead. (ADR 0012) |
-| `output: 'export'` | Kills ISR *and* on-demand revalidation — silently removes every promo-scheduling mechanism except the rejected one. (ADR 0007) |
+| `output: 'export'` | Kills ISR *and* on-demand revalidation — silently removes every promo-scheduling mechanism except the rejected one (ADR 0007), **and the emergency notice with it** (ADR 0017). It fails silently: the notice would simply never reach anyone. |
 
 ## 5. Pages that are referenced but have never been designed
 
