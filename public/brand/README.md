@@ -15,24 +15,42 @@ to white yourself — that needs an approved reversed lockup from the brand owne
 | `logo-market-on-dark.png` | 336 x 120, **white** wordmark, navy `#1D3D7C` outline, cedar paddle with visible grain | Goes on dark backgrounds — the sticky header |
 | `logo-market-on-dark@3x.png` | 1008 x 360, the same art at 3x. Verified: aligned against the 1x it differs only on edge anti-aliasing and finer paddle grain | Served to high-density screens via `srcset`; never referenced on its own |
 | `logo-market-on-light.png` | 512 x 512, **navy** `#1D3D7C` wordmark, letterboxed with ~65% empty vertical space | Goes on light backgrounds — home hero, `/rewards` |
-| `favicon.svg` | **Not a vector.** An SVG wrapper around one embedded base64 PNG — zero `<path>` elements. The payload is byte-identical to `logo-market.png` (sha256 `ff999899…`, 27,566 bytes) | Works, but does not scale |
-| `favicon.ico` | Multi-size ICO, 48px and 32px | Fine as a file |
-| `favicon-96x96.png` | 96 x 96 | Fine as a file |
+| `favicon.ico` | Multi-size ICO: 16, 32 and 48, all 32bpp | Legacy browsers and the bookmark bar |
+| `favicon-16x16.png` | 16 x 16, 757 bytes | The common tab |
+| `favicon-32x32.png` | 32 x 32, 2.0 KB | Retina tab |
+| `apple-touch-icon.png` | 180 x 180, 37.9 KB | iOS home screen |
+| `android-chrome-192x192.png` | 192 x 192, 42.4 KB | Android, via `/site.webmanifest` |
+| `android-chrome-512x512.png` | 512 x 512, **278 KB** | Android splash. Oversized for flat two-colour art — worth re-encoding |
 
-The three favicons are RealFaviconGenerator output and they carry **the full lockup**, a ~3:1
-horizontal band. Rendered down to a browser tab it is a smear at 32px and unreadable at 16px. The
-files are correctly formed; the artwork inside them is the wrong crop for the job.
+`favicon.svg` and `favicon-96x96.png` were deleted in the same upload. **Losing the SVG costs
+nothing**: it was never a vector — an SVG wrapper around one embedded base64 PNG, zero `<path>`
+elements. See *Watch for wrapped bitmaps*, below, which is why it was worth checking.
 
-**Ownership has ruled that the paddle alone is not acceptable as a standalone mark.** That closes
-the obvious escape route — there is no croppable element in the lockup that may stand on its own —
-so a favicon needs **new art**: a monogram, or another device, designed and approved. Do not crop
-one out of the lockup to fill the gap in the meantime; it would be exactly the unauthorised
-standalone mark that was just ruled out.
+### The set was replaced on 27 Aug 2026 — and it raises a permission question
 
-Until that art exists the current set stays. It is wrong-but-harmless: browsers render something
-rather than nothing, and nothing else depends on it. Tracked as A11 in `docs/launch-checklist.md`.
+The old set carried **the full lockup**, a ~3:1 horizontal band squeezed into a square: a smear at
+32px and unreadable at 16px. The replacement is **the paddle device alone, white on a navy disc.**
+Rendered at true size it reads cleanly at 48, at 32, and is a legible diagonal stroke at 16. As
+craft, the problem is solved.
 
-**Watch for wrapped bitmaps.** `favicon.svg` looks like vector from its extension and is not. To
+**The problem is that this was the one option ruled out.** The recorded ruling was that *the paddle
+alone is not acceptable as a standalone mark* — which is precisely why A11 asked for new art, a
+monogram or another device, rather than something lifted from the lockup. The supplied favicon is
+the paddle alone. It is also a recolour: the lockup's paddle is cedar with visible grain, and this
+is flat white on navy, which `CLAUDE.md` forbids for the logo.
+
+Two readings, and only ownership can say which:
+
+- **The ruling has changed** and the paddle is now approved as the icon mark. Then A11 closes, this
+  section becomes history, and `CLAUDE.md`'s logo rule needs a sentence carving out the icon.
+- **The ruling stands** and this set was generated without it in view. Then it carries the same
+  defect as the old one, in a more dangerous form — the old set looked obviously wrong, this one
+  looks right.
+
+**Until that is confirmed, treat A11 as open.** The files are committed and referenced; nothing
+is lost either way, and the confirmation is one sentence.
+
+**Watch for wrapped bitmaps.** The deleted `favicon.svg` looked like vector from its extension and was not. To
 check any `.svg` in five seconds, open it in a text editor: `<path`, `<polygon` and friends mean
 real vector; `<image` with `base64` means a bitmap in an SVG costume, with none of the benefits.
 
@@ -107,7 +125,7 @@ ruled that vector masters stay with the designer rather than living here.
 
 | File | Why |
 |---|---|
-| A favicon mark — **new art** | See below. Not a crop of anything that exists |
+| A favicon mark — **confirmation, not art** | Supplied 27 Aug and it works. But it is the paddle alone, which was the ruled-out option — see below. A11 stays open until ownership confirms |
 
 Masters (`.ai`, `.eps`) belong in `assets/brand-source/`, which is empty.
 

@@ -172,10 +172,27 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 }
 .showsasq .sasq{opacity:var(--sasq-a, .08)}
 .d .sasq{left:0; bottom:0; height:94%}
-/* Phone gets no backdrop. The page is wall-to-wall cards at 390px — there is no ground
-   left for him to show on, and a wash you cannot see still costs contrast. This is one
-   field, so it flips back if the phone layout ever opens up. */
-.p .sasq{display:none}
+/* On the phone his head starts where the condensed price bar ends, so the two read as one
+   stacked column rather than the figure running up behind the bar. Both offsets are
+   measured at runtime and published as custom properties — nothing here is a magic number,
+   so the alignment survives a change to the header's height or the bar's type and padding.
+   top + bottom with height:auto stretches him to the frame floor; measured on a 375x667
+   phone that is 61px of header + 41px of bar = 102px down, and 565px tall. */
+.p .sasq{left:0; top:calc(var(--hd-h,61px) + var(--cond-h,41px)); bottom:0; height:auto}
+/* Phone gets the backdrop too. An earlier revision turned it off below the breakpoint, on
+   the reasoning that the page is wall-to-wall cards at 375px with no ground left to show
+   on. Re-tested against the supplied art, that does not hold: the figure lands at 107px on
+   a 375px screen — 29% of the width — and reads clearly behind the hero and down both
+   gutters, with the promo cards covering only his middle. The contrast line is unchanged
+   at 10%, because it is the same art over the same ground. */
+
+/* PROOF HARNESS ONLY, not a site rule. `position:fixed` is contained by the nearest
+   transformed ancestor. The desktop frame has one (the fit-to-width scale), so the figure
+   is trapped inside it and the preview is truthful. The phone frame is rendered at actual
+   size and has no transform, so without this the figure would escape and size itself
+   against the whole review page instead. On the real site there is no frame and no
+   transform: fixed resolves against the phone's own viewport, which is what we want. */
+#sc-p{transform:translateZ(0)}
 /* Height drives the size; aspect-ratio recovers the width, so the figure keeps its
    proportions at any viewport without a hard-coded pixel width. The narrow file is
    pre-cropped in the art itself, which is why no transform is needed any more. */
@@ -932,12 +949,20 @@ var VARIANTS = {"standard": {"title": "Three stops on the bay", "sub": "Fuel, fo
     function setCond(on){
       if (on !== blk.classList.contains('cond')) blk.open = false;
       blk.classList.toggle('cond', on);
+      /* The bar is display:none until it condenses, so it can only be measured here.
+         Publishing it lets the backdrop's top edge sit exactly on the bar's bottom. */
+      if (on) {
+        var oh = Math.round(blk.querySelector('.oneline').getBoundingClientRect().height);
+        if (oh) vp.style.setProperty('--cond-h', oh + 'px');
+      }
     }
     var natural = false;
     var wrap = hd.parentNode, site = vp.querySelector('.site');
     function syncHd(){
       var h = Math.round(wrap.getBoundingClientRect().height);
       site.style.setProperty('--hd-h', h + 'px');
+      /* also on the frame: the backdrop sits outside .site and would not inherit it */
+      vp.style.setProperty('--hd-h', h + 'px');
       return h;
     }
     var hdH = syncHd();
