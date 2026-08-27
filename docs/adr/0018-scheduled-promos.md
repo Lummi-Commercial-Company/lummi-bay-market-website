@@ -172,6 +172,13 @@ under the rail, on every page that has one. Home already did this correctly; the
 and promo templates did not, and were corrected. Verified by measurement rather than by eye: a
 promo row's right edge and the price rail's right edge are the same pixel.
 
+**This has now been got wrong four times** — the promo region on three templates, then the
+whole tenants index, then the Location blocks on `/contact`. The cause is the same every time:
+`.maincol` is the obvious place to put content and it is the narrow column. State the rule as a
+check rather than a principle. **When adding a block to any page template, measure its right
+edge against the price rail's. If they differ, it is in the wrong container.** Only the page
+title and its lede belong in `.maincol`; everything below goes in `.homerest`.
+
 ## Addendum — where the region sits, and how a short set tiles
 
 The promo region is now on the tenant and contact templates too. Two things settled while

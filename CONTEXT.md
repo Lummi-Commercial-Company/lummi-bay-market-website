@@ -32,8 +32,8 @@ deli, if one exists at a Location, is an Amenity — not a separate brand or sit
 **Tenant** — An independent business operating at a Lummi Bay Market property, renting from
 Lummi Commercial Company. Not owned, operated or managed by Lummi Bay Market. Known at
 Exit 260 / Salish Village: **Piroshky Piroshky** (a counter inside the store), **Wendy's**
-and **Black Bear Diner** (freestanding buildings; Black Bear not yet built), and a coffee
-truck outside the store. The site never mentions renting, leasing or landlords — see
+and **Black Bear Diner** (freestanding buildings; Black Bear not yet built), and **Hi-Tide
+Coffee** (a truck outside the store). The site never mentions renting, leasing or landlords — see
 ADR 0016. A Tenant is **not a Location**
 — Locations are the three Lummi Bay stores and nothing else, and the Locations index and
 the fuel price table both read from that set. A Tenant is also **not an Amenity**: the Cove

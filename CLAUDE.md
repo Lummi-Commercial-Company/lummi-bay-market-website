@@ -94,7 +94,7 @@ the layout and cannot be lost or moved by a page.
   scheduler. `mainPages` is demoted to a redesign escape hatch and is never scheduled (ADR 0018).
 - `tenants` — independent businesses renting space on a Lummi Bay property. Known at Exit 260:
   Piroshky Piroshky (inside the store), Wendy's and Black Bear Diner (freestanding buildings;
-  Black Bear not yet built), and a coffee truck. All rent from LCC; the site never says so. **Whether to advertise them
+  Black Bear not yet built), and Hi-Tide Coffee (a coffee truck). All rent from LCC; the site never says so. **Whether to advertise them
   is undecided** — the collection ships empty and nothing renders until a page is published
   (ADR 0016). **A tenant is never a Location** (it would land in the Locations index and the
   fuel price table) and never an Amenity (the Cove Kitchen is one; ownership decides).

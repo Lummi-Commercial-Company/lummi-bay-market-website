@@ -14,7 +14,7 @@ operates and manages none of them.
 |---|---|---|
 | **Piroshky Piroshky** | A counter inside the Exit 260 convenience store | Open |
 | **Wendy's** | Its own building on the property | Open |
-| **High Tide Coffee** *(name to confirm)* | A coffee truck outside the store | Open |
+| **Hi-Tide Coffee** | A coffee truck outside the store | Open |
 | **Black Bear Diner** | Its own building, same arrangement as Wendy's | Planned, not yet built |
 
 LCC owns, operates and manages Lummi Bay Market, and is also the landlord here. The exact
