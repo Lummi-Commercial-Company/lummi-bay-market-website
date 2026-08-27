@@ -88,8 +88,9 @@ the layout and cannot be lost or moved by a page.
 - `infoPages` — what a promo links to. When its promo is not live the page keeps its URL, drops
   out of the sitemap, goes `noindex` and says the offer has ended — never deleted, or shared
   links break and it could not be reactivated (ADR 0018).
-- `promos` — documents with a date window and a `placement`. **Any number, on any page**, capped
-  at four rendered per page. Live is computed per visitor, so expiry is exact without a
+- `promos` — documents with a date window and a `placement`. **Any number, on any page.** The
+  region is a list of rows and each row picks how many it holds (1–4 across); a row re-divides
+  evenly when a promo in it expires, and rows are capped at six per page. Live is computed per visitor, so expiry is exact without a
   scheduler. `mainPages` is demoted to a redesign escape hatch and is never scheduled (ADR 0018).
 - `tenants` — independent businesses renting space on a Lummi Bay property. Known at Exit 260:
   Piroshky Piroshky (inside the store), Wendy's and Black Bear Diner (freestanding buildings;

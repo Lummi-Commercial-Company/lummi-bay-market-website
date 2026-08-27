@@ -546,6 +546,36 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto !important}}
 
+
+/* ===== the row builder ===== */
+.rowbuild{background:var(--c-surface); border:1px solid var(--c-line); border-radius:10px; padding:16px 18px; margin:18px 0 0}
+.rowbuild .hd{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:12px}
+.rowbuild .lab{font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--c-dim)}
+.rowlist{display:flex; flex-direction:column; gap:8px}
+.rowitem{display:flex; align-items:center; gap:10px; background:var(--c-sunk); border:1px solid var(--c-line); border-radius:8px; padding:9px 11px}
+.rowitem .n{font:500 10.5px/1 "IBM Plex Mono",monospace; color:var(--c-dim); min-width:44px}
+.rowitem select{font:inherit; font-size:13px; padding:5px 8px; border-radius:6px; border:1px solid var(--c-line); background:var(--c-surface); color:var(--c-text)}
+.rowitem .mini{
+  display:flex; gap:3px; margin-left:6px; flex:1 1 auto; max-width:190px;
+}
+.rowitem .mini i{background:var(--c-mark); opacity:.45; height:14px; border-radius:2px; display:block}
+.rowitem button{
+  margin-left:auto; font:500 11px/1 "IBM Plex Sans",system-ui,sans-serif; color:var(--c-dim);
+  background:none; border:1px solid var(--c-line); border-radius:6px; padding:6px 10px; cursor:pointer;
+}
+.rowitem button:hover{color:var(--c-text); border-color:var(--c-dim)}
+.addrow{
+  font:600 12px/1 "IBM Plex Sans",system-ui,sans-serif; color:#fff; background:var(--c-mark);
+  border:0; border-radius:99px; padding:10px 16px; cursor:pointer; margin-top:10px;
+}
+.addrow:disabled{opacity:.45; cursor:not-allowed}
+.rowhint{font:400 12.5px/1.55 "IBM Plex Sans",system-ui,sans-serif; color:var(--c-dim); margin:10px 0 0}
+.promorow{display:grid; gap:12px; grid-template-columns:repeat(12,1fr)}
+.d .promorow{gap:14px}
+.p .promorow{grid-template-columns:1fr}
+.promoregion{display:flex; flex-direction:column; gap:12px}
+.d .promoregion{gap:14px}
+
 /* ===== promo system ===== */
 .scrub{background:var(--c-surface); border:1px solid var(--c-line); border-radius:10px; padding:16px 18px; margin:22px 0 0}
 .scrub .top{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:12px}
@@ -626,10 +656,18 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
     <div class="ticks"><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span><span>Mon</span><span>Tue</span></div>
     <div style="overflow-x:auto">
     <table class="ptable">
-      <thead><tr><th>Promo</th><th>Window</th><th>Width</th><th>State</th></tr></thead>
+      <thead><tr><th>Promo</th><th>Window</th><th></th><th>State</th></tr></thead>
       <tbody id="plist"></tbody>
     </table>
     </div>
+  </div>
+
+
+  <div class="rowbuild">
+    <div class="hd"><span class="lab">Promo rows on this page</span></div>
+    <div class="rowlist" id="rowlist"></div>
+    <button class="addrow" id="addrow" type="button">+ Add a row</button>
+    <p class="rowhint" id="rowhint"></p>
   </div>
 
   <div class="controls">
@@ -814,7 +852,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 </div>
 
 <script>
-var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee, all day", "w": "w-half", "start": null, "end": null, "active": true, "body": "Fresh pots through the day at all three stores, and a fill-your-own mug price if you bring one."}, {"id": "weekend", "eyebrow": "At Exit 260", "title": "Long weekend fuel", "w": "w-quarter", "start": 48, "end": 120, "active": true, "body": "Cents off a gallon on regular through the long weekend, at Exit 260 and the Mini Mart. Truck lanes not included."}, {"id": "fishfry", "eyebrow": "At the Cove", "title": "Friday fish fry", "w": "w-quarter", "start": 96, "end": 110, "active": true, "body": "The Cove Kitchen runs a fish fry every Friday from 11am until it is gone."}, {"id": "rewards", "eyebrow": "Rewards", "title": "Join in 60 seconds", "w": "w-half", "start": null, "end": null, "active": false, "body": "Sign up in the app and start collecting on your first fill."}];
+var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee, all day", "start": null, "end": null, "active": true}, {"id": "weekend", "eyebrow": "At Exit 260", "title": "Long weekend fuel", "start": 48, "end": 120, "active": true}, {"id": "fishfry", "eyebrow": "At the Cove", "title": "Friday fish fry", "start": 96, "end": 110, "active": true}, {"id": "rewards", "eyebrow": "Rewards", "title": "Join in 60 seconds", "start": null, "end": null, "active": false}, {"id": "showers", "eyebrow": "Truck Stop", "title": "Showers open 24 hours", "start": null, "end": null, "active": true}, {"id": "minimart", "eyebrow": "Mini Mart", "title": "New grab-and-go case", "start": 24, "end": null, "active": true}, {"id": "firewood", "eyebrow": "At all three", "title": "Firewood by the bundle", "start": null, "end": 144, "active": true}, {"id": "app", "eyebrow": "Rewards", "title": "Fuel discount in the app", "start": 72, "end": null, "active": true}];
 (function(){
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var force=document.getElementById('force'), condF=document.getElementById('cond');
@@ -870,6 +908,55 @@ var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee
     return 'live';
   }
   var LABEL={live:'Live',sched:'Scheduled',ended:'Ended',off:'Off'};
+
+  /* ---- rows ---- */
+  var LAYOUTS = {
+    '1':  {label:'1 across — full width',      spans:[12]},
+    '2':  {label:'2 across — halves',          spans:[6,6]},
+    '3':  {label:'3 across — thirds',          spans:[4,4,4]},
+    '4':  {label:'4 across — quarters',        spans:[3,3,3,3]},
+    'wn': {label:'2 across — wide + narrow',   spans:[8,4]},
+    'nw': {label:'2 across — narrow + wide',   spans:[4,8]},
+    'l3': {label:'3 across — lead + two',      spans:[6,3,3]},
+  };
+  var MAXROWS = 6;
+  var rows = ['1','2','3'];
+
+  function drawBuilder(){
+    var rl = g('rowlist');
+    rl.innerHTML = rows.map(function(key, i){
+      var opts = Object.keys(LAYOUTS).map(function(k){
+        return '<option value="'+k+'"'+(k===key?' selected':'')+'>'+LAYOUTS[k].label+'</option>';
+      }).join('');
+      var mini = LAYOUTS[key].spans.map(function(sp){
+        return '<i style="flex:'+sp+'"></i>';
+      }).join('');
+      return '<div class="rowitem"><span class="n">Row '+(i+1)+'</span>'+
+             '<select data-row="'+i+'">'+opts+'</select>'+
+             '<span class="mini">'+mini+'</span>'+
+             '<button type="button" data-del="'+i+'">Remove</button></div>';
+    }).join('');
+    [].slice.call(rl.querySelectorAll('select')).forEach(function(sel){
+      sel.addEventListener('change', function(){ rows[+sel.dataset.row]=sel.value; drawBuilder(); render(); });
+    });
+    [].slice.call(rl.querySelectorAll('[data-del]')).forEach(function(btn){
+      btn.addEventListener('click', function(){ rows.splice(+btn.dataset.del,1); drawBuilder(); render(); });
+    });
+    g('addrow').disabled = rows.length >= MAXROWS;
+  }
+  g('addrow').addEventListener('click', function(){
+    if (rows.length < MAXROWS){ rows.push('2'); drawBuilder(); render(); }
+  });
+
+  /* 12 divides by 1, 2, 3, 4 and 6 — so a row that loses a promo to expiry
+     re-divides evenly instead of leaving a hole. That is the whole reason the
+     row owns the layout and the promo does not. */
+  function spansFor(key, n){
+    var want = LAYOUTS[key].spans;
+    if (n === want.length) return want;
+    var even = []; for (var i=0;i<n;i++) even.push(12/n);
+    return even;
+  }
   var clock=g('clock'), region=g('region'), plist=g('plist');
   function render(){
     var now=+clock.value;
@@ -877,15 +964,33 @@ var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee
     plist.innerHTML = PROMOS.map(function(p){
       var st=state(p,now);
       var win = (p.start===null?'from launch':fmt(p.start)) + '  \u2192  ' + (p.end===null?'no end':fmt(p.end));
-      return '<tr><td>'+p.title+'</td><td class="win">'+(p.active?win:'&mdash;')+'</td><td class="win">'+p.w.replace('w-','')+'</td>'+
+      return '<tr><td>'+p.title+'</td><td class="win">'+(p.active?win:'&mdash;')+'</td><td class="win">&mdash;</td>'+
              '<td><span class="stt '+st+'">'+LABEL[st]+'</span></td></tr>';
     }).join('');
-    var live=PROMOS.filter(function(p){ return state(p,now)==='live'; }).slice(0,4);
-    region.innerHTML = live.length
-      ? live.map(function(p){ return '<a class="promo '+p.w+'" href="#"><span class="pe">'+p.eyebrow+
-          '</span><b>'+p.title+'</b><span class="cta">See details</span></a>'; }).join('')
-      : '<div class="emptyregion">No promo is live at this moment &mdash; the region renders nothing at all. This dashed box is a review aid.</div>';
-    /* the landing page for the long-weekend promo */
+
+    var live = PROMOS.filter(function(p){ return state(p,now)==='live'; });
+    var cursor = 0, html = '', slots = 0;
+    rows.forEach(function(key){
+      var want = LAYOUTS[key].spans.length;
+      var take = live.slice(cursor, cursor + want);
+      cursor += take.length;
+      if (!take.length) return;                       /* a row with nothing live does not render */
+      var spans = spansFor(key, take.length);
+      slots += take.length;
+      html += '<div class="promorow">' + take.map(function(p, i){
+        return '<a class="promo" style="grid-column:span '+spans[i]+'" href="#"><span class="pe">'+p.eyebrow+
+               '</span><b>'+p.title+'</b><span class="cta">See details</span></a>';
+      }).join('') + '</div>';
+    });
+    region.innerHTML = html || '<div class="emptyregion">No promo is live at this moment &mdash; the region renders nothing at all. This dashed box is a review aid.</div>';
+
+    var capacity = rows.reduce(function(a,k){ return a + LAYOUTS[k].spans.length; }, 0);
+    g('rowhint').textContent = rows.length
+      ? capacity + ' slot' + (capacity===1?'':'s') + ' across ' + rows.length + ' row' + (rows.length===1?'':'s') +
+        ' \u00b7 ' + live.length + ' promo' + (live.length===1?'':'s') + ' live now \u00b7 ' + slots + ' shown' +
+        (live.length > capacity ? ' \u00b7 ' + (live.length-capacity) + ' waiting for a slot' : '')
+      : 'No rows \u2014 the region does not render at all.';
+
     var wk = PROMOS[1], st = state(wk, now), ended = (st!=='live');
     var main = g('vp-i').querySelector('.maincol');
     main.classList.toggle('is-ended', ended);
@@ -896,6 +1001,6 @@ var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee
     g('t-runs').textContent = fmt(wk.start)+' \u2013 '+fmt(wk.end);
   }
   clock.addEventListener('input', render);
-  render();
+  drawBuilder(); render();
 })();
 </script>

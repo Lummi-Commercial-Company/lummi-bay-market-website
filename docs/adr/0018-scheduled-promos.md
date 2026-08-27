@@ -125,6 +125,45 @@ two fields disagree about the same fact.
 - Timezone is `America/Los_Angeles`, stored explicitly. Staff typing "Friday 5pm" mean Friday
   5pm here, and a server in another region must not decide otherwise.
 
+## Revision — the region is rows, and the row owns the layout
+
+The model above gave each promo a width and let the region tile them. Replaced, on the owner's
+ask, with something both simpler to operate and structurally sounder.
+
+**The promo region on a page is a list of rows. Each row chooses how many promos it holds.**
+One across, two, three, four — and rows are added as needed. Staff build a shape rather than
+setting a width on each promo and hoping the set tiles.
+
+| Row layout | Spans |
+|---|---|
+| 1 across — full width | 12 |
+| 2 across — halves | 6 + 6 |
+| 3 across — thirds | 4 + 4 + 4 |
+| 4 across — quarters | 3 + 3 + 3 + 3 |
+| 2 across — wide + narrow | 8 + 4 |
+| 2 across — narrow + wide | 4 + 8 |
+| 3 across — lead + two | 6 + 3 + 3 |
+
+**A row's layout is a capacity, and it re-divides when a promo expires.** A three-across row
+holding two live promos becomes two halves; holding one, it becomes full width. This is the
+part that matters: **12 divides evenly by 1, 2, 3, 4 and 6**, so a row that loses a promo
+always re-divides into equal columns. A hole cannot appear.
+
+That deletes the "last row fills" rule from the addendum below, which existed only because
+widths lived on promos and a composed set would not always sum to twelve. Move the layout onto
+the row and the problem stops existing rather than being patched.
+
+**Five across is not offered.** Twelve does not divide by five, so a five-up row could not
+re-divide when one expired. The constraint is arithmetic, not taste — and at Home's width, five
+promos across are too small to read anyway.
+
+**Rows are capped at six per page**, and a row with nothing live does not render. Promos beyond
+the available slots wait for one: they stay live in the data and appear as earlier ones expire,
+in `priority` order. That replaces the flat display cap of four — capacity is now something
+staff can see and set, rather than a number in the code.
+
+**On a phone every row is one column**, whatever its desktop layout. Unchanged.
+
 ## Addendum — where the region sits, and how a short set tiles
 
 The promo region is now on the tenant and contact templates too. Two things settled while
@@ -143,11 +182,8 @@ page title on interior pages". That is right for a page about us and wrong for b
 `placement` decides *which* pages a promo appears on; each page type decides *where*. Those are
 different questions and conflating them would put a promo in a bad spot on some page eventually.
 
-**The last row fills.** Widths come from the ladder, but a live set is composed at request time
-and will not always sum to twelve — two promos at half and quarter leave a quarter of empty
-grid. The width is therefore a *preference*: the final promo in the set stretches to close the
-row. Verified at every count: three tiles 6+3+3, two becomes 6+6, one becomes a single full
-width, and zero renders nothing — no region, no separator, no gap.
-
-Without that rule the orphan gap appears only on the days when an odd number of promos happens
-to be live, which is exactly the kind of defect that ships.
+**The last row fills.** *(Superseded by the revision above — rows now own the layout and
+re-divide on expiry, so there is no orphan gap to close.)* Widths came from the ladder, but a
+live set is composed at request time and would not always sum to twelve. The rule made the final
+promo stretch to close the row. It worked, and it was a patch over the real problem: the width
+was on the wrong object.
