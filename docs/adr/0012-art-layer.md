@@ -56,6 +56,9 @@ mascot and broadly regional, not tribal art.
 | The sticky header | the locked logo owns it |
 | Behind any body copy | skill rule: motifs are accents, never backgrounds under text |
 
+**One narrow exception, added later:** the mascot, and only the mascot, is allowed on the ground
+as a capped low-opacity backdrop — ADR 0020. No motif from the tribal library ever is.
+
 The promo exclusion is the load-bearing half. It is what lets the rest of the page be warm
 without the page reading as advertising: **the personality is in the furniture around the promo,
 so the promo itself can stay plain.** A promo that is also decorated has to compete with its own
