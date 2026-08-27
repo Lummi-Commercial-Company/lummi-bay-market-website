@@ -124,3 +124,30 @@ two fields disagree about the same fact.
 - `output: 'export'` remains forbidden — it takes this with it, along with the emergency notice.
 - Timezone is `America/Los_Angeles`, stored explicitly. Staff typing "Friday 5pm" mean Friday
   5pm here, and a server in another region must not decide otherwise.
+
+## Addendum — where the region sits, and how a short set tiles
+
+The promo region is now on the tenant and contact templates too. Two things settled while
+placing it.
+
+**Position is a template decision, not a promo one.** CLAUDE.md says the region goes "below the
+page title on interior pages". That is right for a page about us and wrong for both of these:
+
+- On a **tenant page** the title is another company's name. A promo directly beneath it reads as
+  *their* offer — which is the same confusion ADR 0016's disclosure exists to prevent, arriving
+  by layout instead of by wording. The region goes **below the disclosure**, separated by a
+  waterline band, above the "Also at Exit 260" index.
+- On **contact** the guest came for a phone number. Anything above the Location blocks delays
+  the one thing the page is for. The region goes **after them**, before the no-form note.
+
+`placement` decides *which* pages a promo appears on; each page type decides *where*. Those are
+different questions and conflating them would put a promo in a bad spot on some page eventually.
+
+**The last row fills.** Widths come from the ladder, but a live set is composed at request time
+and will not always sum to twelve — two promos at half and quarter leave a quarter of empty
+grid. The width is therefore a *preference*: the final promo in the set stretches to close the
+row. Verified at every count: three tiles 6+3+3, two becomes 6+6, one becomes a single full
+width, and zero renders nothing — no region, no separator, no gap.
+
+Without that rule the orphan gap appears only on the days when an odd number of promos happens
+to be live, which is exactly the kind of defect that ships.

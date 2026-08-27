@@ -418,6 +418,18 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   background:linear-gradient(90deg,var(--lb-teal),var(--lb-navy)); opacity:.9;
 }
 
+
+/* the full width ladder — ADR 0018. Widths are a preference; the region fills its last
+   row so a short set never leaves an orphan gap. */
+.d .promoregion .promo.w-full{grid-column:span 12}
+.d .promoregion .promo.w-two-thirds{grid-column:span 8}
+.d .promoregion .promo.w-third{grid-column:span 4}
+.promowrap{margin-top:22px}
+.promowrap .lab{
+  font:700 .625rem/1 Inter,sans-serif; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--lb-navy); display:block; margin-bottom:10px;
+}
+
 /* truck stop callout */
 .truckcall{
   background:var(--lb-navy); border-radius:12px; display:flex; align-items:center;
@@ -720,6 +732,11 @@ body:not(.showfields) .fieldtag{display:none}
 
   <div class="controls">
     <span class="ctl-lab">Review controls</span>
+    <label class="sw" style="gap:7px">Live promos
+      <select id="npromo" style="font:inherit;font-size:13px;padding:4px 7px;border-radius:6px;border:1px solid var(--c-line);background:var(--c-surface);color:var(--c-text)">
+        <option value="3">3</option><option value="2">2</option><option value="1">1</option><option value="0">0 — none live</option>
+      </select>
+    </label>
     <label class="sw"><input type="checkbox" id="alertsw"> Show the emergency notice</label>
     <label class="sw"><input type="checkbox" id="safepill"> Use the fully-passing pill</label>
     <label class="sw"><input type="checkbox" id="fields" checked> Show where content comes from</label>
@@ -870,6 +887,10 @@ body:not(.showfields) .fieldtag{display:none}
                   </div>
                 </div>
               </article>
+              </div>
+              <div class="promowrap" data-promowrap>
+                <div class="waterline-band"></div>
+                <div class="promoregion" data-promoslot></div>
               </div>
               <p class="noform"><b>No contact form.</b> Nothing on this site collects messages,
               so there is nothing to go unanswered. Phone and address are the contact routes,
@@ -1036,6 +1057,10 @@ body:not(.showfields) .fieldtag{display:none}
                 </div>
               </article>
               </div>
+              <div class="promowrap" data-promowrap>
+                <div class="waterline-band"></div>
+                <div class="promoregion" data-promoslot></div>
+              </div>
               <p class="noform"><b>No contact form.</b> Nothing on this site collects messages,
               so there is nothing to go unanswered. Phone and address are the contact routes,
               and both are kept current in one place.</p>
@@ -1157,6 +1182,35 @@ body:not(.showfields) .fieldtag{display:none}
     fr.style.width = Math.round(W*s)+'px'; fr.style.height = Math.round(H*s)+'px';
   }
   addEventListener('resize', fit); fit();
+
+  /* ADR 0018 — the region composes itself from whatever is live. Nothing is reserved,
+     and an empty set renders nothing at all. */
+  var PROMOS = [
+    {e:'In the store', t:'Fresh coffee, all day', w:6},
+    {e:'Rewards',      t:'Join in 60 seconds',    w:3},
+    {e:'At the Cove',  t:'The Cove Kitchen',      w:3}
+  ];
+  var SPANCLASS = {12:'w-full', 8:'w-two-thirds', 6:'w-half', 4:'w-third', 3:'w-quarter'};
+  function renderPromos(){
+    var n = +document.getElementById('npromo').value;
+    var live = PROMOS.slice(0, n).map(function(p){ return {e:p.e, t:p.t, w:p.w}; });
+    /* fill the final row rather than leaving an orphan gap */
+    if (live.length){
+      var used = live.reduce(function(a,p){ return a + p.w; }, 0) % 12;
+      if (used) live[live.length - 1].w += (12 - used);
+    }
+    var html = live.map(function(p){
+      return '<a class="promo ' + (SPANCLASS[p.w] || 'w-full') + '" href="#"><span class="pe">' +
+             p.e + '</span><b>' + p.t + '</b><span class="cta">See details</span></a>';
+    }).join('');
+    [].slice.call(document.querySelectorAll('[data-promowrap]')).forEach(function(w){
+      w.style.display = live.length ? '' : 'none';
+      w.querySelector('[data-promoslot]').innerHTML = html;
+    });
+  }
+  document.getElementById('npromo').addEventListener('change', renderPromos);
+  renderPromos();
+
 
   /* review toggles for the notice and the pill */
   var alertsw = g('alertsw'), safepill = g('safepill');
