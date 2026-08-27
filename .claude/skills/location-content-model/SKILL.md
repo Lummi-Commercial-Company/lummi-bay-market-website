@@ -26,7 +26,12 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
   the grades a place sells are the entries present in its price list (ADR 0004,
   skill `fuel-price-update`).
 - `amenities`: string list (drives badges/icons — never hand-place per page)
-- `truckStop`: boolean (only exit-260 is true)
+- `truckStop`: boolean (only exit-260 is true). **Under review — it wants to be a record.**
+  The Truck Stop now has its own hours (24 hours), its own amenity set (diesel lanes, DEF,
+  showers, driver lounge, secondary store, truck parking) and **its own phone,
+  360-778-1696** (confirmed). Three fields hanging off a boolean is the schema asking to be
+  `truckStop: { phone, hours, amenities }`, present or absent. Until it changes, the phone
+  has nowhere to live — `phone` on the Location is the main store's.
 - `hero`: image + alt (mark placeholder if art not final)
 
 ## The three locations
@@ -38,6 +43,9 @@ client before launch.)
    Amenities: 24-hr convenience store, ~16 fuel lanes, tobacco & liquor drive-thru,
    quick-serve food, and a separate TRUCK STOP (diesel lanes, driver store, showers,
    lounge, truck parking). truckStop: true.
+   **The Truck Stop's own phone is 360-778-1696** — confirmed, unlike everything else on this
+   page. A driver asking about showers or the diesel lanes should reach the truck side, not
+   the main store, so `/contact` and the Truck Stop page both use it.
 
 2. **mini-mart** — "Lummi Bay Market Mini Mart"; nav "Mini Mart".
    4884 Haxton Way, Ferndale WA 98248 · ~6AM–10PM · 360-380-2049. Next to Silver Reef
