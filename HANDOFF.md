@@ -6,8 +6,8 @@ whoever picks this up next, human or Claude.
 ## Start here
 1. `CLAUDE.md` — the project's source of truth. Stack, hard rules, locked architecture.
 2. `CONTEXT.md` — the domain language. Use these words: Location, Truck Stop, Amenity.
-3. `docs/adr/` — **13 decisions**, each with its reasoning, its measurements, and what was
-   rejected. Read 0004, 0005 and 0013 before touching anything.
+3. `docs/adr/` — **16 decisions**, each with its reasoning, its measurements, and what was
+   rejected. Read 0004, 0005 and 0013 before touching anything. 0006 carries an amendment.
 4. `docs/roadmap.md` — the work, in order.
 5. `docs/loose-ends.md` — **the most important file for deciding what to do next.** Gaps nobody
    closed, traps that cost time, and the assumptions the whole design rests on that nobody has
@@ -42,10 +42,32 @@ In priority order. The first three are from `docs/loose-ends.md` and matter more
 2. **Nobody has watched staff change a price today.** The CMS model was reasoned, never observed.
 3. **Colour contrast has never been measured** — cedar on white at small sizes, and body copy at
    70–75% opacity. The palette is locked, so a failure becomes a usage rule.
-4. **Phase 0 blockers** (`docs/roadmap.md`): logo vectors + a reversed lockup, the navy-on-navy
-   header, confirmed hours and addresses, an art direction, the pricing decision, and registrar
-   access for lummibay.com and exit260.com.
+4. **Phase 0 blockers** (`docs/roadmap.md`): confirmed hours and addresses, an art direction, the
+   pricing decision, and registrar access for lummibay.com and exit260.com. ~~Logo files~~ and
+   ~~the navy-on-navy header~~ are **done** — see below. A favicon mark is the one logo item left
+   (launch-checklist A11) and it blocks nothing.
 5. **Register items C5, C7, C9** — in `docs/proofs/fuel-strip-proof.html`. C7 is a business call.
+
+## The logo is in, and the header is unblocked
+*Added after the asset session. This is the part most likely to be out of date in your head.*
+
+- **`public/brand/` holds the art, as PNG.** A supplied vector was rejected because its paddle
+  rendered pale and ungrained against the approved raster; it is archived, unserved, in
+  `assets/brand-source/`. Vector masters stay with the designer by decision.
+- **The filename names the background, never the ink.** `logo-market-on-dark.png` holds the
+  *white* wordmark and is the header's; `logo-market-on-light.png` holds the navy one, for the
+  hero and `/rewards`. They were briefly named `logo-market` / `logo-market-reversed` and got
+  swapped, which would have shipped a navy wordmark on the navy header — 1.6:1, invisible, on
+  every page. Do not rename them back, and check any rename by opening the file.
+- **`logo-market-on-dark@3x.png` goes in a `srcset`, never in `src`.** Pointing `src` at it ships
+  61.6 KB to fill a 112px slot on every device.
+- **ADR 0006's navy-on-navy blocker is closed.** The header keeps `--lb-navy`; the reversed
+  lockup measures 8.28:1 against it. The header no longer needs a light ground.
+- **`docs/proofs/logo-in-use.html`** shows all of it rendered at real sizes — header at both
+  widths, hero, footer, favicon at true tab sizes, with the measurements.
+- **One trap.** `logo-market-on-light.png` is a 512-square with ~65% of its height empty, so
+  sized by width it renders 146px tall to show 46px of logo. Fine in the hero; crop to its ink
+  before using it anywhere tight.
 
 ## How this project works
 - **Decisions go in `docs/adr/`**, including rejected ones (see 0012). A rejected decision that
@@ -92,6 +114,8 @@ Locations but not the Truck Stop; "just refresh the price pages" when prices are
 When you write a rule, check every place it should apply.
 
 ## Suggested opening message for a new session
-> Read `HANDOFF.md`, then `CLAUDE.md` and `docs/loose-ends.md`. We are at Phase 0 of
-> `docs/roadmap.md` — no application code exists yet. Do not start building until we have
-> discussed the three untested assumptions at the top of `loose-ends.md`.
+> Read `HANDOFF.md`, then `CLAUDE.md` and `docs/loose-ends.md`. No application code exists yet.
+> The logo assets are in and ADR 0006's header blocker is closed, so the layout shell can be
+> built against real art — see the logo section of `HANDOFF.md` for the two filenames and the
+> `srcset` rule. The three untested assumptions at the top of `loose-ends.md` still stand: raise
+> them before they harden into code, rather than treating them as settled.
