@@ -118,10 +118,40 @@ would make the pill the loudest thing in the header and undo ADR 0006's intent.
 WCAG 1.4.11's 3:1 for a component boundary; bone against navy is 7.35:1 and against the cedar
 fill 3.02:1, so the ring carries the boundary from both sides. That failure is gone.
 
-**What is accepted:** the label is ink on cedar at **4.33:1 against a 4.5:1 requirement**, at
-11px desktop and 10.5px phone. One control, one word pair, on every page. It is a knowing
-exception, not an oversight, and it is the only one in the palette.
+**What is accepted:** ownership has since asked for the label in **white**, which measures
+**3.41:1 against a 4.5:1 requirement** — ink at 4.33 was 4% short, white is 24% short. The
+change was made with the measurement stated first. This is now a clear failure rather than a
+marginal one, on one control, on every page. It is a knowing exception, not an oversight, and it
+is the only one in the palette.
+
+Worth recording for whoever audits this: white on cedar **does** clear the 3:1 bar for large
+text. If the pill's label were ever set at 18.66px bold or larger it would pass outright. That
+was rejected because it would make the pill the loudest thing in the header and undo ADR 0006's
+reason for it existing. The exception is a deliberate trade of one small label's contrast
+against the header's visual balance.
 
 The fully-passing variant — bone fill, navy label — is kept one toggle away in the review pages
 so the comparison stays available rather than becoming a memory. If accessibility is ever
 audited formally, this is the finding that will come back, and this section is the answer to it.
+
+
+## Revision — the pill's hit area, and clear space around the lockup
+
+Two defects found while changing the pill's colour, neither of them about colour.
+
+**The tap target was 31px.** The anchor *was* the visible pill, so the shape's size and the hit
+area were the same thing — and ADR 0010 sets a 44px floor. The approved proof already solved
+this and the note was missed: the anchor is the hit area, and the cedar shape is an inner
+element that keeps its own size. The control looks identical and is now 44px to a thumb. The
+phone menu button had the same fault at 40px and is fixed with it.
+
+**The pill was crowding the logo on the phone.** It sat immediately beside the lockup, which
+`brand-system` protects with a clear-space rule of the paddle-handle height on all sides.
+Raised in review as the pill "encroaching on the brand", which is exactly what the rule exists
+to prevent. The pill now travels to the right and rides with the menu button: **129px of clear
+space** between the lockup and the nearest element, against 4px before. Desktop was never
+affected — the nav sits between them there.
+
+Both are the same lesson the project keeps relearning. A rule written correctly — 44px targets,
+clear space around the mark — applied to the cases that prompted it and not to the one added
+later.
