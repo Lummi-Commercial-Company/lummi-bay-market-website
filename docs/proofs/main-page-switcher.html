@@ -172,13 +172,22 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 }
 .showsasq .sasq{opacity:var(--sasq-a, .08)}
 .d .sasq{left:0; bottom:0; height:94%}
-/* On the phone his head starts where the condensed price bar ends, so the two read as one
-   stacked column rather than the figure running up behind the bar. Both offsets are
-   measured at runtime and published as custom properties — nothing here is a magic number,
-   so the alignment survives a change to the header's height or the bar's type and padding.
-   top + bottom with height:auto stretches him to the frame floor; measured on a 375x667
-   phone that is 61px of header + 41px of bar = 102px down, and 565px tall. */
-.p .sasq{left:0; top:calc(var(--hd-h,61px) + var(--cond-h,41px)); bottom:0; height:auto}
+/* On the phone his head starts below the price widget, so the two read as one stacked
+   column rather than the figure running up behind it.
+
+   The anchor is the widget's LOWEST edge in any state, not its current one. He is fixed and
+   the widget is sticky, so if the anchor tracked the widget he would jump on every scroll;
+   and anchoring to the shortest state — the condensed one-line bar — leaves the resting
+   table hanging 84px over his head, which is exactly what it did. The block's own height is
+   constant at 109px in every state (condensing swaps which child is painted and leaves the
+   resting height in the layout), so the lowest edge is simply the resting position, and
+   that is what --sasq-top carries.
+
+   Published at runtime from three measured values — header height, the body's top padding,
+   the block's height — so nothing here is a magic number and the anchor follows the
+   emergency notice opening, the price table gaining a row, or the header changing size.
+   On a 375x667 phone with no notice showing that is 61 + 16 + 109 = 186px down. */
+.p .sasq{left:0; top:var(--sasq-top,186px); bottom:0; height:auto}
 /* Phone gets the backdrop too. An earlier revision turned it off below the breakpoint, on
    the reasoning that the page is wall-to-wall cards at 375px with no ground left to show
    on. Re-tested against the supplied art, that does not hold: the figure lands at 107px on
@@ -949,12 +958,6 @@ var VARIANTS = {"standard": {"title": "Three stops on the bay", "sub": "Fuel, fo
     function setCond(on){
       if (on !== blk.classList.contains('cond')) blk.open = false;
       blk.classList.toggle('cond', on);
-      /* The bar is display:none until it condenses, so it can only be measured here.
-         Publishing it lets the backdrop's top edge sit exactly on the bar's bottom. */
-      if (on) {
-        var oh = Math.round(blk.querySelector('.oneline').getBoundingClientRect().height);
-        if (oh) vp.style.setProperty('--cond-h', oh + 'px');
-      }
     }
     var natural = false;
     var wrap = hd.parentNode, site = vp.querySelector('.site');
@@ -963,6 +966,13 @@ var VARIANTS = {"standard": {"title": "Three stops on the bay", "sub": "Fuel, fo
       site.style.setProperty('--hd-h', h + 'px');
       /* also on the frame: the backdrop sits outside .site and would not inherit it */
       vp.style.setProperty('--hd-h', h + 'px');
+      /* where the price widget's lowest edge lands, so the backdrop can start below it.
+         Runs here because this is what re-runs when the emergency notice changes the
+         header's height and pushes the whole block down with it. */
+      var pb = vp.querySelector('.pagebody');
+      var pad = pb ? parseFloat(getComputedStyle(pb).paddingTop) || 0 : 0;
+      vp.style.setProperty('--sasq-top',
+        Math.round(h + pad + blk.getBoundingClientRect().height) + 'px');
       return h;
     }
     var hdH = syncHd();
