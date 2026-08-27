@@ -1,6 +1,6 @@
 # 0019 — One map with all three pins, and why the free embed cannot do it
 
-Status: Accepted for the layout; **the embed mechanism is a decision the owner still has to make.**
+Status: Accepted. Layout and mechanism both settled — **Google My Maps, embedded**.
 
 Terms (Location, Truck Stop): `CONTEXT.md`. Lives on `/contact` (ADR 0015).
 
@@ -31,7 +31,15 @@ which on a third-party embed is a real state.
 **Three pins, not four.** The Truck Stop shares Exit 260's address, so a fourth pin would land on
 top of the third. Its pin note says the Truck Stop is there.
 
-**The mechanism is not settled.** Three ways to get three chosen pins, with real differences:
+**The mechanism is Google My Maps, embedded.** Confirmed against Google's own support
+documentation: a custom map is embedded from **Share → "Embed on my site"**, which returns an
+iframe. **The map must be set to public or the embed renders nothing for a visitor** — that is
+the step this fails on, and it fails silently rather than with an error.
+
+"Public" there means anyone may *view* it. Editing stays with the account, so it is not a
+permissions hole.
+
+No API key and no cost. The three options were:
 
 | | Control | Cost | Catch |
 |---|---|---|---|
@@ -39,8 +47,8 @@ top of the third. Its pin note says the Truck Stop is there.
 | **Maps JavaScript API** with markers | Exact, plus styling | **Billed per map load** | More to build and a running cost on a $20/mo site |
 | **A static map image** with pins drawn on | Exact | Free | Not interactive — no zoom, no "directions from here" |
 
-**Recommended: My Maps**, with one condition attached, because the catch is the same failure
-this project already has a checklist item for. A map built in a personal Google account
+**My Maps carries one condition**, because its catch is the same failure this project already
+has a checklist item for. A map built in a personal Google account
 disappears when that person leaves, exactly like a domain registered under a former employee's
 address (A6). If My Maps is used, **the map is created in a company account from the start** —
 not moved there later, because ownership transfer on consumer Google products is not reliable.
@@ -49,10 +57,27 @@ not moved there later, because ownership transfer on consumer Google products is
 - **An embedded Google map loads third-party code and sets cookies.** This site has no cookie
   banner and no consent mechanism anywhere in its architecture, which has been fine because
   nothing tracked anyone. A map changes that, and the question is a legal one rather than a
-  design one. A static image avoids it entirely — worth weighing, since the interactivity a
+  design one. Not speculative: Google's own support forum carries people hitting **Lighthouse
+  cookie warnings from exactly this iframe**, so it surfaces in a routine audit. A static image avoids it entirely — worth weighing, since the interactivity a
   guest actually wants is usually "open this in my own maps app", which a link does.
 - The embed is an iframe and iframes are heavy. It loads below the Location blocks, so it should
   be lazy-loaded and must never delay the phone numbers above it.
 - **The review templates cannot show it.** The preview sandbox blocks outside hosts, so the map
   is a marked placeholder at the right size and position. That is a limitation of the preview,
   not of the design.
+
+
+## Addendum — the steps, so nobody rediscovers them
+
+1. Create the map in **the company Google account**, not a personal one. Doing this first is the
+   whole of A17; moving it later is the part that does not work reliably.
+2. Add a pin per Location. Three, not four — the Truck Stop shares Exit 260's.
+3. Name the map something a stranger would understand. The title shows in the embed.
+4. **Share → set the map to public.** Skipping this is the failure mode: the embed returns an
+   empty frame rather than an error, so it looks like the code is wrong when the setting is.
+5. **Share → Embed on my site** → copy the iframe.
+6. Hand the iframe to whoever is building `/contact`. It is content, not code, and it belongs in
+   a CMS field so the map can be swapped without a deploy.
+
+Step 6 matters more than it reads: a hard-coded iframe means every future map change is an
+engineering task, which is the thing this whole project is built to avoid.
