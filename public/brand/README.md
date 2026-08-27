@@ -15,8 +15,8 @@ to white yourself — that needs an approved reversed lockup from the brand owne
 | `logo-market-on-dark.png` | 336 x 120, **white** wordmark, navy `#1D3D7C` outline, cedar paddle with visible grain | Goes on dark backgrounds — the sticky header |
 | `logo-market-on-dark@3x.png` | 1008 x 360, the same art at 3x. Verified: aligned against the 1x it differs only on edge anti-aliasing and finer paddle grain | Served to high-density screens via `srcset`; never referenced on its own |
 | `logo-market-on-light.png` | 512 x 512, **navy** `#1D3D7C` wordmark, letterboxed with ~65% empty vertical space | Goes on light backgrounds — home hero, `/rewards` |
-| `favicon.ico` | Multi-size ICO: 16, 32 and 48, all 32bpp | Legacy browsers and the bookmark bar |
-| `favicon-16x16.png` | 16 x 16, 757 bytes | The common tab |
+| `favicon.ico` | Multi-size ICO: 16, 32 and 48, all 32bpp BMP entries. **The 16 entry is the hand-tuned one** — see below; 32 and 48 are byte-for-byte as supplied | Legacy browsers and the bookmark bar |
+| `favicon-16x16.png` | 16 x 16, 760 bytes. **Hand-tuned, not a downscale** — see below | The common tab |
 | `favicon-32x32.png` | 32 x 32, 2.0 KB | Retina tab |
 | `apple-touch-icon.png` | 180 x 180, 37.9 KB | iOS home screen |
 | `android-chrome-192x192.png` | 192 x 192, 42.4 KB | Android, via `/site.webmanifest` |
@@ -49,6 +49,38 @@ Two readings, and only ownership can say which:
 
 **Until that is confirmed, treat A11 as open.** The files are committed and referenced; nothing
 is lost either way, and the confirmation is one sentence.
+
+### The 16px is hand-tuned, and only the 16px
+
+A straight downscale of the supplied art gives a paddle that is **8.5% of the disc** — about a
+one-pixel stroke once the browser renders it at 16. Anti-aliasing then smears that one pixel into
+grey and the icon reads as a navy dot. Alongside a tab of Gmail's solid red *G*, you would find
+your tab by position, not by recognising the mark.
+
+The fix, approved 27 Aug 2026: the paddle is **thickened to 16.3% of the disc** for the 16px size
+only. It is not redrawn. The shape is the supplied artwork with a dilation applied to the white
+mask at 512 and then downsampled — same silhouette, same proportions, more weight.
+
+| | Paddle as % of disc | Effective stroke at 16px |
+|---|---|---|
+| As supplied, downscaled | 8.5% | ~1.0px |
+| **Shipped 16px** | **16.3%** | **~1.6px** |
+
+Heavier weights were built and rejected on evidence: at ~2.1px the blade loses its taper and the
+handle starts merging into it; at ~2.6px it is a lozenge with no handle knob left. Scaling the
+paddle up 18% instead broke it through the disc edge at both ends.
+
+**This is why 32 and up are untouched.** One thickened master used at every size would wreck the
+large icon — the same dilation that rescues 16 destroys 180. Hand-tuning the smallest size is
+ordinary practice for icon sets; carrying that weight upward is not.
+
+Regenerating it: dilate the white mask of `android-chrome-512x512.png` by a radius of 10 at 512,
+clip to the disc, downsample to 16. The `.ico`'s own 16 entry is rebuilt from the same pixels as
+a 32bpp BMP so a browser falling back to `/favicon.ico` gets the tuned one too.
+
+**Note what this does not fix.** On dark browser chrome the navy disc is low-contrast against the
+tab background whatever the paddle weight, because the disc is the problem, not the paddle. A
+transparent background would solve it and is a separate decision, tied to the same open ruling.
 
 **Watch for wrapped bitmaps.** The deleted `favicon.svg` looked like vector from its extension and was not. To
 check any `.svg` in five seconds, open it in a text editor: `<path`, `<polygon` and friends mean
