@@ -26,10 +26,10 @@ The backdrop is a **field group on the settings singleton**, not a stylesheet ru
 |---|---|
 | `image` | The artwork. Upload replaces it — no deploy, no engineer. |
 | `enabled` | Off is one checkbox. This is the whole point. |
-| `opacity` | A number, **hard-capped at 12%** in the schema — see below. |
+| `opacity` | A number. **Not clamped — the owner sets it.** The schema shows the measured WCAG line and warns past it; see below. |
 | `side` | `left` or `right`. Left is the default. |
 | `height` | A percentage of the viewport. |
-| `crop` | How much of the figure runs off the edge. 32% by default. |
+| `crop` | How much of the figure runs off the edge. 0 when the art is pre-cropped, as the supplied narrow file is. |
 
 Plus a per-page `noBackdrop` checkbox, so a page that needs a clean ground (a dense table, a
 map) opts out without touching the site setting.
@@ -38,24 +38,39 @@ Turning it off, swapping the art or dropping the opacity publishes the way the e
 does (ADR 0017) — on-demand revalidation, live in under a second, no rebuild. That is what makes
 "disable it at any time" a true statement rather than a hopeful one.
 
-### The opacity ceiling is 12%, and it was measured
+### The opacity line is 10% for the real art, and it was measured
 The backdrop is a wash under text, so it eats contrast off every token that sits on the ground.
-Measured against `--lb-ground` (#FBF9F4) with the figure in `--lb-navy`:
 
-| Opacity | Wash | Navy #1C4E8F (need 4.5) | Ink #2A2820 | Dim label #6B6455 (need 4.5) |
-|---|---|---|---|---|
-| 0% | #FBF9F4 | 7.87 | 14.03 | 5.58 |
-| 10% | #E5E8EA | 6.73 | 11.99 | 4.77 |
-| **12%** | **#E0E4E8** | **6.48** | **11.55** | **4.59** |
-| 14% | #DCE1E6 | 6.29 | 11.21 | **4.46 — fails** |
+The first measurement was taken against a flat `--lb-navy` fill, because the placeholder was a
+flat silhouette. **The supplied artwork is not flat** — it is a rendered figure whose fur carries
+shadow far darker than any single brand token, so the wash it casts is darker at the same opacity.
+Re-measured against `--lb-ground` (#FBF9F4), worst case being the **darkest pixel the figure
+composites onto the ground** (text may sit anywhere over it, so an average would be dishonest):
 
-**The dim label is the binding constraint, not navy.** Navy still has 6.48 at the cap. The cap
-is in the schema, not in a comment, because the field is editable by non-technical staff and
-"looks better a bit darker" is the obvious next thought.
+| Opacity | Dim label #6B6455 over the supplied photo | over the drawn placeholder |
+|---|---|---|
+| 0% | 5.58 | 5.58 |
+| 8% | 4.77 | 4.92 |
+| **10%** | **4.58 — the line** | 4.76 |
+| 12% | 4.40 — fails | 4.61 |
+| 14% | 4.21 — fails | **4.46 — fails** |
+
+**The dim label is the binding constraint, not navy** — navy still holds 6.21 at 12%. Both photo
+files, narrow and wide, measure identically: they are the same render, so they share a darkest pixel.
+
+**The number is not clamped in the schema.** An earlier draft of this ADR hard-capped it; that was
+overridden — the opacity is the owner's call, and a field they cannot move is not a field. What the
+schema does instead is show the measured contrast live at the chosen value and mark where 4.5:1
+stops being met, so the choice is made with the cost visible rather than blind. The same control is
+wired into `main-page-switcher.html` to review it against the real page.
 
 Cedar does not constrain it. ADR 0014 moved every small label off cedar, so cedar carries no text
 on the ground at all — its only remaining uses sit on opaque paper, which the backdrop never
-touches.
+touches. Re-checked against all six proof templates when the real art landed: the only cedar text
+anywhere is the review-aid `ART` marker, and it sits on white paper. Cedar would fail 3:1 over any
+wash at any opacity — it has only 0.24 of headroom at 0% — so this stays true only as long as no
+cedar text is ever put on the ground. **Putting cedar text on the ground is what would break this**,
+not raising the opacity.
 
 ### He is fixed, not parallaxed
 `position: fixed`, so the page scrolls past a figure that does not move. No scroll listener, no
@@ -91,19 +106,38 @@ state precisely:
 
 The rest of ADR 0012's placement table stands.
 
-## What is still a placeholder
-The silhouette currently in the proofs is **drawn to judge placement, scale and opacity, and
-nothing else.** It is not a proposal for the mascot's look. The company's own sasquatch art
-replaces it, which is exactly what the `image` field is for.
+## The art (updated — the real files arrived)
+The drawn silhouette was **only ever a stand-in to judge placement, scale and opacity.** It has
+been superseded. The company's own artwork now lives at:
 
-ADR 0012's warning applies with full force here: *placeholders have a way of surviving to
-launch.* A backdrop is the easiest thing on a page to stop seeing.
+| File | Size | Notes |
+|---|---|---|
+| `public/brand/elements/sasquatch-narrow-bg.png` | 503 × 2948, 1.85 MB | Pre-cropped in the art itself: the back half is already gone, only his front is on canvas, facing right. Matches the original brief exactly and needs no CSS crop. |
+| `public/brand/elements/sasquatch-bg.png` | 866 × 2948, 3.22 MB | The same figure uncropped. Reads far more clearly as a figure, but shows his whole back — it is a different look, not the briefed one. |
+
+Both are wired into `main-page-switcher.html` behind an art selector so they can be compared on
+the real page. The drawn placeholder is kept in that one file as the thing being replaced, and
+nowhere else once the choice is made.
+
+**The art is never recoloured.** No tint, no `filter`, no `currentColor`. It renders exactly as
+supplied and opacity is the only thing applied to it. The `color` property left on `.sasq` feeds
+the drawn placeholder's `currentColor` and nothing else.
+
+**These PNGs must never be served raw.** 1.85 MB for a decorative wash is indefensible; at native
+resolution the same image is **128 KB as WebP** — a 93% saving. `next/image` does this conversion
+and the responsive sizing at build time, which is why the PNG is the right thing to commit and the
+wrong thing to ship. A raw `<img src=".png">` anywhere is a bug.
 
 ## Consequences
 - One more field group for staff to understand, mitigated by the fact that the only field most
   people will ever touch is the checkbox.
-- The 12% cap has to be re-measured if the ground token or the dim label token ever changes.
-  `docs/proofs/scripts/contrast.mjs` is the tool; the table above is the expected output.
+- The 10% line has to be re-measured if the ground token, the dim label token, **or the artwork**
+  changes. Swapping the art is the easy one to forget: the whole reason the line moved from 12% to
+  10% is that new art arrived with darker pixels in it than the placeholder had. Any `image`
+  upload invalidates the table above.
+- The narrow file renders about 108px wide at 94% viewport height, the wide about 186px. Narrow is
+  the briefed look and reads as a shadow at the page edge; wide reads as a recognisable figure.
+  This is a taste call and it is the owner's — both are live in the switcher.
 - Pages that are dense with opaque cards — the Home page as it stands — show almost none of him.
   That is correct behaviour for a ground-level wash, not a bug, and it is why the interior
   templates are where this earns its keep.
