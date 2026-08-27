@@ -26,29 +26,22 @@ to white yourself — that needs an approved reversed lockup from the brand owne
 nothing**: it was never a vector — an SVG wrapper around one embedded base64 PNG, zero `<path>`
 elements. See *Watch for wrapped bitmaps*, below, which is why it was worth checking.
 
-### The set was replaced on 27 Aug 2026 — and it raises a permission question
+### The set was replaced on 27 Aug 2026, and the paddle ruling was reversed
 
 The old set carried **the full lockup**, a ~3:1 horizontal band squeezed into a square: a smear at
 32px and unreadable at 16px. The replacement is **the paddle device alone, white on a navy disc.**
-Rendered at true size it reads cleanly at 48, at 32, and is a legible diagonal stroke at 16. As
-craft, the problem is solved.
+At true size it reads cleanly at 48 and 32, and at 16 with the tuning described below.
 
-**The problem is that this was the one option ruled out.** The recorded ruling was that *the paddle
-alone is not acceptable as a standalone mark* — which is precisely why A11 asked for new art, a
-monogram or another device, rather than something lifted from the lockup. The supplied favicon is
-the paddle alone. It is also a recolour: the lockup's paddle is cedar with visible grain, and this
-is flat white on navy, which `CLAUDE.md` forbids for the logo.
+This was the one option the old ruling excluded. **Ownership approved the paddle as the icon mark
+on 27 Aug 2026**, reversing the earlier ruling that it was not acceptable standing alone. A11 is
+closed on that basis.
 
-Two readings, and only ownership can say which:
-
-- **The ruling has changed** and the paddle is now approved as the icon mark. Then A11 closes, this
-  section becomes history, and `CLAUDE.md`'s logo rule needs a sentence carving out the icon.
-- **The ruling stands** and this set was generated without it in view. Then it carries the same
-  defect as the old one, in a more dangerous form — the old set looked obviously wrong, this one
-  looks right.
-
-**Until that is confirmed, treat A11 as open.** The files are committed and referenced; nothing
-is lost either way, and the confirmation is one sentence.
+**The approval is the icon and nothing more.** It covers the small square slots the lockup cannot
+fill — favicon, app icon, avatar — including the recolour those need (cedar with grain in the
+lockup, flat white on navy here). It does **not** loosen anything else: the lockup is the master
+mark everywhere, no other part of it may stand alone, and a bare paddle never substitutes for the
+lockup in the header, the hero, or any other lockup slot. `CLAUDE.md` and skill `brand-system`
+carry the same carve-out in the same words.
 
 ### The 16px is hand-tuned, and only the 16px
 
@@ -157,7 +150,7 @@ ruled that vector masters stay with the designer rather than living here.
 
 | File | Why |
 |---|---|
-| A favicon mark — **confirmation, not art** | Supplied 27 Aug and it works. But it is the paddle alone, which was the ruled-out option — see below. A11 stays open until ownership confirms |
+| ~~A favicon mark~~ **Done** | Supplied and approved 27 Aug 2026 — see above. A11 closed |
 
 Masters (`.ai`, `.eps`) belong in `assets/brand-source/`, which is empty.
 

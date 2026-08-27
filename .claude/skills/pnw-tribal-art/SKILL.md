@@ -24,7 +24,9 @@ Echo the logo's world: canoe + paddle (already in the logo), eagle, salmon, orca
 (killer whale), crab, and moving water.
 - **Waterline** — the signature. A horizontal blue wave band (using `--lb-teal`)
   separating sections, echoing the brand book's cyan wave. This is the theme's anchor.
-- **Paddle** — dividers, list markers, scroll accents (never alter the logo's paddle).
+- **Paddle** — dividers, list markers, scroll accents. Drawn in the motif style: ornament,
+  not the logo's paddle extracted. The logo's own paddle is still never altered here — the one
+  exception lives outside this skill, in the approved icon mark (see `brand-system`).
 - **Salmon / orca / crab / eagle** — spot illustrations, section icons, empty-state
   art, footer band.
 

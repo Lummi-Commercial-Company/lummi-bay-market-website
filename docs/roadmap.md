@@ -21,10 +21,10 @@ These gate later phases and none of them are code. Start them now because they h
    designer by decision, not oversight.
 2. ~~**Resolve the navy-on-navy header.**~~ **Done — the header stays navy.** A reversed lockup
    was supplied, so the light-ground alternative was never needed. See the amendment to ADR 0006.
-2a. **A favicon mark.** The one logo item still open, and it needs *new art*. The supplied set
-   carries the full lockup, which is a 3:1 band and unreadable at 16px, and ownership has ruled
-   the paddle alone unacceptable as a standalone mark. So a monogram or another device has to be
-   designed and approved. This has a lead time; it blocks nothing but ships visibly.
+2a. ~~**A favicon mark.**~~ **Done — 27 Aug 2026.** A full set was supplied and ownership
+   approved the paddle alone as the icon mark, reversing the earlier ruling against it. The old
+   set carried the full lockup, a 3:1 band unreadable at 16px; the new one is the paddle on a
+   navy disc, with the 16px weight hand-tuned. **No logo item is open.** See A11.
 3. **Confirm addresses, hours and phone numbers.** Everything in `location-content-model` was
    pulled from lcc-lummi.com and is marked unconfirmed. Hours must come back in the short form
    (`6am–9pm`) — there is a measured length budget on the Location card line (ADR 0009).

@@ -22,6 +22,12 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 ## Hard rules (never break)
 - **Logo is locked.** Use the existing logo art as-is. Never redraw, recolor, or
   restyle it. Colors and fonts *around* it may be enhanced; the logo may not.
+  **One carve-out, approved 27 Aug 2026: the paddle alone is the icon mark** — favicon,
+  app icon, avatar, any small square slot the lockup cannot fill. For that use it may be
+  recoloured (it ships white on a navy disc) and its 16px weight is deliberately thickened.
+  The carve-out is the icon and nothing else: the lockup is unchanged, stays the master mark
+  everywhere, and a bare paddle never stands in for it in the header, the hero, or any other
+  lockup slot. Method and measurements in `public/brand/README.md`.
 - **Other Lummi companies** appear ONLY as a single footer link labeled
   "Lummi Commercial Companies." Nowhere else in copy or nav.
 - **Cultural respect.** Coast Salish art is specific to Lummi Nation. For the build,

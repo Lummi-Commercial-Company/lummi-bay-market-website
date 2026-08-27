@@ -10,11 +10,15 @@ description: Canonical, LOCKED brand design tokens for Lummi Bay Market — the 
 - Master mark = the "Market" lockup, used sitewide (header, home hero). Location
   pages may use their own name in type, but the mark stays the Market lockup.
 - Never redraw, recolor, distort, or re-typeset the logo.
-- **No part of the lockup may stand alone as a mark.** Ownership ruled specifically that the
-  paddle on its own is not acceptable, so there is no croppable element to fall back on. A mark
-  for small square slots — a favicon, an app icon, an avatar — needs new art, designed and
-  approved. This does not restrict the *decorative* paddle motif in skill `pnw-tribal-art`:
-  a divider or list marker drawn in that style is ornament, not the logo's paddle extracted.
+- **The paddle alone is the icon mark — approved 27 Aug 2026, for that and nothing else.** It
+  fills the small square slots the lockup cannot: favicon, app icon, avatar. It ships white on a
+  navy disc, and the 16px size carries a thickened paddle because a straight downscale reads as
+  a dot. **This reverses the earlier ruling** that the paddle alone was unacceptable — anything
+  written against that ruling is out of date.
+- **Otherwise no part of the lockup may stand alone**, and the carve-out is not a licence to
+  modify the lockup. Do not extract, recolour or re-weight any part of it for any other purpose.
+- Separate from all of the above: the *decorative* paddle motif in skill `pnw-tribal-art`.
+  A divider or list marker drawn in that style is ornament, not the logo's paddle extracted.
 - Clear space = the paddle-handle height on all sides. Minimum width ~72px.
 - The logo art contains the original brand blue #000F9F. That blue lives INSIDE the
   logo only — it is NOT a UI color in this system. UI blues are the navies below.
