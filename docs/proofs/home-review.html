@@ -378,11 +378,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 /* ===== promo region + waterline band — approved proof, artifact 9af4c540 =====
    The region is full width below the two-column top. Each promo takes a width
    from a fixed 12-column ladder so any mix tiles without orphan gaps. */
-.promoregion{display:grid; gap:12px; grid-template-columns:1fr; margin-top:4px}
-.d .promoregion{gap:14px; grid-template-columns:repeat(12,1fr)}
-.d .promoregion .promo{grid-column:span 12; min-height:150px; aspect-ratio:auto}
-.d .promoregion .promo.w-half{grid-column:span 6}
-.d .promoregion .promo.w-quarter{grid-column:span 3}
+.d .promoregion .promo{min-height:150px; aspect-ratio:auto}
 .p .promoregion .promo{grid-column:auto; aspect-ratio:16/9}
 .promo{
   position:relative; text-decoration:none; overflow:hidden; border-radius:10px;
@@ -417,6 +413,36 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   height:10px; margin:20px 0 18px; border-radius:99px;
   background:linear-gradient(90deg,var(--lb-teal),var(--lb-navy)); opacity:.9;
 }
+
+
+/* ===== the row builder ===== */
+.rowbuild{background:var(--c-surface); border:1px solid var(--c-line); border-radius:10px; padding:16px 18px; margin:18px 0 0}
+.rowbuild .hd{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:12px}
+.rowbuild .lab{font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--c-dim)}
+.rowbuild .setting{display:inline-flex; align-items:center; gap:7px; margin-left:auto; font-size:13px; color:var(--c-dim)}
+.rowbuild .setting input{width:56px; font:inherit; font-size:13px; padding:5px 7px; border-radius:6px; border:1px solid var(--c-line); background:var(--c-surface); color:var(--c-text)}
+.rowlist{display:flex; flex-direction:column; gap:8px}
+.rowitem{display:flex; align-items:center; gap:10px; background:var(--c-sunk); border:1px solid var(--c-line); border-radius:8px; padding:9px 11px}
+.rowitem .n{font:500 10.5px/1 "IBM Plex Mono",monospace; color:var(--c-dim); min-width:44px}
+.rowitem select{font:inherit; font-size:13px; padding:5px 8px; border-radius:6px; border:1px solid var(--c-line); background:var(--c-surface); color:var(--c-text)}
+.rowitem .mini{display:flex; gap:3px; margin-left:6px; flex:1 1 auto; max-width:190px}
+.rowitem .mini i{background:var(--c-mark); opacity:.45; height:14px; border-radius:2px; display:block}
+.rowitem button{margin-left:auto; font:500 11px/1 "IBM Plex Sans",system-ui,sans-serif; color:var(--c-dim); background:none; border:1px solid var(--c-line); border-radius:6px; padding:6px 10px; cursor:pointer}
+.rowitem button:hover{color:var(--c-text); border-color:var(--c-dim)}
+.addrow{font:600 12px/1 "IBM Plex Sans",system-ui,sans-serif; color:#fff; background:var(--c-mark); border:0; border-radius:99px; padding:10px 16px; cursor:pointer; margin-top:10px}
+.addrow:disabled{opacity:.45; cursor:not-allowed}
+
+.rowitem.dry{opacity:.62}
+.rowitem .dry-note{
+  font:500 10px/1 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.05em;
+  color:var(--c-warn); background:var(--c-warn-soft); border-radius:4px; padding:5px 7px; white-space:nowrap;
+}
+.rowhint{font:400 12.5px/1.55 "IBM Plex Sans",system-ui,sans-serif; color:var(--c-dim); margin:10px 0 0}
+.promorow{display:grid; gap:12px; grid-template-columns:repeat(12,1fr)}
+.d .promorow{gap:14px}
+.p .promorow{grid-template-columns:1fr}
+.promoregion{display:flex; flex-direction:column; gap:12px}
+.d .promoregion{gap:14px}
 
 /* truck stop callout */
 .truckcall{
@@ -565,6 +591,19 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
     ADR 0014: the Rewards pill and the small uppercase labels. The notes under each frame say where.</p>
   </div>
 
+
+  <div class="rowbuild">
+    <div class="hd">
+      <span class="lab">Promo rows on this page</span>
+      <label class="setting">Max rows &mdash; a settings field, not a constant
+        <input type="number" id="maxrows" min="1" max="12" value="6">
+      </label>
+    </div>
+    <div class="rowlist" id="rowlist"></div>
+    <button class="addrow" id="addrow" type="button">+ Add a row</button>
+    <p class="rowhint" id="rowhint"></p>
+  </div>
+
   <div class="controls">
     <span class="ctl-lab">Review controls</span>
     <label class="sw"><input type="checkbox" id="alertsw"> Show the emergency notice</label>
@@ -631,10 +670,8 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
               </div>
             </div>
             <div class="homerest">
-              <div class="promoregion">
-                <a class="promo w-half" href="#"><span class="pe mk">In the store</span><b class="mk">Fresh coffee, all day</b><span class="cta">See details</span></a>
-                <a class="promo w-quarter" href="#"><span class="pe mk">Rewards</span><b class="mk">Join in 60 seconds</b><span class="cta">See details</span></a>
-                <a class="promo w-quarter" href="#"><span class="pe mk">At the Cove</span><b class="mk">The Cove Kitchen</b><span class="cta">See details</span></a>
+              <div class="promowrap" data-promowrap>
+                <div class="promoregion" data-promoslot></div>
               </div>
               <div class="waterline-band"></div>
           <section class="sec">
@@ -776,10 +813,8 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
               </div>
             </div>
             <div class="homerest">
-              <div class="promoregion">
-                <a class="promo w-half" href="#"><span class="pe mk">In the store</span><b class="mk">Fresh coffee, all day</b><span class="cta">See details</span></a>
-                <a class="promo w-quarter" href="#"><span class="pe mk">Rewards</span><b class="mk">Join in 60 seconds</b><span class="cta">See details</span></a>
-                <a class="promo w-quarter" href="#"><span class="pe mk">At the Cove</span><b class="mk">The Cove Kitchen</b><span class="cta">See details</span></a>
+              <div class="promowrap" data-promowrap>
+                <div class="promoregion" data-promoslot></div>
               </div>
               <div class="waterline-band"></div>
           <section class="sec">
@@ -984,6 +1019,81 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
     fr.style.height = Math.round(H * s) + 'px';
   }
   addEventListener('resize', fit); fit();
+
+  /* ---- promo rows (ADR 0018). The row owns the layout; 12 divides by 1,2,3,4 and 6,
+     so a row that loses a promo to expiry re-divides evenly instead of leaving a hole. ---- */
+  var LIVE = [{"e": "In the store", "t": "Fresh coffee, all day"}, {"e": "At Exit 260", "t": "Long weekend fuel"}, {"e": "At the Cove", "t": "Friday fish fry"}, {"e": "Truck Stop", "t": "Showers open 24 hours"}, {"e": "Mini Mart", "t": "New grab-and-go case"}, {"e": "At all three", "t": "Firewood by the bundle"}, {"e": "Rewards", "t": "Fuel discount in the app"}, {"e": "At the Cove", "t": "Chowder on Fridays"}, {"e": "At Exit 260", "t": "Drive-thru open late"}, {"e": "Rewards", "t": "Double points Tuesday"}];
+  var LAYOUTS = {
+    '1':  {label:'1 across \u2014 full width',    spans:[12]},
+    '2':  {label:'2 across \u2014 halves',        spans:[6,6]},
+    '3':  {label:'3 across \u2014 thirds',        spans:[4,4,4]},
+    '4':  {label:'4 across \u2014 quarters',      spans:[3,3,3,3]},
+    'wn': {label:'2 across \u2014 wide + narrow', spans:[8,4]},
+    'nw': {label:'2 across \u2014 narrow + wide', spans:[4,8]},
+    'l3': {label:'3 across \u2014 lead + two',    spans:[6,3,3]}
+  };
+  var rows = ['1','2','3','4'];
+  function maxRows(){ return Math.max(1, Math.min(12, +document.getElementById('maxrows').value || 6)); }
+  function spansFor(key, n){
+    var want = LAYOUTS[key].spans;
+    if (n === want.length) return want;
+    var even = []; for (var i=0;i<n;i++) even.push(12/n);
+    return even;
+  }
+  var filled = [];
+  function computeFilled(liveCount){
+    filled = []; var c = 0;
+    rows.forEach(function(k){
+      var take = Math.max(0, Math.min(LAYOUTS[k].spans.length, liveCount - c));
+      filled.push(take > 0); c += take;
+    });
+  }
+  function drawBuilder(){
+    var rl = document.getElementById('rowlist');
+    rl.innerHTML = rows.map(function(key, i){
+      var opts = Object.keys(LAYOUTS).map(function(k){
+        return '<option value="'+k+'"'+(k===key?' selected':'')+'>'+LAYOUTS[k].label+'</option>'; }).join('');
+      var mini = LAYOUTS[key].spans.map(function(sp){ return '<i style="flex:'+sp+'"></i>'; }).join('');
+      return '<div class="rowitem'+(filled[i]?'':' dry')+'"><span class="n">Row '+(i+1)+'</span>'+
+             '<select data-row="'+i+'">'+opts+'</select><span class="mini">'+mini+'</span>'+
+             (filled[i] ? '' : '<span class="dry-note">no live promo &mdash; renders nothing</span>')+
+             '<button type="button" data-del="'+i+'">Remove</button></div>';
+    }).join('');
+    [].slice.call(rl.querySelectorAll('select')).forEach(function(sel){
+      sel.addEventListener('change', function(){ rows[+sel.dataset.row]=sel.value; computeFilled(LIVE.length); drawBuilder(); drawRows(); }); });
+    [].slice.call(rl.querySelectorAll('[data-del]')).forEach(function(btn){
+      btn.addEventListener('click', function(){ rows.splice(+btn.dataset.del,1); computeFilled(LIVE.length); drawBuilder(); drawRows(); }); });
+    document.getElementById('addrow').disabled = rows.length >= maxRows();
+  }
+  function drawRows(){
+    var cursor = 0, html = '', shown = 0;
+    rows.forEach(function(key){
+      var take = LIVE.slice(cursor, cursor + LAYOUTS[key].spans.length);
+      cursor += take.length;
+      if (!take.length) return;
+      var spans = spansFor(key, take.length); shown += take.length;
+      html += '<div class="promorow">' + take.map(function(p,i){
+        return '<a class="promo" style="grid-column:span '+spans[i]+'" href="#"><span class="pe">'+p.e+
+               '</span><b>'+p.t+'</b><span class="cta">See details</span></a>'; }).join('') + '</div>';
+    });
+    var capacity = rows.reduce(function(a,k){ return a + LAYOUTS[k].spans.length; }, 0);
+    [].slice.call(document.querySelectorAll('[data-promowrap]')).forEach(function(w){
+      w.style.display = html ? '' : 'none';
+      w.querySelector('[data-promoslot]').innerHTML = html;
+    });
+    document.getElementById('rowhint').textContent = rows.length
+      ? capacity + ' slot' + (capacity===1?'':'s') + ' across ' + rows.length + ' row' + (rows.length===1?'':'s') +
+        ' \u00b7 ' + LIVE.length + ' promos live \u00b7 ' + shown + ' shown' +
+        (LIVE.length > capacity ? ' \u00b7 ' + (LIVE.length-capacity) + ' waiting for a slot' : '')
+      : 'No rows \u2014 the region does not render at all.';
+  }
+  document.getElementById('addrow').addEventListener('click', function(){
+    if (rows.length < maxRows()){ rows.push('2'); computeFilled(LIVE.length); drawBuilder(); drawRows(); } });
+  document.getElementById('maxrows').addEventListener('input', function(){
+    if (rows.length > maxRows()) rows = rows.slice(0, maxRows());
+    computeFilled(LIVE.length); drawBuilder(); drawRows(); });
+  computeFilled(LIVE.length); drawBuilder(); drawRows();
+
 
   /* review toggles for the notice and the pill */
   var alertsw = get('alertsw'), safepill = get('safepill');
