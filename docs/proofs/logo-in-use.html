@@ -1,0 +1,362 @@
+<title>Lummi Bay Lockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --navy:#1C4E8F; --navy-deep:#14396B; --teal:#0FB5C4; --cedar:#C9772E;
+  --ground:#FBF9F4; --paper:#FFFFFF; --ink:#2A2820; --bone:#F5F1E8;
+  --ink-soft:#6E6959; --rule:#E3DDCE; --rule-dark:#2C5F9E;
+  --display:"Space Grotesk","Segoe UI",system-ui,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --radius:8px; --card:12px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font:400 1rem/1.5 var(--body);
+  font-feature-settings:"kern" 1;
+}
+img{max-width:100%}
+.band{padding:64px 24px}
+.band.dark{background:var(--navy); color:var(--bone)}
+.band.deep{background:var(--navy-deep); color:var(--bone)}
+.in{max-width:1100px; margin:0 auto}
+.narrow{max-width:66ch}
+.in>.narrow{margin-left:0}
+.waterline{height:6px; background:linear-gradient(90deg,var(--teal) 0%,#0A8F9C 55%,var(--teal) 100%)}
+
+h1{font:700 3rem/1.1 var(--display); margin:0 0 16px; letter-spacing:-.015em; text-wrap:balance}
+h2{font:700 1.75rem/1.15 var(--display); margin:0 0 12px; text-wrap:balance}
+h3{font:700 1.125rem/1.25 var(--display); margin:0 0 8px}
+p{margin:0 0 16px}
+.lede{font-size:1.125rem; line-height:1.55}
+.dark p, .deep p{color:#DCE6F3}
+.eyebrow{
+  font:600 .8125rem/1.3 var(--body); letter-spacing:.14em; text-transform:uppercase;
+  color:var(--cedar); margin:0 0 12px;
+}
+.dark .eyebrow, .deep .eyebrow{color:#F0B978}
+.muted{color:var(--ink-soft)}
+.dark .muted{color:#AFC4DD}
+
+/* ---- the one rule ---- */
+.rule2{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; margin:32px 0 0}
+.rulecard{border-radius:var(--card); overflow:hidden; border:1px solid var(--rule)}
+.rulecard .swatch{height:150px; overflow:hidden; display:flex; align-items:center; justify-content:center}
+.rulecard .swatch.onnavy{background:var(--navy)}
+.rulecard .swatch.onbone{background:var(--bone)}
+.rulecard .meta{background:var(--paper); padding:16px 20px}
+.rulecard .meta b{font:600 .9375rem/1.4 var(--body); display:block}
+.rulecard .meta span{font-size:.875rem; color:var(--ink-soft); font-variant-numeric:tabular-nums}
+
+/* ---- specimen frames ---- */
+.frame{border-radius:var(--card); overflow:hidden; border:1px solid var(--rule); background:var(--paper)}
+.dark .frame, .deep .frame{border-color:var(--rule-dark)}
+.frame.phone{width:375px; max-width:100%}
+.sitebar{background:var(--navy); display:flex; align-items:center; gap:12px; padding:12px 22px}
+.sitebar img{display:block; width:112px; height:auto; flex:0 0 auto}
+.nav{display:flex; gap:20px; margin-left:auto; font:500 .75rem/1 var(--body); color:var(--bone)}
+.pill{
+  flex:0 0 auto; background:var(--bone); color:var(--navy);
+  font:600 .6875rem/1 var(--body); padding:9px 12px; border-radius:999px; white-space:nowrap;
+}
+.pagebody{padding:24px 22px 30px; background:var(--ground)}
+.pagebody h4{font:700 1.375rem/1.2 var(--display); color:var(--navy); margin:0 0 6px}
+.pagebody p{margin:0; color:var(--ink-soft); font-size:.9375rem}
+
+.phone .sitebar{gap:7px; padding:6px 12px}
+.phone .sitebar img{width:95px}
+.phone .nav{gap:4px; font-size:.6875rem}
+.phone .nav span{min-width:44px; min-height:44px; display:flex; align-items:center; justify-content:center}
+.phone .pill{min-height:44px; display:flex; align-items:center}
+
+/* hero on light ground */
+.hero{background:var(--bone); padding:44px 24px; text-align:center}
+.hero img{width:146px; height:auto; margin:0 auto 14px; display:block}
+.hero .tag{font:500 .9375rem/1.5 var(--body); color:var(--ink-soft); margin:0}
+.hero .locs{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:20px 0 0}
+.hero .locs span{
+  font:600 .75rem/1 var(--body); letter-spacing:.04em; color:var(--navy);
+  background:var(--paper); border:1px solid var(--rule); border-radius:999px; padding:9px 14px;
+}
+
+/* footer specimen */
+.foot{background:var(--navy-deep); padding:28px 24px; display:flex; gap:22px;
+  align-items:center; flex-wrap:wrap}
+.foot img{width:126px; height:auto; display:block}
+.foot .links{display:flex; gap:18px; flex-wrap:wrap; margin-left:auto;
+  font:500 .8125rem/1 var(--body); color:#C9D8EA}
+
+/* measurement strip */
+.meas{display:flex; gap:28px; flex-wrap:wrap; margin:14px 0 0;
+  font:500 .8125rem/1.5 var(--body); font-variant-numeric:tabular-nums; color:var(--ink-soft)}
+.dark .meas, .deep .meas{color:#AFC4DD}
+.meas b{font-weight:600; color:var(--ink)}
+.dark .meas b, .deep .meas b{color:var(--bone)}
+
+/* favicon reality */
+.tabs{display:flex; gap:26px; align-items:flex-end; flex-wrap:wrap; margin:28px 0 0}
+.tab{text-align:center}
+.tabchrome{
+  background:#DFE1E5; border-radius:9px 9px 0 0; padding:8px 14px 8px 10px;
+  display:flex; align-items:center; gap:7px; min-width:150px;
+}
+.tabchrome img{display:block; image-rendering:auto}
+.tabchrome .t{font:400 .75rem/1 var(--body); color:#3C4043; white-space:nowrap}
+.tab .cap{font:500 .8125rem/1.5 var(--body); color:var(--ink-soft); margin-top:9px;
+  font-variant-numeric:tabular-nums}
+
+/* density pair */
+.pair{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px; margin:28px 0 0}
+.pane{background:var(--navy); border-radius:var(--card); padding:22px; border:1px solid var(--rule-dark)}
+.pane img{width:112px; height:40px; display:block}
+.pane .cap{font:500 .8125rem/1.5 var(--body); color:#AFC4DD; margin-top:14px;
+  font-variant-numeric:tabular-nums}
+.pane .cap b{color:var(--bone); font-weight:600}
+
+.note{border-left:3px solid var(--cedar); padding:2px 0 2px 18px; margin:28px 0 0}
+.dark .note{border-left-color:#F0B978}
+
+table{border-collapse:collapse; width:100%; margin:24px 0 0; font-size:.9375rem}
+th,td{text-align:left; padding:11px 12px; border-bottom:1px solid var(--rule); vertical-align:top}
+th{font:600 .75rem/1.3 var(--body); letter-spacing:.09em; text-transform:uppercase; color:var(--navy)}
+td.n{font-variant-numeric:tabular-nums; white-space:nowrap}
+.scroll{overflow-x:auto}
+.foot-note{font-size:.875rem; color:var(--ink-soft)}
+
+@media (max-width:640px){
+  h1{font-size:2.25rem} h2{font-size:1.375rem} .band{padding:44px 18px}
+  .sitebar{padding:10px 14px} .nav{display:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  a{transition:color .15s ease}
+}
+:focus-visible{outline:2px solid var(--cedar); outline-offset:2px}
+</style>
+
+<header class="band" style="padding-bottom:44px">
+  <div class="in">
+    <div class="narrow">
+    <p class="eyebrow">Market lockup &middot; specimen</p>
+    <h1>The lockup, on every surface it lands on</h1>
+    <p class="lede muted">Two PNG files carry the Lummi Bay Market identity across the site. Which
+    one a surface takes is decided by one thing only &mdash; the colour of the ground behind it.
+    Everything below is the real artwork at the real size it renders at.</p>
+    </div>
+  </div>
+</header>
+<div class="waterline"></div>
+
+<section class="band">
+  <div class="in">
+    <p class="eyebrow">The only rule</p>
+    <h2>The filename names the background, never the ink</h2>
+    <p class="narrow muted"><b>on-dark</b> holds the white wordmark. <b>on-light</b> holds the navy
+    one. The name answers &ldquo;what do I put this on&rdquo;, so it cannot be read backwards.</p>
+    <div class="rule2">
+      <div class="rulecard">
+        <div class="swatch onnavy"><img src="../../public/brand/logo-market-on-dark.png" alt="Lummi Bay Market, white wordmark, on navy" style="width:200px"></div>
+        <div class="meta"><b>logo-market-on-dark.png</b>
+          <span>White wordmark &middot; 8.28:1 on navy &middot; 336 &times; 120</span></div>
+      </div>
+      <div class="rulecard">
+        <div class="swatch onbone"><img src="../../public/brand/logo-market-on-light.png" alt="Lummi Bay Market, navy wordmark, on bone" style="width:200px"></div>
+        <div class="meta"><b>logo-market-on-light.png</b>
+          <span>Navy wordmark &middot; 8.00:1 on bone &middot; 512 &times; 512</span></div>
+      </div>
+    </div>
+    <div class="note narrow">
+      <p style="margin:0">These were briefly called <i>logo-market</i> and <i>logo-market-reversed</i>,
+      and got swapped &mdash; &ldquo;reversed&rdquo; reads as either the ink or the ground, and the two
+      readings are opposites. The swap would have shipped a navy wordmark on the navy header: 1.6:1,
+      invisible, on every page.</p>
+    </div>
+  </div>
+</section>
+
+<div class="waterline"></div>
+<section class="band dark">
+  <div class="in">
+    <p class="eyebrow">Dark ground</p>
+    <h2>The sticky header</h2>
+    <p class="narrow">On every page, pinned for the whole scroll. The logo carries Home. This is the
+    surface that made the reversed lockup necessary &mdash; and the reason the header could stay navy
+    rather than becoming a light bar.</p>
+
+    <div class="frame" style="margin-top:28px">
+      <div class="sitebar">
+        <img src="../../public/brand/logo-market-on-dark.png" srcset="../../public/brand/logo-market-on-dark.png 1x, ../../public/brand/logo-market-on-dark@3x.png 3x" alt="Lummi Bay Market &mdash; home">
+        <nav class="nav"><span>Locations</span><span>Truck Stop</span></nav>
+        <span class="pill">Get the App</span>
+      </div>
+      <div class="waterline"></div>
+      <div class="pagebody">
+        <h4>Salish Village</h4>
+        <p>Fuel, convenience store and the full truck stop &mdash; showers, driver lounge, parking.</p>
+      </div>
+    </div>
+    <div class="meas">
+      <span>logo <b>112 &times; 40</b></span><span>ink <b>111.3 &times; 36.3</b></span>
+      <span>bar <b>64px</b></span><span>contrast <b>8.28:1</b></span>
+    </div>
+
+    <h3 style="margin:44px 0 8px">Phone &mdash; 375px</h3>
+    <p class="narrow" style="margin-bottom:24px">Zero horizontal slack by design: the bar needs its
+    full width for the logo, two nav items and the pill, each a 44px target.</p>
+    <div class="frame phone">
+      <div class="sitebar">
+        <img src="../../public/brand/logo-market-on-dark.png" srcset="../../public/brand/logo-market-on-dark.png 1x, ../../public/brand/logo-market-on-dark@3x.png 3x" alt="Lummi Bay Market &mdash; home">
+        <nav class="nav"><span>Locations</span><span>Truck&nbsp;Stop</span></nav>
+        <span class="pill">Get the App</span>
+      </div>
+      <div class="waterline"></div>
+      <div class="pagebody">
+        <h4>Salish Village</h4>
+        <p>Open 24 hours</p>
+      </div>
+    </div>
+    <div class="meas">
+      <span>logo <b>95 &times; 33.9</b></span><span>ink <b>94.4 &times; 30.8</b></span>
+      <span>bar <b>56px</b></span>
+    </div>
+  </div>
+</section>
+
+<div class="waterline"></div>
+<section class="band">
+  <div class="in">
+    <p class="eyebrow">Light ground</p>
+    <h2>The home hero</h2>
+    <p class="narrow muted">The one place the lockup is the largest thing on the page. The on-dark
+    file cannot appear here &mdash; a white wordmark on bone barely registers &mdash; which is why
+    PNG-only still means two files rather than one.</p>
+    <div class="frame" style="margin-top:28px">
+      <div class="hero">
+        <img src="../../public/brand/logo-market-on-light.png" alt="Lummi Bay Market">
+        <p class="tag">Three locations on the Lummi Peninsula</p>
+        <div class="locs"><span>Salish Village</span><span>Lummi Bay Mini Mart</span><span>The Cove</span></div>
+      </div>
+    </div>
+    <div class="meas">
+      <span>logo <b>146px</b> wide</span><span>ink <b>503 &times; 162</b> available</span>
+      <span>contrast <b>8.00:1</b></span>
+    </div>
+    <div class="note narrow">
+      <p style="margin:0">The air above and below the lockup here is the <i>file</i>, not the layout.
+      <b>on-light</b> is a 512 &times; 512 square with the lockup band across its middle and roughly
+      65% of its height empty. Sized by width it renders 146px tall to show 46px of logo. Harmless in
+      a hero that has room; worth knowing before it goes anywhere tight, where it wants cropping to
+      its ink first.</p>
+    </div>
+  </div>
+</section>
+
+<div class="waterline"></div>
+<section class="band deep">
+  <div class="in">
+    <p class="eyebrow">Dark ground</p>
+    <h2>The footer</h2>
+    <p class="narrow">Deep navy rather than header navy, so the same file works and the lockup sits
+    a little heavier. The single Lummi Commercial Companies link lives here and nowhere else.</p>
+    <div class="frame" style="margin-top:28px; border:none">
+      <div class="foot">
+        <img src="../../public/brand/logo-market-on-dark.png" srcset="../../public/brand/logo-market-on-dark.png 1x, ../../public/brand/logo-market-on-dark@3x.png 3x" alt="Lummi Bay Market">
+        <div class="links"><span>About</span><span>Contact</span><span>Rewards</span>
+          <span>Careers</span><span>Lummi Commercial Companies</span></div>
+      </div>
+    </div>
+    <div class="meas"><span>logo <b>126px</b> wide</span><span>ground <b>#14396B</b></span></div>
+  </div>
+</section>
+
+<div class="waterline"></div>
+<section class="band">
+  <div class="in">
+    <p class="eyebrow">Density</p>
+    <h2>Same slot, two files</h2>
+    <p class="narrow muted">High-density screens fetch the 3&times; export; everything else fetches
+    the small one. The markup names both and the browser chooses &mdash; nothing in the code branches.
+    Both panes below are 112 &times; 40 on screen.</p>
+    <div class="pair">
+      <div class="pane">
+        <img src="../../public/brand/logo-market-on-dark.png" alt="Lockup from the 1x file">
+        <p class="cap"><b>logo-market-on-dark.png</b><br>336 &times; 120 &middot; 15.6 KB &middot; served at 1&times;</p>
+      </div>
+      <div class="pane">
+        <img src="../../public/brand/logo-market-on-dark@3x.png" alt="Lockup from the 3x file">
+        <p class="cap"><b>logo-market-on-dark@3x.png</b><br>1008 &times; 360 &middot; 61.6 KB &middot; served at 3&times;</p>
+      </div>
+    </div>
+    <div class="note narrow">
+      <p style="margin:0"><b>Never point <code>src</code> at the 3&times; file.</b> That ships 61.6 KB
+      to fill a 112px slot on every device. In a <code>srcset</code> it reaches only the screens that
+      can use it.</p>
+    </div>
+  </div>
+</section>
+
+<div class="waterline"></div>
+<section class="band">
+  <div class="in">
+    <p class="eyebrow">Open</p>
+    <h2>The one surface it does not work on</h2>
+    <p class="narrow muted">The favicon carries the full lockup, and the lockup is a 3:1 horizontal
+    band. Squeezed into a browser tab it stops being a logo. These are rendered at the true sizes a
+    browser uses.</p>
+    <div class="tabs">
+      <div class="tab">
+        <div class="tabchrome"><img src="../../public/brand/favicon-96x96.png" width="16" height="16" alt="">
+          <span class="t">Lummi Bay Market</span></div>
+        <p class="cap">16px &mdash; the common case</p>
+      </div>
+      <div class="tab">
+        <div class="tabchrome"><img src="../../public/brand/favicon-96x96.png" width="32" height="32" alt="">
+          <span class="t">Lummi Bay Market</span></div>
+        <p class="cap">32px &mdash; retina tab</p>
+      </div>
+      <div class="tab">
+        <div class="tabchrome" style="min-width:0"><img src="../../public/brand/favicon-96x96.png" width="48" height="48" alt=""></div>
+        <p class="cap">48px &mdash; bookmark bar</p>
+      </div>
+    </div>
+    <div class="note narrow">
+      <p style="margin:0 0 10px">A favicon needs the mark alone, and ownership has ruled that
+      <b>the paddle on its own is not acceptable</b> as a standalone mark. There is no croppable
+      element left, so this needs new art &mdash; a monogram or another device, designed and approved.</p>
+      <p style="margin:0" class="foot-note">Tracked as A11 in the launch checklist. Nothing else
+      depends on it, so the current set stays until that art exists.</p>
+    </div>
+  </div>
+</section>
+
+<div class="waterline"></div>
+<section class="band">
+  <div class="in">
+    <p class="eyebrow">Reference</p>
+    <h2>Every surface, every file</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Surface</th><th>Ground</th><th>File</th><th>CSS width</th><th>3&times; headroom</th></tr></thead>
+        <tbody>
+          <tr><td>Sticky header, desktop</td><td>Navy</td><td>on-dark <span class="muted">+ @3x</span></td><td class="n">112px</td><td class="n">2.98&times;</td></tr>
+          <tr><td>Sticky header, phone</td><td>Navy</td><td>on-dark <span class="muted">+ @3x</span></td><td class="n">95px</td><td class="n">3.52&times;</td></tr>
+          <tr><td>Home hero, desktop</td><td>Bone</td><td>on-light</td><td class="n">146px</td><td class="n">1.15&times;</td></tr>
+          <tr><td>Home hero, phone</td><td>Bone</td><td>on-light</td><td class="n">123px</td><td class="n">1.36&times;</td></tr>
+          <tr><td>Footer</td><td>Deep navy</td><td>on-dark <span class="muted">+ @3x</span></td><td class="n">126px</td><td class="n">2.65&times;</td></tr>
+          <tr><td>Favicon</td><td>Browser chrome</td><td colspan="2">needs new art</td><td class="n">&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="foot-note" style="margin-top:26px">This is the repo copy: it loads the logo files from
+    <code>public/brand/</code>, so it goes stale the moment the art does. The published version
+    embeds them. Artwork is the approved raster, unmodified. A
+    supplied vector was rejected on paddle fidelity and is archived unserved. Colours, type and
+    spacing on this page are the locked brand tokens &mdash; navy #1C4E8F, deep navy #14396B, teal
+    #0FB5C4, cedar #C9772E, bone #F5F1E8, ground #FBF9F4; Space Grotesk and Inter. The page holds a
+    single theme on purpose: a specimen that reflowed to a viewer&rsquo;s dark mode would misstate
+    the colours it exists to show.</p>
+  </div>
+</section>
+<div class="waterline"></div>

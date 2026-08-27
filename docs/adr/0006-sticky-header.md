@@ -127,7 +127,7 @@ row of sticky header.
 one open consequence is.*
 
 **The header stays `--lb-navy`.** A reversed lockup was supplied, so the light-ground alternative
-this ADR offered was never needed. Rendered evidence: `docs/proofs/header-logo-proof.html`.
+this ADR offered was never needed. Rendered evidence: `docs/proofs/logo-in-use.html`.
 
 Three things about the supplied art that the header depends on:
 
