@@ -71,9 +71,35 @@ Regenerating it: dilate the white mask of `android-chrome-512x512.png` by a radi
 clip to the disc, downsample to 16. The `.ico`'s own 16 entry is rebuilt from the same pixels as
 a 32bpp BMP so a browser falling back to `/favicon.ico` gets the tuned one too.
 
-**Note what this does not fix.** On dark browser chrome the navy disc is low-contrast against the
-tab background whatever the paddle weight, because the disc is the problem, not the paddle. A
-transparent background would solve it and is a separate decision, tied to the same open ruling.
+### The bone ring, and why the tab icons carry one
+
+A navy disc has no edge on a dark tab bar. Measured against the browser chromes people actually
+run, the icon's outer boundary was **1.19:1 on Chrome dark, 1.58 on its tab strip, 1.39 on
+Firefox dark** — the shape simply dissolved. On light chrome the same disc measured 10.23 and
+7.80, so this was a dark-mode-only failure, and roughly half of users are in dark mode.
+
+The fix is the pattern this project already uses for anything crossing light and dark grounds
+(ADR 0014, the back-to-top disc, the Rewards pill): **a bone `#F5F1E8` ring, 20 units at 512.**
+
+| | Chrome dk | Chrome strip | Firefox dk | Light tab | Light strip |
+|---|---|---|---|---|---|
+| No ring | 1.19 — fails | 1.58 — fails | 1.39 — fails | 10.23 | 7.80 |
+| **Ring 20** | **4.70** | **5.86** | **5.23** | **10.23** | **7.80** |
+
+**It costs the light case nothing** — 10.23 and 7.80, unchanged to two decimals. The bone rim is
+invisible against white, but the navy disc still supplies that edge one pixel further in, so each
+ground is carried by whichever element contrasts with it. The ring occupies the transparent margin
+the supplied art already had, so neither the disc nor the paddle gives up a pixel.
+
+Measuring this needs care. The first two attempts were wrong: the brightest pixel in the icon is
+always the white paddle, which is identical in every variant, and the *outermost* opaque pixel is
+bone, which reads as a failure on white even though the disc behind it is perfectly visible. The
+honest metric is the strongest boundary anywhere in the outer 2px band, sampled on 64 rays.
+
+**Only the tab-facing icons carry it** — `favicon-16x16.png`, `favicon-32x32.png` and all three
+`.ico` entries. `apple-touch-icon.png` and the `android-chrome-*` files are left exactly as
+supplied: the OS masks them to a rounded rect and they sit on the user's wallpaper, never on
+browser chrome, so a rim there would be clipped for no gain.
 
 **Watch for wrapped bitmaps.** The deleted `favicon.svg` looked like vector from its extension and was not. To
 check any `.svg` in five seconds, open it in a text editor: `<path`, `<polygon` and friends mean
