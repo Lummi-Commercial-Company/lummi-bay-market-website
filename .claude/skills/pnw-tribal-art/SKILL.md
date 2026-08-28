@@ -48,6 +48,11 @@ Art is allowed there now, under one hard rule:
 
 > **No image in the header may come within 20px of the right edge of the text navigation.**
 > Scaling a motif up may never cross that line.
+>
+> **One row of motifs, ever** — at every scale and every viewport width.
+>
+> **Right-aligned** — motifs gather at the far end from the navigation, and slack falls on the
+> nav side, never between the nav and the first motif.
 
 A floor, not a target: the lockup's clear space (skill `brand-system`) still applies, so art
 starts at whichever of the two lands further right. Where the nav collapses to a menu button
@@ -56,6 +61,10 @@ there is no text navigation to measure from, and only the lockup rule binds.
 The rule settles placement by itself. Art *behind* the nav sits left of that edge, so it is out —
 just as well, because it was independently unusable: the active nav item already sits on a 16%
 bone highlight, and a band behind it caps at 6% opacity in bone, 5% in white, 11% in teal.
+
+A repeating band must use `mask-repeat: space no-repeat` — whole tiles across, nothing down.
+`space` alone tiles *both* axes, so a scale control silently grows a second row; `repeat-x` cuts
+the last motif in half wherever the width is not an exact multiple.
 
 Measure the gap off the rendered boxes rather than trusting the arithmetic. `docs/proofs/motif-header.html`
 reads it out live, which is how a NaN that silently dropped the band 243px inside the line

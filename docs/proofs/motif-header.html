@@ -79,12 +79,16 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
   background:var(--motif-ink,var(--lb-bone));
   opacity:0; transition:opacity .15s linear;
   -webkit-mask-image:var(--motif-src); mask-image:var(--motif-src);
-  /* space, not repeat-x: lay down only WHOLE tiles and distribute the leftover between them.
-     repeat-x cuts the last motif in half wherever the band width is not an exact multiple,
-     which reads as a bug rather than a pattern — and on a phone, where only one or two tiles
-     fit, it is all you would see. */
-  -webkit-mask-repeat:space;  mask-repeat:space;
-  -webkit-mask-position:left center; mask-position:left center;
+  /* "space no-repeat" — space across, nothing down.
+     space lays down only WHOLE tiles and distributes the leftover between them, so a motif is
+     never cut in half at either edge; repeat-x cut the last one wherever the band width was not
+     an exact multiple. The second keyword is the rule: ONE ROW, EVER. A bare `space` tiles both
+     axes, so scaling down past about half the header height quietly started a second row. */
+  -webkit-mask-repeat:space no-repeat;  mask-repeat:space no-repeat;
+  /* right-aligned: the motifs sit against the pill end of the band, not the nav end. With
+     `space` this only shows when a single tile fits — with several, space pins first and last to
+     the two edges and spreads the slack between them, which is full-width either way. */
+  -webkit-mask-position:right center; mask-position:right center;
   -webkit-mask-size:auto var(--motif-scale,86%); mask-size:auto var(--motif-scale,86%);
 }
 .showmotif .motifs{opacity:var(--motif-a,.14)}
@@ -208,9 +212,7 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
       fits at any width the header can produce.</p>
       <p>Nothing sits on the band there &mdash; the nav collapses to the menu button and the band
       stops before the pill &mdash; so no contrast is spent at any opacity, and the scale slider is
-      free. <code>space</code> tiles both axes, so turning scale down past roughly half the header
-      height gives a second row and the band reads as a shoal rather than a line. Both look
-      deliberate; pick by eye.</p>
+      free to move. Turning scale down fits more motifs across; it never adds a second row.</p>
     </div>
     <div class="note">
       <h3>Masked, not painted</h3>
@@ -219,6 +221,17 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
       band is one token.</p>
       <p>Where masks are unsupported the decoration is hidden. Without that branch every motif renders
       as a solid rectangle across the header &mdash; which has happened in this build before.</p>
+    </div>
+    <div class="note">
+      <h3>One row, ever</h3>
+      <p>The band is a single row of motifs at every scale and every width. <code>mask-repeat</code>
+      is <code>space no-repeat</code>: whole tiles across, nothing down. A bare <code>space</code>
+      tiles both axes, so scaling below roughly half the header height quietly started a second
+      row &mdash; the slider could produce a layout nobody chose.</p>
+      <p>Scale now changes how many motifs sit across the band, and nothing else.</p>
+      <p>The row is <b>right-aligned</b> &mdash; motifs gather at the pill end, and any slack falls
+      on the nav side. Where several tiles fit, <code>space</code> pins the first and last to the
+      band's two edges and spreads the gap between them, so it fills either way.</p>
     </div>
     <div class="note">
       <h3>20px clear of the nav &mdash; a hard rule</h3>
