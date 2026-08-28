@@ -136,11 +136,6 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
         <option value="eagle">Eagle</option>
         <option value="canoe">Canoe</option>
       </select></label>
-    <label class="sw">Placement
-      <select id="place">
-        <option value="clear" selected>Clear of the nav</option>
-        <option value="behind">Behind the nav</option>
-      </select></label>
     <label class="sw" style="gap:7px">Opacity
       <input type="range" id="op" min="0" max="40" value="14" step="1" style="width:130px">
       <span id="opv" style="font:500 11px/1 'IBM Plex Mono',monospace;color:var(--c-dim);min-width:26px">14%</span>
@@ -225,14 +220,27 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
       <p>Where masks are unsupported the decoration is hidden. Without that branch every motif renders
       as a solid rectangle across the header &mdash; which has happened in this build before.</p>
     </div>
+    <div class="note">
+      <h3>20px clear of the nav &mdash; a hard rule</h3>
+      <p>No image in the header may come within <b>20px of the right edge of the text
+      navigation</b>. Scaling a motif up may never cross that line. Ownership rule, 27 Aug 2026,
+      recorded in skill <code>pnw-tribal-art</code>.</p>
+      <p>It is a floor, not a target: the lockup's own clear space still applies, and the band
+      starts at whichever of the two lands further right. The readout above measures the live gap
+      off the rendered boxes rather than trusting the arithmetic.</p>
+      <p>On the phone the nav collapses to the menu button, so there is no text navigation for the
+      rule to measure from and only the lockup rule binds.</p>
+    </div>
     <div class="note warn">
-      <h3>Behind the nav, the ceiling is almost nothing</h3>
+      <h3>Why there is no &ldquo;behind the nav&rdquo; option any more</h3>
       <p>The active item sits on a 16% bone highlight already, which spends most of the headroom
       before any motif exists: it starts at 5.06:1 against a 4.5 floor. A band behind it caps at
       <b>6% in bone, 5% in white, 11% in teal</b> &mdash; opacities at which the art is barely
       visible, so you pay the whole contrast budget for something nobody sees.</p>
-      <p>That is why <b>Clear of the nav</b> is the default. No text sits on the band, nothing is
-      spent, and the opacity becomes a taste decision rather than a compliance one.</p>
+      <p>The 20px rule settles it independently: art behind the nav sits <em>left</em> of the
+      nav's right edge, which the rule forbids outright. Two separate reasons, so the option is
+      gone rather than merely discouraged. The ceiling figure is kept above because it explains
+      why the rule costs nothing worth having.</p>
     </div>
     <div class="note">
       <h3>Navy deep is not offered</h3>
@@ -271,9 +279,12 @@ function ratio(a,b){var x=L(a),y=L(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+
 function over(fg,bg,a){return [0,1,2].map(function(i){return bg[i]*(1-a)+fg[i]*a})}
 
 var NAVY=hex('#1C4E8F'), BONE=hex('#F5F1E8'), CEDAR=hex('#C9772E');
+/* Minimum gap in px between the text navigation's right edge and any header image.
+   Ownership rule, 27 Aug 2026. Scaling a motif up may never cross this line. */
+var NAV_CLEARANCE = 20;
 var on=document.getElementById('on'), ink=document.getElementById('ink'),
     op=document.getElementById('op'), sc=document.getElementById('sc'),
-    place=document.getElementById('place'), motif=document.getElementById('motif');
+    motif=document.getElementById('motif');
 
 /* highest whole percent at which the ACTIVE nav item still clears 4.5:1 — it sits on its own
    16% bone highlight, so it is always the first thing to fail, well before the plain links */
@@ -285,6 +296,16 @@ function ceiling(inkRGB){
   return 60;
 }
 
+/* live proof that the clearance holds, measured off the rendered boxes rather than assumed */
+function gapChip(){
+  var hd=document.getElementById('hd-d'); if(!hd) return '';
+  var nav=hd.querySelector('.site-nav'), band=hd.querySelector('.motifs');
+  if(!nav||!band) return '';
+  var g=Math.round(band.getBoundingClientRect().left - nav.getBoundingClientRect().right);
+  var ok=g>=NAV_CLEARANCE;
+  return '<span class="rd" style="background:'+(ok?'#E7F2E9':'#FBE9E7')+';color:'+(ok?'#1F5C2E':'#8C2F22')+'">'
+    + 'Gap from the nav <b>'+g+'px</b> '+(ok?'&mdash; clears '+NAV_CLEARANCE:'&mdash; under '+NAV_CLEARANCE)+'</span>';
+}
 function chip(label,val,need){
   var ok=val>=need;
   return '<span class="rd" style="background:'+(ok?'#E7F2E9':'#FBE9E7')+';color:'+(ok?'#1F5C2E':'#8C2F22')+'">'
@@ -306,24 +327,20 @@ function apply(){
       + '#'+band.map(function(v){return Math.round(v).toString(16).padStart(2,'0')}).join('').toUpperCase()
       + '</b></span>';
   var out;
-  if (place.value === 'clear') {
+  if (true) {
     /* Nothing sits on the band, so there is no contrast to spend. The ceiling is reported
        anyway, as what this ink WOULD cost if the band were moved behind the nav. */
     out = '<span class="rd" style="background:#E7F2E9;color:#1F5C2E">'
         + 'No text over the band &mdash; <b>nav unaffected at any opacity</b></span>'
+        + gapChip()
         + '<span class="rd" style="background:var(--c-sunk);color:var(--c-dim)">'
-        + 'behind the nav this ink would cap at <b>' + ceiling(hex(ink.value)) + '%</b></span>'
-        + swatch;
-  } else {
-    out = chip('Nav link on the band', ratio(BONE, band), 4.5)
-        + chip('&ldquo;Home&rdquo; &mdash; on its highlight', ratio(BONE, active), 4.5)
-        + chip('Pill ring boundary', ratio(BONE, band), 3)
+        + 'behind the nav this ink would have capped at <b>' + ceiling(hex(ink.value)) + '%</b></span>'
         + swatch;
   }
   document.getElementById('rd').innerHTML = out;
   setMasks(); place_();
 }
-[on,ink,op,sc,place,motif].forEach(function(el){ el.addEventListener('input',apply); el.addEventListener('change',apply); });
+[on,ink,op,sc,motif].forEach(function(el){ el.addEventListener('input',apply); el.addEventListener('change',apply); });
 
 /* the band clears the lockup and stops before the pill — measured, not guessed */
 function place_(){
@@ -337,9 +354,13 @@ function place_(){
     var clear=Math.round(l.height*0.18);
     /* "clear of the nav" starts after the last nav link, so no text ever sits on the band and
        no contrast is spent. "behind the nav" starts after the lockup's clear space instead. */
-    var startEl = (document.getElementById('place').value==='clear' && nav && nav.offsetParent) ? nav : lock;
-    var s=startEl.getBoundingClientRect();
-    band.style.left  = Math.round(s.right - h.left + clear) + 'px';
+    /* HARD RULE: no image in the header comes within NAV_CLEARANCE of the text navigation's
+       right edge. It is a floor, not a target — the lockup's own clear space still applies, so
+       the band starts at whichever of the two lands further right. On the phone the nav collapses
+       to the menu button and there is no text navigation, so only the lockup rule can bind. */
+    var left = l.right + clear;
+    if (nav && nav.offsetParent) left = Math.max(left, nav.getBoundingClientRect().right + NAV_CLEARANCE);
+    band.style.left  = Math.round(left - h.left) + 'px';
     band.style.right = Math.round(h.right - p.left + clear) + 'px';
   });
 }
