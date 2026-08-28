@@ -79,16 +79,24 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
   background:var(--motif-ink,var(--lb-bone));
   opacity:0; transition:opacity .15s linear;
   -webkit-mask-image:var(--motif-src); mask-image:var(--motif-src);
-  -webkit-mask-repeat:repeat-x;  mask-repeat:repeat-x;
+  /* space, not repeat-x: lay down only WHOLE tiles and distribute the leftover between them.
+     repeat-x cuts the last motif in half wherever the band width is not an exact multiple,
+     which reads as a bug rather than a pattern — and on a phone, where only one or two tiles
+     fit, it is all you would see. */
+  -webkit-mask-repeat:space;  mask-repeat:space;
   -webkit-mask-position:left center; mask-position:left center;
   -webkit-mask-size:auto var(--motif-scale,86%); mask-size:auto var(--motif-scale,86%);
 }
 .showmotif .motifs{opacity:var(--motif-a,.14)}
-/* No band on the phone. Between the lockup's clear space and the pill there is about 90px,
-   which fits neither a whole motif nor a convincing repeat — it renders as two clipped halves
-   and reads as a bug rather than a decision. One line, so it flips back if the phone header
-   ever gains room. */
-.p .motifs{display:none}
+/* A tile can only repeat if it FITS. The mixed strip is four motifs in one tile — about 272px
+   at default scale — so in the phone's ~115px gap no whole tile ever fits and mask-repeat:space
+   degrades to one clipped tile. The phone therefore tiles a SINGLE motif, which fits at any
+   width the header can produce. This is why the strip looked cut in half on the phone: not the
+   repeat mode, the tile. */
+.p .motifs{-webkit-mask-image:var(--motif-src-p); mask-image:var(--motif-src-p)}
+/* The phone gets the band too. Nothing sits on it there — the nav collapses to the menu button
+   and the band stops before the pill — so no contrast is spent at any opacity, and scale is free
+   to choose. mask-repeat:space is what makes the narrow gap work: whole motifs only. */
 /* Without mask support every motif would render as a solid coloured rectangle across the
    header. That has happened in this build before. Hide the decoration instead. */
 @supports not ((-webkit-mask-image:none) or (mask-image:none)){ .motifs{display:none !important} }
@@ -119,6 +127,14 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
         <option value="#F5F1E8">Bone</option>
         <option value="#0FB5C4">Teal</option>
         <option value="#FFFFFF">White</option>
+      </select></label>
+    <label class="sw">Motif
+      <select id="motif">
+        <option value="mixed" selected>Mixed strip</option>
+        <option value="orca">Orca</option>
+        <option value="salmon">Salmon</option>
+        <option value="eagle">Eagle</option>
+        <option value="canoe">Canoe</option>
       </select></label>
     <label class="sw">Placement
       <select id="place">
@@ -187,11 +203,19 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
       <p>Authentic, commissioned or tribe-approved art replaces them before launch.</p>
     </div>
     <div class="note">
-      <h3>The phone gets none of it</h3>
-      <p>At 375px the gap between the lockup's clear space and the Rewards pill is about 90px.
-      That fits neither a whole motif nor a convincing repeat &mdash; you get two clipped halves,
-      which reads as a mistake. The phone header is turned off rather than crowded.</p>
-      <p>One CSS line, so it flips back if the phone header ever gains room.</p>
+      <h3>The phone carries it too</h3>
+      <p>The gap between the lockup's clear space and the pill is narrow, so the band uses
+      <code>mask-repeat: space</code>: only whole motifs are laid down and the leftover is
+      distributed between them. Nothing is ever cut in half, however narrow the space gets.</p>
+      <p>A tile only repeats if it fits. The mixed strip is four motifs in one tile, far wider than
+      the phone's gap, so no whole tile ever fits and it degrades to one clipped tile &mdash; which
+      is what made the strip look cut in half. The phone tiles a <b>single</b> motif instead, which
+      fits at any width the header can produce.</p>
+      <p>Nothing sits on the band there &mdash; the nav collapses to the menu button and the band
+      stops before the pill &mdash; so no contrast is spent at any opacity, and the scale slider is
+      free. <code>space</code> tiles both axes, so turning scale down past roughly half the header
+      height gives a second row and the band reads as a shoal rather than a line. Both look
+      deliberate; pick by eye.</p>
     </div>
     <div class="note">
       <h3>Masked, not painted</h3>
@@ -229,8 +253,15 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
 </div>
 
 <script>
+var MASKS = {"mixed":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2ODAgMTIwIiBmaWxsPSIjZmZmIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIj48cGF0aCBkPSJNMTQgNzRjOC0yMiAzNC0zNCA2Mi0zMiAyMiAyIDQwIDEwIDU4IDIyLTE0IDE0LTM0IDIyLTU4IDI0LTI4IDItNTQtNC02Mi0xNHoiLz4KIDxwYXRoIGQ9Ik02MiA0MiA3MSAxMmwxOCAzMnoiLz48cGF0aCBkPSJNMTYgNzJDNiA2NiAyIDU2IDIgNDRjOCA4IDE0IDE2IDIwIDIyeiIvPgogPHBhdGggZD0iTTE2IDc2QzYgODIgMiA5MiAyIDEwNGM4LTggMTQtMTYgMjAtMjJ6Ii8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3MCwwKSI+PHBhdGggZD0iTTE4IDYyYzE0LTIwIDQwLTMwIDY2LTI4IDI0IDIgNDQgMTIgNTggMjYtMTQgMTQtMzQgMjQtNTggMjYtMjYgMi01Mi02LTY2LTI0eiIvPgogPHBhdGggZD0iTTIwIDYyIDIgNDB2NDR6Ii8+PHBhdGggZD0iTTc0IDM2IDgyIDE2bDE0IDIyeiIvPjxwYXRoIGQ9Ik03NCA4OCA4NCAxMDZsMTQtMjB6Ii8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM0MCwwKSI+PHBhdGggZD0iTTg1IDQwYzggMCAxNCA2IDE0IDE0IDAgMTAtNiAxOC0xNCAxOHMtMTQtOC0xNC0xOGMwLTggNi0xNCAxNC0xNHoiLz4KIDxwYXRoIGQ9Ik03MSA1MEM1NiAzNCAzNCAyNCA4IDIyYzE0IDE2IDI0IDMwIDMwIDQ0IDQgMTAgMTQgMTYgMzMgMTR6Ii8+CiA8cGF0aCBkPSJNOTkgNTBjMTUtMTYgMzctMjYgNjMtMjgtMTQgMTYtMjQgMzAtMzAgNDQtNCAxMC0xNCAxNi0zMyAxNHoiLz4KIDxwYXRoIGQ9Ik03OCA3MmgxNGwtNCAzNC0zIDgtMy04eiIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MTAsMCkiPjxwYXRoIGQ9Ik04IDUyYzMwLTEyIDEyMi0xMiAxNTIgMC0xMCAyMi0zMiAzNC03NiAzNFMxOCA3NCA4IDUyeiIvPgogPHBhdGggZD0iTTggNTIgMiA0MGM0LTIgMTAtMiAxNCAweiIvPjxwYXRoIGQ9Ik0xNTIgNTJsNi0xMmMtNC0yLTEwLTItMTQgMHoiLz48L2c+PC9zdmc+","orca":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzAgMTIwIiBmaWxsPSIjZmZmIj48cGF0aCBkPSJNMTQgNzRjOC0yMiAzNC0zNCA2Mi0zMiAyMiAyIDQwIDEwIDU4IDIyLTE0IDE0LTM0IDIyLTU4IDI0LTI4IDItNTQtNC02Mi0xNHoiLz4KIDxwYXRoIGQ9Ik02MiA0MiA3MSAxMmwxOCAzMnoiLz48cGF0aCBkPSJNMTYgNzJDNiA2NiAyIDU2IDIgNDRjOCA4IDE0IDE2IDIwIDIyeiIvPgogPHBhdGggZD0iTTE2IDc2QzYgODIgMiA5MiAyIDEwNGM4LTggMTQtMTYgMjAtMjJ6Ii8+PC9zdmc+","salmon":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzAgMTIwIiBmaWxsPSIjZmZmIj48cGF0aCBkPSJNMTggNjJjMTQtMjAgNDAtMzAgNjYtMjggMjQgMiA0NCAxMiA1OCAyNi0xNCAxNC0zNCAyNC01OCAyNi0yNiAyLTUyLTYtNjYtMjR6Ii8+CiA8cGF0aCBkPSJNMjAgNjIgMiA0MHY0NHoiLz48cGF0aCBkPSJNNzQgMzYgODIgMTZsMTQgMjJ6Ii8+PHBhdGggZD0iTTc0IDg4IDg0IDEwNmwxNC0yMHoiLz48L3N2Zz4=","eagle":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzAgMTIwIiBmaWxsPSIjZmZmIj48cGF0aCBkPSJNODUgNDBjOCAwIDE0IDYgMTQgMTQgMCAxMC02IDE4LTE0IDE4cy0xNC04LTE0LTE4YzAtOCA2LTE0IDE0LTE0eiIvPgogPHBhdGggZD0iTTcxIDUwQzU2IDM0IDM0IDI0IDggMjJjMTQgMTYgMjQgMzAgMzAgNDQgNCAxMCAxNCAxNiAzMyAxNHoiLz4KIDxwYXRoIGQ9Ik05OSA1MGMxNS0xNiAzNy0yNiA2My0yOC0xNCAxNi0yNCAzMC0zMCA0NC00IDEwLTE0IDE2LTMzIDE0eiIvPgogPHBhdGggZD0iTTc4IDcyaDE0bC00IDM0LTMgOC0zLTh6Ii8+PC9zdmc+","canoe":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzAgMTIwIiBmaWxsPSIjZmZmIj48cGF0aCBkPSJNOCA1MmMzMC0xMiAxMjItMTIgMTUyIDAtMTAgMjItMzIgMzQtNzYgMzRTMTggNzQgOCA1MnoiLz4KIDxwYXRoIGQ9Ik04IDUyIDIgNDBjNC0yIDEwLTIgMTQgMHoiLz48cGF0aCBkPSJNMTUyIDUybDYtMTJjLTQtMi0xMC0yLTE0IDB6Ii8+PC9zdmc+"};
+var SINGLE = {mixed:'orca', orca:'orca', salmon:'salmon', eagle:'eagle', canoe:'canoe'};
 var MASK = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2ODAgMTIwIiBmaWxsPSIjZmZmIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIj4KIDxwYXRoIGQ9Ik0xNCA3NGM4LTIyIDM0LTM0IDYyLTMyIDIyIDIgNDAgMTAgNTggMjItMTQgMTQtMzQgMjItNTggMjQtMjggMi01NC00LTYyLTE0eiIvPgogPHBhdGggZD0iTTYyIDQyIDcxIDEybDE4IDMyeiIvPgogPHBhdGggZD0iTTE2IDcyQzYgNjYgMiA1NiAyIDQ0YzggOCAxNCAxNiAyMCAyMnoiLz4KIDxwYXRoIGQ9Ik0xNiA3NkM2IDgyIDIgOTIgMiAxMDRjOC04IDE0LTE2IDIwLTIyeiIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNzAsMCkiPgogPHBhdGggZD0iTTE4IDYyYzE0LTIwIDQwLTMwIDY2LTI4IDI0IDIgNDQgMTIgNTggMjYtMTQgMTQtMzQgMjQtNTggMjYtMjYgMi01Mi02LTY2LTI0eiIvPgogPHBhdGggZD0iTTIwIDYyIDIgNDB2NDR6Ii8+CiA8cGF0aCBkPSJNNzQgMzYgODIgMTZsMTQgMjJ6Ii8+CiA8cGF0aCBkPSJNNzQgODggODQgMTA2bDE0LTIweiIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNDAsMCkiPgogPHBhdGggZD0iTTg1IDQwYzggMCAxNCA2IDE0IDE0IDAgMTAtNiAxOC0xNCAxOHMtMTQtOC0xNC0xOGMwLTggNi0xNCAxNC0xNHoiLz4KIDxwYXRoIGQ9Ik03MSA1MEM1NiAzNCAzNCAyNCA4IDIyYzE0IDE2IDI0IDMwIDMwIDQ0IDQgMTAgMTQgMTYgMzMgMTR6Ii8+CiA8cGF0aCBkPSJNOTkgNTBjMTUtMTYgMzctMjYgNjMtMjgtMTQgMTYtMjQgMzAtMzAgNDQtNCAxMC0xNCAxNi0zMyAxNHoiLz4KIDxwYXRoIGQ9Ik03OCA3MmgxNGwtNCAzNC0zIDgtMy04eiIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MTAsMCkiPgogPHBhdGggZD0iTTggNTJjMzAtMTIgMTIyLTEyIDE1MiAwLTEwIDIyLTMyIDM0LTc2IDM0UzE4IDc0IDggNTJ6Ii8+CiA8cGF0aCBkPSJNOCA1MiAyIDQwYzQtMiAxMC0yIDE0IDB6Ii8+CiA8cGF0aCBkPSJNMTUyIDUybDYtMTJjLTQtMi0xMC0yLTE0IDB6Ii8+PC9nPjwvc3ZnPg==";
-document.documentElement.style.setProperty('--motif-src','url("'+MASK+'")');
+function setMasks(){
+  var k=document.getElementById('motif').value, r=document.documentElement.style;
+  r.setProperty('--motif-src',  'url("'+MASKS[k]+'")');
+  /* the phone always tiles one motif — a four-motif strip cannot fit its gap whole */
+  r.setProperty('--motif-src-p','url("'+MASKS[SINGLE[k]]+'")');
+}
 
 /* --- colour maths, exact rather than sampled: every layer here is a flat token --- */
 function hex(h){return [1,3,5].map(function(i){return parseInt(h.substr(i,2),16)})}
@@ -242,7 +273,7 @@ function over(fg,bg,a){return [0,1,2].map(function(i){return bg[i]*(1-a)+fg[i]*a
 var NAVY=hex('#1C4E8F'), BONE=hex('#F5F1E8'), CEDAR=hex('#C9772E');
 var on=document.getElementById('on'), ink=document.getElementById('ink'),
     op=document.getElementById('op'), sc=document.getElementById('sc'),
-    place=document.getElementById('place');
+    place=document.getElementById('place'), motif=document.getElementById('motif');
 
 /* highest whole percent at which the ACTIVE nav item still clears 4.5:1 — it sits on its own
    16% bone highlight, so it is always the first thing to fail, well before the plain links */
@@ -290,9 +321,9 @@ function apply(){
         + swatch;
   }
   document.getElementById('rd').innerHTML = out;
-  place_();
+  setMasks(); place_();
 }
-[on,ink,op,sc,place].forEach(function(el){ el.addEventListener('input',apply); el.addEventListener('change',apply); });
+[on,ink,op,sc,place,motif].forEach(function(el){ el.addEventListener('input',apply); el.addEventListener('change',apply); });
 
 /* the band clears the lockup and stops before the pill — measured, not guessed */
 function place_(){
