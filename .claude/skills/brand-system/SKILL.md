@@ -20,6 +20,8 @@ description: Canonical, LOCKED brand design tokens for Lummi Bay Market — the 
 - Separate from all of the above: the *decorative* paddle motif in skill `pnw-tribal-art`.
   A divider or list marker drawn in that style is ornament, not the logo's paddle extracted.
 - Clear space = the paddle-handle height on all sides. Minimum width ~72px.
+- **Header imagery keeps 20px clear of the text navigation's right edge** — a separate floor from
+  the logo's clear space; art starts at whichever lands further right. See `pnw-tribal-art`.
 - The logo art contains the original brand blue #000F9F. That blue lives INSIDE the
   logo only — it is NOT a UI color in this system. UI blues are the navies below.
 
