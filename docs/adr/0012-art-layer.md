@@ -53,11 +53,21 @@ mascot and broadly regional, not tribal art.
 |---|---|
 | **The promo region** | it already competes for attention; decorating it makes the page shout twice |
 | The fuel price block | it is the most-used thing on the site and it is a table |
-| The sticky header | the locked logo owns it |
+| ~~The sticky header~~ | ~~the locked logo owns it~~ — **amended, see below** |
 | Behind any body copy | skill rule: motifs are accents, never backgrounds under text |
 
-**One narrow exception, added later:** the mascot, and only the mascot, is allowed on the ground
-as a capped low-opacity backdrop — ADR 0020. No motif from the tribal library ever is.
+**Two narrow exceptions, both added later.** Neither generalises; every other row stands.
+
+1. **The mascot on the ground** — the mascot, and only the mascot, as a capped low-opacity
+   backdrop (ADR 0020). No motif from the tribal library ever is.
+2. **The header band** — motifs are allowed in the sticky header (ADR 0021). The objection here
+   was clear space, not the surface: art starts 20px past the text navigation and after the
+   lockup's clear space, whichever is further right, in one right-aligned row. The row above is
+   struck rather than deleted because the reason was sound and is now satisfied by construction.
+
+What the two have in common is the test they passed: **a placement rule holds until someone can
+state the objection as a measurable distance, and then it becomes that distance.** A third
+exception without a number behind it should be refused.
 
 The promo exclusion is the load-bearing half. It is what lets the rest of the page be warm
 without the page reading as advertising: **the personality is in the furniture around the promo,

@@ -43,7 +43,7 @@ illustrated layer (ADR 0012) — the placement was never the objection.
 shout twice), the fuel price block (the most-used thing on the site, and it is a table), and
 behind any body copy.
 
-**The sticky header, amended 27 Aug 2026.** It was on the Never list — the locked logo owns it.
+**The sticky header, amended — ADR 0021.** It was on the Never list — the locked logo owns it.
 Art is allowed there now, under one hard rule:
 
 > **No image in the header may come within 20px of the right edge of the text navigation.**
