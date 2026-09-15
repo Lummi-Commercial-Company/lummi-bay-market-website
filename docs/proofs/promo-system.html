@@ -802,8 +802,8 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
           </div>
           <footer class="site-ft">
             <div class="ft-cols">
-              <div><h5>About</h5><a href="#">Our story</a><a href="#">Contact</a></div>
-              <div><h5>Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a></div>
+              <div><h5>About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact</a></div>
+              <div><h5>Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a><a href="#">Truck Stop</a></div>
               <div><h5>Rewards</h5><a href="#">Get the app</a><a href="#">All fuel prices</a></div>
               <div><h5>Work with us</h5><a href="#">Careers</a></div>
             </div>
@@ -879,8 +879,8 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
           </div>
           <footer class="site-ft">
             <div class="ft-cols">
-              <div><h5>About</h5><a href="#">Our story</a><a href="#">Contact</a></div>
-              <div><h5>Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a></div>
+              <div><h5>About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact</a></div>
+              <div><h5>Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a><a href="#">Truck Stop</a></div>
               <div><h5>Rewards</h5><a href="#">Get the app</a><a href="#">All fuel prices</a></div>
               <div><h5>Work with us</h5><a href="#">Careers</a></div>
             </div>
@@ -898,10 +898,11 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   <div class="notes">
     <div class="note">
       <h3>Any number, any page</h3>
-      <p><code>placement</code> says where a promo appears; nothing is reserved. Four is the
-      display cap per page, ordered by <code>priority</code> &mdash; a data limit would be
-      arbitrary, but an unbounded region is a design failure that arrives silently on a busy
-      week.</p>
+      <p><code>placement</code> says where a promo appears; nothing is reserved. The cap is
+      structural rather than a number in the code: the region is a list of rows, each row holds
+      one to four across, and rows are capped at six per page. Promos past the available slots
+      stay live in the data and take a slot as earlier ones expire, in <code>priority</code>
+      order &mdash; so a busy week queues instead of growing the page without limit.</p>
     </div>
     <div class="note">
       <h3>Zero live renders nothing</h3>
