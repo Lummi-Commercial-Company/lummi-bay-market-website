@@ -373,8 +373,11 @@ function place_(){
        to the menu button and there is no text navigation, so only the lockup rule can bind. */
     var left = l.right + clear;
     if (nav && nav.offsetParent) left = Math.max(left, nav.getBoundingClientRect().right + NAV_CLEARANCE);
-    band.style.left  = Math.round(left - h.left) + 'px';
-    band.style.right = Math.round(h.right - p.left + clear) + 'px';
+    /* screen pixels in, CSS pixels out — these frames are unscaled today, but the conversion
+       is what keeps this correct if one ever gains a fit-to-width transform */
+    var k=(hd.offsetWidth && h.width) ? h.width/hd.offsetWidth : 1;
+    band.style.left  = Math.round((left - h.left)/k) + 'px';
+    band.style.right = Math.round((h.right - p.left + clear)/k) + 'px';
   });
 }
 addEventListener('resize', place_);
