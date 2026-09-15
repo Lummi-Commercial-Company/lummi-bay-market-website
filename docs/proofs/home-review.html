@@ -779,7 +779,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
               <div><h5 class="mk">About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact us</a></div>
               <div><h5 class="mk">Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a><a href="#">Truck Stop</a></div>
               <div><h5 class="mk">Rewards</h5><a href="#">Get the app</a><a href="#">How it works</a><a href="#">All fuel prices</a></div>
-              <div><h5 class="mk">Work with us</h5><a href="#">Careers</a><a href="#">Contact form</a></div>
+              <div><h5 class="mk">Work with us</h5><a href="#">Careers</a></div>
             </div>
             <div class="ft-base">
               <span>© 2026 Lummi Bay Market</span>
@@ -921,8 +921,8 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
             <div class="ft-cols">
               <div><h5 class="mk">About</h5><a href="#">Our story</a><a href="#">Community</a><a href="#">Contact us</a></div>
               <div><h5 class="mk">Visit</h5><a href="#">Exit 260</a><a href="#">Mini Mart</a><a href="#">Fisherman's Cove</a><a href="#">Truck Stop</a></div>
-              <div><h5 class="mk">Rewards</h5><a href="#">Get the app</a><a href="#">How it works</a></div>
-              <div><h5 class="mk">Work with us</h5><a href="#">Careers</a><a href="#">All fuel prices</a></div>
+              <div><h5 class="mk">Rewards</h5><a href="#">Get the app</a><a href="#">How it works</a><a href="#">All fuel prices</a></div>
+              <div><h5 class="mk">Work with us</h5><a href="#">Careers</a></div>
             </div>
             <div class="ft-base">
               <span>© 2026 Lummi Bay Market</span>
@@ -1002,13 +1002,14 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
       “Mark placeholder content” to see how much of the page that is.</p>
     </div>
     <div class="note warn">
-      <h3>This version contradicts the locked footer</h3>
-      <p>CLAUDE.md's architecture names the footer's contents explicitly: About, <strong>contact
-      form</strong>, <strong>per-location hours/phone</strong>, Rewards, Careers, and the single
-      Lummi Commercial Companies link. Two of those are now absent.</p>
-      <p>CLAUDE.md is the project's source of truth, so it needs amending to match — otherwise the
-      next session rebuilds both sections from the spec. Hours and phone also still exist per
-      Location in <code>location-content-model</code>; only the footer copy of them is gone.</p>
+      <h3>Resolved &mdash; the locked footer now matches</h3>
+      <p>This note used to say CLAUDE.md still named a contact form and a per-location hours/phone
+      block in the footer, and needed amending to match the page. <strong>It has been.</strong>
+      CLAUDE.md now states that neither is in the footer and that there is no form anywhere on the
+      site (ADR 0015).</p>
+      <p>The page had not caught up: a <code>Contact form</code> link survived in the desktop
+      footer, contradicting both the spec and this page's own lede. Removed. Hours and phone still
+      exist per Location in <code>location-content-model</code>; only the footer copy is gone.</p>
     </div>
     <div class="note">
       <h3>Promos on Home</h3>
