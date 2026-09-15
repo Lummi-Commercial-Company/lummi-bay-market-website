@@ -138,6 +138,18 @@ td b{font-weight:600}
 }
 .prop .cap b{display:block; font-weight:500; color:var(--ink)}
 
+/* ---------- share card frame ---------- */
+.shareframe{margin:24px 0 0}
+.shareframe svg{
+  display:block; width:100%; height:auto; max-width:100%;
+  border-radius:5px; border:1px solid var(--rule);
+}
+.framecap{
+  font:400 11px/1.5 var(--mono); color:var(--ink-soft); margin:9px 0 0;
+  font-variant-numeric:tabular-nums;
+}
+.framecap b{font-weight:500; color:var(--ink)}
+
 /* ---------- notes ---------- */
 .note{
   background:var(--note-bg); border-left:3px solid var(--teal);
@@ -188,7 +200,7 @@ footer{
     <span><b>Version</b> 15 Sep 2026</span>
     <span><b>Palette &amp; type</b> locked — approved 2026 refresh</span>
     <span><b>Content width</b> 1200px max</span>
-    <span><b>Density</b> supply at 2×</span>
+    <span><b>Density</b> supply at 2× — one exception, §06</span>
   </div>
 </header>
 
@@ -392,6 +404,7 @@ footer{
         <tr><td><b>Page backdrop — narrow</b></td><td class="n">503 × 2948<br>renders ≈108 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
         <tr><td><b>Motif tile, single</b></td><td class="n">≈68 wide</td><td class="n">≈68 wide</td><td>vector</td><td>SVG mask</td></tr>
         <tr><td><b>Motif strip, four-up</b></td><td class="n">≈272 wide</td><td class="n">not used</td><td>vector</td><td>SVG mask</td></tr>
+        <tr><td><b>Social share card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Not an on-page slot — see section 06</span></td><td class="n">1200 &times; 630</td><td class="n">same file</td><td class="n">1200 &times; 630<br><b>not 2&times;</b></td><td>JPG</td></tr>
         <tr><td><b>Waterline band</b></td><td class="n">full width × 18</td><td class="n">full width × 18</td><td>vector</td><td>SVG</td></tr>
       </tbody>
     </table>
@@ -409,7 +422,97 @@ footer{
 </section>
 
 <section>
-  <h2><span class="num">06 / promos</span>The width ladder, and why art must survive a re-crop</h2>
+  <h2><span class="num">06 / social share card</span>1200 &times; 630, and the square crop is what decides the layout</h2>
+  <p class="sec-lede">The image a platform shows when somebody pastes a link to this site into
+  Facebook, LinkedIn, Slack, iMessage, WhatsApp or X. It is the most-reproduced image the brand
+  has off-site, and the only one third parties cache and keep. Full rules in ADR 0022.</p>
+
+  <div class="shareframe">
+    <svg viewBox="0 0 1200 630" role="img" aria-label="A 1200 by 630 share card showing the centred 630 by 630 square crop, the 1200 by 600 two-to-one crop, and the 570 by 510 title-safe box inside them.">
+      <rect x="0" y="0" width="1200" height="630" fill="#1C4E8F"/>
+      <rect x="0" y="0" width="285" height="630" fill="#0B2547" opacity=".72"/>
+      <rect x="915" y="0" width="285" height="630" fill="#0B2547" opacity=".72"/>
+      <rect x="285" y="0" width="630" height="15" fill="#0B2547" opacity=".45"/>
+      <rect x="285" y="615" width="630" height="15" fill="#0B2547" opacity=".45"/>
+      <rect x="285.5" y="0.5" width="629" height="629" fill="none" stroke="#0FB5C4" stroke-width="3"/>
+      <rect x="315" y="60" width="570" height="510" fill="none" stroke="#F5F1E8" stroke-width="3" stroke-dasharray="14 10" opacity=".85"/>
+      <rect x="390" y="240" width="420" height="150" fill="none" stroke="#F5F1E8" stroke-width="2" opacity=".55"/>
+      <text x="600" y="322" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="21" letter-spacing="2" text-anchor="middle" opacity=".92">LOCKUP &#183; 570 MAX</text>
+      <text x="142" y="300" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".78">285 lost</text>
+      <text x="142" y="326" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".78">in square</text>
+      <text x="1058" y="300" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".78">285 lost</text>
+      <text x="1058" y="326" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".78">in square</text>
+      <text x="600" y="106" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle">630 &#215; 630 square crop</text>
+      <text x="600" y="540" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".85">title-safe 570 &#215; 510</text>
+      <text x="600" y="600" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="18" text-anchor="middle" opacity=".68">15px strips lost at 2:1</text>
+    </svg>
+    <p class="framecap"><b>1200 &times; 630</b> &nbsp;&middot;&nbsp; outer margin 60 &nbsp;&middot;&nbsp; title-safe box x&nbsp;315&ndash;885, y&nbsp;60&ndash;570</p>
+  </div>
+
+  <h3>The same file is shown at three different aspect ratios</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Where</th><th class="n">Ratio</th><th class="n">Crop of 1200 &times; 630</th><th>What is lost</th></tr></thead>
+      <tbody>
+        <tr><td>Facebook feed, LinkedIn, Slack unfurl</td><td class="n">1.91:1</td><td class="n">1200 &times; 630</td><td>Nothing — shown whole</td></tr>
+        <tr><td>X, <code>summary_large_image</code></td><td class="n">2:1</td><td class="n">1200 &times; 600</td><td>15px off the top and bottom</td></tr>
+        <tr><td>WhatsApp, many mobile chat thumbnails</td><td class="n">1:1</td><td class="n">630 &times; 630</td><td><b>285px off each side</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">The square is the binding crop. Compose for it: the lockup and every word sit
+  inside the centred title-safe box, and everything outside it is ground, texture or photography
+  that can be lost without the card failing.</p>
+
+  <h3>Supply</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Item</th><th class="n">Value</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Canvas</td><td class="n">1200 &times; 630</td><td>1.905:1</td></tr>
+        <tr><td>Outer margin</td><td class="n">60</td><td>Nothing of consequence nearer any edge</td></tr>
+        <tr><td>Title-safe box</td><td class="n">570 &times; 510</td><td>Centred. The lockup and all text live inside it</td></tr>
+        <tr><td>Lockup width</td><td class="n">570 max</td><td>The on-dark 3&times; art is 1008 wide, so it is always downsampled</td></tr>
+        <tr><td>Ground</td><td class="n">#1C4E8F</td><td>Opaque navy, or full-bleed photography</td></tr>
+        <tr><td>Format</td><td class="n">JPG</td><td>Quality 75&ndash;82, sRGB, EXIF stripped. <b>Never PNG with alpha</b></td></tr>
+        <tr><td>Weight</td><td class="n">&lt; 200 KB</td><td></td></tr>
+        <tr><td>Files at launch</td><td class="n">1 required</td><td>One sitewide default. Then the three Locations, then <code>/truck-stop</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <h3>This is the one asset on this sheet that is <em>not</em> supplied at 2&times;</h3>
+    <p>Everywhere else, export at twice the CSS size. Not here: 1200 &times; 630 is the delivered
+    pixel size, platforms re-encode to their own dimensions, and a 2400 &times; 1260 file buys
+    nothing but weight. The floor matters more than the ceiling — <b>below 600 &times; 315 the
+    large card silently degrades to a small square thumbnail</b> beside the text, with no warning
+    and no error.</p>
+  </div>
+
+  <div class="note">
+    <h3>Nothing that can go out of date may be drawn on this card</h3>
+    <p>No fuel prices, no price of any kind, no phone number, no hours, no address. Platforms
+    cache an unfurl against the page URL for days to indefinitely, so a card outlives the fact
+    printed on it — and a link already shared keeps the old image even after the file is replaced.
+    A new card ships as a <b>new filename</b>, never an overwrite.</p>
+    <p>The page title and description are live text supplied by the platform beside the image, so
+    <b>do not set the page title inside the artwork</b> — it appears twice. A short standing line
+    is fine; unlike a promo, nothing is overlaid on this image.</p>
+  </div>
+
+  <div class="note">
+    <h3>No tribal motif on a share card until the approved art exists</h3>
+    <p>Interim motifs elsewhere get swapped before launch. A card that has been scraped cannot be
+    recalled — it sits in other companies' caches. The waterline is the single exception, being an
+    abstract gradient wave band rather than formline.</p>
+    <p>The card is a lockup slot, so the paddle icon carve-out does <b>not</b> apply: a bare paddle
+    never stands in for the lockup here, whatever the crop does.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">07 / promos</span>The width ladder, and why art must survive a re-crop</h2>
   <p class="sec-lede">The promo region is a stack of rows. Each row decides how many promos it
   holds — one, two, three or four across — drawn from a twelve-column grid with 14px gutters
   inside the 1200px content width.</p>
@@ -473,7 +576,7 @@ footer{
 </svg>
 
 <section>
-  <h2><span class="num">07 / files &amp; weight</span>There is a hard 100 MB ceiling on the whole library</h2>
+  <h2><span class="num">08 / files &amp; weight</span>There is a hard 100 MB ceiling on the whole library</h2>
   <p class="sec-lede">The content system's free tier allows 100 MB of assets in total, across the
   entire site, forever. A real set of store photography exceeds that on its own — so file weight
   is a live constraint on what can be commissioned, not a technical footnote.</p>
@@ -509,14 +612,13 @@ footer{
 </section>
 
 <section>
-  <h2><span class="num">08 / open items</span>Slots that exist but have no approved specification</h2>
+  <h2><span class="num">09 / open items</span>Slots that exist but have no approved specification</h2>
   <p class="sec-lede">Flagged so nobody produces artwork against a number that was never agreed.</p>
 
   <div class="tw">
     <table>
       <thead><tr><th>Item</th><th>Status</th><th>What is missing</th></tr></thead>
       <tbody>
-        <tr><td><b>Social share image</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The card shown when a link is pasted into Facebook, iMessage or Slack</span></td><td><span class="pill open">Not specified</span></td><td>Nothing in the project specifies one at all. The usual size is 1200 × 630. Needs a decision on whether it is one sitewide image or one per page.</td></tr>
         <tr><td><b>All tribal motifs</b></td><td><span class="pill open">Placeholder</span></td><td>Every motif on the site is an interim silhouette. Authentic, commissioned or tribe-approved art must replace them before launch.</td></tr>
         <tr><td><b>Tenant artwork</b></td><td><span class="pill open">Undecided</span></td><td>Whether the independent businesses on site are advertised at all is a business decision that has not been made. Templates show "ART TBD". Do not commission this yet.</td></tr>
         <tr><td><b>Promo crop ladder</b></td><td><span class="pill proposed">Proposed</span></td><td>Section 06. The column widths are locked; the crop ratios are a derivation awaiting sign-off.</td></tr>
@@ -527,7 +629,7 @@ footer{
 </section>
 
 <section>
-  <h2><span class="num">09 / summary</span>Do and don't</h2>
+  <h2><span class="num">10 / summary</span>Do and don't</h2>
   <div class="dd">
     <div class="do">
       <h3>Do</h3>
@@ -538,6 +640,7 @@ footer{
         <li>Keep the subject centred in promo art, so it survives a row re-dividing.</li>
         <li>Send motifs as white-on-transparent SVG masks.</li>
         <li>Mark every placeholder motif <code>TODO: replace with approved Lummi art</code>.</li>
+        <li>Compose the share card for the centred square — 285px is cut off each side in a chat thumbnail.</li>
         <li>Name files for what they show.</li>
       </ul>
     </div>
@@ -551,6 +654,7 @@ footer{
         <li>Use <code>--lb-navy-deep</code> for decoration. It belongs to fuel prices.</li>
         <li>Put artwork in the promo region, the fuel-price block, or behind body copy.</li>
         <li>Draw Coast Salish formline, or pass interim art off as final.</li>
+        <li>Put a price, a phone number or opening hours on a share card. It is cached for weeks after the fact changes.</li>
         <li>Add a typeface or a colour that is not on this sheet.</li>
       </ul>
     </div>

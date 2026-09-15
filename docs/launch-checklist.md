@@ -28,6 +28,7 @@ compressed by working faster.
 | A19 | **The built map itself** — three pins, public, iframe handed over | `/contact` | Steps are in ADR 0019. The iframe goes in a CMS field, not the markup, or every future change is an engineering task |
 | A17 | **A company Google account, if My Maps is used** | The map, permanently | A map built in a personal account leaves with that person. Same failure as A6, and consumer-product ownership transfer is not reliable — create it in the right account first |
 | A18 | **Cookie/consent decision** | Any third-party embed | The site tracks nobody today and has no banner. An embedded Google map loads third-party code and sets cookies; a static image does not |
+| A20 | **The social share card artwork** — 1200 × 630 | Every link anyone pastes anywhere | One sitewide default is the minimum and it cannot be left blank: with no image the platform scrapes whatever it finds, which on a Location page is a 26px motif. Size, safe area and the rules are in ADR 0022 and on the designer spec sheet. Then the three Locations and `/truck-stop`, in that order |
 
 ## B. Engineering
 | # | Item | Notes |
@@ -42,6 +43,7 @@ compressed by working faster.
 | B8 | Rebuild strategy for fuel prices | Scheduled rebuild vs ISR (ADR 0007's mechanism list applies to prices too) |
 | B9 | Accessibility pass | Targets and contrast are designed; the built site still needs a real audit |
 | B10 | Performance budget | Static-first makes this achievable, images are what will break it |
+| B11 | Open Graph tags + the `shareImage` fields | ADR 0022. `og:image` must be an **absolute URL** — a root-relative path produces no card and no error. A required field on settings, optional per page |
 
 ## When each account is needed
 Two different questions hide in "when do I set up accounts", and only one of them is about
