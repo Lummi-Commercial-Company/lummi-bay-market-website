@@ -186,6 +186,66 @@ footer{
   .page{padding-left:16px; padding-right:16px}
   .meta{gap:4px 16px}
 }
+/* ---------- print: the PDF is generated from this same file ---------- */
+@page{size:Letter; margin:15mm 14mm 17mm}
+@media print{
+  /* Paper has one theme. Pin the light palette so a dark viewing profile can
+     never reach the PDF, and firm up the rules that thin out on paper. */
+  :root,:root[data-theme="dark"]{
+    --ground:#FFFFFF; --paper:#FFFFFF; --ink:#2A2820; --ink-soft:#5F5A4E;
+    --navy:#1C4E8F; --navy-deep:#14396B; --teal:#0FB5C4; --cedar:#C9772E;
+    --bone:#F5F1E8; --rule:rgba(28,78,143,.30); --rule-soft:rgba(42,40,32,.18);
+    --swatch-edge:rgba(42,40,32,.30);
+    --flag-bg:#FBF1E6; --flag-edge:rgba(201,119,46,.50);
+    --note-bg:#F1F6FB;
+  }
+  /* The swatch chips, the waterline and the share-card diagram are the
+     content, not decoration — they must survive background-stripping. */
+  *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  html{font-size:13px}
+  body{background:#fff; font-size:1rem; line-height:1.55}
+  .page{max-width:none; padding:0}
+
+  /* One numbered section per sheet: this is looked up, not read through.
+     The vertical rhythm is tightened throughout so that each section fits
+     the sheet it starts on — two lines spilling over is a wasted page. */
+  section{break-before:page; padding-block:0}
+  section:first-of-type{break-before:auto}
+  .mast{padding-block:0}
+  h1{font-size:2rem}
+  .meta{margin-top:12px}
+  h2{break-after:avoid}
+  h3{break-after:avoid; margin-top:16px}
+  .sec-lede{margin-bottom:12px}
+  /* Grid fragments unreliably across a page boundary in Chrome; as blocks
+     the three rules pack onto the opening sheet instead of orphaning one. */
+  .flags{display:block}
+  .flag{padding:11px 15px; margin-bottom:10px}
+  .flag p + p{margin-top:6px}
+  .flag:last-child{margin-bottom:0}
+  .note{margin-top:12px; padding:12px 15px}
+  .props{margin-top:16px}
+  .dd{gap:14px}
+  .dd>div{padding:15px 17px}
+  th,td{padding:8px 12px}
+  .tw + .tnote{margin-top:8px}
+  footer{margin-top:34px}
+
+  /* Nothing that reads as a single object may straddle a page. */
+  .flag,.note,.sw,.tw,.dd>div,.prop,.props,.shareframe,.swatches,table{break-inside:avoid}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  .tw{overflow:visible}          /* a scroll container clips on paper */
+
+  /* Four columns keeps the palette to two short rows. */
+  .swatches{grid-template-columns:repeat(4,1fr)}
+  .sw .chip{height:52px}
+
+  /* The masthead waterline opens the document. The interior ones would print
+     at the foot of a page whose next section has already been pushed over. */
+  svg.waterline{display:none}
+  .mast + svg.waterline{display:block; margin:20px 0 18px}
+}
 </style>
 
 <div class="page">

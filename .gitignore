@@ -1,0 +1,2 @@
+# Build-time cache: webfonts fetched by scripts/make-spec-pdf.cjs
+.cache/

@@ -69,6 +69,11 @@ In priority order. The first three are from `docs/loose-ends.md` and matter more
 - **One trap.** `logo-market-on-light.png` is a 512-square with ~65% of its height empty, so
   sized by width it renders 146px tall to show 46px of logo. Fine in the hero; crop to its ink
   before using it anywhere tight.
+- **`docs/design-spec-sheet.html` is what designers are sent**, and
+  `docs/lummi-bay-asset-specs-brand-guide.pdf` is printed from that same file by
+  `scripts/make-spec-pdf.cjs` — the `@media print` block at the end of its stylesheet is the
+  whole of the PDF's design. Edit the HTML, re-run the script, commit both. Never hand-edit
+  the PDF, and never let the two drift.
 
 ## How this project works
 - **Decisions go in `docs/adr/`**, including rejected ones (see 0012). A rejected decision that
