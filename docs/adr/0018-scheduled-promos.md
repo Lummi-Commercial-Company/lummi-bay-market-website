@@ -38,17 +38,36 @@ a whole-page swap needed a rebuild while everything around it was exact to the m
 
 ### 2. `promos` is a collection, and placement is a field
 
-`content/promos/*.md`, one document per promo:
+`content/promos/*.md`, one document per promo.
+
+**This table is the promo field config** — the one place it is written down, and what
+`tina/config.ts` gets built from. ADR 0007 and `docs/backend-setup.md` point here rather than
+repeating it.
 
 | Field | Purpose |
 |---|---|
-| `title`, `eyebrow`, `image` + alt | What it says |
-| `link` | A reference to an `infoPages` document |
+| `eyebrow` | The small label above the headline. First of the three text fields |
+| `headline` | The offer itself, in **28 characters or fewer** — a character counter in the CMS, advisory to the editor and not enforced at render (ADR 0023). It is also the document's name in the Tina list, so a promo is findable by what it says |
+| `cta` | The button label. **Editable per promo**, defaulting to "See details" — never hardcoded. Third text field |
+| `image` + `alt` | **One master, 2400 × 1350**, subject inside the centre 2400 × 480 strip. Not two crops: the phone slot is 16:9, so the master already is the phone crop (ADR 0023). Alt text describes the offer, not the artwork, because the image is the link |
+| `link` | A reference to an `infoPages` document. Both the image and the button go there |
 | `startsAt`, `endsAt` | The window. Both optional — no `startsAt` means "already running", no `endsAt` means "until turned off" |
 | `active` | A manual kill switch. **False beats any date**; true never overrides a date |
 | `placement` | Which pages it appears on: `home`, `all-interior`, or references to specific pages |
-| `width` | From the ladder — full, two-thirds, half, third, quarter |
-| `priority` | Ties broken by soonest `endsAt`, then by title |
+| `priority` | Which promo takes a slot first when more are live than there is room for. Ties broken by soonest `endsAt`, then by `headline` |
+
+**Two fields that were here and are not any more**, both removed by later decisions rather than
+by preference:
+
+- **`body`** — withdrawn by ADR 0023. Three text fields, on every slot and every device: eyebrow,
+  headline, button. The body line cost a flat 24px of picture in *every* slot before a word was
+  typed, and at the quarter that is the difference between 45% of the frame left clear and 31%.
+- **`width`** — superseded by the revision below. The layout belongs to the **row**, not the
+  promo: a row picks how many promos it holds and re-divides when one expires. A width on the
+  promo cannot re-divide, and a composed set would not always sum to twelve.
+
+The field was called `title` here and `headline` in ADR 0007. **It is `headline`** — one field,
+one name, matching ADR 0023, where the 28-character cap is set.
 
 **A page renders whatever is live for it.** No fixed count, no fixed slots, nothing reserved.
 Adding a promo is creating a document; removing one is setting `active: false` or letting

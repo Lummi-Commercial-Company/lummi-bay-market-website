@@ -59,6 +59,10 @@ These do not wait on code, and step 1 is the single most common launch-week disa
 10. **Define the collections**: `locations`, fuel prices (ADR 0004), `pages`, `mainPages`,
     `infoPages`, `promos`, `tenants`, the `siteAlert` singleton, and the settings singleton that
     points at the live main page. Label every field for a non-technical editor.
+    **`promos` has a written field list — ADR 0018 §2.** Build it from there rather than from
+    memory: three text fields (`eyebrow`, `headline`, `cta`) and no `body`, one 2400 × 1350
+    image and not two crops, a 28-character counter on `headline`, and no `width` on the promo
+    because the row owns the layout.
 11. **Invite the two editors by email.** The free tier caps at **2 logins** — a third person is
     Team at $24/mo, which is a separate purchase from approvals at $41/mo.
 12. **Have a real staff member edit a real page**, unaided, and watch. Then have them do it

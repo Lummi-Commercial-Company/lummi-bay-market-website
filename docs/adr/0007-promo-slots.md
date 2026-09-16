@@ -45,8 +45,11 @@ carry an offer. Only at 1920 does it reach 375px. A quarter is what 20% usually 
 practice and it holds up. On a phone the ladder is ignored and every promo is full width.
 
 **The slot reserves its box with a fixed `aspect-ratio`** so the page does not shift when the
-image loads — 5:1 on desktop, 16:9 on a phone as built. Two crops, not one image scaled: a
-wide desktop banner rendered at 375px is unreadable.
+image loads — 5:1 on desktop, 16:9 on a phone as built. *The "two crops, not one image scaled"
+rule that followed is withdrawn by ADR 0023:* the reasoning was right — a wide desktop banner
+rendered at 375px is unreadable — but the answer is one 16:9 master at 2400 × 1350 with the
+subject held inside the centre 2400 × 480 strip, which every slot on the ladder crops from,
+the phone included. One file, no re-supply when a row re-divides.
 
 **The slot is never named `ad`, `advert`, `banner`, or `sponsored`** — in class names, ids, or
 image filenames. Those strings are on every ad-blocker filter list, matched on exactly those
@@ -57,8 +60,11 @@ nothing in the build to show for it. The class is `.promo`.
 architecture and is not designed here; see Open.
 
 **Promos are a constrained template, not a freeform builder.** One TinaCMS collection with
-fixed fields — image (desktop crop, phone crop), alt text, eyebrow, headline, body, button
-label, button link, start, end, which pages it appears on, priority — rendered by one component.
+fixed fields, rendered by one component. **The field list lives in ADR 0018 §2** and is not
+repeated here, because it has since changed in four ways: the `body` field is gone (ADR 0023 — three
+text fields, everywhere), the two image crops are one 2400 × 1350 master (ADR 0023), the button
+label is editable per promo (ADR 0023), and `width` moved off the promo onto the row (ADR 0018).
+The sentence this replaces listed all four the old way.
 
 A builder that lets staff assemble graphics, text and buttons freely was considered and
 rejected. It is *harder* for non-technical staff, not easier: it hands them layout decisions
@@ -158,9 +164,9 @@ here, and a UTC-naive date silently shifts the window.
   offer and call to action as real HTML over it. Same look, none of those four costs.
 - Every promo needs alt text describing the offer, not the artwork, because the image *is* the
   link and the alt text is its accessible name.
-- Promos are content, so they belong in TinaCMS as their own collection: image (both crops),
-  alt text, target page, and an active window. Without an active window a staff member must
-  remember to take a promo down, which is how stale offers survive.
+- Promos are content, so they belong in TinaCMS as their own collection: the image and its alt
+  text, the target page, and an active window. Without an active window a staff member must
+  remember to take a promo down, which is how stale offers survive. Fields: ADR 0018 §2.
 
 ## Open, and deliberately not decided here
 - **Product info pages are a new page type.** URL scheme, whether they appear in navigation,

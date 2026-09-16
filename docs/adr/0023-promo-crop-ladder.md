@@ -112,9 +112,10 @@ It is a field, defaulting to “See details”, not a hardcoded string.
   in the template now carries its own label and falls back to “See details” only when one is
   left blank. It already rendered three text fields, so with that fix the template is correct as
   it stands — and it is what the Next.js component will be built from.
-- **The CMS needs two additions** to the `promos` collection: a character counter on the headline
-  (28) and a button-label field. The counter is advisory to the editor; nothing enforces it at
-  render time, and nothing needs to.
+- **The CMS field config now matches** — `promos` gained a character counter on the headline (28)
+  and an editable `cta` button label, and lost `body` and its second image crop. The counter is
+  advisory to the editor; nothing enforces it at render time, and nothing needs to. The field
+  list is written once, in **ADR 0018 §2**; ADR 0007 and `docs/backend-setup.md` point at it.
 - **The designer spec sheet carries the same numbers** — `docs/design-spec-sheet.html` §05 and
   §07. If the two ever disagree, this ADR is the record.
 - **There is no responsive text rule left to build or explain.** The component renders the same
