@@ -72,6 +72,41 @@ Two standing constraints follow, and they are the whole of the decision:
    way a site like this acquires a consent obligation it did not need, and it would reverse this
    ADR on its own.
 
+## How you get past consent without a popup
+The trick is that there is no trick. **Consent is required for storage that is not strictly
+necessary — so if nothing non-essential is stored, the obligation never attaches.** You are not
+working around a banner; you are not triggering the thing a banner exists to answer for. That is
+also why it cannot be undone by a cookie policy page or a smaller, politer banner: those manage
+the obligation, they do not remove it.
+
+Four rules do the whole job.
+
+1. **"Cookieless" has to mean no device storage at all, not no `Set-Cookie` header.** The law is
+   about storing or reading anything on a visitor's device — `localStorage`, `sessionStorage`,
+   IndexedDB and a fingerprint all count the same as a cookie. A vendor advertising "cookie-free"
+   while writing an id to `localStorage` has changed the mechanism and not the legal position.
+2. **Nothing third-party loads on page load.** Not an analytics tag, not a font from a CDN, not a
+   video, not a chat bubble, not a map. This is the whole rule, and it is the one that erodes,
+   because each of these arrives as somebody's small helpful addition.
+3. **Where a third party is genuinely wanted, use a façade.** The page renders a lightweight
+   local stand-in — a static map image, a video poster frame — and loads the real embed only when
+   the guest clicks it. Nothing reaches the third party until the guest asks for it, which is
+   consent in the only form that is not an interruption: they clicked the thing they wanted.
+   No modal, no dismissal, no page-load delay, and it is faster besides.
+4. **First-party and strictly necessary is exempt anyway.** The TinaCMS session cookie in
+   `/admin` needs no consent under any of these regimes and never reaches a guest. If the site
+   ever gets a cart or a login, the same exemption covers the session itself — but the rest of
+   this ADR would need re-reading.
+
+**What the guest experiences: nothing.** No banner, no overlay, no "we value your privacy", no
+second click to read a fuel price. That is the point — the least intrusive consent UI is the one
+that never had to exist.
+
+**Optional, and worth it:** a short **Privacy** line in the footer saying the site sets no
+cookies and tracks nobody. Not required, does not interrupt anyone, and it is a better answer
+than a banner to the guest who wonders. It would be a footer link, so it needs sign-off before
+it is added.
+
 ## Consequences
 - **A18 is closed without a purchase, a vendor, or a banner component.** Nothing ships.
 - **The constraint is invisible and therefore easy to break.** Any future embed — a YouTube video,

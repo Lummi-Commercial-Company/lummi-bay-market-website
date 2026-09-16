@@ -62,6 +62,10 @@ So the short line stays, and it stops being about the build:
 - Neither is a legal opinion and neither is expensive. If the client wants the line gone, that is
   their call to make with the stamp still in place; the stamp is not optional.
 
+**Confirmed by the client, 16 Sep 2026: "keep the stamp."** So it is settled rather than merely
+recommended — the `updated` stamp ships, and removing it later is a decision to reopen this ADR,
+not a tidy-up. The "prices subject to change" line was not raised either way and stays as written.
+
 **C9 (stamp stored or derived) resolves to stored-on-save**, as recommended. A stamp derived from
 the commit would have to be read at request time from a git history the build cannot see, which
 is a second request-time dependency bought for nothing.
