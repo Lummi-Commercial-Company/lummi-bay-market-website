@@ -40,8 +40,10 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
 
 ## The three locations
 **All three Locations are now CONFIRMED by the client** — every address, every phone, every
-opening time. Worth recording: the values originally scraped from lcc-lummi.com were correct
-in every particular. The scrape was right; it simply had no standing until someone said so.
+opening time. Every address and every phone number originally scraped from lcc-lummi.com proved
+correct. **One value did not: the Minimart's hours are 7am–8pm, not the 6am–10pm the scrape
+returned** (client, 16 Sep 2026). That is the whole of the correction — but it is why "the
+scrape was right" is not a safe thing to conclude from a sample of eleven.
 
 The two naming questions that came back with them were **settled by the client on 16 Sep
 2026** — see the note under the list.
@@ -61,9 +63,13 @@ The two naming questions that came back with them were **settled by the client o
    C-Store, so `/contact` and the Truck Stop page both use that number.
 
 2. **minimart** — nav "Minimart". **CONFIRMED.** 4884 Haxton Way, Ferndale WA 98248 ·
-   open daily 6am–10pm · 360-380-2049. Next to Silver Reef Casino.
+   open daily 7am–8pm · 360-380-2049. Next to Silver Reef Casino.
    Amenities: fuel + convenience store. No `truckStop` record.
    Full name **"Lummi Bay Market Minimart"** — one word, no space, confirmed by the client.
+   **Hours corrected by the client 16 Sep 2026: 7am–8pm, superseding the 6am–10pm this
+   document previously carried as confirmed.** It is the only value in the three Locations that
+   the scrape got wrong, and the only one to have changed after being confirmed — so a posted
+   time is worth re-checking with staff before launch even where it is marked settled.
 
 3. **fishermans-cove** — nav "Fisherman's Cove"; shortLabel "The Cove"; aka The Cove.
    **CONFIRMED.** 2570 Lummi View Drive, Bellingham WA 98226 · open daily 6am–9pm ·

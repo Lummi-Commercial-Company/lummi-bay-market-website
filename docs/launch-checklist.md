@@ -8,7 +8,7 @@ compressed by working faster.
 | # | Item | Blocks | Notes |
 |---|---|---|---|
 | ~~A1~~ | ~~**Logo vector files** — including a reversed/light lockup~~ **Done** | — | Delivered as PNG in `public/brand/`. The vector was rejected on colour fidelity; masters stay with the designer. ADR 0006, amended |
-| ~~A2~~ | ~~**Confirmed addresses, hours, phone numbers**~~ **Done** | — | All three Locations confirmed by the client, plus both Exit 260 numbers. Every scraped value proved correct. In `location-content-model` |
+| ~~A2~~ | ~~**Confirmed addresses, hours, phone numbers**~~ **Done** | — | All three Locations confirmed by the client, plus both Exit 260 numbers. Every address and phone from the scrape proved correct; the Minimart's hours did not — **7am–8pm, not 6am–10pm** (client, 16 Sep 2026). In `location-content-model` |
 | ~~A15~~ | ~~**Two Location names**~~ **Done** | — | Settled by the client 16 Sep 2026: **"Minimart"** (one word) and **"Fisherman's Cove"** with no "at"; "at" stays on Exit 260 alone. Applied across the repo — 17 files, including the `minimart` slug. In `location-content-model` |
 | A3 | **Art direction + budget** — commissioned Lummi art, photography, or both | Every page's finished look | Site has no imagery at all today (ADR 0012). Note the CMS free tier caps assets at **100 MB** — a real photo set exceeds it |
 | A4 | **Cultural approval** for any Coast Salish art | Launch, unconditionally | Final art must be authentic, commissioned, or tribe-approved |
