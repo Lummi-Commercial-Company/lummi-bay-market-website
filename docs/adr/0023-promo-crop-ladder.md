@@ -1,6 +1,10 @@
 # 0023 — The promo crop ladder: five slot ratios, one master, and a capped text block
 
-Status: **Accepted** (2026-09-16).
+Status: **Accepted** (2026-09-16), **amended the same day** — the field set went from four
+fields on desktop and three on a phone to **three fields everywhere**, and the 30-character body
+cap went with the field. The five ratios, the master and the 28-character headline cap are
+unchanged. The superseded rule is recorded at the end of the decision it replaced, because it was
+signed off and someone will look for it.
 
 Terms (Location, Truck Stop): `CONTEXT.md`. Colour tokens: skill `brand-system` (LOCKED).
 Cultural guardrail: skill `pnw-tribal-art` — and note that tribal motifs are barred from the
@@ -54,38 +58,46 @@ the master already is the phone crop.
 The centre 2400 × 480 strip is what the full-width 5:1 slot shows. Anything that has to be seen
 belongs inside it; everything above and below is breathing room the narrower slots use.
 
-### Four text fields on desktop, three on a phone
-The live fields are **eyebrow, headline, body, button**. The body field is shown on desktop and
-**hidden on a phone**, leaving eyebrow, headline and button.
+### Three text fields, everywhere
+The live fields are **eyebrow, headline, button**. There is no body field, on any slot or any
+device. The block measures **89px in every slot on every device** — one rule, one number.
 
-All four fit every slot — the measurement, not an estimate: a four-field block needs 113px and
-the smallest slot is 163px tall. What is constrained is copy *length*, not field count.
+| Slot | Text block | Picture left clear |
+|---|---|---|
+| Full width 1200 × 240 | 89px · 37% | 63% |
+| Wide half 795 × 265 | 89px · 34% | 66% |
+| Half 593 × 198 | 89px · 45% | 55% |
+| Third 391 × 196 | 89px · 45% | 55% |
+| Quarter 290 × 163 | **89px · 55%** | **45%** |
+| Phone 351 × 197 | 89px · 45% | 55% |
 
-| Slot | Three fields | Four fields | Picture left clear |
-|---|---|---|---|
-| Full width 1200 × 240 | 89px · 37% | 113px · 47% | 53% |
-| Wide half 795 × 265 | 89px · 34% | 113px · 43% | 57% |
-| Half 593 × 198 | 89px · 45% | 113px · 57% | 43% |
-| Third 391 × 196 | 89px · 45% | 113px · 58% | 42% |
-| Quarter 290 × 163 | 89px · 55% | **113px · 69%** | **31%** |
-| Phone 351 × 197 | **89px · 45%** | — | **55%** |
+The quarter is still the slot art must be composed for, because any promo can be re-divided
+into it — but it now keeps **45% of the frame clear** rather than 31%, so the subject has the
+bottom half rather than the bottom third.
 
-The quarter is where this bites: at four fields the text covers 69% of the frame and leaves
-roughly the bottom third clear. That is the slot art must be composed for, because any promo
-can be re-divided into it.
+*Superseded, same day:* the field set first signed was four fields on desktop — eyebrow,
+headline, body, button — and three on a phone, where the body line dropped out. All four did
+fit every slot (113px of block against a 163px quarter); the reason for dropping the body field
+was not fit. It bought about five words, cost a flat 24px of picture in *every* slot before a
+word was typed — which at the quarter is the difference between 45% of the frame clear and 31% —
+needed a second character counter, and keyed its rule to device rather than slot width, putting
+*more* text in the narrower frame: the phone slot is 351px wide and the desktop quarter is
+290px.
 
-### Headline capped at 28 characters, body at 30
-Set in the CMS as character counters on the two fields.
+### Headline capped at 28 characters
+Set in the CMS as a character counter on the one field. The 30-character body cap is withdrawn
+with the field it counted.
 
-At these caps **nothing wraps in any slot**. Every card sits at its floor — 89px with three
-fields, 113px with four, one line per field, identical at every width. Worst case at the
-quarter (28 wide capitals plus a 30-character body) measures 152px against 163px available,
-with 11px to spare.
+At this cap **nothing wraps on real copy**. Every card sits at its 89px floor, one line per
+field, identical at every width on the ladder. The one case that adds a line is 28 characters of
+wide capitals in the quarter, the narrowest slot — measured at 109px against 163px available,
+still 54px clear. Every other slot holds 89px even then, and so does the quarter on an
+unbreakable 28-character word.
 
-**These caps are a style rule, not a safety rule.** The measured ceiling before the quarter
-overflows is about 115 characters across the text block; 28 + 30 = 58 is half of it. The
-counters exist to keep promo copy punchy and the geometry uniform, not to stop the layout
-breaking — the layout will carry roughly twice what has been signed off.
+**The cap is a style rule, not a safety rule.** With the body field gone the measured ceiling
+before the quarter overflows is about 124 characters of headline alone; 28 is under a quarter of
+it. The counter exists to keep promo copy punchy and the geometry uniform, not to stop the
+layout breaking.
 
 The consequence worth having is that **a re-divided promo changes size but never shape**. The
 card is geometrically identical at every slot width, so there is no spill condition left to
@@ -95,24 +107,21 @@ design for.
 It is a field, defaulting to “See details”, not a hardcoded string.
 
 ## Consequences
-- **`docs/proofs/promo-system.html` — the button label is now a field.** It had the CTA
-  hardcoded as “See details”, which left the approved card with two editable fields. Each promo
+- **`docs/proofs/promo-system.html` now matches this decision exactly.** It had the CTA
+  hardcoded as “See details”, which left the approved card with two editable fields; each promo
   in the template now carries its own label and falls back to “See details” only when one is
-  left blank. The template still renders three text fields rather than four; that gap stands
-  until the field-set question below is closed, and the template is what the Next.js component
-  will be built from.
-- **The CMS needs three additions** to the `promos` collection: a character counter on the
-  headline (28), a counter on the body (30), and a button-label field. Counters are advisory to
-  the editor; nothing enforces them at render time, and nothing needs to.
+  left blank. It already rendered three text fields, so with that fix the template is correct as
+  it stands — and it is what the Next.js component will be built from.
+- **The CMS needs two additions** to the `promos` collection: a character counter on the headline
+  (28) and a button-label field. The counter is advisory to the editor; nothing enforces it at
+  render time, and nothing needs to.
 - **The designer spec sheet carries the same numbers** — `docs/design-spec-sheet.html` §05 and
   §07. If the two ever disagree, this ADR is the record.
-- **The phone rule shows the body field in the narrower of two slots.** The phone slot is 351px
-  wide and the desktop quarter is 290px, so “four on desktop, three on a phone” puts *more* text
-  in the *smaller* frame. It is defensible as a reading rule — a phone reader is closer to the
-  screen and scrolling one column — but if it ever looks wrong, the alternative is a slot-width
-  threshold: body at the third and wider, none at the quarter or on the phone. Both fit at
-  28/30, and it is a one-line change in the component. **This is the cheap part of the decision
-  to revisit; the ratios and the master are not.**
+- **There is no responsive text rule left to build or explain.** The component renders the same
+  three fields at every width, so there is no media query, no second character counter, and no
+  “my body text doesn't show on my phone” for staff to report. Adding the field back later is a
+  one-line change in the component plus a counter in the CMS; **this is the cheap part of the
+  decision, and the ratios and the master are not.**
 - **Still open:** every measurement was taken against stand-in photography. Re-run the proof
   page once real promo art exists — a busy image may need the text block's scrim darkened, which
   changes contrast, not geometry.
