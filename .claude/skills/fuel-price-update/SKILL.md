@@ -43,15 +43,27 @@ Rules that hold no matter who is editing:
    - **Unchecked** — the three Locations show separately; edit whichever you need.
 4. **Truck Stop** is always its own section, always typed by hand. Diesel and DEF.
 5. Dollars, two decimals (e.g. 4.05). The "updated" date sets itself for the places you changed.
-6. Save/Publish. The site rebuilds and shows the new price in ~1–2 minutes. The live site keeps
-   serving the old price until the rebuild finishes — it never goes blank.
+6. Save/Publish. **The new price is live immediately** — refresh the site and it is there. There
+   is no rebuild to wait for: the price block renders per request and reads the content API, so
+   nothing about a price was ever baked into the page (ADR 0024, settling the client's "once a
+   price is pushed it must go live immediately"). If the site still shows the old number after a
+   hard refresh, that is a bug to report, not a delay to wait out.
 
 ## For Claude / developers
 - Edit `content/fuel-prices.json` only. Never hard-code a price in a page.
 - Validate: numbers only, two decimals, >= 0. Never remove a grade a place sells.
 - A direct file edit bypasses any editor hook, so **set `updated` by hand** for every place
-  you changed. (Whether this stamp should instead be derived from the commit is still open —
-  ADR 0004.)
+  you changed. The stamp is **stored on save**, not derived from the commit — settled by ADR 0024,
+  because a derived stamp would need git history read at request time. It also carries more weight
+  than it used to: with publish latency at zero it is the only thing telling a guest how fresh the
+  number is, so a wrong stamp is now the only staleness a guest can see.
+- **The block reads the TinaCloud content API at request time, never the built
+  `content/fuel-prices.json`.** Rendering the built file per request is exactly as stale as a
+  static page and costs server work for nothing — it is the one way to ship this looking finished
+  and have it not work. The built value is the **fallback** when the API is slow or unreachable;
+  a guest never sees a blank where a price goes (ADR 0024).
+- `output: 'export'` is prohibited. It would silently delete this and the emergency notice
+  (ADR 0017) rather than fail the build.
 - Changing all three Locations means writing three values. There is no shortcut field.
 
 ## How prices are displayed
@@ -208,12 +220,13 @@ the grid, shifting every row after them. One class per cell, or the row is not a
 
 **Every block collapses and expands.** There is no "always expanded" variant.
 
-**Opening — two mechanisms, one rule.** *A panel already open on arrival cannot overlay.*
+**Opening — one mechanism.** Because every block loads collapsed, nothing is ever drawn open on
+arrival, and the rule that used to force a second mechanism — *a panel already open on arrival
+cannot overlay* — no longer has a case to apply to.
 
 | the block… | opens as | why |
 |---|---|---|
-| loads collapsed (every page but Home) | HTML **popover** (`popover="auto"`), anchored over the block | overlays the page; outside-click and Escape dismiss it with **zero JavaScript** |
-| loads expanded (Home, `/fuel-prices`) | plain in-flow disclosure | an overlay drawn on arrival would cover the hero before anyone touched it |
+| loads collapsed (**every page**, Home and `/fuel-prices` included) | HTML **popover** (`popover="auto"`), anchored over the block | overlays the page; outside-click and Escape dismiss it with **zero JavaScript** |
 
 The popover covers the block rather than opening below it, so the two collapsed rows are not
 repeated inside the panel. It lives in the browser's top layer, so the block's own box never
@@ -234,8 +247,8 @@ further ~47px permanently.
 ## Safety checks (test before done — do not assert)
 - JSON parses (no trailing comma).
 - All four places present; every grade shown on a page exists in the data.
-- Prices render collapsed on a Location page, on `/truck-stop`, and on a non-Location page;
-  expanded on Home. `/truck-stop` shows the Truck Stop first.
+- Prices render **collapsed on every page** — a Location page, `/truck-stop`, a non-Location
+  page and Home alike. Nothing arrives open. `/truck-stop` shows the Truck Stop first.
 - The popover dismisses on outside-click **and** on Escape. Check in Safari and Firefox, not
   only Chromium — CSS anchor positioning is the project's one dependency on a newer feature,
   and the corner placement is what requires it (ADR 0005).

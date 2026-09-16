@@ -60,6 +60,11 @@ not moved there later, because ownership transfer on consumer Google products is
   design one. Not speculative: Google's own support forum carries people hitting **Lighthouse
   cookie warnings from exactly this iframe**, so it surfaces in a routine audit. A static image avoids it entirely — worth weighing, since the interactivity a
   guest actually wants is usually "open this in my own maps app", which a link does.
+  **Resolved 16 Sep 2026 by ADR 0025**, which weighed exactly that and kept both: `/contact`
+  renders a static map image with per-Location Directions links, and mounts this iframe only if
+  a guest clicks to open the interactive map. Nothing above changes — the mechanism, the company
+  account and the public setting all still apply — only *when* the iframe loads. The site sets no
+  cookies before an explicit act, so there is no banner and no audit finding.
 - The embed is an iframe and iframes are heavy. It loads below the Location blocks, so it should
   be lazy-loaded and must never delay the phone numbers above it.
 - **The review templates cannot show it.** The preview sandbox blocks outside hosts, so the map

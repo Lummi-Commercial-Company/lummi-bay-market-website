@@ -61,6 +61,8 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 - Tribal motifs + the blue waterline → skill `pnw-tribal-art`.
 - Location schema + amenity differences → skill `location-content-model`.
 - Fuel-price editing procedure → skill `fuel-price-update`.
+- **No cookie banner** — the site sets no cookies to consent to, which is a constraint on every
+  future embed and on analytics, not just a decision already made — ADR 0025.
 
 ## Site architecture (locked — owned by ux-navigation-architect)
 Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, see ADR 0008.
@@ -74,7 +76,9 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
   to a product info page (ADR 0007). Product info pages are the `infoPages` collection — ADR 0015.
 - **Emergency notice**: a `siteAlert` singleton rides inside the sticky header on every page,
   published by on-demand revalidation in under a second rather than a rebuild — ADR 0017. It is
-  why the build must never be `output: 'export'`.
+  one of two reasons the build must never be `output: 'export'`; the other is fuel prices, which
+  render per request against the content API so a pushed price is live immediately — ADR 0024.
+  Static export would silently delete both rather than fail.
 - Header is **sticky** on every page; the fuel-price rail is **not** — ADR 0006 records why the
   rail must never be sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
   carries the Rewards "Get the App" pill on every page.
