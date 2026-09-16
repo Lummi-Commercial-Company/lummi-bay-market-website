@@ -13,7 +13,7 @@ all. And every page listed every Location, including the one the guest was alrea
 
 ## Decision
 **The Truck Stop callout leads the list**, above the Location cards, at both widths. Order is
-Truck Stop, Exit 260, Mini Mart, Fisherman's Cove.
+Truck Stop, Exit 260, Minimart, Fisherman's Cove.
 
 **A page never advertises itself.** On the Exit 260 page the Exit 260 card is not rendered; the
 section heading becomes "Our other locations". On `/truck-stop` the Truck Stop callout is not

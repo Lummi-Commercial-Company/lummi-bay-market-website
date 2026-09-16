@@ -13,9 +13,11 @@ Lummi Bay Market brand.
   prices, (3) exceptional navigation.
 
 ## The brand = one company, three locations
-1. **Salish Village** (aka "Exit 260") — fuel + convenience store + full truck stop
-   (showers, driver lounge, secondary store, truck parking). The flagship.
-2. **Lummi Bay Mini Mart** — fuel + convenience store.
+1. **Salish Village** (aka "Exit 260") — fuel + convenience store, plus a **separate truck
+   stop** on the same property: its own fuel station for truckers with a small c-store,
+   driver lounge, showers and truck parking. Not an amenity of the store — see CONTEXT.md.
+   The flagship.
+2. **Lummi Bay Minimart** — fuel + convenience store.
 3. **The Cove** (aka "Fisherman's Cove") — fuel + convenience store.
 All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 
@@ -62,7 +64,7 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 
 ## Site architecture (locked — owned by ux-navigation-architect)
 Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, see ADR 0008.
-- Locations: index → 3 detail pages (nav labels: Exit 260 · Mini Mart · Fisherman's Cove).
+- Locations: index → 3 detail pages (nav labels: Exit 260 · Minimart · Fisherman's Cove).
 - Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it.
 - `/fuel-prices` still exists as a page — reached from the footer and the price block's
   "All prices" panel, not from the nav (ADR 0008).

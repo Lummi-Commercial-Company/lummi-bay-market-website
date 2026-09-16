@@ -14,9 +14,10 @@ Opaque `--lb-navy` `#1C4E8F`, the supplied on-dark lockup, and the waterline acr
 image, so anything set in the artwork appears twice. Two further reasons the default card stays
 wordless:
 
-- **The Location names are still unsettled** (checklist A15 — "Minimart" or "Mini Mart",
-  "Fisherman's Cove" with or without "at"). A card is cached by third parties for weeks after
-  the file changes, so a name printed on one outlives the decision to correct it.
+- **A name on a card outlives a change to it.** A card is cached by third parties for weeks
+  after the file changes, so the default card carries no Location name. The names themselves
+  are now settled (A15, 16 Sep 2026 — "Minimart", "Fisherman's Cove"), but the caching
+  argument stands on its own.
 - Nothing time-sensitive may go on a card at all — no price, phone number or hours — for the
   same reason.
 
@@ -42,5 +43,5 @@ cached, which is why nothing on a card may go stale.
 
 ## Still to come
 Per-page cards for the three Locations and `/truck-stop` — the links people actually paste.
-Those wait on the A15 naming decision if they are to carry a name, and on photography (A3)
-if they are not.
+The A15 naming decision is in, so a card may now carry a name; the remaining dependency is
+photography (A3).

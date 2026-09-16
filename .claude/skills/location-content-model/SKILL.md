@@ -8,11 +8,11 @@ description: The content schema for the three Lummi Bay Market locations and how
 ## Schema (per location)
 Each location is one Markdown/MDX file in `content/locations/`, defined as a TinaCMS
 "Locations" collection (content lives as files in the git repo — no database):
-- `id` (slug): exit-260 | mini-mart | fishermans-cove
+- `id` (slug): exit-260 | minimart | fishermans-cove
 - `name`: full name (e.g., "Lummi Bay Market at Exit 260")
-- `navLabel`: short nav label (Exit 260 | Mini Mart | Fisherman's Cove)
+- `navLabel`: short nav label (Exit 260 | Minimart | Fisherman's Cove)
 - `shortLabel`: the tightest display label, for the fuel price band where horizontal
-  room is scarce (Exit 260 | Mini Mart | **The Cove**). Falls back to `navLabel` when
+  room is scarce (Exit 260 | Minimart | **The Cove**). Falls back to `navLabel` when
   the two are the same. This is a third name, not a reuse of `aka` — `aka` records what
   a place is *also called*; `shortLabel` is what we *print* in a constrained slot.
 - `aka`: legacy/alternate name(s)
@@ -26,12 +26,16 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
   the grades a place sells are the entries present in its price list (ADR 0004,
   skill `fuel-price-update`).
 - `amenities`: string list (drives badges/icons — never hand-place per page)
-- `truckStop`: boolean (only exit-260 is true). **Under review — it wants to be a record.**
-  The Truck Stop now has its own hours (24 hours), its own amenity set (diesel lanes, DEF,
-  showers, driver lounge, secondary store, truck parking) and **its own phone,
-  360-778-1696** (confirmed). Three fields hanging off a boolean is the schema asking to be
-  `truckStop: { phone, hours, amenities }`, present or absent. Until it changes, the phone
-  has nowhere to live — `phone` on the Location is the main store's.
+- `truckStop`: a **record**, present only on exit-260 — `truckStop: { phone, hours, amenities }`.
+  **Settled 16 Sep 2026** by the client: the Truck Stop is *not* an amenity of the Exit 260
+  fuel station, it is a **separate fuel station for truckers**, with its own small c-store and
+  an additional lounge and showers for drivers taking a break. A boolean cannot carry that, and
+  three fields hanging off a boolean was the schema asking for this shape. Its fields:
+  `phone` **360-778-1696** (confirmed — a driver asking about showers or the diesel lanes must
+  not land on the C-Store line), `hours` 24 hours, and `amenities` (diesel lanes, DEF, small
+  c-store, driver lounge, showers, truck parking). Absent on the other two Locations.
+  The Location's own `phone`, `hours` and `amenities` stay the **store's** — never merged with
+  these.
 - `hero`: image + alt (mark placeholder if art not final)
 
 ## The three locations
@@ -39,8 +43,8 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
 opening time. Worth recording: the values originally scraped from lcc-lummi.com were correct
 in every particular. The scrape was right; it simply had no standing until someone said so.
 
-Two **naming** questions came back with them and are not settled — see the note under the
-list.
+The two naming questions that came back with them were **settled by the client on 16 Sep
+2026** — see the note under the list.
 
 1. **exit-260** — "Lummi Bay Market at Exit 260"; nav "Exit 260"; aka Salish Village.
    **CONFIRMED by the client.** 4839 Rural Ave, Bellingham WA 98226 · open daily, 24 hours ·
@@ -49,49 +53,47 @@ list.
    those labels rather than inventing "main" or "store". The card line keeps the short
    `Open 24 hours` form — the length budget below is measured and unchanged by this.
    Amenities: 24-hr convenience store, ~16 fuel lanes, tobacco & liquor drive-thru,
-   quick-serve food, and a separate TRUCK STOP (diesel lanes, driver store, showers,
-   lounge, truck parking). truckStop: true.
-   **The Truck Stop's own phone is 360-778-1696.** A driver asking about showers or the diesel
-   lanes should reach the truck side, not the C-Store, so `/contact` and the Truck Stop page
-   both use it.
+   quick-serve food. **The Truck Stop is not on this list** — it is not an amenity of the fuel
+   station but a separate fuel station for truckers sharing the property, and it carries its own
+   `truckStop` record (see the schema above): its own small c-store, driver lounge, showers,
+   diesel lanes, DEF, truck parking, 24 hours, and its own phone **360-778-1696**.
+   A driver asking about showers or the diesel lanes should reach the truck side, not the
+   C-Store, so `/contact` and the Truck Stop page both use that number.
 
-2. **mini-mart** — nav "Mini Mart". **CONFIRMED.** 4884 Haxton Way, Ferndale WA 98248 ·
+2. **minimart** — nav "Minimart". **CONFIRMED.** 4884 Haxton Way, Ferndale WA 98248 ·
    open daily 6am–10pm · 360-380-2049. Next to Silver Reef Casino.
-   Amenities: fuel + convenience store. truckStop: false.
-   *Name unsettled:* the client writes **"Lummi Bay Market Minimart"** — one word, no space.
-   This document had "Mini Mart". See the naming note.
+   Amenities: fuel + convenience store. No `truckStop` record.
+   Full name **"Lummi Bay Market Minimart"** — one word, no space, confirmed by the client.
 
 3. **fishermans-cove** — nav "Fisherman's Cove"; shortLabel "The Cove"; aka The Cove.
    **CONFIRMED.** 2570 Lummi View Drive, Bellingham WA 98226 · open daily 6am–9pm ·
    360-758-2448. Amenities: fuel + convenience store, the Cove Kitchen, ethanol-free fuel.
-   truckStop: false.
-   *Name unsettled:* the client writes **"Lummi Bay Market Fisherman's Cove"** — no "at".
-   This document had "at". See the naming note.
+   No `truckStop` record.
+   Full name **"Lummi Bay Market Fisherman's Cove"** — no "at", confirmed by the client.
 
-### The naming note — two open questions, worth one answer each
-The client supplied all three names alongside the confirmed details, and two differ from what
-this document carried:
+### The naming note — both questions answered, 16 Sep 2026
+The client supplied all three names alongside the confirmed details, and confirmed the two that
+differed from what this document carried. The settled forms:
 
-| | This document had | The client wrote |
+| Location | Full name | navLabel |
 |---|---|---|
-| Mini Mart | Lummi Bay Market Mini Mart | **Lummi Bay Market Minimart** |
-| Fisherman's Cove | Lummi Bay Market **at** Fisherman's Cove | **Lummi Bay Market Fisherman's Cove** |
+| Exit 260 | Lummi Bay Market **at** Exit 260 | Exit 260 |
+| Minimart | Lummi Bay Market **Minimart** (one word, no space) | Minimart |
+| Fisherman's Cove | Lummi Bay Market **Fisherman's Cove** (no "at") | Fisherman's Cove |
 
-Exit 260 came back as "Lummi Bay Market **at** Exit 260", matching. So "at" is used for Exit
-260 and not for the Cove, which may be deliberate or may be shorthand in the message.
-
-**Neither has been changed.** A business's own name printed wrong is not a detail, and guessing
-between "Minimart" and "Mini Mart" on every page of the site is the wrong way to settle it.
-The `navLabel` field is separate and can stay "Mini Mart" for the nav whatever the full name
-turns out to be — that is what the field is for.
+"at" belongs to Exit 260 alone — that is the client's own usage, not an inconsistency to tidy
+up. "Minimart" is one word everywhere: never "Mini Mart", never "Mini-Mart". `shortLabel` is
+unaffected and still prints **The Cove** in the fuel price band.
 
 ## Rules
 - **The location list is derived, never authored per page** (ADR 0009). Order is Truck Stop
-  callout first, then Exit 260, Mini Mart, Fisherman's Cove. The component filters out the
+  callout first, then Exit 260, Minimart, Fisherman's Cove. The component filters out the
   page's own Location, and the heading becomes "Our other locations" when it does.
-- **The Truck Stop is a second store, not a wing of Exit 260.** It shares the Exit 260 property
-  physically, and that is all it shares: two c-stores, two fuel needs, two sets of customers
-  (truckers at one, everything else at the other). Consequences that follow from this and not
+- **The Truck Stop is a second fuel station, not a wing of Exit 260** (client, 16 Sep 2026). It
+  shares the Exit 260 property physically, and that is all it shares: two fuel stations, two
+  c-stores (the truck side's is small), two sets of customers (truckers at one, everything else
+  at the other). It is never written as an Exit 260 amenity; the driver lounge and showers are
+  *its* amenities, not the store's. Consequences that follow from this and not
   from anything else: the two are separate rows in the price table (ADR 0004/0005), and the
   **Exit 260 card is still listed on `/truck-stop`** — the filter drops the page's *subject*
   (there, the callout), never everything at the page's street address (ADR 0009).
@@ -107,7 +109,8 @@ turns out to be — that is what the field is for.
 - The card line carries **where it is and when it is open — not what it sells**. Amenities live
   in `amenities` and render on the detail page. A list view is for choosing between places.
 - Amenity badges/icons are driven by the `amenities` list — don't hand-place them.
-- Only exit-260 (truckStop: true) shows the Truck Stop summary + links to `/truck-stop`.
+- Only exit-260 carries a `truckStop` record, and only it shows the Truck Stop summary +
+  links to `/truck-stop`. The summary reads from that record, never from `amenities`.
 - Keep addresses/hours in data, never in page markup, so staff edit via the CMS.
 - Only regular, diesel and DEF are priced on this site. Midgrade, premium and
   ethanol-free may remain Amenities, but carry no posted price.

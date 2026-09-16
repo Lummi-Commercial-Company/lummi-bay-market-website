@@ -21,7 +21,7 @@ Truck Stop. Midgrade, premium and ethanol-free are NOT priced on this site.
   "linkLocations": true,
   "locations": {
     "exit-260":        { "regular": 3.79, "diesel": 4.29, "updated": "2026-08-21" },
-    "mini-mart":       { "regular": 3.79, "diesel": 4.29, "updated": "2026-08-21" },
+    "minimart":       { "regular": 3.79, "diesel": 4.29, "updated": "2026-08-21" },
     "fishermans-cove": { "regular": 3.79, "diesel": 4.29, "updated": "2026-08-21" }
   },
   "truckStop":         { "diesel": 4.55, "def": 3.29, "updated": "2026-08-21" }
@@ -104,8 +104,8 @@ a phone is what they are holding.
 
 | | Resting | Condensed | Expanded adds |
 | --- | --- | --- | --- |
-| Desktop | Location + Truck Stop, 400x110 | Location only, 400x39 | Mini Mart, The Cove |
-| Phone | Location + Truck Stop, 345x102 | Location only, one line | Mini Mart, The Cove |
+| Desktop | Location + Truck Stop, 400x110 | Location only, 400x39 | Minimart, The Cove |
+| Phone | Location + Truck Stop, 345x102 | Location only, one line | Minimart, The Cove |
 | Either, once condensed | — | — | those two **and the Truck Stop** |
 
 **The panel adds only what is not already on screen.** Never list a place twice — that is one
@@ -168,9 +168,9 @@ open at rest (desktop)                  open while condensed (desktop)
 │ ⌃ Hide                         │      │ Exit 260 │ REG 3.79  DIESEL 4.29 ⌃ │
 │           REGULAR DIESEL   DEF │      ├────────────────────────────────────┤
 │ Exit 260     3.79    4.29    — │      │        REGULAR   DIESEL       DEF  │
-│ Truck Stop      —    4.55  3.29│      │ Mini Mart 3.79     4.29         —  │
+│ Truck Stop      —    4.55  3.29│      │ Minimart 3.79     4.29         —  │
 ├────────────────────────────────┤      │ The Cove  3.85     4.29         —  │
-│ Mini Mart    3.79    4.29    — │      │ Truck Stop   —     4.55       3.29 │
+│ Minimart    3.79    4.29    — │      │ Truck Stop   —     4.55       3.29 │
 │ The Cove     3.85    4.29    — │      └────────────────────────────────────┘
 └────────────────────────────────┘
 

@@ -13,21 +13,23 @@ operating under Lummi Bay Market. Referred to as "Lummi Bay Market" in copy.
 Exactly three exist; there are no others in scope.
 
 **Exit 260** — A Location. Full name "Lummi Bay Market at Exit 260"; nav label
-"Exit 260". Sits on the Salish Village development beside I-5 Exit 260. Holds the
-24-hour convenience store (16 fuel lanes, tobacco & liquor drive-thru, quick-serve
-food) and the separate truck stop (diesel lanes, driver store, showers, lounge). The
-flagship.
+"Exit 260". Sits on the Salish Village development beside I-5 Exit 260. The Location is
+the 24-hour convenience store and its fuel station (16 fuel lanes, tobacco & liquor
+drive-thru, quick-serve food). The **Truck Stop is a separate fuel station** sharing the
+same property — not one of this Location's amenities (see its own entry). The flagship.
 
-**Mini Mart** — A Location. Full name "Lummi Bay Market Mini Mart"; nav label
-"Mini Mart". Fuel + convenience store; next to Silver Reef Casino.
+**Minimart** — A Location. Full name "Lummi Bay Market Minimart"; nav label
+"Minimart". Fuel + convenience store; next to Silver Reef Casino.
 
-**Fisherman's Cove** — A Location. Full name "Lummi Bay Market at Fisherman's Cove";
+**Fisherman's Cove** — A Location. Full name "Lummi Bay Market Fisherman's Cove";
 nav label "Fisherman's Cove"; short label "The Cove", used only where horizontal room is
 scarce — the fuel price band. Navigation never abbreviates it. Fuel + convenience store; includes the Cove Kitchen and
 ethanol-free fuel.
 
-**Amenity** — A service offered at a Location (e.g., showers, driver lounge). A café or
-deli, if one exists at a Location, is an Amenity — not a separate brand or site section.
+**Amenity** — A service offered at a Location (e.g., a drive-thru, quick-serve food,
+ethanol-free fuel). A café or deli, if one exists at a Location, is an Amenity — not a
+separate brand or site section. The Truck Stop's showers and driver lounge are **not**
+Exit 260 amenities; they belong to the Truck Stop's own amenity set.
 
 **Tenant** — An independent business operating at a Lummi Bay Market property, renting from
 Lummi Commercial Company. Not owned, operated or managed by Lummi Bay Market. Known at
@@ -54,10 +56,13 @@ _Avoid_: gas price, pump price, rate.
 **DEF** — Diesel exhaust fluid. Not a fuel, but posted and priced like one, so it is a
 Fuel Grade. Sold at the Truck Stop only.
 
-**Truck Stop** — The driver-facing facility at the Exit 260 / Salish Village site
-(diesel lanes, driver store, showers, lounge, parking). Not a Location, but it posts its
-own Fuel Prices — diesel and DEF — independently of the three Locations. Summarized on the
-Exit 260 page and detailed on its own dedicated `/truck-stop` page; the two cross-link.
+**Truck Stop** — A **separate fuel station for truckers** on the Exit 260 / Salish Village
+site: diesel lanes, DEF, its own small c-store, and an additional driver lounge and showers
+for drivers taking a break, plus truck parking. Open 24 hours; its own phone, 360-778-1696.
+It is *not* an amenity of the Exit 260 fuel station and not a Location of its own — it is the
+`truckStop` record on Exit 260 — but it posts its own Fuel Prices, diesel and DEF,
+independently of the three Locations. Summarized on the Exit 260 page and detailed on its own
+dedicated `/truck-stop` page; the two cross-link.
 
 **Rewards** — The Lummi Bay Market loyalty program, delivered via a mobile app. On this
 site it is a promo page (`/rewards`) that pitches the app and links to the download —
