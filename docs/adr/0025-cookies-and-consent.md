@@ -126,10 +126,32 @@ Four rules do the whole job.
 second click to read a fuel price. That is the point — the least intrusive consent UI is the one
 that never had to exist.
 
-**Optional, and worth it:** a short **Privacy** line in the footer saying the site sets no
-cookies and tracks nobody. Not required, does not interrupt anyone, and it is a better answer
-than a banner to the guest who wonders. It would be a footer link, so it needs sign-off before
-it is added.
+**Approved by the client 16 Sep 2026: the footer carries one line of plain text.**
+
+> **No cookies. Visits counted anonymously.**
+
+Three deliberate choices in that sentence:
+
+- **Plain text, not a link.** A "Privacy Policy" link promises a policy document — a legal
+  artifact somebody has to own, review and keep current. There is no page behind this because
+  there is nothing a page would add: the claim is two facts, both checkable in about ten seconds
+  by opening devtools.
+- **It says what is true, not what sounds best.** "We track nobody" would be the tempting line
+  and it would be **false** — Vercel Web Analytics counts visits, anonymously and without
+  cookies, but it counts them. A privacy claim that overstates is worse than no claim at all:
+  it is the one sentence on the site that could be read as deceptive, which is a real exposure
+  where the cookies themselves were not. So the line concedes the counting in its second half.
+- **It speaks for the site, and the map façade speaks for the map.** After a guest clicks to load
+  the map, Google may set cookies — so on `/contact` a blanket "no cookies" would be contradicted
+  by the thing sitting above it. The split is intentional: the footer states what the *site* does,
+  the façade notice discloses the *embed* at the point of use. Neither has to carry the other's
+  nuance, and neither is wrong. If that ever feels too fine a distinction, the fix is a short
+  `/privacy` page — a new decision, not a rewording of this one.
+
+**This line is a constraint, not a caption.** It is the most visible commitment on the site and
+the easiest to falsify by accident: the day someone adds a tag that sets a cookie, this sentence
+becomes a lie in the footer of every page. Anything that changes what the site stores changes
+this line first.
 
 ## Consequences
 - **A18 is closed without a purchase, a vendor, or a banner component.** Nothing ships.
