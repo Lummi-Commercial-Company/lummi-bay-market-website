@@ -917,6 +917,15 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
       <p>That is also what makes reactivation possible &mdash; a deleted page cannot come back.</p>
     </div>
     <div class="note">
+      <h3>The button label is a field, not a fixed string</h3>
+      <p>Every promo here carries its own &mdash; &ldquo;See the menu&rdquo;, &ldquo;Get the
+      app&rdquo;, &ldquo;How it works&rdquo;. A button that says the same thing on all of them
+      tells a reader nothing about which one to press, and a screen reader announces a list of
+      identical links.</p>
+      <p>It defaults to &ldquo;See details&rdquo; when an editor leaves it blank, so a promo is
+      never published with an unlabelled button. Signed off 16 September 2026 &mdash; ADR 0023.</p>
+    </div>
+    <div class="note">
       <h3>The list of old promos is the CMS</h3>
       <p>TinaCMS already lists every document in a collection with create, edit and delete.
       Reactivate is extending <code>endsAt</code>; deactivate is <code>active: false</code>, which
@@ -938,7 +947,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 </div>
 
 <script>
-var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee, all day", "start": null, "end": null, "active": true}, {"id": "weekend", "eyebrow": "At Exit 260", "title": "Long weekend fuel", "start": 48, "end": 120, "active": true}, {"id": "fishfry", "eyebrow": "At the Cove", "title": "Friday fish fry", "start": 96, "end": 110, "active": true}, {"id": "rewards", "eyebrow": "Rewards", "title": "Join in 60 seconds", "start": null, "end": null, "active": false}, {"id": "showers", "eyebrow": "Truck Stop", "title": "Showers open 24 hours", "start": null, "end": null, "active": true}, {"id": "minimart", "eyebrow": "Mini Mart", "title": "New grab-and-go case", "start": 24, "end": null, "active": true}, {"id": "firewood", "eyebrow": "At all three", "title": "Firewood by the bundle", "start": null, "end": 144, "active": true}, {"id": "app", "eyebrow": "Rewards", "title": "Fuel discount in the app", "start": 72, "end": null, "active": true}, {"id": "drivethru", "eyebrow": "At Exit 260", "title": "Drive-thru open late", "start": null, "end": null, "active": true}, {"id": "points", "eyebrow": "Rewards", "title": "Double points Tuesday", "start": null, "end": null, "active": true}, {"id": "ice", "eyebrow": "At all three", "title": "Bagged ice, all summer", "start": null, "end": null, "active": true}];
+var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee, all day", "cta": "See what's on", "start": null, "end": null, "active": true}, {"id": "weekend", "eyebrow": "At Exit 260", "title": "Long weekend fuel", "cta": "See the offer", "start": 48, "end": 120, "active": true}, {"id": "fishfry", "eyebrow": "At the Cove", "title": "Friday fish fry", "cta": "See the menu", "start": 96, "end": 110, "active": true}, {"id": "rewards", "eyebrow": "Rewards", "title": "Join in 60 seconds", "cta": "Get the app", "start": null, "end": null, "active": false}, {"id": "showers", "eyebrow": "Truck Stop", "title": "Showers open 24 hours", "cta": "See the truck stop", "start": null, "end": null, "active": true}, {"id": "minimart", "eyebrow": "Mini Mart", "title": "New grab-and-go case", "cta": "See what's new", "start": 24, "end": null, "active": true}, {"id": "firewood", "eyebrow": "At all three", "title": "Firewood by the bundle", "cta": "See details", "start": null, "end": 144, "active": true}, {"id": "app", "eyebrow": "Rewards", "title": "Fuel discount in the app", "cta": "Get the app", "start": 72, "end": null, "active": true}, {"id": "drivethru", "eyebrow": "At Exit 260", "title": "Drive-thru open late", "cta": "See the hours", "start": null, "end": null, "active": true}, {"id": "points", "eyebrow": "Rewards", "title": "Double points Tuesday", "cta": "How it works", "start": null, "end": null, "active": true}, {"id": "ice", "eyebrow": "At all three", "title": "Bagged ice, all summer", "cta": "See details", "start": null, "end": null, "active": true}];
 (function(){
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var force=document.getElementById('force'), condF=document.getElementById('cond');
@@ -1076,8 +1085,10 @@ var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee
       var spans = spansFor(key, take.length);
       slots += take.length;
       html += '<div class="promorow">' + take.map(function(p, i){
+        /* ADR 0023: the button label is an editable field, not a fixed string.
+           It falls back to "See details" only when an editor leaves it blank. */
         return '<a class="promo" style="grid-column:span '+spans[i]+'" href="#"><span class="pe">'+p.eyebrow+
-               '</span><b>'+p.title+'</b><span class="cta">See details</span></a>';
+               '</span><b>'+p.title+'</b><span class="cta">'+(p.cta || 'See details')+'</span></a>';
       }).join('') + '</div>';
     });
     region.innerHTML = html || '<div class="emptyregion">No promo is live at this moment &mdash; the region renders nothing at all. This dashed box is a review aid.</div>';

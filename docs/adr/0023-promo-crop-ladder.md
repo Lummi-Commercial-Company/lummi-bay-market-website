@@ -95,10 +95,12 @@ design for.
 It is a field, defaulting to “See details”, not a hardcoded string.
 
 ## Consequences
-- **`docs/proofs/promo-system.html` must change.** It renders three fields, not four, and
-  hardcodes the CTA as “See details” — so the approved card currently has two editable fields,
-  not four. The template is what is wrong, and it is what the Next.js component will be built
-  from.
+- **`docs/proofs/promo-system.html` — the button label is now a field.** It had the CTA
+  hardcoded as “See details”, which left the approved card with two editable fields. Each promo
+  in the template now carries its own label and falls back to “See details” only when one is
+  left blank. The template still renders three text fields rather than four; that gap stands
+  until the field-set question below is closed, and the template is what the Next.js component
+  will be built from.
 - **The CMS needs three additions** to the `promos` collection: a character counter on the
   headline (28), a counter on the body (30), and a button-label field. Counters are advisory to
   the editor; nothing enforces them at render time, and nothing needs to.
