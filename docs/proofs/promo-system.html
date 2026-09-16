@@ -121,6 +121,12 @@ hr.rule{border:0; border-top:1px solid var(--c-line); margin:44px 0}
 .note.warn h3{color:var(--c-warn)}
 .note p{margin:0; font-size:13.5px; line-height:1.55}
 .note p + p{margin-top:8px}
+.note.wide{grid-column:1/-1}
+.flds{margin:10px 0 0; padding:0; list-style:none; display:grid; gap:7px;
+  grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+.flds li{font-size:13px; line-height:1.5; padding-left:11px; border-left:2px solid var(--c-line)}
+.flds code{font-size:12px}
+.flds li.gone{opacity:.72; border-left-color:var(--c-warn)}
 
 /* legend */
 .legend{display:flex; flex-wrap:wrap; gap:8px 22px; margin:18px 0 0; align-items:center}
@@ -925,6 +931,39 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
       <p>It defaults to &ldquo;See details&rdquo; when an editor leaves it blank, so a promo is
       never published with an unlabelled button. Signed off 16 September 2026 &mdash; ADR 0023.</p>
     </div>
+    <div class="note wide">
+      <h3>The fields, as the CMS shows them</h3>
+      <p>Every promo on this page is one document with these fields and no others &mdash; the
+      list of record is <b>ADR 0018 &sect;2</b>, and this page is built from it. A promo is a
+      form with fixed slots, not a builder: staff write the words and pick the dates, and the
+      layout is not theirs to lose.</p>
+      <ul class="flds">
+        <li><code>eyebrow</code> &mdash; the small label above the headline. First of the three
+        text fields</li>
+        <li><code>headline</code> &mdash; the offer, <b>28 characters or fewer</b>. The counter in
+        the CMS is advisory; nothing enforces it at render. Also the document&rsquo;s name in the
+        Tina list, so a promo is findable by what it says</li>
+        <li><code>cta</code> &mdash; the button label, editable per promo, defaulting to
+        &ldquo;See details&rdquo;. Third text field &mdash; see the note below</li>
+        <li><code>image</code> + <code>alt</code> &mdash; <b>one 2400 &times; 1350 master</b>,
+        subject inside the centre 2400 &times; 480 strip. Not two crops: the phone slot is 16:9,
+        so the master already is the phone crop</li>
+        <li><code>link</code> &mdash; a reference to an <code>infoPages</code> document. Both the
+        image and the button go there</li>
+        <li><code>startsAt</code>, <code>endsAt</code> &mdash; the window, both optional. No start
+        means already running; no end means until turned off</li>
+        <li><code>active</code> &mdash; the kill switch. False beats any date; true never
+        overrides one</li>
+        <li><code>placement</code> &mdash; which pages it appears on</li>
+        <li><code>priority</code> &mdash; who takes a slot first when more are live than there is
+        room for. Ties go to the soonest <code>endsAt</code>, then to <code>headline</code></li>
+        <li class="gone"><code>body</code> &mdash; <b>removed.</b> Three text fields, every slot
+        and every device (ADR 0023). The body line cost a flat 24px of picture in <i>every</i>
+        slot before a word was typed</li>
+        <li class="gone"><code>width</code> &mdash; <b>removed.</b> The layout belongs to the row,
+        which re-divides when a promo expires. A width on the promo cannot</li>
+      </ul>
+    </div>
     <div class="note">
       <h3>The list of old promos is the CMS</h3>
       <p>TinaCMS already lists every document in a collection with create, edit and delete.
@@ -947,7 +986,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 </div>
 
 <script>
-var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee, all day", "cta": "See what's on", "start": null, "end": null, "active": true}, {"id": "weekend", "eyebrow": "At Exit 260", "title": "Long weekend fuel", "cta": "See the offer", "start": 48, "end": 120, "active": true}, {"id": "fishfry", "eyebrow": "At the Cove", "title": "Friday fish fry", "cta": "See the menu", "start": 96, "end": 110, "active": true}, {"id": "rewards", "eyebrow": "Rewards", "title": "Join in 60 seconds", "cta": "Get the app", "start": null, "end": null, "active": false}, {"id": "showers", "eyebrow": "Truck Stop", "title": "Showers open 24 hours", "cta": "See the truck stop", "start": null, "end": null, "active": true}, {"id": "minimart", "eyebrow": "Mini Mart", "title": "New grab-and-go case", "cta": "See what's new", "start": 24, "end": null, "active": true}, {"id": "firewood", "eyebrow": "At all three", "title": "Firewood by the bundle", "cta": "See details", "start": null, "end": 144, "active": true}, {"id": "app", "eyebrow": "Rewards", "title": "Fuel discount in the app", "cta": "Get the app", "start": 72, "end": null, "active": true}, {"id": "drivethru", "eyebrow": "At Exit 260", "title": "Drive-thru open late", "cta": "See the hours", "start": null, "end": null, "active": true}, {"id": "points", "eyebrow": "Rewards", "title": "Double points Tuesday", "cta": "How it works", "start": null, "end": null, "active": true}, {"id": "ice", "eyebrow": "At all three", "title": "Bagged ice, all summer", "cta": "See details", "start": null, "end": null, "active": true}];
+var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "headline": "Fresh coffee, all day", "cta": "See what's on", "start": null, "end": null, "active": true}, {"id": "weekend", "eyebrow": "At Exit 260", "headline": "Long weekend fuel", "cta": "See the offer", "start": 48, "end": 120, "active": true}, {"id": "fishfry", "eyebrow": "At the Cove", "headline": "Friday fish fry", "cta": "See the menu", "start": 96, "end": 110, "active": true}, {"id": "rewards", "eyebrow": "Rewards", "headline": "Join in 60 seconds", "cta": "Get the app", "start": null, "end": null, "active": false}, {"id": "showers", "eyebrow": "Truck Stop", "headline": "Showers open 24 hours", "cta": "See the truck stop", "start": null, "end": null, "active": true}, {"id": "minimart", "eyebrow": "Mini Mart", "headline": "New grab-and-go case", "cta": "See what's new", "start": 24, "end": null, "active": true}, {"id": "firewood", "eyebrow": "At all three", "headline": "Firewood by the bundle", "cta": "See details", "start": null, "end": 144, "active": true}, {"id": "app", "eyebrow": "Rewards", "headline": "Fuel discount in the app", "cta": "Get the app", "start": 72, "end": null, "active": true}, {"id": "drivethru", "eyebrow": "At Exit 260", "headline": "Drive-thru open late", "cta": "See the hours", "start": null, "end": null, "active": true}, {"id": "points", "eyebrow": "Rewards", "headline": "Double points Tuesday", "cta": "How it works", "start": null, "end": null, "active": true}, {"id": "ice", "eyebrow": "At all three", "headline": "Bagged ice, all summer", "cta": "See details", "start": null, "end": null, "active": true}];
 (function(){
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var force=document.getElementById('force'), condF=document.getElementById('cond');
@@ -1071,7 +1110,7 @@ var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee
     plist.innerHTML = PROMOS.map(function(p){
       var st=state(p,now);
       var win = (p.start===null?'from launch':fmt(p.start)) + '  \u2192  ' + (p.end===null?'no end':fmt(p.end));
-      return '<tr><td>'+p.title+'</td><td class="win">'+(p.active?win:'&mdash;')+'</td><td class="win">&mdash;</td>'+
+      return '<tr><td>'+p.headline+'</td><td class="win">'+(p.active?win:'&mdash;')+'</td><td class="win">&mdash;</td>'+
              '<td><span class="stt '+st+'">'+LABEL[st]+'</span></td></tr>';
     }).join('');
 
@@ -1088,7 +1127,7 @@ var PROMOS = [{"id": "coffee", "eyebrow": "In the store", "title": "Fresh coffee
         /* ADR 0023: the button label is an editable field, not a fixed string.
            It falls back to "See details" only when an editor leaves it blank. */
         return '<a class="promo" style="grid-column:span '+spans[i]+'" href="#"><span class="pe">'+p.eyebrow+
-               '</span><b>'+p.title+'</b><span class="cta">'+(p.cta || 'See details')+'</span></a>';
+               '</span><b>'+p.headline+'</b><span class="cta">'+(p.cta || 'See details')+'</span></a>';
       }).join('') + '</div>';
     });
     region.innerHTML = html || '<div class="emptyregion">No promo is live at this moment &mdash; the region renders nothing at all. This dashed box is a review aid.</div>';
