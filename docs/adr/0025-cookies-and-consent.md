@@ -61,7 +61,7 @@ Two standing constraints follow, and they are the whole of the decision:
 1. **`/contact`'s map does not load Google until a guest asks it to.** *Confirmed by the client
    16 Sep 2026, against the alternative.* They were shown the plain reading — a raw iframe is
    legal for this site and needs no banner — and chose the façade anyway, so this is a decision
-   rather than a default, and the raw embed is closed rather than merely unbuilt.* ADR 0019's choice of
+   rather than a default, and the raw embed is closed rather than merely unbuilt. ADR 0019's choice of
    My Maps stands — the mechanism, the company account, the public setting, all unchanged. What
    changes is *when* the iframe mounts: the page renders a static map image with the three pins
    and a per-Location **Directions** link, and the iframe loads only if the guest clicks to open
