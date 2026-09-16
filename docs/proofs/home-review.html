@@ -448,10 +448,10 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 .rowbuild .setting{display:inline-flex; align-items:center; gap:7px; margin-left:auto; font-size:13px; color:var(--c-dim)}
 .rowbuild .setting input{width:56px; font:inherit; font-size:13px; padding:5px 7px; border-radius:6px; border:1px solid var(--c-line); background:var(--c-surface); color:var(--c-text)}
 .rowlist{display:flex; flex-direction:column; gap:8px}
-.rowitem{display:flex; align-items:center; gap:10px; background:var(--c-sunk); border:1px solid var(--c-line); border-radius:8px; padding:9px 11px}
+.rowitem{display:flex; flex-wrap:wrap; align-items:center; gap:10px; background:var(--c-sunk); border:1px solid var(--c-line); border-radius:8px; padding:9px 11px}
 .rowitem .n{font:500 10.5px/1 "IBM Plex Mono",monospace; color:var(--c-dim); min-width:44px}
-.rowitem select{font:inherit; font-size:13px; padding:5px 8px; border-radius:6px; border:1px solid var(--c-line); background:var(--c-surface); color:var(--c-text)}
-.rowitem .mini{display:flex; gap:3px; margin-left:6px; flex:1 1 auto; max-width:190px}
+.rowitem select{font:inherit; font-size:13px; padding:5px 8px; border-radius:6px; border:1px solid var(--c-line); background:var(--c-surface); color:var(--c-text); min-width:0; max-width:100%}
+.rowitem .mini{display:flex; gap:3px; margin-left:6px; flex:1 1 90px; min-width:70px; max-width:190px}
 .rowitem .mini i{background:var(--c-mark); opacity:.45; height:14px; border-radius:2px; display:block}
 .rowitem button{margin-left:auto; font:500 11px/1 "IBM Plex Sans",system-ui,sans-serif; color:var(--c-dim); background:none; border:1px solid var(--c-line); border-radius:6px; padding:6px 10px; cursor:pointer}
 .rowitem button:hover{color:var(--c-text); border-color:var(--c-dim)}
@@ -1261,5 +1261,30 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(place);
   addEventListener('load', place);
   apply();
+})();
+</script>
+
+<script>
+/* Phone stage: the frame is 375px so the preview is true to a phone, but 375
+   plus the page gutters needs 423px of viewport. Below that the frame scaled
+   nothing and the page itself scrolled sideways. Scale it down instead — the
+   same .scaler mechanism the desktop stage on this page already uses — and say
+   in the label when it is no longer actual size. */
+(function(){
+  var frp = document.getElementById('fr-p'), scp = document.getElementById('sc-p');
+  if (!frp || !scp) return;
+  var stage = frp.closest ? frp.closest('.stage') : frp.parentNode;
+  var dims = stage ? stage.querySelector('.dims') : null;
+  var PW = 375, PH = 667;
+  function fitPhone(){
+    var avail = frp.parentNode.clientWidth, s = Math.min(1, avail / PW);
+    scp.style.transform = 'scale(' + s + ') translateZ(0)';
+    frp.style.width  = Math.round(PW * s) + 'px';
+    frp.style.height = Math.round(PH * s) + 'px';
+    if (dims) dims.textContent = '375 \u00d7 667 viewport \u00b7 ' +
+      (s === 1 ? 'actual size' : 'shown at ' + Math.round(s * 100) + '%');
+  }
+  addEventListener('resize', fitPhone);
+  fitPhone();
 })();
 </script>

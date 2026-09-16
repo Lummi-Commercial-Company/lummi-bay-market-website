@@ -40,6 +40,9 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
 .stage{margin:30px 0 0}
 .stage h2{font:600 18px/1.2 "IBM Plex Sans",system-ui,sans-serif;margin:0 0 12px}
 .frame{background:var(--c-sunk);border:1px solid var(--c-line);border-radius:12px;overflow:hidden}
+/* the phone frame is 375px on purpose; it is the live-measurement rig, so it is
+   never scaled. Below 423px of viewport it scrolls here instead of the page. */
+.framescroll{overflow-x:auto;max-width:100%}
 
 /* ===== the site header ===== */
 .hdwrap{position:relative}
@@ -115,7 +118,7 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
 .note.warn h3{color:var(--c-warn)}
 .note p{margin:0;font-size:13.5px;line-height:1.55;max-width:none}
 .note p+p{margin-top:8px}
-.notes{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin:20px 0 0}
+.notes{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));margin:20px 0 0}
 </style>
 
 <div class="wrap">
@@ -170,7 +173,8 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
 
   <div class="stage">
     <h2>Phone &mdash; 375px</h2>
-    <div class="frame" style="width:375px">
+    <div class="framescroll">
+      <div class="frame" style="width:375px">
       <div class="hdwrap p">
         <header class="site-hd" id="hd-p">
           <!-- TODO: replace with authentic/approved Lummi art -->
@@ -180,6 +184,7 @@ hr.rule{border:0;border-top:1px solid var(--c-line);margin:40px 0}
           <span class="nav-btn" aria-hidden="true">&#9776;</span>
         </header>
         <div class="waterline"></div>
+      </div>
       </div>
     </div>
   </div>
