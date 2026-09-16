@@ -68,6 +68,8 @@ The two naming questions that came back with them were **settled by the client o
 3. **fishermans-cove** — nav "Fisherman's Cove"; shortLabel "The Cove"; aka The Cove.
    **CONFIRMED.** 2570 Lummi View Drive, Bellingham WA 98226 · open daily 6am–9pm ·
    360-758-2448. Amenities: fuel + convenience store, the Cove Kitchen, ethanol-free fuel.
+   **The Cove Kitchen is an Amenity, confirmed by the client 16 Sep 2026** — Lummi Bay Market
+   runs it, so it is not a tenant and does not depend on the undecided tenant question.
    No `truckStop` record.
    Full name **"Lummi Bay Market Fisherman's Cove"** — no "at", confirmed by the client.
 

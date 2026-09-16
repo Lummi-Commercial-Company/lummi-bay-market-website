@@ -213,6 +213,9 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   box-shadow:0 0 0 1.5px var(--lb-bone);
 }
 .pill.safe .pill-in{background:var(--lb-bone); color:var(--lb-navy); box-shadow:none}
+/* The truck stop button carries the same exception, so the toggle has to reach it as well --
+   otherwise "fully-passing" would still leave one failing control on screen. */
+.truckcall.safe .go{background:var(--lb-bone); color:var(--lb-navy); box-shadow:none}
 
 /* ===== emergency notice — ADR 0017 =====
    Rides inside the sticky header wrapper, so it cannot be scrolled past. Off by
@@ -480,7 +483,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 .truckcall .go{
   /* Cedar, on the owner's call -- the same decision already taken for the Rewards pill
      (ADR 0014 revision). Cedar measures 2.43:1 against the navy callout behind it, so the
-     bone ring carries the 1.4.11 boundary instead (bone/navy 7.48:1). The white label is
+     bone ring carries the 1.4.11 boundary instead (bone/navy 7.35:1). The white label is
      3.41:1 against cedar -- short of 4.5, and the same recorded exception as the pill. */
   margin-left:auto; background:var(--lb-cedar); color:#fff; border-radius:99px;
   box-shadow:0 0 0 1.5px var(--lb-bone);
@@ -804,10 +807,17 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 
     <div class="notes">
       <div class="note">
-        <h3>Changed · Rewards pill</h3>
-        <p>Now <strong>bone fill, navy label</strong>. It was cedar with white 11px text — that
-        measured 3.41:1 for the label and 2.43:1 for the fill against the navy header, so it failed
-        twice on every page of the site. Tick “Show the old cedar pill” to compare.</p>
+        <h3>The two cedar pills</h3>
+        <p>The Rewards pill and the truck stop button are both <strong>cedar fill, white label,
+        bone ring</strong> — cedar on the owner’s call, because it is the on-brand colour.</p>
+        <p>The <strong>ring is structural, not trim</strong>. Cedar against navy is 2.43:1 and a
+        button’s own edge needs 3:1, so without the ring the control has no visible boundary at
+        all. Bone against navy is 7.35:1 and carries it.</p>
+        <p>The <strong>white label is 3.41:1 against a 4.5:1 requirement</strong> — a fail, and a
+        knowing one. No label colour in the locked palette clears 4.5 on cedar; ink comes closest and
+        is still short at 4.33. Tick “Use the fully-passing pill” to swap both controls to the
+        bone fill and navy label that does pass, so the comparison stays available rather than
+        becoming a memory.</p>
       </div>
       <div class="note">
         <h3>Changed · uppercase labels</h3>
@@ -979,14 +989,16 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 
   <h2 style="font:600 19px/1.2 'IBM Plex Sans',system-ui,sans-serif; margin:0 0 6px">The contrast audit behind the two changes</h2>
   <p style="max-width:62ch">Run it yourself with <code>node docs/proofs/scripts/contrast.mjs</code>.
-  Only the pairs that moved are listed.</p>
+  This is the page as it stands, not a record of what changed.</p>
   <div class="tbl-scroll">
     <table class="audit">
       <thead><tr><th>Pair</th><th>Ratio</th><th>Needs</th><th>Where</th><th></th></tr></thead>
       <tbody>
-        <tr><td>White label on cedar fill</td><td class="num">3.41</td><td class="num">4.5</td><td>Rewards pill, every page</td><td><span class="tag bad">replaced</span></td></tr>
-        <tr><td>Cedar fill vs navy header</td><td class="num">2.43</td><td class="num">3.0</td><td>Rewards pill, every page</td><td><span class="tag bad">replaced</span></td></tr>
-        <tr><td>Navy label on bone fill</td><td class="num">7.35</td><td class="num">4.5</td><td>Rewards pill, now</td><td><span class="tag good">passes</span></td></tr>
+        <tr><td>White label on cedar fill</td><td class="num">3.41</td><td class="num">4.5</td><td>Both pills — the one accepted exception</td><td><span class="tag bad">accepted</span></td></tr>
+        <tr><td>Cedar fill vs navy</td><td class="num">2.43</td><td class="num">3.0</td><td>Both pills — fails alone, which is why the ring exists</td><td><span class="tag bad">ringed</span></td></tr>
+        <tr><td>Bone ring vs navy</td><td class="num">7.35</td><td class="num">3.0</td><td>Both pills — the boundary the ring carries</td><td><span class="tag good">passes</span></td></tr>
+        <tr><td>Ink label on cedar fill</td><td class="num">4.33</td><td class="num">4.5</td><td>The closest the palette gets — still short</td><td><span class="tag bad">rejected</span></td></tr>
+        <tr><td>Navy label on bone fill</td><td class="num">7.35</td><td class="num">4.5</td><td>The fully-passing variant, behind the toggle</td><td><span class="tag good">passes</span></td></tr>
         <tr><td>Cedar on ground, 10px</td><td class="num">3.24</td><td class="num">4.5</td><td>Section labels</td><td><span class="tag bad">replaced</span></td></tr>
         <tr><td>Navy on ground</td><td class="num">7.87</td><td class="num">4.5</td><td>Section labels, now</td><td><span class="tag good">passes</span></td></tr>
         <tr><td>Ink at .75 opacity on ground</td><td class="num">6.36</td><td class="num">4.5</td><td>Body copy — the old worry</td><td><span class="tag good">passes</span></td></tr>
@@ -1198,7 +1210,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
     fit();
   });
   safepill.addEventListener('change', function(){
-    [].slice.call(document.querySelectorAll('.pill')).forEach(function(n){
+    [].slice.call(document.querySelectorAll('.pill, .truckcall')).forEach(function(n){
       n.classList.toggle('safe', safepill.checked);
     });
   });

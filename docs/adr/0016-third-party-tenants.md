@@ -53,6 +53,12 @@ header image for the business, its hours, and a short description — the same s
 market terms, which is how a guest thinks of it and which cannot be confused with the LCC
 development. `aka: Salish Village` stays on the Location record; it is not the page title.
 
+**A tenant is never an Amenity either.** The two are told apart by who owns the counter: if
+Lummi Bay Market hires the staff and takes the revenue it is an Amenity on that Location; if the
+business pays rent for the space it is a tenant. The **Cove Kitchen is an Amenity** (client,
+16 Sep 2026) — it stays in Fisherman's Cove's `amenities` and is unaffected by whether tenants
+are ever advertised. The known tenants are all at Exit 260.
+
 **A tenant is never a Location.** It goes in `content/tenants/`, not `content/locations/`.
 This is the load-bearing part of the decision, because Location is not just a label: the
 location list is derived from that folder (ADR 0009) and the fuel price table takes its

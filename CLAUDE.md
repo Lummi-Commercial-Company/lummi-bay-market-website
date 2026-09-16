@@ -106,7 +106,9 @@ the layout and cannot be lost or moved by a page.
   Black Bear not yet built), and Hi-Tide Coffee (a coffee truck). All rent from LCC; the site never says so. **Whether to advertise them
   is undecided** — the collection ships empty and nothing renders until a page is published
   (ADR 0016). **A tenant is never a Location** (it would land in the Locations index and the
-  fuel price table) and never an Amenity (the Cove Kitchen is one; ownership decides).
+  fuel price table) and never an Amenity. **Settled 16 Sep 2026: the Cove Kitchen is an
+  Amenity, not a tenant** — Lummi Bay Market runs it, so it stays in Fisherman's Cove's
+  `amenities` and is unaffected by whether tenants are advertised at all.
   The index is its own page, "Also at Exit 260" — never "Salish Village" (ADR 0001 collision) — grouped by where each business is rather than alphabetically. Not in the nav.
 A new page never appears in the nav on its own — the nav stays three items (ADR 0008).
 

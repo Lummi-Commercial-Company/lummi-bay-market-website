@@ -284,6 +284,9 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   box-shadow:0 0 0 1.5px var(--lb-bone);
 }
 .pill.safe .pill-in{background:var(--lb-bone); color:var(--lb-navy); box-shadow:none}
+/* The truck stop button carries the same exception, so the toggle has to reach it as well --
+   otherwise "fully-passing" would still leave one failing control on screen. */
+.truckcall.safe .go{background:var(--lb-bone); color:var(--lb-navy); box-shadow:none}
 
 /* ===== emergency notice — ADR 0017 =====
    Rides inside the sticky header wrapper, so it cannot be scrolled past. Off by
@@ -500,7 +503,7 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 .truckcall .go{
   /* Cedar, on the owner's call -- the same decision already taken for the Rewards pill
      (ADR 0014 revision). Cedar measures 2.43:1 against the navy callout behind it, so the
-     bone ring carries the 1.4.11 boundary instead (bone/navy 7.48:1). The white label is
+     bone ring carries the 1.4.11 boundary instead (bone/navy 7.35:1). The white label is
      3.41:1 against cedar -- short of 4.5, and the same recorded exception as the pill. */
   margin-left:auto; background:var(--lb-cedar); color:#fff; border-radius:99px;
   box-shadow:0 0 0 1.5px var(--lb-bone);
@@ -1065,7 +1068,7 @@ var VARIANTS = {"standard": {"title": "Three stops on the bay", "sub": "Fuel, fo
     fit();
   });
   safepill.addEventListener('change', function(){
-    [].slice.call(document.querySelectorAll('.pill')).forEach(function(n){
+    [].slice.call(document.querySelectorAll('.pill, .truckcall')).forEach(function(n){
       n.classList.toggle('safe', safepill.checked);
     });
   });

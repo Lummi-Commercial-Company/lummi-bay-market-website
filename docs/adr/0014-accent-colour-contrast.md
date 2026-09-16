@@ -156,7 +156,7 @@ Measured for this control, against the callout's navy rather than the header's:
 
 | Pair | Ratio | Needs | |
 |---|---|---|---|
-| bone ring vs navy callout | 7.48 | 3.0 (1.4.11) | passes — the ring carries the boundary |
+| bone ring vs navy callout | 7.35 | 3.0 (1.4.11) | passes — the ring carries the boundary |
 | cedar fill vs navy callout | 2.43 | 3.0 (1.4.11) | fails alone; the ring is why it does not matter |
 | white label on cedar | 3.41 | 4.5 | the accepted exception, unchanged |
 

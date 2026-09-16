@@ -27,8 +27,10 @@ scarce — the fuel price band. Navigation never abbreviates it. Fuel + convenie
 ethanol-free fuel.
 
 **Amenity** — A service offered at a Location (e.g., a drive-thru, quick-serve food,
-ethanol-free fuel). A café or deli, if one exists at a Location, is an Amenity — not a
-separate brand or site section. The Truck Stop's showers and driver lounge are **not**
+ethanol-free fuel). A café or deli **that Lummi Bay Market runs** is an Amenity — not a
+separate brand or site section. The test is who owns the counter: if the company hires the
+staff and takes the revenue it is an Amenity; if someone pays rent for the space it is a
+Tenant. The **Cove Kitchen is an Amenity** — confirmed by the client 16 Sep 2026. The Truck Stop's showers and driver lounge are **not**
 Exit 260 amenities; they belong to the Truck Stop's own amenity set.
 
 **Tenant** — An independent business operating at a Lummi Bay Market property, renting from
