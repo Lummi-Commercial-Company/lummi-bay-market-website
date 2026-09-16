@@ -521,6 +521,11 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
   position:absolute; right:16px; border:0; border-radius:99px; cursor:pointer;
   background:var(--lb-navy); color:var(--lb-bone); display:grid; place-items:center;
   visibility:hidden; box-shadow:0 3px 12px rgba(20,57,107,.32); font-size:17px;
+  /* the disc is a sibling of .vp, so it shares the scaler's stacking context with
+     .site — and .site is z-index:1, which painted the whole page over the button.
+     2 is the whole fix: .site is a stacking context, so its own sticky header at 40
+     and price panel at 50 are sealed inside it and cannot reach past this. */
+  z-index:2;
   /* ADR 0014 discipline: the disc scrolls over ground AND over the navy footer.
      Navy fill carries it on ground (7.87); the bone ring carries it on the
      footer (7.35). A plain navy disc measures 1:1 against the footer. */
@@ -545,7 +550,10 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 .d .site-ft{margin-top:40px; padding:30px 26px 30px}
 .d .ft-cols{grid-template-columns:repeat(4,1fr)}
 .d .ft-base{margin-top:20px; padding-top:16px}
-#tt-d{width:44px; height:44px; bottom:18px}
+/* both stages on this page are desktop frames, so both discs take the desktop
+   metrics. #tt-i had no rule at all — the phone rule below is #tt-p, and this
+   page has no phone stage — so it rendered 22 x 24 at its static position. */
+#tt-d, #tt-i{width:44px; height:44px; bottom:18px}
 
 /* ---- phone frame metrics ---- */
 .p .site-hd{height:56px; padding:0 12px 0 10px; gap:8px}
