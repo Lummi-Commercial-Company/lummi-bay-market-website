@@ -66,11 +66,32 @@ Two standing constraints follow, and they are the whole of the decision:
    only form that means anything. If the click-to-load proves fiddly, the static image with
    Directions links **is** the shipped answer — it does what a guest actually wants, which is
    usually "open this in my own maps app".
-2. **B7's analytics product must be cookieless.** This is a hard constraint on an item that is
-   still open, not a preference. Vercel Web Analytics and Speed Insights are cookieless and are
-   already part of the platform. **Google Analytics is ruled out** — it is the single most common
-   way a site like this acquires a consent obligation it did not need, and it would reverse this
-   ADR on its own.
+
+   **The button carries a one-line notice, and that line is not decoration.** Consent has to be
+   *informed* as well as unambiguous: a bare click on something that looks like a map is the
+   second and not the first. So the façade reads *"Loading the interactive map connects to
+   Google, which may set cookies"* above a **Load map** control. One line of text is the whole
+   difference between a click that stands as consent and a click that merely happened — and it
+   interrupts nobody, because it sits on a control the guest was already choosing whether to
+   press. A façade built without it is worth building again.
+2. **Analytics is Vercel Web Analytics.** Chosen by the client 16 Sep 2026, which also **closes
+   B7**. Cookieless, already part of the Vercel Pro subscription the site is paying for either
+   way, and one line of code. It reports what was actually asked for — visitors, page views,
+   referrers, **device type**, OS/browser and **location** — which is the whole reason a heavier
+   product was being considered. *Two things to confirm at wiring time rather than assume: the
+   event allowance included with Pro, and whether it reports city or only country. If country is
+   too coarse, Plausible or Fathom is the cookieless step up, not GA.*
+
+   **Google Analytics was considered and declined**, and the reasoning matters more than the
+   outcome because it will be raised again. GA here would not have been *illegal* — no US law
+   forces a banner on this site, with or without it. What it costs is this ADR: a third party
+   profiling visitors means a privacy policy that names it, a real question the first time an EU
+   visitor arrives, and a live Lighthouse finding. It is also **materially undercounted** — ad
+   blockers and Safari's tracking prevention drop a routine 10–30% of GA4 hits, skewing the data
+   away from precisely the privacy-conscious and mobile-Safari visitors. Against all that it
+   offered nothing extra for device and location. **The one thing that would reverse this is
+   Google Ads**: conversion tracking is a real capability the cookieless products do not have, so
+   if a paid campaign starts, this decision is reopened on purpose rather than worked around.
 
 ## How you get past consent without a popup
 The trick is that there is no trick. **Consent is required for storage that is not strictly

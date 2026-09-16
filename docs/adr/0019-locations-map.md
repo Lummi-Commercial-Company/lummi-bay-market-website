@@ -62,7 +62,8 @@ not moved there later, because ownership transfer on consumer Google products is
   guest actually wants is usually "open this in my own maps app", which a link does.
   **Resolved 16 Sep 2026 by ADR 0025**, which weighed exactly that and kept both: `/contact`
   renders a static map image with per-Location Directions links, and mounts this iframe only if
-  a guest clicks to open the interactive map. Nothing above changes — the mechanism, the company
+  a guest clicks to open the interactive map — behind a one-line notice saying the map connects
+  to Google, which is what makes the click count as informed consent rather than just a click. Nothing above changes — the mechanism, the company
   account and the public setting all still apply — only *when* the iframe loads. The site sets no
   cookies before an explicit act, so there is no banner and no audit finding.
 - The embed is an iframe and iframes are heavy. It loads below the Location blocks, so it should

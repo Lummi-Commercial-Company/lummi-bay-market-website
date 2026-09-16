@@ -39,7 +39,7 @@ compressed by working faster.
 | B4 | `exit260.com` → `lummibay.com/locations/exit-260` **301** | Permanent, not 302 — a 302 keeps the old domain in search results |
 | B5 | Redirect map from the three old sites' URLs | Every indexed URL that will not exist needs a target, or search traffic lands on 404s |
 | B6 | Technical SEO | Titles, meta, canonical tags, `sitemap.xml`, `robots.txt`, LocalBusiness structured data per Location |
-| B7 | Analytics | Which product, and who reads it. **The product must be cookieless** (ADR 0025) — Vercel Web Analytics and Speed Insights are, and are already on the platform. **Google Analytics is ruled out**: it would hand the site a consent obligation it does not otherwise have |
+| ~~B7~~ | ~~Analytics~~ **Decided** — **Vercel Web Analytics** (client, 16 Sep 2026). Cookieless, included with the Pro plan already being paid for, one line of code; reports visitors, referrers, device type, OS/browser and location, which is what was asked for. Confirm at wiring time: the Pro event allowance, and city vs country granularity. **GA4 declined** — not for legality but because it would cost the no-banner position and arrives 10–30% undercounted by blockers (ADR 0025). Reopen it only for Google Ads conversion tracking. Still open: **who actually reads it** |
 | ~~B8~~ | ~~Rebuild strategy for fuel prices~~ **Settled** | Neither rebuild nor ISR — the block renders per request behind `<Suspense>` and reads the TinaCloud content API, so there is nothing to invalidate (ADR 0024). Build it wrong and it looks built: a per-request render of the **built** `content/fuel-prices.json` is exactly as stale as a static page. `output: 'export'` is now impossible twice over — ADR 0017 and ADR 0024 |
 | B9 | Accessibility pass | Targets and contrast are designed; the built site still needs a real audit |
 | B10 | Performance budget | Static-first makes this achievable, images are what will break it |
@@ -63,7 +63,7 @@ creating anything.
 | **Vercel** | Phase 1, when the app is first deployed | **Do not start the Pro trial now.** It is **14 days, one per user account** — started today it expires long before launch, and it is the only free look at Pro. Either pay from the day you connect ($20/mo during the build is noise) or hold the trial for the final fortnight. |
 | **TinaCloud** | Phase 2, once there is real content to edit | Set up by whoever holds GitHub — only that person needs it. An empty CMS teaches staff nothing, so provision it when there is something to click. |
 | Staff editor logins ×2 | Phase 2, at training | Decide *which two people* before provisioning: shared logins destroy the per-person history that is half the point (ADR 0013). Deferred by the client (A7) — the deadline is training, not now |
-| Analytics | Phase 3 | Pick the product and the person who will actually read it. Cookieless only (ADR 0025) |
+| Analytics | Phase 3 | Product decided — Vercel Web Analytics, so there is no account to create, only a toggle on the existing Vercel project (ADR 0025). What is left is naming **the person who will actually read it** |
 | ~~Contact form inbox~~ | ~~Phase 3~~ **never** | There is no form anywhere on the site (ADR 0015), so A10 was dropped and no inbox is nominated. Phone and address are the contact routes and there is no spam protection to build |
 
 **The rule:** create an account when the work that needs it starts — but confirm access *today*
