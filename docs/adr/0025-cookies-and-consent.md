@@ -58,7 +58,10 @@ is theatre that every guest has to dismiss.
 
 Two standing constraints follow, and they are the whole of the decision:
 
-1. **`/contact`'s map does not load Google until a guest asks it to.** ADR 0019's choice of
+1. **`/contact`'s map does not load Google until a guest asks it to.** *Confirmed by the client
+   16 Sep 2026, against the alternative.* They were shown the plain reading — a raw iframe is
+   legal for this site and needs no banner — and chose the façade anyway, so this is a decision
+   rather than a default, and the raw embed is closed rather than merely unbuilt.* ADR 0019's choice of
    My Maps stands — the mechanism, the company account, the public setting, all unchanged. What
    changes is *when* the iframe mounts: the page renders a static map image with the three pins
    and a per-Location **Directions** link, and the iframe loads only if the guest clicks to open
@@ -142,6 +145,12 @@ it is added.
   ADR 0019 anticipated. That was the concrete, non-speculative cost of the embed, and this
   removes it.
 - **A static map image is one more asset the designer owes**, against a 100 MB CMS asset cap
-  (A3). It is small, but it is not free, and it should be listed rather than discovered.
+  (A3). It is small, but it is not free, and it should be listed rather than discovered. Take the
+  still **from the finished My Maps**, so the pins a guest sees at rest are the pins the click
+  opens — two separately-drawn maps that disagree is the failure mode here, and it is the kind
+  nobody tests for.
+- **The façade has a real cost and it is one click**, paid by the minority who want to pan and
+  zoom rather than tap Directions and leave. That is the trade, it was made with open eyes, and
+  it is not a bug report when someone notices it.
 - **This is worth one plain sentence to the client**, since they asked a legal question: no
   banner is required, and we went further and built the site so the question does not arise.
