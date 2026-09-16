@@ -96,6 +96,8 @@ hr.rule{border:0; border-top:1px solid var(--c-line); margin:46px 0}
 .stage{margin:30px 0 0}
 .stage>.board{overflow-x:auto; overscroll-behavior-x:contain}
 .stage-hd{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:0 0 12px}
+h3.sub{font:600 15px/1.25 "IBM Plex Sans",system-ui,sans-serif;
+  margin:30px 0 8px; color:var(--c-text)}
 .stage-hd h3{font:600 16px/1.2 "IBM Plex Sans",system-ui,sans-serif; margin:0}
 .stage-hd .dims{
   font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;
@@ -161,6 +163,19 @@ hr.rule{border:0; border-top:1px solid var(--c-line); margin:46px 0}
 /* the overflow marker: the page measures each overlay against its slot at load
    and stamps this on the ones that do not fit. Nothing here is hand-set. */
 .slot .tx.spill{outline:2px solid var(--c-warn); outline-offset:-2px}
+
+/* Section 05 compares the field sets, so its overlays cannot be behind the
+   global text toggle — they are the subject, not an annotation. .qz draws the
+   quiet zone: the strip of photograph the text actually sits on, sized at
+   runtime to the height measure() just calculated, never to a guessed number. */
+.slot.on .tx{display:flex}
+.slot .qz{position:absolute; left:0; right:0; bottom:0; height:var(--qz,0px);
+  opacity:0; pointer-events:none; z-index:2;
+  outline:1px dashed var(--c-warn); outline-offset:-1px;
+  background:linear-gradient(var(--c-warn-soft),var(--c-warn-soft));}
+.showqz .slot .qz{opacity:.40}
+.slot .qz b{position:absolute; right:7px; bottom:4px; font:500 9px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.06em; color:var(--c-warn);}
 .slot .tx .rd{
   position:absolute; top:6px; right:7px; font:500 9px/1 "IBM Plex Mono",ui-monospace,monospace;
   letter-spacing:.06em; padding:3px 5px; border-radius:4px;
@@ -296,6 +311,7 @@ footer.pf{
     <span class="ctl-lab">Overlays</span>
     <label class="sw"><input type="checkbox" id="t-band" checked> Safe band (5:1)</label>
     <label class="sw"><input type="checkbox" id="t-text"> Live text fields</label>
+    <label class="sw"><input type="checkbox" id="t-qz"> Quiet zone (§05)</label>
     <span class="ctl-lab">Master</span>
     <label class="sw"><input type="radio" name="src" value="img/crop-counter.jpg" checked> A — subject centred</label>
     <label class="sw"><input type="radio" name="src" value="img/crop-storefront.jpg"> B — subject low in frame</label>
@@ -399,7 +415,7 @@ footer.pf{
       <h4>Watch the readout with text on</h4>
       <p>Switch on the live text fields and each slot reports <code>needed / available</code>,
       measured in the browser rather than worked out on paper. The four fields fit every slot
-      in the ladder at short copy. What the quarter cannot absorb is length — section 04 finds
+      in the ladder at short copy. What the quarter cannot absorb is length — sections 04 and 05 find
       where it breaks.</p>
     </div>
   </div>
@@ -525,7 +541,7 @@ horizontal loss   none, at any slot width</div>
   field plausibly runs, which makes these the most generous numbers available.</p>
 
   <div class="finding">
-    <h4><span class="id">F3</span>All four fields fit every slot. Roughly 130 characters is where the quarter breaks</h4>
+    <h4><span class="id">F3</span>All four fields fit every slot. Roughly 115 characters is where the quarter breaks</h4>
     <div class="math">four fields, one line each, any slot width          = 113 px
 quarter slot height                                = 163 px
                                                      ------
@@ -542,15 +558,20 @@ headroom at the quarter                            =  50 px  — about two extra
           <tr><td>Wide half</td><td class="num">795 × 265</td><td class="num">92 ch</td><td class="num">125 ch</td><td class="num">no practical limit</td></tr>
           <tr><td>Half</td><td class="num">593 × 198</td><td class="num">67 ch</td><td class="num">92 ch</td><td class="num">no practical limit</td></tr>
           <tr><td>Third</td><td class="num">391 × 196</td><td class="num">44 ch</td><td class="num">58 ch</td><td class="num">266 ch</td></tr>
-          <tr class="fail"><td><b>Quarter</b></td><td class="num">290 × 163</td><td class="num">32 ch</td><td class="num">43 ch</td><td class="num"><b>130 ch</b></td></tr>
-          <tr><td>Phone, any row</td><td class="num">351 × 197</td><td class="num">39 ch</td><td class="num">53 ch</td><td class="num">240 ch</td></tr>
+          <tr class="fail"><td><b>Quarter</b></td><td class="num">290 × 163</td><td class="num">32 ch</td><td class="num">43 ch</td><td class="num"><b>115 ch</b></td></tr>
+          <tr><td>Phone, any row</td><td class="num">351 × 197</td><td class="num">39 ch</td><td class="num">53 ch</td><td class="num">no practical limit</td></tr>
         </tbody>
       </table>
     </div>
 
-    <p>Read the quarter row as: a headline of about 45 characters plus a body of about 85, and it
+    <p>Read the quarter row as: a headline of about 45 characters plus a body of about 70, and it
     is full. One more sentence and the text runs off the bottom of the picture. Nothing in the
     page stops an editor typing that sentence.</p>
+
+    <p class="fine">The quarter figure was tightened after section 05 was built. The first sweep
+    ran one word pool and returned 130 characters; run against six samples of realistic promo
+    prose it returns 115, because real sentences wrap worse than an evenly-worded string. The
+    table shows the six-sample worst case, which is the only number safe to put in a CMS.</p>
 
     <p>Which points at a different remedy than the draft had. Not "drop the body field" — the
     field fits — but <b>put character counters on the promo fields and set them to the narrowest
@@ -567,13 +588,193 @@ headroom at the quarter                            =  50 px  — about two extra
     button. There is no body field in the approved design and therefore no approved size for one.
     The measurements above assume the four-field version because the spec sheet is what a
     photographer and an editor are handed. If the answer is three fields, the quarter ceiling
-    rises to about 124 characters of headline alone and the body row above is moot.</p>
+    rises to about 124 characters of headline alone and the body row above is moot. Section 05
+    puts the two field sets side by side and measures what the difference is worth.</p>
   </div>
 
   <hr class="rule">
 
   <!-- ===================================================== 05 -->
-  <h2 class="sec"><span class="n">05 / the phone</span>Every row collapses to one column</h2>
+  <h2 class="sec"><span class="n">05 / the field set</span>Three fields or four, measured side by side</h2>
+  <p>Section 04 ends on a contradiction: the spec sheet names four live fields, the approved card
+  renders three. This section is that comparison drawn rather than argued. It is a question about
+  the <b>promo card</b> — the tile in the row — not about the info page it links to. The card is
+  the trailer; the info page is the film, and the film has as much room as it likes.</p>
+
+  <p class="fine">The overlays in this section are always on, independent of the toggles above,
+  because they are the subject. Every badge is measured in the browser: <code>text height /
+  slot height</code>. Turn on <b>Quiet zone (§05)</b> to shade the strip of photograph the text
+  actually covers.</p>
+
+  <h3 class="sub">A — the floor, at the narrowest slot</h3>
+  <p>One line in every field, the shortest copy anyone would ship. This is the cost of the field
+  set before an editor types anything long.</p>
+
+  <div class="cols">
+    <div>
+      <div class="stage-hd"><h3>Three fields</h3><span class="dims">eyebrow · headline · button</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="align-items:center">
+          <div class="slot on" style="--w:290px; --ar:16/9; --band:55.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap">290 × 163 · the approved card's field set</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="stage-hd"><h3>Four fields</h3><span class="dims">eyebrow · headline · body · button</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="align-items:center">
+          <div class="slot on" style="--w:290px; --ar:16/9; --band:55.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky</span><span class="bd">Baked through the morning.</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap">290 × 163 · the spec sheet's field set</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub">B — the same two cards with copy an editor would actually write</h3>
+  <p>A 42-character headline on both. The four-field card adds an 85-character body, which is
+  what the §04 draft budget allowed. Nothing else changes — and the four-field card does not
+  fit. The page stamps it, so the recommendation in §04 was corrected to 45/70 rather than the
+  copy being trimmed until the picture agreed.</p>
+
+  <div class="cols">
+    <div>
+      <div class="stage-hd"><h3>Three fields</h3><span class="dims">headline carries it</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="align-items:center">
+          <div class="slot on" style="--w:290px; --ar:16/9; --band:55.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here every morning</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap">290 × 163 · a third of the frame left clear</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="stage-hd"><h3>Four fields</h3><span class="dims">headline + body at the §04 cap</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="align-items:center">
+          <div class="slot on" style="--w:290px; --ar:16/9; --band:55.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here every morning</span><span class="bd">Hand-filled pastries, sweet and savoury, pulled from the oven from six until sold out.</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap"><b>Overflows by 7px</b>290 × 163 · the §04 draft cap is not safe</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note warn">
+      <h4>This is what the quiet zone toggle is for</h4>
+      <p>Whatever the shaded strip covers, the photograph cannot use. At the quarter the
+      three-field card leaves two thirds of the frame clear; the four-field card at the §04 cap
+      leaves almost none. The brief to a photographer is different in the two cases, and the
+      brief is written before anyone knows which slot a promo will end up in.</p>
+    </div>
+    <div class="note warn">
+      <h4>The spill in B is the point, not a mistake in the example</h4>
+      <p>B was written to the §04 draft cap of 45 characters of headline and 85 of body. It
+      overflows the quarter by 7px, because the headline takes two lines and the body three. The
+      cap was measured again against six samples of realistic promo prose and comes back at
+      <b>45 / 70</b>; the earlier 45 / 85 came from a single evenly-worded string, which wraps
+      more kindly than English does. The argument for three fields is still not that four
+      overflow — it is what four do to the picture underneath, and to how little an editor may
+      then write.</p>
+    </div>
+  </div>
+
+  <h3 class="sub">C — the same question at full width</h3>
+  <p>1200 × 240, the widest slot. Same field sets, same copy and the same photograph as B —
+  only the width changes.</p>
+
+  <div class="stage">
+    <div class="board lit">
+      <div class="col" style="gap:20px">
+        <div class="slot on" style="--w:1200px; --ar:5/1; --band:40%">
+          <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here every morning</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+        </div>
+        <p class="cap"><b>Three fields</b>1200 × 240 · 5:1</p>
+        <div class="slot on" style="--w:1200px; --ar:5/1; --band:40%">
+          <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here every morning</span><span class="bd">Hand-filled pastries, sweet and savoury, pulled from the oven from six until sold out.</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+        </div>
+        <p class="cap"><b>Four fields</b>1200 × 240 · 5:1 · the body field costs the picture nothing here</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="finding">
+    <h4><span class="id">F4</span>The body field costs the same everywhere and buys almost nothing where it is needed</h4>
+    <div class="math">three-field floor, one line each      =  89 px
+four-field floor, one line each       = 113 px
+                                        ------
+cost of the body field, before a word =  24 px   — identical at every slot width
+
+quarter slot                          = 163 px
+  three fields, worst case            = 110 ch  (headline alone)
+  four fields, worst case             = 115 ch  (45 headline + 70 body)
+                                        ------
+  what the fourth field buys          =   5 ch</div>
+    <p>Characters are the wrong unit for reading that, though. The overlay grows in whole lines:
+    above the four-field floor the quarter has 50px of headroom, one more headline line costs
+    about 20px and one more body line about 18px. So the quarter grants <b>two extra lines</b>
+    with four fields and about four with three. The body field does not buy an editor more room;
+    it spends the room on a second typographic register.</p>
+
+    <p>Sweeping both field sets against every slot, against copy someone would really write:</p>
+
+    <div class="tbl-scroll">
+      <table class="audit">
+        <thead><tr><th>Slot</th><th class="num">Size</th><th class="num">Three fields hold</th><th class="num">Four fields hold</th><th class="num">Bought by the body field</th></tr></thead>
+        <tbody>
+          <tr><td>Full width</td><td class="num">1200 × 240</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+          <tr><td>Wide half</td><td class="num">795 × 265</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+          <tr><td>Half</td><td class="num">593 × 198</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+          <tr><td>Third</td><td class="num">391 × 196</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+          <tr class="fail"><td><b>Quarter</b></td><td class="num">290 × 163</td><td class="num">110 ch</td><td class="num"><b>45 / 70 ch</b></td><td class="num"><b>+5 ch</b></td></tr>
+          <tr><td>Phone, any row</td><td class="num">351 × 197</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="fine">Method: six samples of realistic promo copy — bakery, truck stop, coffee
+    truck, fuel, Wendy's, the Cove — truncated at a word boundary and swept until the overlay
+    overflowed, with the worst of the six reported. "Every sample" means the longest copy in the
+    set fits with room left, so no cap is needed there.</p>
+
+    <p>Read down the last column: <b>the quarter is the only slot where any of this bites.</b>
+    Everywhere else both field sets hold copy longer than anyone will write, so the body field
+    is free. At the quarter it costs 24px of floor to buy five characters.</p>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <h4>A third option the comparison surfaces</h4>
+      <p>Keep the body field and hide it below a slot-width threshold. The table puts that
+      threshold in one place: it renders everywhere except the quarter, and drops out there,
+      where it costs 24px of floor to buy five characters. One field in the CMS, two behaviours
+      in the layout, and editors keep a body field for every promo that has room for one. It
+      needs a rule for what the body says when it is not shown: nothing load-bearing may live
+      there, which is the same discipline the safe band imposes on the picture. It also removes
+      the two-number cap — the CMS counts one budget, not a headline cap and a body cap that
+      interact.</p>
+    </div>
+    <div class="note warn">
+      <h4>The button may not be an editable field either</h4>
+      <p>The approved card in <code>promo-system.html</code> hardcodes the label
+      <code>See details</code> — it is not read from the promo document. So the live count on the
+      approved design is two editable fields, not three: eyebrow and headline. Whichever way the
+      body field goes, the button label needs its own answer, and an editable label is the only
+      version that lets a promo say <i>Order ahead</i> or <i>Directions</i>.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ===================================================== 06 -->
+  <h2 class="sec"><span class="n">06 / the phone</span>Every row collapses to one column</h2>
   <p>On a phone the row layout is irrelevant — one column, 351px wide inside a 390px viewport.
   A promo designed as a quarter and a promo designed as full width render identically.</p>
 
@@ -605,16 +806,17 @@ headroom at the quarter                            =  50 px  — about two extra
     </div>
     <div class="note">
       <h4>The phone is roomier than the quarter, and that is a trap</h4>
-      <p>351 × 197 takes about 240 characters before the text overflows; the desktop quarter takes
-      130. So copy written and checked on a phone can be half as long again as the narrowest
-      desktop slot will hold — and the row that shows it as a quarter is one expiry away.</p>
+      <p>351 × 197 holds every sample of realistic copy section 05 threw at it; the desktop
+      quarter stops at about 115 characters. So copy written and checked on a phone can be well
+      past what the narrowest desktop slot will hold — and the row that shows it as a quarter is
+      one expiry away.</p>
     </div>
   </div>
 
   <hr class="rule">
 
-  <!-- ===================================================== 06 -->
-  <h2 class="sec"><span class="n">06 / decision</span>What needs signing off</h2>
+  <!-- ===================================================== 07 -->
+  <h2 class="sec"><span class="n">07 / decision</span>What needs signing off</h2>
 
   <div class="decision">
     <h3>Put to whoever owns the brand, before artwork is commissioned</h3>
@@ -626,14 +828,23 @@ headroom at the quarter                            =  50 px  — about two extra
       This is the instruction that goes to a photographer. It is derived from the ratios, so it
       changes if they do.
       <span class="tag mark">recommend: approve with the ratios</span></li>
-      <li><b>The quarter text budget — about 130 characters of headline and body together.</b>
-      The four fields do fit; length is what breaks. Cap the promo fields in the CMS at the
+      <li><b>The quarter text budget — about 115 characters of headline and body together.</b>
+      The four fields do fit; length is what breaks. Section 05 draws the same budget as picture:
+      at the cap the text covers 93% of a quarter-width frame, against 67% with three fields. Cap the promo fields in the CMS at the
       narrowest slot, not the one the promo is written for, because rows re-divide.
-      <span class="tag mark">recommend: 45-character headline, 85-character body, counted in the editor</span></li>
+      <span class="tag mark">recommend: 45-character headline, 70-character body, counted in the editor</span></li>
       <li><b>Three fields or four.</b> Spec sheet §07 says eyebrow, headline, body, button; the
-      approved card renders eyebrow, headline, button. One of the two is wrong and the numbers
-      above move depending on which.
-      <span class="tag mark">recommend: settle it here, then correct the loser</span></li>
+      approved card renders eyebrow, headline, button. One of the two is wrong. Section 05
+      measures the difference: the body field costs 24px of floor at every slot width and buys
+      six characters at the quarter, eight at the third, fourteen on the phone and nothing at
+      all in the three widest slots. It is free where there is room and near-useless where there
+      is not — so a third option is on the table: keep the field and hide it below a slot-width
+      threshold.
+      <span class="tag mark">recommend: keep the body field, hide it below the third</span></li>
+      <li><b>Is the button label editable.</b> The approved card hardcodes <code>See details</code>,
+      which makes the live count on that design two fields, not three. A promo that wants to say
+      <i>Order ahead</i> or <i>Directions</i> cannot.
+      <span class="tag mark">recommend: make the label a field, default "See details"</span></li>
       <li><b>Re-run this page against real photography</b> once any exists. The stand-ins prove
       the geometry; they cannot tell you whether a real subject reads at 290px.</li>
     </ol>
@@ -675,8 +886,9 @@ headroom at the quarter                            =  50 px  — about two extra
   }
   bind('t-band', 'showband');
   bind('t-text', 'showtext');
+  bind('t-qz', 'showqz');
 
-  // Section 01 swaps master; sections 03 and 05 are fixed comparisons, so only
+  // Section 01 swaps master; sections 03, 05 and 06 are fixed comparisons, so only
   // images marked data-src follow the radio.
   var swappable = document.querySelectorAll('img[data-src]');
   function setSrc(v) { swappable.forEach(function (im) { im.src = v; }); }
@@ -695,24 +907,32 @@ headroom at the quarter                            =  50 px  — about two extra
     tx.appendChild(rd);
   });
   function measure() {
-    if (!body.classList.contains('showtext')) return;
     overlays.forEach(function (tx) {
+      // An overlay behind the global toggle measures nothing; section 05's are
+      // always on. A field that is not laid out still reports its specified
+      // margin-top, so skip it outright rather than counting a phantom 6px.
+      if (getComputedStyle(tx).display === 'none') return;
       var slot = tx.parentNode.getBoundingClientRect().height;
       var cs = getComputedStyle(tx);
       var need = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
       [].slice.call(tx.children).forEach(function (k) {
         if (k.className === 'rd') return;
         var ks = getComputedStyle(k);
+        if (ks.display === 'none') return;
         need += k.getBoundingClientRect().height + parseFloat(ks.marginTop);
       });
       need = Math.round(need);
       var over = need - Math.round(slot);
       tx.classList.toggle('spill', over > 0);
+      tx.parentNode.style.setProperty('--qz', need + 'px');
+      var qz = tx.parentNode.querySelector('.qz b');
+      if (qz) qz.textContent = Math.round(need / slot * 100) + '% of the slot';
       tx.querySelector('.rd').textContent =
         need + ' / ' + Math.round(slot) + (over > 0 ? '  +' + over : '');
     });
   }
   document.getElementById('t-text').addEventListener('change', measure);
+  document.getElementById('t-qz').addEventListener('change', measure);
   window.addEventListener('resize', measure);
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(measure); }
   measure();
