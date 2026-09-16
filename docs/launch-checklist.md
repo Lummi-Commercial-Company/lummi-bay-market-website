@@ -28,7 +28,7 @@ compressed by working faster.
 | A19 | **The built map itself** — three pins, public, iframe handed over | `/contact` | Steps are in ADR 0019. The iframe goes in a CMS field, not the markup, or every future change is an engineering task |
 | A17 | **A company Google account, if My Maps is used** | The map, permanently | A map built in a personal account leaves with that person. Same failure as A6, and consumer-product ownership transfer is not reliable — create it in the right account first |
 | A18 | **Cookie/consent decision** | Any third-party embed | The site tracks nobody today and has no banner. An embedded Google map loads third-party code and sets cookies; a static image does not |
-| A20 | **The social share card artwork** — 1200 × 630 | Every link anyone pastes anywhere | One sitewide default is the minimum and it cannot be left blank: with no image the platform scrapes whatever it finds, which on a Location page is a 26px motif. Size, safe area and the rules are in ADR 0022 and on the designer spec sheet. Then the three Locations and `/truck-stop`, in that order |
+| A20 | **Per-Location share cards** — 1200 × 630 | Nothing — the sitewide default already covers every link | **The sitewide default is done**, at `public/brand/share/share-default-2026-09.jpg`, so nothing scrapes a 26px motif any more. What is left is the better version of the same thing: the three Locations and `/truck-stop`, in that order. Size, safe area and the rules are in ADR 0022, on the designer spec sheet and in `docs/lummi-bay-asset-specs-brand-guide.pdf` |
 
 ## B. Engineering
 | # | Item | Notes |
@@ -64,7 +64,7 @@ creating anything.
 | **TinaCloud** | Phase 2, once there is real content to edit | Set up by whoever holds GitHub — only that person needs it. An empty CMS teaches staff nothing, so provision it when there is something to click. |
 | Staff editor logins ×2 | Phase 2, at training | Decide *which two people* before provisioning: shared logins destroy the per-person history that is half the point (ADR 0013) |
 | Analytics | Phase 3 | Pick the product and the person who will actually read it |
-| Contact form inbox | Phase 3 | Also decides whether spam protection is needed |
+| ~~Contact form inbox~~ | ~~Phase 3~~ **never** | There is no form anywhere on the site (ADR 0015), so A10 was dropped and no inbox is nominated. Phone and address are the contact routes and there is no spam protection to build |
 
 **The rule:** create an account when the work that needs it starts — but confirm access *today*
 to anything that already exists. The registrar is the one that bites.
