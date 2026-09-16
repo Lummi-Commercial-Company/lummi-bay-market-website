@@ -470,7 +470,10 @@ details[open] .face{visibility:hidden}
 .truckcall h4{font:700 1.0625rem/1.2 "Space Grotesk",Archivo,sans-serif;color:#fff;margin:0 0 4px}
 .truckcall p{font:400 .8125rem/1.45 Inter,sans-serif;color:var(--lb-bone);opacity:.85;margin:0;
   max-width:44ch}
+/* Cedar here already; the bone ring is what was missing. Cedar is 2.43:1 against the navy
+   callout, so without a ring the button's own edge fails WCAG 1.4.11. ADR 0014. */
 .truckcall .go{margin-left:auto;background:var(--lb-cedar);color:#fff;border-radius:99px;
+  box-shadow:0 0 0 1.5px var(--lb-bone);
   padding:8px 14px;font:600 .6875rem/1 Inter,sans-serif;letter-spacing:.07em;flex:0 0 auto}
 .homefoot{margin-top:22px;background:var(--lb-navy);border-radius:12px 12px 0 0;padding:16px;
   display:grid;gap:10px;grid-template-columns:1fr}

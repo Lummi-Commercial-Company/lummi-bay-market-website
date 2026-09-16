@@ -535,7 +535,12 @@ table.audit td.num{font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono
 .truckcall h3{font:700 15px/1.2 "Space Grotesk",Inter,sans-serif; margin:0 0 3px; color:var(--lb-bone)}
 .truckcall p{margin:0; font:400 12px/1.45 Inter,sans-serif; color:var(--lb-bone); opacity:.86}
 .truckcall .go{
-  margin-left:auto; background:var(--lb-bone); color:var(--lb-navy); border-radius:99px;
+  /* Cedar, on the owner's call -- the same decision already taken for the Rewards pill
+     (ADR 0014 revision). Cedar measures 2.43:1 against the navy callout behind it, so the
+     bone ring carries the 1.4.11 boundary instead (bone/navy 7.48:1). The white label is
+     3.41:1 against cedar -- short of 4.5, and the same recorded exception as the pill. */
+  margin-left:auto; background:var(--lb-cedar); color:#fff; border-radius:99px;
+  box-shadow:0 0 0 1.5px var(--lb-bone);
   font:600 11px/1 Inter,sans-serif; flex:0 0 auto; display:inline-flex; align-items:center;
 }
 
