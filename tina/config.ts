@@ -226,8 +226,14 @@ const locations: Collection = {
   ui: { allowedActions: { create: false, delete: false } },
   fields: [
     {
+      // Every Tina document already has a built-in `id`, so a content field
+      // called `id` collides in the generated GraphQL schema. `nameOverride`
+      // keeps the key in the .mdx file as `id` — which is what the content
+      // model specifies and what lib/locations.ts reads — while Tina's own
+      // name for it is `slug`.
       type: 'string',
-      name: 'id',
+      name: 'slug',
+      nameOverride: 'id',
       label: 'Location ID',
       description: 'Set once when the location was created. Changing it breaks the web address and every link to it.',
       required: true,
@@ -365,9 +371,25 @@ const fuelPrices: Collection = {
       name: 'locations',
       label: 'Store prices',
       fields: [
-        { type: 'object', name: 'exit-260', label: 'Exit 260', fields: priceFields() },
+        // `nameOverride` keeps the JSON key the location slug (`exit-260`) while
+        // Tina's own field name stays alphanumeric, which is all Tina allows.
+        // The slug in the file is what `lib/fuel-prices.ts` reads — it must not
+        // change.
+        {
+          type: 'object',
+          name: 'exit_260',
+          nameOverride: 'exit-260',
+          label: 'Exit 260',
+          fields: priceFields(),
+        },
         { type: 'object', name: 'minimart', label: 'Minimart', fields: priceFields() },
-        { type: 'object', name: 'fishermans-cove', label: 'Fisherman’s Cove', fields: priceFields() },
+        {
+          type: 'object',
+          name: 'fishermans_cove',
+          nameOverride: 'fishermans-cove',
+          label: 'Fisherman’s Cove',
+          fields: priceFields(),
+        },
       ],
     },
     {
