@@ -1,6 +1,5 @@
 import { readFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
-import { cache } from 'react'
 
 /**
  * Filesystem access to the content files in this repo.
@@ -36,7 +35,7 @@ export async function readContentJson<T>(relativePath: string): Promise<T | null
   }
 }
 
-export const listContentFiles = cache(async function listContentFiles(
+export async function listContentFiles(
   dir: string,
   extensions: string[] = ['.md', '.mdx']
 ): Promise<string[]> {
@@ -48,4 +47,4 @@ export const listContentFiles = cache(async function listContentFiles(
   } catch {
     return []
   }
-})
+}

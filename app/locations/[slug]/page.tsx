@@ -5,7 +5,9 @@ import { Suspense } from 'react'
 import styles from '../../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
-import { getLocation, getLocations, LOCATION_ORDER, resolveHours } from '@/lib/locations'
+import { LiveCardLine } from '@/components/locations/LiveCardLine'
+import { LiveHours } from '@/components/locations/LiveHours'
+import { getLocation, getLocations, LOCATION_ORDER } from '@/lib/locations'
 import { JsonLd, locationJsonLd } from '@/lib/structured-data'
 import type { LocationSlug } from '@/lib/types'
 
@@ -37,9 +39,6 @@ export default async function LocationPage({
   const location = await getLocation(slug as LocationSlug)
   if (!location) notFound()
 
-  // Evaluated per request against the visitor's date in Pacific time, so a
-  // scheduled override reverts on its own (ADR 0027).
-  const hours = resolveHours(location.hours, location.hoursOverrides)
   const others = (await getLocations()).filter((other) => other.id !== location.id)
 
   return (
@@ -56,17 +55,17 @@ export default async function LocationPage({
           </dd>
 
           <dt>Hours</dt>
+          {/* Per request in Pacific time, so a scheduled override starts and
+              reverts on its own. The fallback is the standard line, so the
+              prerendered page never shows a gap where an opening time goes. */}
           <dd>
-            {hours.hours}
-            {hours.isOverride ? (
-              <>
-                {' '}
-                <span className={styles.overrideNote}>
-                  (usually {hours.standardHours}
-                  {hours.reason ? ` — ${hours.reason}` : ''})
-                </span>
-              </>
-            ) : null}
+            <Suspense fallback={location.hours}>
+              <LiveHours
+                hours={location.hours}
+                overrides={location.hoursOverrides}
+                showReason
+              />
+            </Suspense>
           </dd>
 
           <dt>{location.id === 'exit-260' ? 'C-Store' : 'Phone'}</dt>
@@ -103,7 +102,13 @@ export default async function LocationPage({
             <p>
               A separate fuel station for truckers on the same property:{' '}
               {location.truckStop.amenities.join(', ').toLowerCase()}.{' '}
-              {location.truckStop.hours}.
+              <Suspense fallback={location.truckStop.hours}>
+                <LiveHours
+                  hours={location.truckStop.hours}
+                  overrides={location.truckStop.hoursOverrides}
+                />
+              </Suspense>
+              .
             </p>
             <p>
               <Link href="/truck-stop">More about the Truck Stop</Link>
@@ -125,14 +130,22 @@ export default async function LocationPage({
             <li key={other.id}>
               <Link className={styles.card} href={`/locations/${other.id}`}>
                 <p className={styles.cardName}>{other.navLabel}</p>
-                <p className={styles.cardLine}>{other.cardLine}</p>
+                <p className={styles.cardLine}>
+                  <Suspense fallback={other.cardLine}>
+                    <LiveCardLine location={other} />
+                  </Suspense>
+                </p>
               </Link>
             </li>
           ))}
         </ul>
       </div>
 
-      <JsonLd data={locationJsonLd(location, hours.hours)} />
+      {/* Structured data carries the STANDARD hours, never a temporary
+          override. It feeds the "open now" badge in search results, which
+          nobody on our side ever sees, and a holiday exception published there
+          outlives the holiday. */}
+      <JsonLd data={locationJsonLd(location, location.hours)} />
     </div>
   )
 }

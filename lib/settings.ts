@@ -1,4 +1,5 @@
-import { cache } from 'react'
+import { cacheLife, cacheTag } from 'next/cache'
+import { CACHE_TAGS } from './cache-tags'
 import { readContentJson } from './content'
 import type { SiteSettings, SocialLink } from './types'
 
@@ -51,7 +52,13 @@ function asSocial(value: unknown): SocialLink[] {
   )
 }
 
-export const getSettings = cache(async function getSettings(): Promise<SiteSettings> {
+export async function getSettings(): Promise<SiteSettings> {
+  'use cache'
+  // Held until something explicitly drops it: a deploy, or a call to the
+  // revalidation endpoint when the emergency notice is published (ADR 0017).
+  cacheTag(CACHE_TAGS.settings)
+  cacheLife('max')
+
   const raw = await readContentJson<Record<string, unknown>>('settings/site.json')
   if (!raw) return DEFAULT_SETTINGS
 
@@ -93,4 +100,4 @@ export const getSettings = cache(async function getSettings(): Promise<SiteSetti
     },
     liveMainPage: raw.liveMainPage ? String(raw.liveMainPage) : undefined,
   }
-})
+}

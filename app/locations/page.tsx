@@ -4,7 +4,8 @@ import { Suspense } from 'react'
 import styles from '../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
-import { getLocations, resolveCardLine } from '@/lib/locations'
+import { LiveCardLine } from '@/components/locations/LiveCardLine'
+import { getLocations } from '@/lib/locations'
 
 export const metadata: Metadata = {
   title: 'Locations',
@@ -35,7 +36,11 @@ export default async function LocationsPage() {
             <li key={location.id}>
               <Link className={styles.card} href={`/locations/${location.id}`}>
                 <p className={styles.cardName}>{location.navLabel}</p>
-                <p className={styles.cardLine}>{resolveCardLine(location)}</p>
+                <p className={styles.cardLine}>
+                <Suspense fallback={location.cardLine}>
+                  <LiveCardLine location={location} />
+                </Suspense>
+              </p>
               </Link>
             </li>
           ))}

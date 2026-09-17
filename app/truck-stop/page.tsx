@@ -5,7 +5,9 @@ import { Suspense } from 'react'
 import styles from '../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
-import { getLocation, resolveHours } from '@/lib/locations'
+import { LiveCardLine } from '@/components/locations/LiveCardLine'
+import { LiveHours } from '@/components/locations/LiveHours'
+import { getLocation } from '@/lib/locations'
 
 export const metadata: Metadata = {
   title: 'Truck Stop',
@@ -25,8 +27,6 @@ export default async function TruckStopPage() {
   const truckStop = exit260?.truckStop
   if (!exit260 || !truckStop) notFound()
 
-  const hours = resolveHours(truckStop.hours, truckStop.hoursOverrides)
-
   return (
     <div className={styles.pagegrid}>
       <div className={styles.maincol}>
@@ -44,7 +44,15 @@ export default async function TruckStopPage() {
             {exit260.city}, {exit260.state} {exit260.zip}
           </dd>
           <dt>Hours</dt>
-          <dd>{hours.hours}</dd>
+          <dd>
+            <Suspense fallback={truckStop.hours}>
+              <LiveHours
+                hours={truckStop.hours}
+                overrides={truckStop.hoursOverrides}
+                showReason
+              />
+            </Suspense>
+          </dd>
           {/* The Truck Stop's own number. A driver asking about showers or the
               diesel lanes must not land on the C-Store line. */}
           <dt>Truck Stop</dt>
@@ -86,7 +94,11 @@ export default async function TruckStopPage() {
           <li>
             <Link className={styles.card} href="/locations/exit-260">
               <p className={styles.cardName}>{exit260.navLabel}</p>
-              <p className={styles.cardLine}>{exit260.cardLine}</p>
+              <p className={styles.cardLine}>
+                <Suspense fallback={exit260.cardLine}>
+                  <LiveCardLine location={exit260} />
+                </Suspense>
+              </p>
             </Link>
           </li>
         </ul>

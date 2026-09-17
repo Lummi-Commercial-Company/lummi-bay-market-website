@@ -1,4 +1,5 @@
-import { cache } from 'react'
+import { cacheLife, cacheTag } from 'next/cache'
+import { CACHE_TAGS } from './cache-tags'
 import { readContentFile, listContentFiles } from './content'
 import { splitFrontmatter } from './frontmatter'
 import { isWithinWindow, storeToday, windowLengthDays } from './pacific-time'
@@ -80,7 +81,11 @@ function toLocation(data: Record<string, unknown>, body: string): LocationDoc | 
   }
 }
 
-export const getLocations = cache(async function getLocations(): Promise<LocationDoc[]> {
+export async function getLocations(): Promise<LocationDoc[]> {
+  'use cache'
+  cacheTag(CACHE_TAGS.locations)
+  cacheLife('max')
+
   const files = await listContentFiles('locations')
   const docs: LocationDoc[] = []
   for (const file of files) {
@@ -93,7 +98,7 @@ export const getLocations = cache(async function getLocations(): Promise<Locatio
   return docs.sort(
     (a, b) => LOCATION_ORDER.indexOf(a.id) - LOCATION_ORDER.indexOf(b.id)
   )
-})
+}
 
 export async function getLocation(id: LocationSlug): Promise<LocationDoc | undefined> {
   return (await getLocations()).find((loc) => loc.id === id)
