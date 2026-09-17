@@ -1,0 +1,1318 @@
+<title>Lummi Bay Market — editor's handbook</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#FBF9F4; --paper:#FFFFFF; --ink:#2A2820; --ink-soft:#6B6659;
+  --navy:#1C4E8F; --navy-deep:#14396B; --teal:#0FB5C4; --cedar:#C9772E;
+  --bone:#F5F1E8; --rule:rgba(28,78,143,.16); --rule-soft:rgba(42,40,32,.10);
+  --flag-bg:#FBF1E6; --flag-edge:rgba(201,119,46,.42);
+  --note-bg:#F1F6FB;
+  --disp:"Space Grotesk",Inter,system-ui,sans-serif;
+  --body:Inter,system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E141C; --paper:#161F2A; --ink:#E6E2D6; --ink-soft:#9A9484;
+    --navy:#8FB4E4; --navy-deep:#A9C8EE; --teal:#3FD0DC; --cedar:#E3A264;
+    --bone:#F5F1E8; --rule:rgba(143,180,228,.22); --rule-soft:rgba(230,226,214,.12);
+    --flag-bg:#241C12; --flag-edge:rgba(227,162,100,.40);
+    --note-bg:#12202E;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E141C; --paper:#161F2A; --ink:#E6E2D6; --ink-soft:#9A9484;
+  --navy:#8FB4E4; --navy-deep:#A9C8EE; --teal:#3FD0DC; --cedar:#E3A264;
+  --bone:#F5F1E8; --rule:rgba(143,180,228,.22); --rule-soft:rgba(230,226,214,.12);
+  --flag-bg:#241C12; --flag-edge:rgba(227,162,100,.40);
+  --note-bg:#12202E;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font:400 15px/1.6 var(--body);
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:1020px; margin:0 auto; padding-block:0 72px; padding-left:20px; padding-right:20px}
+
+/* ---------- masthead ---------- */
+.mast{padding-block:44px 0}
+.eyebrow{
+  font:500 11px/1 var(--mono); letter-spacing:.17em; text-transform:uppercase;
+  color:var(--cedar); margin:0 0 14px;
+}
+h1{
+  font:700 clamp(2rem,6vw,3rem)/1.05 var(--disp); color:var(--navy);
+  margin:0 0 14px; letter-spacing:-.02em; text-wrap:balance;
+}
+.standfirst{font-size:1.0625rem; color:var(--ink); opacity:.88; max-width:62ch; margin:0}
+.meta{
+  display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:20px;
+  font:400 12px/1.5 var(--mono); color:var(--ink-soft);
+}
+.meta b{font-weight:500; color:var(--ink); opacity:.8}
+
+/* ---------- waterline divider (the brand's connective tissue) ---------- */
+.waterline{display:block; width:100%; height:18px; margin:40px 0 0; overflow:visible}
+
+/* ---------- sections ---------- */
+section{padding-block:40px 0}
+h2{
+  font:700 1.5rem/1.2 var(--disp); color:var(--navy); margin:0 0 6px;
+  letter-spacing:-.01em; text-wrap:balance;
+}
+h2 .num{
+  font:500 .6875rem/1 var(--mono); color:var(--cedar); letter-spacing:.14em;
+  display:block; margin-bottom:9px;
+}
+h3{font:700 1.0625rem/1.3 var(--disp); color:var(--ink); margin:30px 0 8px}
+.sec-lede{max-width:66ch; color:var(--ink); opacity:.84; margin:0 0 22px}
+p{margin:0 0 14px}
+p:last-child{margin-bottom:0}
+a{color:var(--navy); text-decoration-thickness:1px; text-underline-offset:2px}
+code{font:400 .875em/1.4 var(--mono); background:var(--note-bg); padding:1px 5px; border-radius:3px}
+
+/* ---------- ordered procedures and plain lists ---------- */
+ol.steps{margin:0 0 16px; padding-left:22px; display:grid; gap:9px; max-width:72ch}
+ol.steps li{font-size:.9375rem; line-height:1.55}
+ol.steps li > b{font-weight:600}
+ul.plain{margin:0 0 16px; padding-left:20px; display:grid; gap:8px; max-width:72ch}
+ul.plain li{font-size:.9375rem; line-height:1.55}
+
+/* ---------- the hard-rule flags ---------- */
+.flags{display:grid; gap:14px; margin-top:4px}
+.flag{
+  background:var(--flag-bg); border:1px solid var(--flag-edge);
+  border-left:3px solid var(--cedar); border-radius:4px; padding:16px 18px;
+}
+.flag h3{
+  margin:0 0 6px; font:700 .9375rem/1.3 var(--disp); color:var(--ink);
+  display:flex; align-items:baseline; gap:9px; flex-wrap:wrap;
+}
+.flag h3 span{font:500 10px/1 var(--mono); letter-spacing:.13em; color:var(--cedar); text-transform:uppercase}
+.flag p{font-size:.9375rem; margin:0; color:var(--ink); opacity:.9; max-width:68ch}
+.flag p + p{margin-top:8px}
+.flag ul{margin:8px 0 0; padding-left:18px; display:grid; gap:6px}
+.flag li{font-size:.9375rem; line-height:1.5}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto; border:1px solid var(--rule); border-radius:6px; background:var(--paper)}
+table{border-collapse:collapse; width:100%; min-width:540px; font-size:.875rem}
+th,td{padding:11px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--rule-soft)}
+thead th{
+  font:600 10.5px/1.3 var(--body); letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-soft); background:var(--note-bg); border-bottom:1px solid var(--rule);
+  white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap; font-size:.8125rem}
+td b{font-weight:600}
+.tw + .tnote{
+  font-size:.8125rem; color:var(--ink-soft); margin:10px 0 0; max-width:70ch; line-height:1.55;
+}
+
+/* ---------- notes ---------- */
+.note{
+  background:var(--note-bg); border-left:3px solid var(--teal);
+  border-radius:0 4px 4px 0; padding:14px 17px; margin:20px 0 0;
+}
+.note h3{margin:0 0 6px; font:700 .9375rem/1.3 var(--disp); color:var(--ink)}
+.note p{font-size:.9375rem; margin:0; opacity:.9; max-width:68ch}
+.note p + p{margin-top:8px}
+.note ul{margin:8px 0 0; padding-left:18px; display:grid; gap:6px}
+.note li{font-size:.9375rem; line-height:1.5}
+/* "How you know it worked" — a note that closes a procedure. */
+.note.check{border-left-color:var(--navy)}
+
+/* ---------- do / don't ---------- */
+.dd{display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); margin-top:6px}
+.dd > div{background:var(--paper); border:1px solid var(--rule); border-radius:6px; padding:18px 20px}
+.dd h3{margin:0 0 12px; font:700 .875rem/1 var(--disp); letter-spacing:.06em; text-transform:uppercase}
+.dd .do h3{color:var(--navy)}
+.dd .dont h3{color:var(--cedar)}
+.dd ul{margin:0; padding-left:18px; display:grid; gap:9px}
+.dd li{font-size:.875rem; line-height:1.55}
+
+/* ---------- status pills ---------- */
+.pill{
+  display:inline-block; font:600 9.5px/1 var(--body); letter-spacing:.09em;
+  text-transform:uppercase; padding:4px 8px; border-radius:99px; white-space:nowrap;
+  border:1px solid currentColor;
+}
+.pill.locked{color:var(--navy)}
+.pill.proposed{color:var(--cedar)}
+.pill.open{color:var(--ink-soft)}
+
+footer{
+  margin-top:48px; padding-top:22px; border-top:1px solid var(--rule);
+  font-size:.8125rem; color:var(--ink-soft); max-width:70ch; line-height:1.6;
+}
+@media (max-width:560px){
+  .page{padding-left:16px; padding-right:16px}
+  .meta{gap:4px 16px}
+}
+/* ---------- print: the PDF is generated from this same file ---------- */
+@page{size:Letter; margin:15mm 14mm 17mm}
+@media print{
+  /* Paper has one theme. Pin the light palette so a dark viewing profile can
+     never reach the PDF, and firm up the rules that thin out on paper. */
+  :root,:root[data-theme="dark"]{
+    --ground:#FFFFFF; --paper:#FFFFFF; --ink:#2A2820; --ink-soft:#5F5A4E;
+    --navy:#1C4E8F; --navy-deep:#14396B; --teal:#0FB5C4; --cedar:#C9772E;
+    --bone:#F5F1E8; --rule:rgba(28,78,143,.30); --rule-soft:rgba(42,40,32,.18);
+    --flag-bg:#FBF1E6; --flag-edge:rgba(201,119,46,.50);
+    --note-bg:#F1F6FB;
+  }
+  /* The waterline and the tinted panels carry meaning here, not decoration —
+     they must survive background-stripping. */
+  *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  html{font-size:13px}
+  body{background:#fff; font-size:1rem; line-height:1.55}
+  .page{max-width:none; padding:0}
+
+  /* One numbered section per sheet: this is looked up, not read through.
+     The vertical rhythm is tightened throughout so that each section fits
+     the sheet it starts on — two lines spilling over is a wasted page. */
+  section{break-before:page; padding-block:0}
+  section:first-of-type{break-before:auto}
+  .mast{padding-block:0}
+  h1{font-size:2rem}
+  .meta{margin-top:12px}
+  h2{break-after:avoid}
+  h3{break-after:avoid; margin-top:16px}
+  .sec-lede{margin-bottom:12px}
+  /* Grid fragments unreliably across a page boundary in Chrome; as blocks
+     the panels pack onto the opening sheet instead of orphaning one. */
+  .flags{display:block}
+  .flag{padding:11px 15px; margin-bottom:10px}
+  .flag p + p{margin-top:6px}
+  .flag:last-child{margin-bottom:0}
+  .note{margin-top:12px; padding:12px 15px}
+  .dd{gap:14px}
+  .dd>div{padding:15px 17px}
+  ol.steps{gap:6px}
+  ul.plain{gap:6px}
+  th,td{padding:8px 12px}
+  .tw + .tnote{margin-top:8px}
+  footer{margin-top:34px}
+
+  /* Nothing that reads as a single object may straddle a page. */
+  .flag,.note,.tw,.dd>div,table,ol.steps li,ul.plain li{break-inside:avoid}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  .tw{overflow:visible}          /* a scroll container clips on paper */
+
+  /* The masthead waterline opens the document. The interior ones would print
+     at the foot of a page whose next section has already been pushed over. */
+  svg.waterline{display:none}
+  .mast + svg.waterline{display:block; margin:20px 0 18px}
+}
+</style>
+
+<div class="page">
+
+<header class="mast">
+  <p class="eyebrow">Lummi Bay Market — for the people who change what is on the website</p>
+  <h1>Editor's handbook</h1>
+  <p class="standfirst">For store managers and the staff who keep the site right: fuel prices,
+  pages, promos, holiday hours and emergency notices. No code, no jargon. Every job here is a
+  numbered procedure that ends with how you check it worked.</p>
+  <div class="meta">
+    <span><b>Version</b> 17 Sep 2026</span>
+    <span><b>Audience</b> store managers and CMS editors</span>
+    <span><b>Editor logins</b> 2 on the current plan</span>
+    <span><b>Companion</b> Asset specs &amp; brand guide</span>
+  </div>
+</header>
+
+<svg class="waterline" viewBox="0 0 1200 18" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="wl" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#0FB5C4"/><stop offset="1" stop-color="#1C4E8F"/>
+  </linearGradient></defs>
+  <path d="M0 11 C 100 2, 200 20, 300 11 S 500 2, 600 11 S 800 20, 900 11 S 1100 2, 1200 11 L1200 18 L0 18 Z" fill="url(#wl)"/>
+</svg>
+
+<!-- ============================================================ 01 -->
+<section>
+  <h2><span class="num">01 / how this site stores content</span>There is no database. Content is files.</h2>
+  <p class="sec-lede">Everything you type — a price, a page, a promo, a phone number — is saved as
+  a text file in the project's code repository. That one fact explains most of how this site
+  behaves, including why nothing you do can be permanently lost.</p>
+
+  <h3>Three doors onto the same act</h3>
+  <p>All three write the same files. There is no separate "CMS content" that can drift out of step
+  with what the developers see.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Door</th><th>Who uses it</th><th>Best for</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>1. TinaCMS</b><br>the visual editor at <code>/admin</code></td>
+          <td>Staff. Sign in with your email — no GitHub account needed.</td>
+          <td>The daily work: prices, hours, page copy, promos, the emergency notice.</td>
+        </tr>
+        <tr>
+          <td><b>2. An AI session</b><br>a chat window</td>
+          <td>Anyone with access to the project's chat sessions.</td>
+          <td>Bulk changes, anything that is not a field in the CMS, "do all three locations at once".</td>
+        </tr>
+        <tr>
+          <td><b>3. A developer</b><br>directly in the code</td>
+          <td>Your engineer.</td>
+          <td>Design, layout, new kinds of page, anything structural.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">Sections 02 and 03 cover door one. Section 10 covers door two. Section 12 is a
+  one-page summary of which door to use for what.</p>
+
+  <h3>Why files instead of a database matters to you</h3>
+  <ul class="plain">
+    <li><b>Every change is a recorded commit.</b> Who changed what, when, and a one-click undo. A
+    wrong fuel price is fixed by reverting to the previous one, not by remembering what it was.</li>
+    <li><b>Nothing to back up.</b> The repository is the backup, and it is copied in more than one
+    place already.</li>
+    <li><b>Deleted is not gone.</b> Deleting a document removes it from the site, but the document
+    is still in the history and can be brought back. That makes the delete button a safe button
+    rather than a frightening one.</li>
+    <li><b>The site does not go down if the CMS does.</b> Published pages are served as static
+    files. If TinaCMS is unreachable you cannot edit, but visitors are unaffected.</li>
+  </ul>
+
+  <h3>How many people can log in</h3>
+  <p>The current plan is TinaCMS <b>Free: two editor logins</b> <span class="pill locked">Locked</span>.
+  Growing past two is a purchase, not a settings change.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Plan</th><th class="n">Cost</th><th class="n">Editor logins</th></tr></thead>
+      <tbody>
+        <tr><td><b>Free</b> — what the site runs on today</td><td class="n">$0</td><td class="n">2</td></tr>
+        <tr><td>Team</td><td class="n">$24/mo</td><td class="n">3</td></tr>
+        <tr><td>Team Plus</td><td class="n">$41/mo</td><td class="n">5</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">Prices verified against tina.io, Aug 2026. Team Plus is also the plan that adds
+  an approval step, where one person's edit waits for another person to publish it. The site does
+  not have that today.</p>
+
+  <div class="note">
+    <h3>Do not share a login</h3>
+    <p>Two seats is tight, and sharing one is the obvious workaround. It removes the thing the
+    commit history is for — knowing who changed the price. If a third person needs to edit, that
+    is a $24/mo decision, not a password to pass around.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 02 -->
+<section>
+  <h2><span class="num">02 / getting in</span>Your first edit, and what "published" means</h2>
+  <p class="sec-lede">TinaCMS is a visual editor. You open the real page, click the words you want
+  to change, and type. There is no separate preview to imagine — the page in front of you updates
+  as you type.</p>
+
+  <h3>Signing in</h3>
+  <ol class="steps">
+    <li>Go to <code>lummibay.com/admin</code>.</li>
+    <li>Enter <b>your work email address</b> and follow the sign-in. You do not need a GitHub
+    account and you will never be asked for one.</li>
+    <li>You land in the editor. The left sidebar lists everything you can change, grouped by type.</li>
+  </ol>
+
+  <h3>Making a change on a page</h3>
+  <ol class="steps">
+    <li>Navigate to the page you want, the same way a customer would.</li>
+    <li><b>Click the text</b> you want to change. The sidebar opens on the matching field.</li>
+    <li>Type in the sidebar. The page beside it updates live, so you can see the result before
+    anyone else does.</li>
+    <li>Press <b>Save</b>.</li>
+  </ol>
+  <div class="note check">
+    <h3>How you know it worked</h3>
+    <p>Open the live page in a different browser tab and reload it. If your change is there, it is
+    published. If it is not, check the timing table below before assuming something is broken —
+    most content waits for a rebuild.</p>
+  </div>
+
+  <h3>How long "published" takes — it depends what you changed</h3>
+  <p>This is the part people get wrong. Three things on this site publish instantly by design;
+  everything else waits about a minute or two for the site to rebuild itself.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>What you changed</th><th class="n">Live in</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>A fuel price</b></td>
+          <td class="n">Immediately</td>
+          <td>Prices are read fresh every time a page loads, not baked into the page. There is no
+          rebuild to wait for.</td>
+        </tr>
+        <tr>
+          <td><b>The emergency notice</b> (site alert)</td>
+          <td class="n">Under a second</td>
+          <td>Saving it refreshes the site's caches worldwide in about 300 milliseconds, with no
+          rebuild.</td>
+        </tr>
+        <tr>
+          <td><b>A promo starting or ending</b><br><b>An hours override starting or ending</b></td>
+          <td class="n">On the dot</td>
+          <td>Whether they are live is worked out per visitor, against today's Pacific date. Nothing
+          has to run at midnight, so nothing can fail to run.</td>
+        </tr>
+        <tr>
+          <td><b>Everything else</b> — page copy, hours, addresses, promo artwork and wording,
+          settings, the watermark</td>
+          <td class="n">~1–2 min</td>
+          <td>Your save becomes a commit, the commit triggers a rebuild, the rebuild publishes.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">One lag applies to everything, including prices: a page already open on
+  somebody's phone keeps showing the old version until they refresh it. Nothing can change that,
+  and it is the only delay worth explaining to a colleague.</p>
+
+  <div class="note">
+    <h3>If a rebuild fails, the old site stays up</h3>
+    <p>Visitors see the last good version, not an error page. That is deliberate. But it also means
+    a failure is quiet — if a change you made has not appeared after a few minutes, say so rather
+    than waiting longer. See section 11.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 03 -->
+<section>
+  <h2><span class="num">03 / fuel prices</span>Eight numbers, one form, live the moment you save</h2>
+  <p class="sec-lede">This is the thing staff do most, and it is the thing the whole site was built
+  around. The form is designed to be used one-handed on a phone, standing at the pumps, because
+  that is when the price actually changes.</p>
+
+  <h3>What exists: eight prices, in one place</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Place</th><th>Grades priced on the site</th></tr></thead>
+      <tbody>
+        <tr><td>Exit 260</td><td>Regular, Diesel</td></tr>
+        <tr><td>Minimart</td><td>Regular, Diesel</td></tr>
+        <tr><td>Fisherman's Cove</td><td>Regular, Diesel</td></tr>
+        <tr><td><b>Truck Stop</b></td><td>Diesel, DEF</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">Midgrade, premium and ethanol-free are <b>not</b> priced on this site. Ethanol-free
+  is still listed as something Fisherman's Cove sells — it just carries no posted price.</p>
+
+  <h3>Changing a price</h3>
+  <ol class="steps">
+    <li>Go to <code>/admin</code> and sign in with your email.</li>
+    <li>In the sidebar, under <b>Site</b>, open <b>Fuel Prices</b>. The form opens straight away —
+    there is no list to pick from, because there is only one price document.</li>
+    <li>Decide about the checkbox labelled <b>"Apply one price to all three locations"</b>.
+      <ul>
+        <li><b>Checked</b> — type Regular and Diesel once. All three Locations get that number when
+        you save.</li>
+        <li><b>Unchecked</b> — the three Locations appear separately. Edit whichever ones you need.</li>
+      </ul>
+    </li>
+    <li><b>Truck Stop is always its own section and is always typed by hand.</b> Diesel and DEF. The
+    checkbox never touches it.</li>
+    <li>Type dollars with two decimals — <code>4.05</code>, not <code>4.5</code> and not <code>$4.05</code>.</li>
+    <li>Press <b>Save</b>. The <b>updated</b> date sets itself, for the places you actually changed.</li>
+  </ol>
+
+  <div class="note check">
+    <h3>How you know it worked</h3>
+    <p>Open any page of the live site and refresh it hard (hold Shift and click reload). The new
+    number should be there — on <em>any</em> page, because the price block is on every page, not
+    only on the fuel prices page.</p>
+    <p><b>If the old number is still showing after a hard refresh, that is a bug to report, not a
+    delay to wait out.</b> There is no rebuild happening in the background. Say so straight away.</p>
+  </div>
+
+  <h3>What the checkbox is, and what it is not</h3>
+  <div class="flags">
+    <div class="flag">
+      <h3><span>Important</span> The checkbox is a typing shortcut, not a price</h3>
+      <p>There is no "all locations" price stored anywhere. Every place stores its own number for
+      every grade. With the box checked, the value you type is written into all three Locations as
+      you save — and from that moment they are three separate numbers that happen to match.</p>
+      <p>The useful consequence: <b>unchecking the box can never resurrect an old price.</b> There is
+      no second, stale value hiding behind the shared one, because no such value is ever stored.</p>
+    </div>
+    <div class="flag">
+      <h3><span>Never</span> The Truck Stop is never covered by the checkbox</h3>
+      <p>Truck-lane diesel is not car-lane diesel, and truck prices move on their own schedule. If
+      you changed the Truck Stop you typed it yourself; if you did not type it, it did not change.</p>
+    </div>
+  </div>
+
+  <h3>The "updated" stamp, and why it matters more than it looks</h3>
+  <p>Each of the four places carries its own <b>updated</b> date, and it shows to customers in the
+  expanded price panel. Because publishing is instant, that stamp is now the <em>only</em> thing on
+  the page telling a guest how fresh a number is. A missed save leaves no other trace.</p>
+  <p>When you edit through the CMS the stamp sets itself. <b>When a price is changed any other way —
+  an AI session, a developer editing the file — the stamp has to be set by hand for every place that
+  changed.</b> If you ask for a price change in a chat session, that is the one thing worth checking
+  in the result.</p>
+
+  <div class="note">
+    <h3>If the site cannot reach its price source</h3>
+    <p>The page falls back to the last price it was built with, and shows that price's own updated
+    date, rather than showing a blank space or an error. A guest never sees a hole where a number
+    should be — but they may briefly see an old number with an old date on it. Another reason the
+    stamp is not decoration.</p>
+  </div>
+
+  <p class="tnote">The website's own timing is the only part of a price change this handbook
+  describes. The order your team changes the pumps, the sign and the site in is an operations
+  decision and belongs to you, not to the website.</p>
+</section>
+
+<!-- ============================================================ 04 -->
+<section>
+  <h2><span class="num">04 / creating a page</span>A page is a document you fill in, not code</h2>
+  <p class="sec-lede">You can add a page without an engineer. Pick the right collection in the
+  sidebar, press its create button, fill in the fields, save. What you cannot do — and do not need
+  to do — is lay the page out.</p>
+
+  <h3>The five collections, and which one you want</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Collection</th><th>Use it for</th><th>Web address</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>pages</b></td>
+          <td>Ordinary pages. About, Rewards, Fuel Prices, Privacy Policy, Contact, and anything new.</td>
+          <td class="n">/your-slug</td>
+        </tr>
+        <tr>
+          <td><b>infoPages</b></td>
+          <td>The page a promo sends people to — the product or offer detail. Header image, title,
+          body, optional hours table, a call to action.</td>
+          <td class="n">/info/your-slug</td>
+        </tr>
+        <tr>
+          <td><b>promos</b></td>
+          <td>The graphic banners themselves. Section 06.</td>
+          <td class="n">(no page of its own)</td>
+        </tr>
+        <tr>
+          <td><b>tenants</b></td>
+          <td>The independent businesses on a Lummi Bay property. Each gets a card on the
+          "Also at Exit 260" page.</td>
+          <td class="n">(set per tenant)</td>
+        </tr>
+        <tr>
+          <td><b>mainPages</b></td>
+          <td>A full replacement home page. Rare. See the warning below.</td>
+          <td class="n">/ (when switched live)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">Locations are not in this list on purpose. There are three Locations and one Truck
+  Stop; the CMS deliberately has no button to create a fourth, because a fourth store is a business
+  event, not a content task.</p>
+
+  <h3>Adding an ordinary page</h3>
+  <ol class="steps">
+    <li>In the sidebar, open <b>pages</b> and press the create button.</li>
+    <li>Give it a <b>title</b> and a <b>slug</b>. The slug is the bit that shows in the web address,
+    lower case with hyphens — <code>propane-refills</code>, not <code>Propane Refills</code>.</li>
+    <li>Build the body from the available blocks: rich text, an image banner (its alt text is
+    required), an hours table, the derived location list, a row of buttons, or an FAQ.</li>
+    <li>Save.</li>
+    <li><b>Give the page a way in.</b> This is the step people miss — see section 05.</li>
+  </ol>
+  <div class="note check">
+    <h3>How you know it worked</h3>
+    <p>After a minute or two, visit the address directly — <code>lummibay.com/your-slug</code>. The
+    page should load with the header, the price block, the waterline and the footer already on it.
+    Then follow the link you added in step 5 and make sure it lands there.</p>
+  </div>
+
+  <h3>What a page can never lose</h3>
+  <p>The header, the waterline, the fuel price block, the back-to-top button and the footer come
+  from the site's layout, not from your page. No page document can move them, restyle them or drop
+  them. You cannot break the furniture by filling in a form, which is why the form is safe to give
+  you.</p>
+
+  <h3>Two things that are never done</h3>
+  <div class="flags">
+    <div class="flag">
+      <h3><span>Never</span> Never rename or delete <code>/privacy</code></h3>
+      <p>That address is typed into the Rewards app's App Store and Google Play listings. Changing
+      the slug breaks a live app listing; taking the page down can get the app pulled from a store.
+      Treat it more like a phone number than like a page.</p>
+      <p>Revising the <em>wording</em> is fine and expected — the policy is a document that has to
+      stay current. Publish the revision at the same address. Legal text is revised by whoever owns
+      it, not by an engineer and not by an AI session.</p>
+    </div>
+    <div class="flag">
+      <h3><span>Never</span> Never delete an info page when its promo ends</h3>
+      <p>When a promo stops running, its info page takes care of itself: nothing on the site links
+      to it any more, it drops out of the sitemap, search engines are told to forget it, and it says
+      plainly that the offer has ended.</p>
+      <p>It keeps its address. That matters because the address is in Facebook posts, printed QR
+      codes, bookmarks and search results — deleting it turns all of those into a broken site rather
+      than a finished offer. It is also how the offer gets switched back on later.</p>
+      <p>Deleting an info page outright is allowed when something is genuinely finished forever.
+      That is a deliberate decision you make, not something an expiry date does behind your back.</p>
+    </div>
+    <div class="flag">
+      <h3><span>Careful</span> <code>mainPages</code> is a redesign escape hatch</h3>
+      <p>More than one home page may exist; a single setting points at the one that is live, so a
+      replacement can be built in full, reviewed at its own address, and switched over by changing
+      one field — with the old one still there to switch back to.</p>
+      <p>It is <b>never scheduled</b> and it is not how you run a seasonal campaign. A campaign is a
+      promo plus a hero variant (section 06). Reach for <code>mainPages</code> only when the page
+      genuinely needs a different layout, and expect a developer to be involved.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 05 -->
+<section>
+  <h2><span class="num">05 / navigation</span>The honest chapter: the nav is three items and stays three</h2>
+  <p class="sec-lede">"Manage navigation" usually means adding items to the top menu. Here it does
+  not, and pretending otherwise would waste your time. The top nav is a settled decision, and what
+  you manage instead is how people reach everything else.</p>
+
+  <h3>What is fixed</h3>
+  <div class="flags">
+    <div class="flag">
+      <h3><span>Locked</span> Home · Locations · Truck Stop</h3>
+      <p>Three items, and they are not a CMS field. There is no "add to menu" checkbox on a page,
+      and <b>a new page never appears in the nav on its own.</b> Three items fit a phone without a
+      hamburger menu; four were tight once the header also had to carry the logo and the "Get the
+      App" pill.</p>
+      <p>Fuel Prices used to be the fourth and was deliberately removed. The reason is that the fuel
+      price block is already on every page, so the nav item pointed at a page whose entire contents
+      were already in front of the guest.</p>
+    </div>
+  </div>
+  <p>The <code>/fuel-prices</code> page still exists and is still worth having — it is the page that
+  matches searches like "diesel prices Bellingham". It is reached from <b>the footer</b> and from the
+  <b>"All prices"</b> panel on the price block, not from the nav.</p>
+
+  <h3>What you actually control</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Surface</th><th>Who changes it</th><th>How</th></tr></thead>
+      <tbody>
+        <tr><td>The three nav items</td><td>Nobody, without a decision</td><td>Not a field. See below.</td></tr>
+        <tr><td><b>The Careers link destination</b></td><td>You</td><td>A field in settings. The text stays "Careers".</td></tr>
+        <tr><td><b>Social links</b> (Facebook, Instagram, Yelp)</td><td>You</td><td>A list in settings: platform and web address. An empty list renders no row at all.</td></tr>
+        <tr><td><b>Promos</b></td><td>You</td><td>Section 06. This is the main way to point people at a new page.</td></tr>
+        <tr><td><b>Links inside page copy</b></td><td>You</td><td>Rich text, or a row of buttons.</td></tr>
+        <tr><td>Footer columns, the header, the price block</td><td>A developer</td><td>Layout, not content.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <h3>The Careers link has one rule, and it is about the words</h3>
+    <p>The destination is editable and points off this site, to wherever hiring is actually run. The
+    <b>link text stays exactly "Careers"</b> — not "Careers at …", no company name, no logo, no
+    parenthetical, no tooltip naming where it goes. The moment the label names another company, a
+    signpost becomes an advertisement for that company, which is what the site's standing rule
+    forbids. There is deliberately no <code>/careers</code> page on this site.</p>
+  </div>
+
+  <h3>So how does a new page get found?</h3>
+  <p>Pick one of these deliberately when you create the page, and do it the same day. A page with no
+  way in is worse than no page.</p>
+  <ol class="steps">
+    <li><b>A promo.</b> The strongest route, and the one the site is built for: a graphic banner on
+    the pages you choose, pointing at an info page. Section 06.</li>
+    <li><b>A footer link.</b> How <code>/about</code>, <code>/contact</code>,
+    <code>/fuel-prices</code>, <code>/rewards</code> and <code>/privacy</code> are reached. Adding a
+    new one is a developer change, not a field.</li>
+    <li><b>A link from a related page.</b> The "Also at Exit 260" tenants index is reached from the
+    Exit 260 Location page. A page about propane belongs linked from the Location that sells it.</li>
+    <li><b>A link in body copy or a button row.</b> The cheapest route, and fine for a page that only
+    some people need.</li>
+  </ol>
+
+  <h3>If the nav genuinely must change</h3>
+  <p>It can. It is just not a field, and it should not be. Changing it means re-checking things that
+  were measured against three items — whether the header still fits a 320px phone, and whether the
+  header's motif band still clears the navigation. Raise it with whoever owns the site's
+  architecture; the change gets recorded as a decision, and then a developer builds it. Expect a
+  conversation, not a five-minute edit.</p>
+</section>
+
+<!-- ============================================================ 06 -->
+<section>
+  <h2><span class="num">06 / ads and promos</span>Graphic banners that put themselves up and take themselves down</h2>
+  <p class="sec-lede">A promo is a document with artwork, three short lines of text, a date window,
+  and a note of which pages it belongs on. Type the end date when you create it and you never have
+  to remember to take it down.</p>
+
+  <h3>Creating a promo</h3>
+  <ol class="steps">
+    <li>Create the <b>info page</b> first, in <code>infoPages</code> — the page the promo sends
+    people to. A promo pointing at nothing does not render.</li>
+    <li>In the sidebar, open <b>promos</b> and press create.</li>
+    <li>Fill in the three text fields: <b>eyebrow</b> (the small label), <b>headline</b> (the offer
+    itself, 28 characters — there is a counter), and <b>cta</b> (the button label; it defaults to
+    "See details").</li>
+    <li>Upload the <b>image</b> and write its <b>alt text</b>. The alt text describes <em>the
+    offer</em>, not the picture, because the whole image is a link and the alt text is what a screen
+    reader announces.</li>
+    <li>Set <b>link</b> to the info page from step 1.</li>
+    <li>Set <b>startsAt</b> and <b>endsAt</b>. Both are optional: no start means "running already",
+    no end means "until someone turns it off".</li>
+    <li>Set <b>placement</b> — <code>home</code>, <code>all-interior</code>, or specific pages.</li>
+    <li>Leave <b>active</b> on. Set <b>priority</b> if several promos are competing for room.</li>
+    <li>Save.</li>
+  </ol>
+  <div class="note check">
+    <h3>How you know it worked</h3>
+    <p>Open one of the pages you set in <b>placement</b>. If the window has started, the promo is
+    there. If it has not, the promos list in the CMS shows the promo's state — <b>Live</b>,
+    <b>Scheduled</b>, <b>Ended</b> or <b>Off</b> — so you can confirm it is queued rather than
+    broken.</p>
+  </div>
+
+  <h3>How expiry works, and why you can trust it</h3>
+  <p>Nothing is scheduled to run at your end date. Instead, every time a visitor loads the page, the
+  site compares today's Pacific date against the window. A promo that ends at the close of Friday
+  stops appearing on Saturday, exactly, with no job to fail and nobody at a keyboard.</p>
+  <p>Dates are in Pacific time on purpose. "Friday" means Friday here.</p>
+
+  <h3>Rows: how the region is shaped</h3>
+  <p>The promo region on a page is a list of <b>rows</b>, and each row picks how many promos it
+  holds — one, two, three or four across. You build a shape rather than setting a width on each
+  promo and hoping they tile.</p>
+  <ul class="plain">
+    <li><b>A row re-divides when one of its promos expires.</b> A three-across row holding two live
+    promos becomes two halves; holding one, it becomes full width. A hole cannot appear.</li>
+    <li><b>Five across is not offered.</b> Twelve does not divide by five, so a five-up row could not
+    re-divide. It is arithmetic, not taste.</li>
+    <li><b>Rows are capped at six per page.</b> A row with nothing live renders nothing at all — no
+    gap, no empty box.</li>
+    <li><b>Extra promos wait their turn.</b> Anything beyond the available slots stays live in the
+    data and appears as earlier promos expire, in priority order.</li>
+    <li><b>On a phone every row is one column</b>, whatever it does on a desktop.</li>
+  </ul>
+
+  <h3>Artwork: the rules that will bite you</h3>
+  <div class="flags">
+    <div class="flag">
+      <h3><span>Never</span> Never bake the offer into the image</h3>
+      <p>Text inside a picture cannot be edited by you, cannot be read by a screen reader, cannot be
+      selected, translated or resized, and does not respond when a customer has enlarged their type.
+      The eyebrow, headline and button are real text laid over the art for exactly that reason. Give
+      the designer the picture; type the words in the form.</p>
+    </div>
+    <div class="flag">
+      <h3><span>Never</span> Never name an image file <code>ad</code>, <code>banner</code> or <code>sponsored</code></h3>
+      <p>Those exact words are on every ad-blocker filter list. A perfectly ordinary in-house promo
+      named <code>summer-banner.jpg</code> is invisible to a large share of your customers, and
+      nothing in the site will tell you it happened. Name the file after the offer —
+      <code>summer-car-wash.jpg</code>.</p>
+    </div>
+    <div class="flag">
+      <h3><span>Crop ladder</span> One image has to survive five shapes</h3>
+      <p>Because a row re-divides when a promo expires, a promo supplied for a quarter-width slot can
+      end up displayed full width, with nobody notified. So one master image is supplied and every
+      slot crops from it.</p>
+      <ul>
+        <li><b>Supply one file at 2400 × 1350</b> (16:9).</li>
+        <li><b>Anything that must be seen lives inside the centre 2400 × 480 strip.</b> That strip is
+        what the full-width slot shows; everything above and below it is breathing room the narrower
+        slots use.</li>
+        <li>Compose for the <b>quarter</b>, the narrowest slot — the text block takes about 55% of it
+        and leaves the bottom half of the frame for the subject.</li>
+        <li>You do not supply a separate phone crop. The phone slot is 16:9, so the master already is
+        the phone crop.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Turning a promo off, and back on</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>What you want</th><th>What you do</th></tr></thead>
+      <tbody>
+        <tr><td>Take it down right now</td><td>Set <b>active</b> to false. False beats any date. This is the panic button.</td></tr>
+        <tr><td>End it earlier than planned</td><td>Change <b>endsAt</b> to today.</td></tr>
+        <tr><td>Run it again later</td><td>Clear or extend <b>endsAt</b> and set <b>active</b> back to true. Its info page comes back with it.</td></tr>
+        <tr><td>See the old ones</td><td>The promos list in the CMS is the archive. Every promo is there with its state.</td></tr>
+        <tr><td>Remove it forever</td><td>Delete it. Remember the info page is a separate decision — section 04.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <h3>Where a promo lands is decided by the page, not by you</h3>
+    <p>You choose <em>which</em> pages a promo appears on. <em>Where</em> on the page it sits is set
+    per page type — below the title on most interior pages, below the disclosure on a tenant page,
+    after the phone numbers on Contact. That is not a field, and it is not an oversight: a promo
+    directly under a tenant's name would read as that tenant's offer.</p>
+    <p>Two related things are set the same way and are worth knowing about. <b>Hero variants</b> — a
+    headline and sub-headline on a date window — are how the home page changes for a campaign, using
+    the same date engine as promos. And <code>/contact</code> deliberately carries <b>no promos at
+    all</b>. <span class="pill open">Open</span> Whether the home page carries a promo region in the
+    finished build has not been settled — confirm before planning a home-page campaign.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 07 -->
+<section>
+  <h2><span class="num">07 / header motifs</span>Not a CMS field — but here is how to judge one</h2>
+  <p class="sec-lede">The band of small motifs in the header is built in code, not stored as content.
+  You cannot upload a new one or move it from the sidebar. What you <em>can</em> do is ask for a
+  change and tell whether what comes back is right, which is what this section is for.</p>
+
+  <div class="flags">
+    <div class="flag">
+      <h3><span>Honest answer</span> There is no field for this</h3>
+      <p>The motif band is a decorative layer in the site's code. To change it — different motifs,
+      different size, a different colour — <b>ask in an AI session or ask your developer.</b> There is
+      no sidebar entry and adding one is not planned.</p>
+      <p>Section 10 covers how to phrase the request. The rest of this page is so you can check the
+      result without taking anyone's word for it.</p>
+    </div>
+  </div>
+
+  <h3>The four rules the band must obey</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Rule</th><th>What it prevents</th></tr></thead>
+      <tbody>
+        <tr><td><b>20px clear of the right edge of the text navigation</b></td><td>Art crowding the nav, and art sitting behind the nav.</td></tr>
+        <tr><td><b>One row of motifs, ever</b></td><td>A size change quietly producing a second row nobody asked for.</td></tr>
+        <tr><td><b>Right-aligned</b></td><td>Empty space falling between the nav and the first motif.</td></tr>
+        <tr><td><b>Coloured through a mask, with a no-mask fallback</b></td><td>An off-brand colour sneaking in, and — in older browsers — a header full of solid coloured rectangles.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">The 20px figure is a <b>floor, not a target</b>. The logo's own clear space also
+  applies, so the art starts at whichever of the two lands further right. On a phone there is no text
+  navigation to measure from, so only the logo's clear space binds.</p>
+
+  <h3>Why the art is never behind the nav</h3>
+  <p>It was built that way once and measured. A lighter band behind the navigation raises the
+  background brightness and eats the contrast of the pale nav text sitting on it. The binding case is
+  the <b>active</b> nav item, which already sits on a light highlight: it starts at 5.06:1 against a
+  4.5:1 minimum, and <b>fails at 6% band opacity</b>. At that opacity the art is barely visible — so
+  the entire contrast budget buys something nobody can see.</p>
+  <p>If someone proposes putting motifs behind the navigation, that is the number to quote back. The
+  only live route to reconsidering it is ownership releasing the reserved deep navy for decoration,
+  which today is reserved for fuel prices and emphasis.</p>
+
+  <div class="note">
+    <h3>The motifs you see now are placeholders, deliberately obvious ones</h3>
+    <p>They are flat silhouettes — orca, salmon, eagle, canoe — and they look like placeholders on
+    purpose. Coast Salish formline is specific to Lummi Nation, and a convincing imitation is the
+    failure mode, not the goal. Every instance is marked
+    <code>TODO: replace with approved Lummi art</code>.</p>
+    <p><b>Final art must be authentic, commissioned or tribe-approved before launch.</b> The header
+    band is on every page, so this is the placeholder most likely to survive to launch if nobody
+    chases it. Chase it.</p>
+  </div>
+
+  <p>The band is decorative in the technical sense too: it is hidden from screen readers, ignores
+  clicks entirely, and disappears completely for a visitor whose device is set to high contrast. None
+  of that is optional and none of it is yours to change.</p>
+</section>
+
+<!-- ============================================================ 08 -->
+<section>
+  <h2><span class="num">08 / the side watermark</span>The sasquatch — and this one you can turn off yourself</h2>
+  <p class="sec-lede">The faint figure at the edge of the page is a content setting, not a piece of
+  code. Switching it off is one checkbox, and it takes effect in under a second. That was the whole
+  point of building it this way: a decoration that needs an engineer to remove is a decoration nobody
+  ever removes.</p>
+
+  <h3>The fields, in settings</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Field</th><th>What it does</th></tr></thead>
+      <tbody>
+        <tr><td><b>enabled</b></td><td>The off switch. One checkbox. This is the field most people will ever touch.</td></tr>
+        <tr><td><b>image</b></td><td>The artwork. Uploading a replacement swaps it — no deploy, no engineer. Read the warning below first.</td></tr>
+        <tr><td><b>opacity</b></td><td>How strong the wash is. Not capped — it is the owner's call. See the 10% line below.</td></tr>
+        <tr><td><b>side</b></td><td>Left or right. Left is the default.</td></tr>
+        <tr><td><b>height</b></td><td>How tall he is, as a percentage of the screen.</td></tr>
+        <tr><td><b>crop</b></td><td>How much of the figure runs off the page edge. Set to 0 when the art is already cropped, which the supplied narrow file is.</td></tr>
+        <tr><td><b>noBackdrop</b><br>(on a page, not in settings)</td><td>A per-page opt-out, for a page that needs a clean background — a dense table, a map.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Turning him off</h3>
+  <ol class="steps">
+    <li>In the sidebar, open <b>Settings</b>.</li>
+    <li>Find the backdrop group and uncheck <b>enabled</b>.</li>
+    <li>Save.</li>
+  </ol>
+  <div class="note check">
+    <h3>How you know it worked</h3>
+    <p>Reload any desktop page. He is gone, within a second — this one does not wait for a rebuild.
+    Do not test it on a phone: he is hidden on phones anyway, so a phone tells you nothing.</p>
+  </div>
+
+  <h3>The 10% opacity line</h3>
+  <p>The backdrop is a wash sitting underneath text, so it costs contrast on everything on the page.
+  The binding case is the dim label colour <code>#6B6455</code> on the page ground
+  <code>#FBF9F4</code>, measured against the <em>darkest</em> pixel of the artwork, because text can
+  land anywhere over it.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th class="n">Opacity</th><th class="n">Contrast</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td class="n">0%</td><td class="n">5.58</td><td>Comfortable</td></tr>
+        <tr><td class="n">8%</td><td class="n">4.77</td><td>Passes</td></tr>
+        <tr><td class="n"><b>10%</b></td><td class="n"><b>4.58</b></td><td><b>The line</b> — still passes, with little left over</td></tr>
+        <tr><td class="n">12%</td><td class="n">4.40</td><td>Fails the 4.5:1 minimum</td></tr>
+        <tr><td class="n">14%</td><td class="n">4.21</td><td>Fails</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote"><b>The number is not clamped.</b> You can set it past 10% and the field will let
+  you. The form shows the measured contrast live at whatever value you pick and marks where it stops
+  passing, so the choice is made with the cost visible rather than blind. It is the owner's decision,
+  not the software's.</p>
+
+  <h3>Three things about him that are not negotiable</h3>
+  <ul class="plain">
+    <li><b>He is hidden on phones.</b> At phone width the page is wall-to-wall cards and there is no
+    background for him to show on — but the wash would still cost contrast on the text you <em>can</em>
+    see.</li>
+    <li><b>He disappears for high-contrast users.</b> A visitor who has asked their device for more
+    contrast does not get a wash behind their text. He is also hidden from screen readers and ignores
+    clicks.</li>
+    <li><b>He is never recoloured.</b> No tint, no filter. The art renders exactly as supplied, and
+    opacity is the only thing applied to it.</li>
+  </ul>
+
+  <div class="flags">
+    <div class="flag">
+      <h3><span>Careful</span> Swapping the art has two consequences</h3>
+      <p><b>The contrast table above becomes invalid.</b> The 10% line moved from 12% once already,
+      because new art arrived with darker pixels in it than the previous art had. Any change to the
+      <b>image</b> field means the line has to be measured again. Ask for that measurement; do not
+      assume 10% still holds.</p>
+      <p><b>The raw artwork is never what gets served.</b> The supplied file is 503 × 2948 and
+      1.85 MB, which is indefensible for a decorative wash. The site converts it at build time and
+      delivers about 128 KB instead — a 93% saving. If you upload replacement art, confirm with a
+      developer that it is still going through that conversion. A raw image file served straight to
+      visitors is a bug, not a preference.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 09 -->
+<section>
+  <h2><span class="num">09 / notices and holiday hours</span>Two tools that get confused with each other</h2>
+  <p class="sec-lede">A snowstorm and New Year's Eve are not the same problem, and they do not use
+  the same tool. Using the alert bar for a holiday leaves a wrong opening time sitting on four pages
+  underneath it.</p>
+
+  <h3>Which one do I want?</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th></th><th>Emergency notice</th><th>Hours override</th></tr></thead>
+      <tbody>
+        <tr><td><b>Use it when</b></td><td>Something is happening now that nobody planned — snow, a power cut, a road closure.</td><td>Hours are different on a known date — a holiday, a season.</td></tr>
+        <tr><td><b>Scope</b></td><td>Sitewide. Every page, every Location.</td><td>One Location (or the Truck Stop) at a time.</td></tr>
+        <tr><td><b>Timing</b></td><td>Now. Live in under a second.</td><td>Scheduled, typed weeks ahead.</td></tr>
+        <tr><td><b>Turning it off</b></td><td>Somebody has to remember.</td><td>Automatic, on the end date.</td></tr>
+        <tr><td><b>Where it shows</b></td><td>A bar in the sticky header.</td><td>The hours line itself, everywhere hours appear.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">The alert says <em>something is happening</em>. The override makes the hours
+  <em>correct</em>. For a same-day hours change, both are worth using together: the override fixes the
+  line, the alert says so at the top of the page.</p>
+
+  <h3>Publishing an emergency notice</h3>
+  <ol class="steps">
+    <li>In the sidebar, open the <b>Site Alert</b> settings.</li>
+    <li>Fill in <b>headline</b>, <b>detail</b>, and a <b>link</b> if there is somewhere useful to
+    send people.</li>
+    <li>Write it leading with what is <em>true and useful</em> before the caveat — "All three stores
+    are open" first, then the exception. Name the Location and the road.</li>
+    <li>Set <b>active</b> to true.</li>
+    <li>Save.</li>
+  </ol>
+  <div class="note check">
+    <h3>How you know it worked</h3>
+    <p>Reload any page on the live site. The bar is there, in the header, within a second. There is
+    no rebuild running — if it is not there after a hard refresh, it did not publish.</p>
+  </div>
+  <div class="note">
+    <h3>Taking it down matters as much as putting it up</h3>
+    <p>Set <b>active</b> to false. A storm notice still up on a sunny Tuesday costs more credibility
+    than never having posted one. The notice carries its own <b>updated</b> stamp, which makes
+    staleness visible — but nothing takes it down for you.</p>
+    <p>Two other things worth knowing before you need this at 5am. <b>There is no dismiss button</b>
+    for visitors, on purpose: the point is that everybody sees it. And the notice is <b>never used for
+    an offer</b> — the moment it becomes a marketing surface it stops being believed, and then it does
+    not work for weather either.</p>
+    <p><b>Test it on a phone, once, before you need it.</b> The person likely to publish this is likely
+    to be doing it in the dark, from a phone browser, with two editor logins between them and whoever
+    else is asleep. Find out now, not then.</p>
+  </div>
+
+  <h3>Scheduling different hours for a date</h3>
+  <ol class="steps">
+    <li>Open the Location in the sidebar — or the <b>Truck Stop</b> record on Exit 260, which keeps
+    its own hours and its own overrides.</li>
+    <li>Add an entry to <b>hoursOverrides</b>.</li>
+    <li><b>hours</b> — the replacement line, written the short way: <code>6am–6pm</code> or
+    <code>Closed</code>. Keep it the same length as the normal line; there is a character counter,
+    because this line has to fit on a Location card that truncates rather than wraps.</li>
+    <li><b>reason</b> — two or three words, <code>New Year's Eve</code>. It shows on the detail page,
+    never on the card.</li>
+    <li><b>startsAt</b> — the first day it applies. Both dates default to today.</li>
+    <li><b>endsAt</b> — the last day it applies. <b>Required.</b></li>
+    <li>Save.</li>
+  </ol>
+  <div class="note check">
+    <h3>How you know it worked</h3>
+    <p>If the window includes today, check the Location page after the rebuild: it shows
+    <b>"Today: 6am–6pm — New Year's Eve"</b> with <b>"Regular hours 6am–9pm"</b> underneath. Both
+    lines, because a guest who sees only the short hours has no way to know they are unusual.</p>
+    <p>If the window is in the future, set both dates to today, look at the page, confirm the wording
+    fits the card, then set the real dates. That is the cheap way to test a holiday in November.</p>
+  </div>
+
+  <div class="flags">
+    <div class="flag">
+      <h3><span>Required</span> <code>endsAt</code> is not optional, and there is no on/off toggle</h3>
+      <p>The whole value of this field is that the hours <em>go back on their own</em>. An override
+      with no end date is a permanently wrong opening time waiting to happen, and it fails silently,
+      because a wrong time still looks exactly like a time.</p>
+      <p>There is deliberately no toggle, because a toggle is a thing somebody has to come back and
+      switch off. Instead the dates are editable at any moment, which gives you the same control:</p>
+      <ul>
+        <li><b>Live today only</b> — leave both dates at today. Type the line, save.</li>
+        <li><b>Live now, for a while</b> — leave <b>startsAt</b> at today, set <b>endsAt</b> to the
+        last day.</li>
+        <li><b>Start it early</b> — set both dates in the future and forget it. This is the point.</li>
+        <li><b>End it sooner</b> — change <b>endsAt</b> to today.</li>
+        <li><b>Back to normal, right now</b> — set <b>endsAt</b> to yesterday, or delete the override.
+        The normal hours line returns on the next page load.</li>
+      </ul>
+      <p>"Until further notice" has to be written as a date. Pick one far enough out and shorten it
+      later — the override is editable the whole time it is live. A date can be wrong; it cannot be
+      forgotten.</p>
+    </div>
+    <div class="flag">
+      <h3><span>Never</span> Never use an override for a permanent change</h3>
+      <p>If the store's hours have genuinely changed, edit the <b>hours</b> field itself. The
+      override is for the temporary case only, and reaching for it to make a permanent change is the
+      one way to misuse this field — because it will quietly revert on its end date.</p>
+      <p>Two other rules, so nothing surprises you. If two overrides overlap, <b>the shorter window
+      wins</b> — a one-day holiday inside a two-week seasonal change behaves the way whoever typed
+      them meant. And the Truck Stop's hours are separate: the store closing early on a holiday while
+      the diesel lanes stay open all night is the normal case, not an edge case.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ 10 -->
+<section>
+  <h2><span class="num">10 / updating through an AI session</span>The third door: ask in chat</h2>
+  <p class="sec-lede">Because content is files in the repository, an AI session can make the same
+  edits you make in TinaCMS — and a few it cannot. It is a third door beside the CMS and your
+  developer, not a replacement for either.</p>
+
+  <h3>How to phrase a request so it lands</h3>
+  <p>Vague requests come back wrong, and then you check them and ask again. Three habits fix almost
+  everything.</p>
+  <ol class="steps">
+    <li><b>Name the place.</b> "The Cove", not "the one by the water". "The Truck Stop", not "the
+    truck diesel".</li>
+    <li><b>Name the field and the exact new value.</b> "Set diesel to 4.19", not "diesel is up a bit".</li>
+    <li><b>Paste, do not describe.</b> If you have a price sheet, an address or a block of policy
+    text, paste it in exactly as it is. Describing what it says is where the errors come from.</li>
+  </ol>
+
+  <h3>Worked examples</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>You want</th><th>Say something like</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>All three locations, one price</b></td>
+          <td>"Set regular to 3.85 and diesel to 4.29 at all three Locations. Leave the Truck Stop
+          alone. Set today's updated stamp on the three you changed."</td>
+        </tr>
+        <tr>
+          <td><b>Truck Stop only</b></td>
+          <td>"Truck Stop diesel 4.55, DEF 3.29. Only the Truck Stop. Set its updated stamp to
+          today."</td>
+        </tr>
+        <tr>
+          <td><b>A promo, off now</b></td>
+          <td>"Set the 'Summer car wash' promo to active: false. Do not delete it and do not touch
+          its info page."</td>
+        </tr>
+        <tr>
+          <td><b>A holiday, typed early</b></td>
+          <td>"Add an hours override to all three Locations: hours 6am–6pm, reason New Year's Eve,
+          startsAt 2026-12-31, endsAt 2026-12-31. Truck Stop stays 24 hours."</td>
+        </tr>
+        <tr>
+          <td><b>A page edit</b></td>
+          <td>"On the About page, replace the second paragraph with this text: [paste]. Leave
+          everything else as it is."</td>
+        </tr>
+        <tr>
+          <td><b>A settings change</b></td>
+          <td>"Turn the page backdrop off — set enabled to false in the settings backdrop group."</td>
+        </tr>
+        <tr>
+          <td><b>Something that is not a field</b></td>
+          <td>"Change the header motif band to use just the canoe, and confirm it still clears the
+          navigation by 20px and is still one row, right-aligned, and masked."</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">Notice the last one. Naming the rules you expect to be kept is how you get a result
+  you can check — and section 07 is where those rules are written down.</p>
+
+  <h3>What this door can do that TinaCMS cannot</h3>
+  <ul class="plain">
+    <li><b>Touch things that are not fields</b> — the header motifs, the site's colours and spacing,
+    the way a page is laid out.</li>
+    <li><b>Add a whole new kind of content</b>, which means a new collection in the CMS, not just a
+    new document.</li>
+    <li><b>Make many edits at once</b> — the same holiday override on three Locations, or a text
+    correction across several pages.</li>
+    <li><b>Explain what happened.</b> "Why did this promo stop showing?" is a reasonable question to
+    ask in chat and an impossible one to ask a form.</li>
+  </ul>
+
+  <h3>What it cannot do</h3>
+  <div class="flags">
+    <div class="flag">
+      <h3><span>Always</span> It cannot approve its own work</h3>
+      <p>An AI session can make a change and tell you it made the change. It cannot be the one who
+      confirms the change is correct, and neither can the person who asked for it without looking.
+      <b>Somebody opens the live site and checks.</b> Every time. That is not distrust; it is the same
+      rule that applies to a developer and to you.</p>
+      <p>Two specific things to check, because they are the ones that go wrong quietly:</p>
+      <ul>
+        <li><b>The <code>updated</code> stamp on a price.</b> A change made outside the CMS does not
+        set it for you. A correct price with a stale date is the one kind of staleness a customer can
+        actually see.</li>
+        <li><b>That only what you asked for changed.</b> Look at the neighbouring numbers and the rest
+        of the page, not only the thing you asked about.</li>
+      </ul>
+    </div>
+  </div>
+  <p>It also cannot make a business decision. "Should we drop the price?" is not a question for this
+  door. And anything with a legal owner — the privacy policy text above all — is revised by its
+  owner, not by an AI session and not by an engineer.</p>
+
+  <div class="note">
+    <h3>Timing through this door</h3>
+    <p>A chat session's edit is an ordinary commit, so the timing table in section 02 applies
+    unchanged: most content waits a minute or two for a rebuild.</p>
+
+    <p><b>Fuel prices should be the exception through this door too, and here is the reasoning</b> —
+    a save in the CMS is itself a commit to the same branch, and the price block does not read the
+    file that was shipped with the site, it asks the content service for whatever is committed now.
+    Neither door is special. What reaches the page is the commit, not who made it.</p>
+
+    <p><span class="pill open">Confirm</span> <b>One step in that chain has not been measured, and
+    it is the step that would make the difference.</b> The content service has to notice a new
+    commit and index it before it can serve it. A save made inside the CMS goes through that
+    service, so it is plausibly indexed as part of the save; a commit arriving from outside has to
+    be picked up. That gap is seconds if it exists at all — but "seconds" is a guess until someone
+    changes one real price in chat, watches the live site, and writes down what actually happened.
+    Do that once, early. Until it is written down, look at the live site before you rely on a price
+    you changed in chat.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 11 -->
+<section>
+  <h2><span class="num">11 / when something looks wrong</span>Triage, before you call anyone</h2>
+  <p class="sec-lede">Most of what looks broken is one of six things. Work down this table first;
+  it takes two minutes and it makes the conversation with your developer much shorter.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Symptom</th><th>Likely cause</th><th>What to do</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>The price didn't change</b></td>
+          <td>An open tab showing a cached page. Or the save did not go through. Or the checkbox was
+          not doing what you thought.</td>
+          <td>Hard refresh (Shift + reload) on a page you did not have open. Still wrong? Reopen the
+          Fuel Prices form and read the numbers back. If the form is right and the site is wrong
+          after a hard refresh, <b>report it as a bug</b> — prices do not wait for a rebuild, so
+          there is nothing to wait for.</td>
+        </tr>
+        <tr>
+          <td><b>The promo is still showing</b></td>
+          <td><b>endsAt</b> is later than you think, or the dates are right and it is a stale tab.</td>
+          <td>Check the promo's state in the CMS list — Live, Scheduled, Ended or Off. To remove it
+          immediately, set <b>active</b> to false; false beats any date.</td>
+        </tr>
+        <tr>
+          <td><b>A promo vanished that shouldn't have</b></td>
+          <td>Its info page was deleted. A promo pointing at a missing page is skipped rather than
+          shipping a dead link.</td>
+          <td>Restore the info page, or repoint the promo's <b>link</b> at a page that exists.</td>
+        </tr>
+        <tr>
+          <td><b>The page is blank or missing</b></td>
+          <td>The document was saved without a slug, or the rebuild has not finished, or the rebuild
+          failed.</td>
+          <td>Wait two minutes and reload. Then check the slug on the document. If the rest of the
+          site is fine but your page is not, the build probably failed — that needs a developer, and
+          visitors are still seeing the last good version meanwhile.</td>
+        </tr>
+        <tr>
+          <td><b>The backdrop is too strong</b></td>
+          <td>Opacity is set above the 10% line, or new artwork was uploaded with darker pixels than
+          the last one.</td>
+          <td>Lower <b>opacity</b> in settings, or uncheck <b>enabled</b> — either is live in under a
+          second. If the art changed, ask for the contrast line to be re-measured (section 08).</td>
+        </tr>
+        <tr>
+          <td><b>The alert won't go away</b></td>
+          <td><b>active</b> is still true, or you are looking at a tab that has not been reloaded.</td>
+          <td>Set <b>active</b> to false and save, then reload. It clears within a second. If it does
+          not, report it — nothing is queued.</td>
+        </tr>
+        <tr>
+          <td><b>I deleted something</b></td>
+          <td>You deleted a document.</td>
+          <td><b>It is not gone.</b> Every change is a recorded commit, so the document is still in
+          the history and can be restored. Say what you deleted and roughly when. Do not try to
+          retype it from memory first — restoring it is more accurate.</td>
+        </tr>
+        <tr>
+          <td><b>Two of us edited the same thing</b></td>
+          <td>Two editors in the same field at once.</td>
+          <td>The second person re-does their edit. There is no merge dialog and with two seats this
+          should be rare — but check the field rather than assuming yours won.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <h3>The safety net, stated plainly</h3>
+    <p>Every change any of the three doors makes is a recorded commit: who, what, when, and a
+    one-click undo. Nothing you do in the CMS can permanently destroy content, and nothing you do can
+    take the site down — a failed publish leaves the last good version serving.</p>
+    <p>So the right instinct when something looks wrong is to <b>say so early</b>, not to try to
+    quietly fix it. Reverting a known change is a minute's work; untangling three attempted fixes is
+    not.</p>
+  </div>
+</section>
+
+<!-- ============================================================ 12 -->
+<section>
+  <h2><span class="num">12 / quick reference</span>One page to keep by the till</h2>
+
+  <h3>Who does what</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Job</th><th>TinaCMS</th><th>AI session</th><th>Developer</th></tr></thead>
+      <tbody>
+        <tr><td>Fuel prices</td><td><b>Yes</b> — the normal way</td><td>Yes</td><td>Rarely</td></tr>
+        <tr><td>Hours, addresses, phone numbers</td><td><b>Yes</b></td><td>Yes</td><td>Rarely</td></tr>
+        <tr><td>Page copy, new pages</td><td><b>Yes</b></td><td>Yes</td><td>—</td></tr>
+        <tr><td>Promos and info pages</td><td><b>Yes</b></td><td>Yes</td><td>—</td></tr>
+        <tr><td>Emergency notice</td><td><b>Yes</b></td><td>Yes</td><td>—</td></tr>
+        <tr><td>Side watermark settings</td><td><b>Yes</b></td><td>Yes</td><td>—</td></tr>
+        <tr><td>Careers link, social links</td><td><b>Yes</b></td><td>Yes</td><td>—</td></tr>
+        <tr><td>Header motifs</td><td>No</td><td><b>Yes</b></td><td>Yes</td></tr>
+        <tr><td>A new footer link</td><td>No</td><td><b>Yes</b></td><td>Yes</td></tr>
+        <tr><td>A new kind of content (a new collection)</td><td>No</td><td><b>Yes</b></td><td>Yes</td></tr>
+        <tr><td>Layout, colours, spacing</td><td>No</td><td>Yes</td><td><b>Yes</b></td></tr>
+        <tr><td>A fourth nav item</td><td>No</td><td>No</td><td>A decision first, then yes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>How fast it goes live</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Content</th><th class="n">Live in</th></tr></thead>
+      <tbody>
+        <tr><td>Fuel price</td><td class="n">Immediately</td></tr>
+        <tr><td>Emergency notice on or off</td><td class="n">Under a second</td></tr>
+        <tr><td>Side watermark on, off, or dimmed</td><td class="n">Under a second</td></tr>
+        <tr><td>A promo or hours override starting or ending on its date</td><td class="n">On the dot</td></tr>
+        <tr><td>Everything else</td><td class="n">~1–2 min</td></tr>
+        <tr><td>A page already open on someone's phone</td><td class="n">When they refresh</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The never-rules, in one place</h3>
+  <div class="dd">
+    <div class="dont">
+      <h3>Never</h3>
+      <ul>
+        <li><b>Never rename or delete <code>/privacy</code>.</b> It is in two app store listings.</li>
+        <li><b>Never delete an info page</b> when its promo ends. It hides itself and keeps its
+        address.</li>
+        <li><b>Never name an image file</b> <code>ad</code>, <code>banner</code> or
+        <code>sponsored</code>. Ad blockers eat it silently.</li>
+        <li><b>Never bake the offer wording into a promo image.</b> Type it in the fields.</li>
+        <li><b>Never recolour the logo</b>, and never recolour the sasquatch.</li>
+        <li><b>Never add a nav item.</b> Three, locked. A new page gets a promo or a link instead.</li>
+        <li><b>Never use an hours override</b> for a permanent hours change.</li>
+        <li><b>Never use the emergency notice</b> for an offer.</li>
+        <li><b>Never share an editor login.</b></li>
+        <li><b>Never let a placeholder ship.</b> Anything marked
+        <code>TODO: replace with approved Lummi art</code> must be real, approved art before launch.</li>
+      </ul>
+    </div>
+    <div class="do">
+      <h3>Always</h3>
+      <ul>
+        <li><b>Check the live site</b> after any change made outside TinaCMS.</li>
+        <li><b>Set the <code>updated</code> stamp</b> when a price is changed outside the CMS.</li>
+        <li><b>Type an <code>endsAt</code></b> on every hours override. It is required for a reason.</li>
+        <li><b>Give a new page a way in</b> the same day you create it.</li>
+        <li><b>Write promo alt text about the offer</b>, not about the picture.</li>
+        <li><b>Take the emergency notice down</b> when it stops being true.</li>
+        <li><b>Say so early</b> when something looks wrong. Everything is revertible.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">
+    <h3>Two facts the footer states, which the site has to keep true</h3>
+    <p>Every page's footer says <b>"No cookies. Visits counted anonymously."</b> That is a checkable
+    claim, not a slogan — the day anything on the site sets a cookie, it becomes a false statement in
+    the footer of every page.</p>
+    <p>The practical rule for an editor: <b>anything you are asked to embed is a decision, not a
+    detail.</b> A social feed, a follow button, a video, a review widget, a chat bubble, a booking
+    button — each of those loads another company's code before a visitor clicks anything. Links out
+    are ordinary content and always fine. Embeds are not yours to add; pass the request on. The one
+    existing exception is the map on Contact, which loads only after a visitor clicks a button that
+    tells them what it will do.</p>
+  </div>
+</section>
+
+<footer>
+  <p>Every procedure in this handbook traces to the project's recorded architecture decisions, its
+  source-of-truth project file, or the fuel-price procedure skill. Where something genuinely has not
+  been settled it is marked <span class="pill open">Open</span> or
+  <span class="pill open">Confirm</span> rather than guessed at — treat those as questions to answer,
+  not as instructions. If this document and a screen in the CMS disagree, the screen is what staff
+  will follow, so report the difference rather than working around it.</p>
+</footer>
+
+</div>

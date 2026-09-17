@@ -16,8 +16,19 @@ Two things people expect to set up and should not:
 - **No backups to arrange.** The repo *is* the backup. Every content change is a commit with an
   author and a one-click revert (`docs/content-updates.md`).
 
-The one genuinely undecided piece is the map embed on `/contact` — mechanism is open (ADR 0019),
-and if it lands on a keyed provider that adds an API key and a cookie/consent question.
+~~The one genuinely undecided piece is the map embed on `/contact` — mechanism is open (ADR 0019),
+and if it lands on a keyed provider that adds an API key and a cookie/consent question.~~
+
+**Corrected 17 Sep 2026.** The mechanism is not open: ADR 0019 settled on an **embedded Google My
+Maps**, and ADR 0025 settled the click-to-load still image in front of it, precisely so that no
+third-party code loads before a visitor asks for it. So the keyed-provider worry above is resolved
+rather than pending — there is no API key and no consent question, which is what keeps the
+footer's "No cookies" line true.
+
+What is genuinely outstanding is smaller and is a task, not a decision: **nobody has made the map
+yet.** Someone builds it in Google My Maps with three pins, sets it public, and pastes the
+`<iframe>` into `map.embedCode` plus a picture of it into `map.stillImage`. Both fields are empty
+until then, and an empty map renders one section fewer on `/contact` rather than a broken page.
 
 ---
 

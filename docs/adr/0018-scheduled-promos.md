@@ -77,9 +77,11 @@ Adding a promo is creating a document; removing one is setting `active: false` o
 future — evaluated per visitor at request time, in `America/Los_Angeles`. That is ADR 0007's
 dynamic slot, unchanged: nothing is scheduled, so nothing can fail to fire.
 
-**A display cap of four per page**, ordered by `priority`. Past that the region stops rendering
-and the CMS says so. Not a data limit — a page with eleven promos on it is not a page anyone
-reads, and an unbounded region is a design failure that arrives silently on a busy week.
+~~**A display cap of four per page**, ordered by `priority`. Past that the region stops rendering
+and the CMS says so.~~ **Superseded by the revision later in this file** — capacity is now rows of
+one to four across, capped at six rows per page. The reasoning below still holds and is why a cap
+exists at all: a page with eleven promos on it is not a page anyone reads, and an unbounded region
+is a design failure that arrives silently on a busy week. Only the shape of the cap changed.
 
 **Zero live promos renders nothing.** No region, no gap, no empty grid — the same rule the
 tenants index follows.

@@ -105,7 +105,9 @@ never renamed or deleted once it is in a store listing, and is not in the nav.
 The contact form and the per-location hours/phone block are **not** in the footer. There is
 no form anywhere on the site; hours, addresses, phone and a per-Location synopsis live on
 `/contact`, derived from the Location data — ADR 0015. `/contact` also carries one map with a
-pin per Location and no promos; the embed mechanism is open — ADR 0019.
+pin per Location and no promos; the mechanism is settled — an embedded Google My Maps behind a
+click-to-load still image, ADR 0019 with ADR 0025. What is outstanding is that nobody has built
+the map yet, so both settings fields are empty and `/contact` renders one section fewer.
 Note: `/about` still exists as a page — it is reached from the footer, not the top nav.
 
 ## Page types (ADR 0015, ADR 0016)

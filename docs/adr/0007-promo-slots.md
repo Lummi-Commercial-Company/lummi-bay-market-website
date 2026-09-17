@@ -152,8 +152,12 @@ here, and a UTC-naive date silently shifts the window.
 - The same revalidation question governs fuel prices (ADR 0004), which are also static. Whatever
   mechanism is chosen here should cover both rather than being solved twice.
 - **Rules are needed for zero and for more than one active promo.** With none, the slot must
-  collapse to nothing rather than reserve an empty box. With several, `priority` decides, and
-  only one renders per slot — otherwise a busy month silently stacks banners on every page.
+  collapse to nothing rather than reserve an empty box. ~~With several, `priority` decides, and
+  only one renders per slot~~ — **superseded by ADR 0018's revision:** several promos share a row,
+  one to four across, and a row re-divides evenly when one of them expires. The concern that drove
+  the original rule is still the right concern and is still answered — a busy month must not
+  silently stack banners down every page — but it is answered by capping rows at six per page
+  rather than by rendering only one.
 - **The promo is almost certainly the page's largest contentful paint**, since it is the first
   large element. Every page it appears on is as fast as that image is. It needs explicit
   dimensions, a modern format, and a size budget.
