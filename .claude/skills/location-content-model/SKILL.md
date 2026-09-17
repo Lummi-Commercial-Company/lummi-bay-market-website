@@ -17,6 +17,13 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
   a place is *also called*; `shortLabel` is what we *print* in a constrained slot.
 - `aka`: legacy/alternate name(s)
 - `address`, `city`, `state`, `zip`, `phone`, `hours`
+- `hoursOverrides`: a list, usually empty — **the temporary hours line, on a date window**
+  (ADR 0027). Each entry is `hours` (the replacement line), `reason` (two or three words, detail
+  page only), `startsAt` and `endsAt`. Live is computed per visitor in `America/Los_Angeles`, so
+  New Year's Eve hours are typed in November and revert on their own. **`endsAt` is required** —
+  an override with no end never reverts and fails silently, because a wrong opening time still
+  looks like an opening time. Dates are whole days, inclusive. When two overlap the shorter
+  window wins. `hours` itself is never empty and a permanent change edits `hours`, not this.
 - `cardLine`: the single line under the name in a Location card — **street, then hours**,
   e.g. `4839 Rural Ave · Open 24 hours`. Derived from `address` + `hours` where those are
   clean; stored when they are not, because the card wants "4839 Rural Ave", not the full
@@ -25,7 +32,11 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
 - fuel prices are NOT stored here. All eight live in `content/fuel-prices.json`;
   the grades a place sells are the entries present in its price list (ADR 0004,
   skill `fuel-price-update`).
-- `amenities`: string list (drives badges/icons — never hand-place per page)
+- `amenities`: string list (drives the **badge row** — never hand-place per page). What that
+  looks like is drawn in `docs/proofs/amenity-badges.html`: one small chip per amenity, icon plus
+  two or three words, wrapping across the detail page rather than running down it. See the badge
+  rules below — the list *is* the layout, so a thin list is a visible problem and not a
+  styling one.
 - `truckStop`: a **record**, present only on exit-260 — `truckStop: { phone, hours, amenities }`.
   **Settled 16 Sep 2026** by the client: the Truck Stop is *not* an amenity of the Exit 260
   fuel station, it is a **separate fuel station for truckers**, with its own small c-store and
@@ -116,10 +127,35 @@ unaffected and still prints **The Cove** in the fuel price band.
   the layout.
 - The card line carries **where it is and when it is open — not what it sells**. Amenities live
   in `amenities` and render on the detail page. A list view is for choosing between places.
-- Amenity badges/icons are driven by the `amenities` list — don't hand-place them.
+- **Amenity badges are driven by the `amenities` list — don't hand-place them**, and the badge
+  row has rules of its own (ADR 0027 is hours; these are the badges, proved in
+  `docs/proofs/amenity-badges.html`):
+  - **Fewer than two amenities and the row does not render** — a sentence renders instead. One
+    lone chip under a "What's here" heading reads as a failed load, not as a short list. The
+    Minimart is the live case: its recorded amenity list is the single string
+    `fuel + convenience store`.
+  - **Split compound strings.** `fuel + convenience store` is two facts typed into one field. The
+    badge row is where that shows.
+  - **Free text, with a fallback.** Staff type any amenity; the component matches it against an
+    icon map and falls back to a neutral dot when there is no icon yet. Never a fixed picklist —
+    that turns "we sell propane now" into an engineering ticket, which is the exact thing this
+    build exists to avoid.
+  - **Order is the order in the field**, not alphabetical. Whoever writes the list puts the
+    reason-to-stop first.
+  - **No badge is a link**, and the row is a detail-page block — never on the card or the
+    Locations index, where street and hours are the whole job.
+  - The Truck Stop's badges come from its own `truckStop.amenities`, never merged with the
+    store's. Showers are the truck stop's amenity, not Exit 260's.
 - Only exit-260 carries a `truckStop` record, and only it shows the Truck Stop summary +
-  links to `/truck-stop`. The summary reads from that record, never from `amenities`.
-- Keep addresses/hours in data, never in page markup, so staff edit via the CMS.
+  links to `/truck-stop`. The summary reads from that record, never from `amenities`. The record
+  also carries **its own `hoursOverrides`** — the Location's never apply to it. The store closing
+  early on a holiday while the diesel lanes stay open all night is the normal outcome, not an
+  edge case (ADR 0027).
+- Keep addresses/hours in data, never in page markup, so staff edit via the CMS. **Hours render
+  in exactly four places** — the Location card's `cardLine`, the Locations index, the Location
+  detail page and `/contact` — and they all read the same value, so an override swaps all four
+  together. On the card the override replaces only the hours half of `cardLine` and is held to
+  the same length budget; the *why* lives in `reason`, which the card never shows (ADR 0027).
 - Only regular, diesel and DEF are priced on this site. Midgrade, premium and
   ethanol-free may remain Amenities, but carry no posted price.
 - The footer "Lummi Commercial Companies" link is global, not per-location.

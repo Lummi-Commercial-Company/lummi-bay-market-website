@@ -7,8 +7,14 @@ This is a *view*, not a new record. Where an item already has an ID it carries i
 lives in `docs/launch-checklist.md` (section A), `docs/loose-ends.md` and the ADRs, and is not
 repeated here. Items with no ID are gaps neither document had captured.
 
-**Read the three starred items first.** They are the only ones that can change work already
-finished; everything else fills a field in a design that already exists.
+**Revised 17 Sep 2026** after the client answered the first version point by point. Answered items
+are kept, struck through, with where the answer went — a list that deletes what it asked loses the
+record of why the design is the way it is. **Three groups were cut entirely**: they were launch
+logistics, not design, layout or content, and the client was right to say so. See *What was cut*
+at the foot.
+
+**One item is still open and it is the only one that can change work already finished**: ★C, the
+real amenity list per Location.
 
 ---
 
@@ -16,9 +22,9 @@ finished; everything else fills a field in a design that already exists.
 
 | # | What we need | Why it can move things |
 |---|---|---|
-| ★A | **Analytics or Search Console access for exit260.com, lcc-lummi.com and lummibay.com** — whatever exists, even if it is nothing | The whole navigation assumes **fuel prices are the primary draw**. That has never been checked against one piece of evidence. If most visits are people hunting for *hours*, a *phone number* or the *Cove Kitchen*, the three-item nav is optimised for the wrong thing and we find out after launch. `loose-ends.md` §1. If no analytics exist anywhere, that is the answer — and **20 minutes of "what do people phone and ask?" from whoever answers the phone beats nothing** |
-| ★B | **Do any hours vary?** By day of week, by season, or on holidays — Thanksgiving, Christmas, New Year's Day | Today each Location stores hours as **one line of text** (`open daily 7am–8pm`). One "closed Christmas Day" turns that field into a structure, and it changes the Location card, the Locations index and `/contact` at once. Cheap to build in now, expensive to retrofit. Worth noting: the Minimart's hours are the one confirmed value that later turned out wrong, so **re-check each with the staff who open up** |
-| ★C | **The full amenity list for each Location, as a customer would ask for it** | Amenities drive a row of badges on every Location page, so the list *is* the layout. What we hold for the Minimart today is "fuel + convenience store" — almost certainly incomplete. Things people search for and we have no record of: ATM, propane exchange, ice, lottery, hot food, restrooms, air and water, car wash, EV charging, RV lane, accessible parking and restrooms |
+| ~~★A~~ | ~~**Analytics or Search Console access**~~ | **Answered by assertion, 17 Sep 2026** — *"Fuel prices are the draw."* The three-item nav stands. Recorded in `loose-ends.md` §1 with the one caveat worth keeping: that answers *why people come*, which is not the same question as *what they could not find*. Nothing is blocked |
+| ~~★B~~ | ~~**Do any hours vary?**~~ | **Answered and built, 17 Sep 2026** — *"most likely would be an alert bar mention… If you want to build in a second 'one line of text' variable for any changes, that would be smart."* That is now `hoursOverrides`: a second hours line on a date window, per Location, which swaps in and back out on its own. **ADR 0027**, checklist **B14**. The New Year's Eve case in the answer is the worked example in the ADR |
+| ★C | **The full amenity list for each Location, as a customer would ask for it** | **Still open — the one thing on this list that is.** Amenities drive a row of badges on every Location page, so the list *is* the layout: see `docs/proofs/amenity-badges.html`, which draws it. What we hold for the Minimart today is the single string `fuel + convenience store`, which renders as **one lone chip** under a heading promising a list. Two asks: split the compound strings we already have, and five minutes with whoever opens up. Things people search for and we have no record of: ATM, propane exchange, ice, lottery, hot food, restrooms, air and water, car wash, EV charging, RV lane, accessible parking and restrooms. Checklist **A23** |
 
 ---
 
@@ -26,6 +32,10 @@ finished; everything else fills a field in a design that already exists.
 
 Every line below was written to fill a layout and **reads as finished**, which is the danger
 (`A12`, `loose-ends.md` §6). None of it is a design question; all of it blocks launch.
+
+The client's answer — *"All the text will be updated before launch. Is that the concern?"* — is
+exactly the concern, and it is now answered: yes, and this is the list of what has to be written,
+so nothing is discovered missing on launch week.
 
 | # | What we need |
 |---|---|
@@ -36,60 +46,60 @@ Every line below was written to fill a layout and **reads as finished**, which i
 | 2.5 | **The Truck Stop page: what a driver decides on.** The amenity list is settled, the decision factors are not — shower cost and whether towels are included, lounge access rules, how long a truck may park, any reservation, whether there is a scale, and which **fleet cards** are accepted |
 | 2.6 | **The Cove Kitchen** — hours (are they the store's?), whether there is a menu to publish, and a phone for orders. It is an Amenity, not a tenant (settled 16 Sep 2026), but customers will search for it by name |
 | 2.7 | **The Careers link destination** (`A9`), and whether "Careers" is the right label |
-| 2.8 | **The Rewards app in one paragraph** — what a customer gets, for the `/rewards` page. Separate from the store links in §5 |
+| 2.8 | **The Rewards app in one paragraph** — what a customer gets, for the `/rewards` page. This is a page on this website with nothing on it, which is why it survived the cut of the app group below |
 | 2.9 | **The legal entity name for the footer copyright line** — "Lummi Bay Market", or a registered company name |
-| 2.10 | **Whether to advertise the businesses renting space at Exit 260 at all** (`A14`) — Piroshky Piroshky, Wendy's, Hi-Tide Coffee, and Black Bear Diner when it is built. Undecided by design; the collection ships empty and nothing renders until the answer is yes. **If yes**, each needs a short description, and none of them is a Location or an amenity |
+| ~~2.10~~ | ~~**Whether to advertise the businesses renting space at Exit 260 at all**~~ (`A14`) — **Answered: yes.** *"we will create a page for tenants and add their card to that page."* ADR 0016 amended, `A14` closed. What is still needed is ordinary content, and it is now item **2.11** |
+| 2.11 | **A short description and hours for each business at Exit 260**, and for each one, whether its card links to a page on our site or straight to their own website — *"depending on the company's decision at that time."* Piroshky Piroshky first, since that is the one named. A logo only where we have written permission (`markApproved`, ADR 0016) |
 
 ---
 
 ## 3. Structure — small facts the content model has nowhere to put yet
+
+The client's answer here was *"not sure the actual issue"*, which is fair — the heading was doing
+no work. The issue in every case is the same one: **a fact that exists in the business but has no
+field to live in**, so it cannot be entered in the CMS until someone adds one. That is a build
+change, not a content update, which is why they are asked before launch rather than after.
 
 | # | What we need | Note |
 |---|---|---|
 | 3.1 | **Which fuel grades each Location and the Truck Stop actually sell** | This is the *shape* of the price table, not the prices in it — the table's rows are the grades present. Fisherman's Cove is recorded as carrying ethanol-free; nobody has confirmed the full set anywhere |
 | 3.2 | **Do the showers or driver lounge have their own hours or a cost?** | The content model has no field for either (`loose-ends.md` §7) |
 | 3.3 | **Is a newsletter or email signup expected?** | Nobody has ever mentioned one, and it is **not** in the architecture. It would be the only form on a site that deliberately has none (ADR 0015), so it is an architecture decision rather than a field |
-| 3.4 | **Are there Facebook / Instagram accounts for any of the three?** | Nothing on the site links to social today. Either they get a footer row or the answer is "no accounts", and both are fine — but the current silence is an omission, not a decision |
+| ~~3.4~~ | ~~**Are there Facebook / Instagram accounts?**~~ | **Answered 17 Sep 2026** — *"Social site links should be added to the bottom of the page, within or below the footer links."* Built as a footer social row: **ADR 0028**, checklist **B13**. One rule came with it — **links only, never embedded feeds or follow buttons**, because an embed loads third-party code and sets cookies, which would falsify the footer's own "No cookies" line (ADR 0025). What is still needed is the accounts themselves: **3.5** |
+| 3.5 | **Which social accounts exist, and their URLs** — per brand or per Location, and who posts to them. An account linked from the footer and last posted to in 2023 is worse than no link at all |
 
 ---
 
-## 4. Access — things that already exist and somebody must be able to log into
+## 4. Everything else — cut
 
-Checking these costs nothing today and can cost the launch date if left. **The registrar is the
-one that bites**: a domain registered years ago under a former employee's address can take weeks
-to recover.
+The first version of this list had three more groups: **Access** (registrar logins, Google
+accounts, repo ownership), **The app** (its data inventory, store URLs, whether it is
+white-labelled) and **Operations** (what happens to the three old domains, and how a price change
+happens today).
+
+**The client's objection was right and the groups are removed.** They are launch and operations
+logistics, not the design, layout and content questions this list was asked for. Nothing is lost:
+every one of them is already an item in `docs/launch-checklist.md` section A, which is where
+launch logistics belong, and they are tracked there.
+
+Two things did not survive the cut, because they are not really about the app or about
+operations — they are pages on this website with nothing on them:
 
 | # | What we need | ID |
 |---|---|---|
-| 4.1 | **Registrar logins for lummibay.com and exit260.com** — not to change anything, just proof someone at the company can get in | `A6` |
-| 4.2 | **A company Google account** for the Locations map — a map built in a personal account leaves with that person | `A17` |
-| 4.3 | **The Google Business Profile for each of the three Locations** — do they exist, who controls them, and do the name, hours and phone match what this site will publish? | — |
-| 4.4 | **Confirmation the GitHub repo sits in a company org**, and that Vercel and the CMS will be owned the same way | — |
-| 4.5 | **Two staff emails for CMS editor logins** — deferred, and the deadline is training, not now. Two constraints when it is answered: the free tier is **exactly two seats**, and one of the two has to be able to publish an emergency notice at 5am | `A7` |
-| 4.6 | **Who will actually read the analytics** | `B7` |
+| 4.1 | **The App Store and Google Play URLs** for the `/rewards` page. Not an app question — `/rewards` is a page on this site whose two main buttons currently point nowhere | `A8` |
+| 4.2 | **What the Rewards app collects**, for `/privacy`. The page exists because neither store will publish an app without a public policy URL, and it cannot be written from guesswork | `A21`, ADR 0026 |
 
-**4.3 is the one most often skipped and it matters more than the website for a fuel stop.** More
-people will see the Google listing than the site, and hours that disagree between the two
-generate complaints at the counter rather than emails.
+And one answer from the cut groups was kept, because it changed a document rather than a plan:
 
----
+> **How a price change happens today** — *"Price changes today are immediate and manual. 3-4
+> people have to get together and say 'change prices....now' and then do their related tasks to
+> change the price as close to the same time as possible."*
 
-## 5. The Rewards app
-
-| # | What we need | ID |
-|---|---|---|
-| 5.1 | **The real App Store and Google Play URLs.** Blocked until the privacy page is live — neither store publishes an app without a public policy URL | `A8` |
-| 5.2 | **The app's data inventory**, from whoever built it: what it collects, who receives it, retention, the account-deletion route, and who the data controller is. **Not a writing task until these facts exist** | `A21` |
-| 5.3 | **Is the app white-labelled from a loyalty vendor?** If so they may already publish a policy, and hosting a second divergent one is the worst of the three options | ADR 0026 |
-
----
-
-## 6. Two operational questions, easy to forget
-
-| # | What we need |
-|---|---|
-| 6.1 | **What happens to the three old sites after launch** — parked, redirected wholesale, or shut down? Who keeps paying, and who renews the SSL certificates? (`loose-ends.md` §7.) Separately, a **full URL list from all three** is needed so every indexed address either resolves or redirects — a crawl, not a memory (`B5`) |
-| 6.2 | **How does a price change happen today?** Not the prices — the *process*. Who changes the pump signs, who tells whom, and does the website need to match the pumps or lead them? The CMS design was reasoned from first principles and has never been shown to the person who will use it (`loose-ends.md` §2) |
+That is now recorded in the `fuel-price-update` skill, with the consequence that follows from it:
+the website is a fourth task in that huddle, it needs a login that works on a phone, and **it goes
+last, after the pump signs** — a website price ahead of the pump is an argument at the counter; a
+website price thirty seconds behind is invisible.
 
 ---
 

@@ -1,0 +1,507 @@
+<meta charset="utf-8">
+<title>Amenity Badge Row</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* ============================================================
+   REVIEW CHROME — deliberately not the brand.
+   Cool slate + a violet marker, so an annotation can never be
+   mistaken for site copy. Themed for the viewer.
+   ============================================================ */
+:root{
+  --c-bg:#EDEEF1; --c-surface:#FFFFFF; --c-sunk:#E3E5EA;
+  --c-text:#191C22; --c-dim:#5A616E; --c-line:#D3D7DE;
+  --c-mark:#6B4FA8; --c-mark-soft:#EFE9FA;
+  --c-warn:#9A5B12; --c-warn-soft:#FBEFDD;
+  --c-good:#1F6B4A; --c-good-soft:#E2F1E9;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --c-bg:#14161B; --c-surface:#1D2027; --c-sunk:#0F1115;
+    --c-text:#E7E9ED; --c-dim:#99A1AE; --c-line:#2E323B;
+    --c-mark:#A78BE8; --c-mark-soft:#241D33;
+    --c-warn:#E0A75E; --c-warn-soft:#2A2114;
+    --c-good:#6FC29A; --c-good-soft:#12251C;
+  }
+}
+:root[data-theme="dark"]{
+  --c-bg:#14161B; --c-surface:#1D2027; --c-sunk:#0F1115;
+  --c-text:#E7E9ED; --c-dim:#99A1AE; --c-line:#2E323B;
+  --c-mark:#A78BE8; --c-mark-soft:#241D33;
+  --c-warn:#E0A75E; --c-warn-soft:#2A2114;
+  --c-good:#6FC29A; --c-good-soft:#12251C;
+}
+
+/* LOCKED BRAND TOKENS — skill `brand-system`. Fixed in both themes on
+   purpose: this is a review of a light-ground site, so the frames must
+   render the site's own palette whatever theme the reviewer is using. */
+:root{
+  --lb-navy:#1C4E8F; --lb-navy-deep:#14396B; --lb-teal:#0FB5C4;
+  --lb-cedar:#C9772E; --lb-ground:#FBF9F4; --lb-paper:#FFFFFF;
+  --lb-ink:#2A2820; --lb-bone:#F5F1E8;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--c-bg); color:var(--c-text);
+  font:400 15px/1.6 "IBM Plex Sans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px; margin:0 auto; padding:40px 24px 80px}
+.lede{max-width:64ch}
+h1{
+  font:600 30px/1.2 "IBM Plex Sans",system-ui,sans-serif;
+  letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance;
+}
+h2{
+  font:600 20px/1.25 "IBM Plex Sans",system-ui,sans-serif;
+  letter-spacing:-.01em; margin:0 0 6px; text-wrap:balance;
+}
+h3{font:600 15px/1.3 "IBM Plex Sans",system-ui,sans-serif; margin:0 0 6px}
+.eyebrow{
+  font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--c-mark);
+  margin:0 0 14px;
+}
+p{margin:0 0 14px; color:var(--c-dim); max-width:64ch}
+p strong{color:var(--c-text); font-weight:600}
+a{color:var(--c-mark)}
+code{
+  font:500 .88em/1 "IBM Plex Mono",ui-monospace,monospace;
+  background:var(--c-sunk); padding:2px 5px; border-radius:4px; color:var(--c-text);
+}
+hr.rule{border:0; border-top:1px solid var(--c-line); margin:48px 0}
+ul.notes{margin:0 0 14px; padding-left:20px; color:var(--c-dim); max-width:64ch}
+ul.notes li{margin:0 0 7px}
+ul.notes li strong{color:var(--c-text); font-weight:600}
+
+section{margin:0 0 8px}
+.sec-head{margin:0 0 20px}
+
+/* ---- the site frame: everything inside renders the real palette ---- */
+.frame{
+  background:var(--lb-ground); border:1px solid var(--c-line); border-radius:10px;
+  padding:26px 28px; color:var(--lb-ink);
+  font-family:Inter,system-ui,sans-serif;
+  overflow:hidden;
+}
+.frame.narrow{max-width:320px; padding:20px 16px}
+.frame h4{
+  font:700 21px/1.2 Inter,system-ui,sans-serif; margin:0 0 3px; color:var(--lb-navy-deep);
+  letter-spacing:-.01em;
+}
+.frame .cardline{
+  font:400 13px/1.4 Inter,system-ui,sans-serif; margin:0 0 16px;
+  color:var(--lb-ink); opacity:.72;
+}
+.frame .sublabel{
+  font:600 10.5px/1 Inter,system-ui,sans-serif; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--lb-cedar); margin:0 0 10px;
+}
+
+/* ============================================================
+   TREATMENT A — pill badges
+   ============================================================ */
+.badges{display:flex; flex-wrap:wrap; gap:8px; margin:0; padding:0; list-style:none}
+.badge{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:7px 13px 7px 11px;
+  border:1px solid rgba(28,78,143,.22); border-radius:999px;
+  background:var(--lb-paper);
+  font:600 13px/1 Inter,system-ui,sans-serif; color:var(--lb-ink);
+  white-space:nowrap;
+}
+.badge svg{flex:none; width:16px; height:16px; stroke:var(--lb-navy); fill:none;
+  stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+
+/* ============================================================
+   TREATMENT B — quiet icon row, no pill
+   ============================================================ */
+.quiet{display:flex; flex-wrap:wrap; gap:12px 26px; margin:0; padding:0; list-style:none}
+.quiet li{
+  display:inline-flex; align-items:center; gap:8px;
+  font:500 13.5px/1 Inter,system-ui,sans-serif; color:var(--lb-ink);
+}
+.quiet svg{flex:none; width:17px; height:17px; stroke:var(--lb-teal); fill:none;
+  stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+
+/* ============================================================
+   TREATMENT C — plain list, no icons
+   ============================================================ */
+.plain{margin:0; padding-left:19px; list-style:disc}
+.plain li{
+  font:400 14px/1.75 Inter,system-ui,sans-serif; color:var(--lb-ink);
+  margin:0;
+}
+.plain li::marker{color:var(--lb-teal)}
+
+/* comparison grid */
+.compare{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; align-items:start}
+@media (max-width:860px){.compare{grid-template-columns:1fr}}
+.compare .frame{padding:22px 20px}
+.tlabel{
+  font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--c-mark);
+  margin:0 0 9px;
+}
+.tlabel span{color:var(--c-dim); letter-spacing:.04em; text-transform:none; font-weight:400}
+
+.locgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; align-items:start}
+@media (max-width:860px){.locgrid{grid-template-columns:1fr}}
+
+.phones{display:flex; flex-wrap:wrap; gap:18px; align-items:start}
+
+/* annotation */
+.note{
+  border-left:3px solid var(--c-mark); background:var(--c-mark-soft);
+  padding:13px 16px; border-radius:0 8px 8px 0; margin:16px 0 0;
+  color:var(--c-text); font-size:14px; line-height:1.6; max-width:76ch;
+}
+.note.warn{border-left-color:var(--c-warn); background:var(--c-warn-soft)}
+.note.good{border-left-color:var(--c-good); background:var(--c-good-soft)}
+.note p{color:inherit; margin:0 0 8px; max-width:none}
+.note p:last-child{margin:0}
+.note strong{font-weight:600}
+
+table.spec{
+  width:100%; border-collapse:collapse; margin:0 0 16px;
+  font-size:13.5px; background:var(--c-surface); border:1px solid var(--c-line);
+  border-radius:8px; overflow:hidden;
+}
+table.spec th,table.spec td{
+  text-align:left; padding:10px 13px; border-bottom:1px solid var(--c-line);
+  vertical-align:top;
+}
+table.spec th{
+  font:600 11px/1.3 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--c-dim); background:var(--c-sunk);
+}
+table.spec tr:last-child td{border-bottom:0}
+table.spec td strong{font-weight:600}
+.tablescroll{overflow-x:auto; margin:0 0 16px}
+.tablescroll table.spec{margin:0; min-width:520px}
+</style>
+
+<div class="wrap">
+
+<p class="eyebrow">Proof · Location detail page · 17 Sep 2026</p>
+<h1>Amenity Badge Row</h1>
+
+<div class="lede">
+<p>You asked what <em>“as a badge row”</em> means. Fair question — it has been written down three
+times and <strong>never actually drawn</strong>. <code>location-content-model</code> says
+<em>“amenities: string list (drives badges/icons — never hand-place per page)”</em>, and ADR 0009
+refers to it twice as if it exists. No proof file renders one. So here it is, in three
+treatments, with the real amenity list from each Location rather than filler.</p>
+
+<p>The short version: a <strong>badge row</strong> is the “what’s here” strip on a Location page —
+one small chip per amenity, icon plus two or three words, wrapping across the page instead of
+running down it as a bulleted list. It is the row you scan in a second at a fuel stop, not
+something you read.</p>
+</div>
+
+<hr class="rule">
+
+<!-- ============================================================
+     1. THE THREE TREATMENTS
+     ============================================================ -->
+<section>
+<div class="sec-head">
+  <h2>1. Three ways to draw the same four facts</h2>
+  <p>Same data, same page slot, same Location (Exit 260). Only the treatment changes.</p>
+</div>
+
+<div class="compare">
+
+  <div>
+    <p class="tlabel">A — Pill badges <span>· recommended</span></p>
+    <div class="frame">
+      <p class="sublabel">What’s here</p>
+      <ul class="badges">
+        <li class="badge"><svg viewBox="0 0 24 24"><path d="M4 9.5 12 4l8 5.5V20H4z"/><path d="M9.5 20v-6h5v6"/></svg>24-hour store</li>
+        <li class="badge"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="16" rx="1.5"/><path d="M6.5 8h5"/><path d="M14 10h3.5a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 1.5 1.5"/></svg>~16 fuel lanes</li>
+        <li class="badge"><svg viewBox="0 0 24 24"><path d="M3 17h14l3-6h-3"/><circle cx="7" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/><path d="M3 17V8h11v9"/></svg>Drive-thru</li>
+        <li class="badge"><svg viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M17 3c-1.5 2-2 4-2 6.5 0 1.5.7 2.5 2 2.5v9"/></svg>Quick-serve food</li>
+      </ul>
+    </div>
+  </div>
+
+  <div>
+    <p class="tlabel">B — Quiet icon row</p>
+    <div class="frame">
+      <p class="sublabel">What’s here</p>
+      <ul class="quiet">
+        <li><svg viewBox="0 0 24 24"><path d="M4 9.5 12 4l8 5.5V20H4z"/><path d="M9.5 20v-6h5v6"/></svg>24-hour store</li>
+        <li><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="16" rx="1.5"/><path d="M6.5 8h5"/><path d="M14 10h3.5a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 1.5 1.5"/></svg>~16 fuel lanes</li>
+        <li><svg viewBox="0 0 24 24"><path d="M3 17h14l3-6h-3"/><circle cx="7" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/><path d="M3 17V8h11v9"/></svg>Drive-thru</li>
+        <li><svg viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M17 3c-1.5 2-2 4-2 6.5 0 1.5.7 2.5 2 2.5v9"/></svg>Quick-serve food</li>
+      </ul>
+    </div>
+  </div>
+
+  <div>
+    <p class="tlabel">C — Plain list <span>· what we have now</span></p>
+    <div class="frame">
+      <p class="sublabel">What’s here</p>
+      <ul class="plain">
+        <li>24-hour convenience store</li>
+        <li>~16 fuel lanes</li>
+        <li>Tobacco &amp; liquor drive-thru</li>
+        <li>Quick-serve food</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="note">
+<p><strong>Why A is the recommendation.</strong> A list runs down the page and pushes the fuel
+prices, the map link and the Truck Stop summary below the fold. The badge row runs across and
+costs one or two lines total. On a fuel stop the amenity list is the thing people scan and the
+thing they stop reading after three items — a horizontal row suits that, a vertical list argues
+for reading all of it.</p>
+<p><strong>B is the cheaper insurance.</strong> No border means no chip that looks broken when
+there is only one of them — which is the Minimart’s exact problem, §3 below.</p>
+</div>
+</section>
+
+<hr class="rule">
+
+<!-- ============================================================
+     2. ALL FOUR REAL LISTS
+     ============================================================ -->
+<section>
+<div class="sec-head">
+  <h2>2. The four real lists, in treatment A</h2>
+  <p>Straight out of <code>location-content-model</code>. Nothing here is invented — including
+  the Minimart’s, which is two words.</p>
+</div>
+
+<div class="locgrid">
+
+  <div class="frame">
+    <h4>Lummi Bay Market at Exit 260</h4>
+    <p class="cardline">4839 Rural Ave · Open 24 hours</p>
+    <p class="sublabel">What’s here</p>
+    <ul class="badges">
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M4 9.5 12 4l8 5.5V20H4z"/><path d="M9.5 20v-6h5v6"/></svg>24-hour store</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="16" rx="1.5"/><path d="M6.5 8h5"/><path d="M14 10h3.5a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 1.5 1.5"/></svg>~16 fuel lanes</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M3 17h14l3-6h-3"/><circle cx="7" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/><path d="M3 17V8h11v9"/></svg>Tobacco &amp; liquor drive-thru</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M17 3c-1.5 2-2 4-2 6.5 0 1.5.7 2.5 2 2.5v9"/></svg>Quick-serve food</li>
+    </ul>
+  </div>
+
+  <div class="frame">
+    <h4>The Truck Stop <span style="font:400 13px/1 Inter,sans-serif;opacity:.6">— its own record</span></h4>
+    <p class="cardline">Same property · Open 24 hours · 360-778-1696</p>
+    <p class="sublabel">What’s here</p>
+    <ul class="badges">
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M3 17h10V6H3z"/><path d="M13 10h4l3 3.5V17h-7z"/><circle cx="7" cy="19" r="1.7"/><circle cx="17" cy="19" r="1.7"/></svg>Diesel lanes</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M12 3.5c3 4 5 6.5 5 9a5 5 0 0 1-10 0c0-2.5 2-5 5-9z"/></svg>DEF</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M4 9.5 12 4l8 5.5V20H4z"/><path d="M9.5 20v-6h5v6"/></svg>Small c-store</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M4 12v-2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/><rect x="3" y="12" width="18" height="6" rx="1.5"/><path d="M6 18v2M18 18v2"/></svg>Driver lounge</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M6 12V7a3 3 0 0 1 6 0"/><path d="M3 12h9"/><path d="M6 16v1M9 15v2M12 16v1M15 15v2M18 16v1"/><path d="M17 4h3v8"/></svg>Showers</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9.5 16V8h3a2.5 2.5 0 0 1 0 5h-3"/></svg>Truck parking</li>
+    </ul>
+  </div>
+
+  <div class="frame">
+    <h4>Lummi Bay Market Fisherman’s Cove</h4>
+    <p class="cardline">2570 Lummi View Dr · 6am–9pm</p>
+    <p class="sublabel">What’s here</p>
+    <ul class="badges">
+      <li class="badge"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="16" rx="1.5"/><path d="M6.5 8h5"/><path d="M14 10h3.5a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 1.5 1.5"/></svg>Fuel &amp; convenience store</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M5 9h11v4a5.5 5.5 0 0 1-11 0z"/><path d="M16 10h2.5a2 2 0 0 1 0 4H16"/><path d="M4 20h13"/></svg>The Cove Kitchen</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M12 20c0-6 3-10 8-11-1 7-4 10-8 11z"/><path d="M12 20c0-4-2-7-6-8 .5 5 2.5 7.5 6 8z"/></svg>Ethanol-free fuel</li>
+    </ul>
+  </div>
+
+  <div class="frame">
+    <h4>Lummi Bay Market Minimart</h4>
+    <p class="cardline">4884 Haxton Way · 7am–8pm</p>
+    <p class="sublabel">What’s here</p>
+    <ul class="badges">
+      <li class="badge"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="16" rx="1.5"/><path d="M6.5 8h5"/><path d="M14 10h3.5a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 1.5 1.5"/></svg>Fuel &amp; convenience store</li>
+      </ul>
+  </div>
+
+</div>
+
+<div class="note warn">
+<p><strong>Look at the Minimart.</strong> One chip, alone, under a heading that promises a list.
+It does not read as “this place has one thing” — it reads as “the other badges failed to load.”
+That is not a rendering bug, it is the honest state of the data: the Minimart’s recorded amenity
+list is the single string <em>“fuel + convenience store”</em>.</p>
+<p>This is the whole reason the real amenity list per Location was one of the three questions that
+can change work already done. <strong>The badge row is not a layout that sits on top of the
+data — it is the data, drawn.</strong> Four amenities make a row; one makes a mistake.</p>
+</div>
+</section>
+
+<hr class="rule">
+
+<!-- ============================================================
+     3. THE THIN-LIST PROBLEM
+     ============================================================ -->
+<section>
+<div class="sec-head">
+  <h2>3. Three ways out of the thin list</h2>
+  <p>Only the first one is free.</p>
+</div>
+
+<div class="compare">
+  <div>
+    <p class="tlabel">1 — Split the string <span>· free</span></p>
+    <div class="frame">
+      <p class="sublabel">What’s here</p>
+      <ul class="badges">
+        <li class="badge"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="16" rx="1.5"/><path d="M6.5 8h5"/><path d="M14 10h3.5a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 1.5 1.5"/></svg>Fuel</li>
+        <li class="badge"><svg viewBox="0 0 24 24"><path d="M4 9.5 12 4l8 5.5V20H4z"/><path d="M9.5 20v-6h5v6"/></svg>Convenience store</li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <p class="tlabel">2 — Ask staff what’s actually there</p>
+    <div class="frame">
+      <p class="sublabel">What’s here</p>
+      <ul class="badges">
+        <li class="badge"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="16" rx="1.5"/><path d="M6.5 8h5"/><path d="M14 10h3.5a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 1.5 1.5"/></svg>Fuel</li>
+        <li class="badge"><svg viewBox="0 0 24 24"><path d="M4 9.5 12 4l8 5.5V20H4z"/><path d="M9.5 20v-6h5v6"/></svg>Convenience store</li>
+        <li class="badge"><svg viewBox="0 0 24 24"><path d="M5 9h11v4a5.5 5.5 0 0 1-11 0z"/><path d="M16 10h2.5a2 2 0 0 1 0 4H16"/><path d="M4 20h13"/></svg>Hot coffee</li>
+        <li class="badge"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 10h8M8 14h5"/></svg>ATM</li>
+        <li class="badge"><svg viewBox="0 0 24 24"><path d="M12 3v18M7 8h10M7 16h10"/></svg>Lottery</li>
+      </ul>
+      <p style="font:400 11.5px/1.4 Inter,sans-serif;opacity:.55;margin:11px 0 0">
+        Illustrative — these three are guesses, not confirmed.</p>
+    </div>
+  </div>
+  <div>
+    <p class="tlabel">3 — Suppress the row under two</p>
+    <div class="frame">
+      <p class="sublabel">What’s here</p>
+      <p style="font:400 14px/1.6 Inter,sans-serif;margin:0">
+        Fuel and a convenience store, open 7am–8pm, next to Silver Reef Casino.</p>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+<p><strong>The recommendation is 1 + 2, with 3 as the guard rail.</strong> Split the string
+whatever else happens — “fuel + convenience store” is two facts typed into one field, and the
+badge row is where that shows. Then the real list is a five-minute question to whoever works
+there: coffee, ATM, lottery, propane, air, ice, restrooms, a deli case. Every one of those is a
+reason a driver picks one exit over the next.</p>
+<p>Rule 3 stays in the component regardless: <strong>fewer than two amenities and the row does not
+render</strong>, the sentence does. A component that cannot draw a bad state badly is worth more
+than one that always draws.</p>
+</div>
+</section>
+
+<hr class="rule">
+
+<!-- ============================================================
+     4. 320px
+     ============================================================ -->
+<section>
+<div class="sec-head">
+  <h2>4. At 320px, where it has to survive</h2>
+  <p>The narrowest common phone. Badges wrap; nothing truncates, because unlike
+  <code>cardLine</code> this row is allowed as many lines as it needs.</p>
+</div>
+
+<div class="phones">
+  <div class="frame narrow">
+    <h4 style="font-size:18px">Lummi Bay Market at Exit 260</h4>
+    <p class="cardline">4839 Rural Ave · Open 24 hours</p>
+    <p class="sublabel">What’s here</p>
+    <ul class="badges">
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M4 9.5 12 4l8 5.5V20H4z"/><path d="M9.5 20v-6h5v6"/></svg>24-hour store</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="16" rx="1.5"/><path d="M6.5 8h5"/><path d="M14 10h3.5a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 1.5 1.5"/></svg>~16 fuel lanes</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M3 17h14l3-6h-3"/><circle cx="7" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/><path d="M3 17V8h11v9"/></svg>Drive-thru</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M6 3v7a2 2 0 0 0 4 0V3"/><path d="M8 10v11"/><path d="M17 3c-1.5 2-2 4-2 6.5 0 1.5.7 2.5 2 2.5v9"/></svg>Quick-serve food</li>
+    </ul>
+  </div>
+
+  <div class="frame narrow">
+    <h4 style="font-size:18px">The Truck Stop</h4>
+    <p class="cardline">Same property · 24 hours</p>
+    <p class="sublabel">What’s here</p>
+    <ul class="badges">
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M3 17h10V6H3z"/><path d="M13 10h4l3 3.5V17h-7z"/><circle cx="7" cy="19" r="1.7"/><circle cx="17" cy="19" r="1.7"/></svg>Diesel lanes</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M12 3.5c3 4 5 6.5 5 9a5 5 0 0 1-10 0c0-2.5 2-5 5-9z"/></svg>DEF</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M4 9.5 12 4l8 5.5V20H4z"/><path d="M9.5 20v-6h5v6"/></svg>Small c-store</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M4 12v-2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/><rect x="3" y="12" width="18" height="6" rx="1.5"/><path d="M6 18v2M18 18v2"/></svg>Driver lounge</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><path d="M6 12V7a3 3 0 0 1 6 0"/><path d="M3 12h9"/><path d="M6 16v1M9 15v2M12 16v1M15 15v2M18 16v1"/><path d="M17 4h3v8"/></svg>Showers</li>
+      <li class="badge"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9.5 16V8h3a2.5 2.5 0 0 1 0 5h-3"/></svg>Truck parking</li>
+    </ul>
+  </div>
+</div>
+
+<div class="note good">
+<p>Six badges cost four lines at 320px — about 140px of page. The same six as a bulleted list
+cost six lines and read as a specification sheet. <strong>The long list is where the badge row
+earns its keep, and the Truck Stop has the longest list on the site.</strong></p>
+</div>
+</section>
+
+<hr class="rule">
+
+<!-- ============================================================
+     5. WHAT THE BADGE ROW COSTS
+     ============================================================ -->
+<section>
+<div class="sec-head">
+  <h2>5. What it costs — the part that needs a decision</h2>
+  <p>A plain list takes any words an editor types. A badge row does not, because every badge
+  wants an icon, and an icon has to be drawn in advance by somebody.</p>
+</div>
+
+<div class="tablescroll">
+<table class="spec">
+  <tr><th>Option</th><th>How <code>amenities</code> behaves in the CMS</th><th>What happens to a new amenity</th></tr>
+  <tr>
+    <td><strong>Free text + fallback dot</strong><br><span style="color:var(--c-dim)">recommended</span></td>
+    <td>Staff type anything, as today. The component matches the text against a small icon map.</td>
+    <td>Renders immediately with a neutral dot instead of an icon. Nothing breaks, nothing is
+        blocked, and the icon gets drawn later if the amenity sticks around.</td>
+  </tr>
+  <tr>
+    <td><strong>Fixed picklist</strong></td>
+    <td>A dropdown of approved amenities. Every one has an icon by definition.</td>
+    <td>Staff cannot add it. It is an engineering ticket — exactly the kind of thing this build
+        is meant to avoid.</td>
+  </tr>
+  <tr>
+    <td><strong>Icon per item in the CMS</strong></td>
+    <td>Each amenity is a row with a label and an icon picker.</td>
+    <td>Works, but hands a design decision to whoever is editing hours that morning.</td>
+  </tr>
+</table>
+</div>
+
+<div class="note">
+<p><strong>Free text with a fallback is the only one that keeps the promise the whole build is
+built on</strong> — staff change content without an engineer. The icon map is an optimisation on
+top of it, not a gate in front of it. A missing icon is a slightly plainer chip; a picklist is a
+phone call.</p>
+</div>
+
+<ul class="notes">
+  <li><strong>The icons above are stand-ins.</strong> They are utility glyphs — pump, truck,
+      shower — drawn for this proof so the row could be seen. They are not Coast Salish motifs
+      and are not governed by the art rules; the real set is either licensed or drawn once by the
+      designer. <code>TODO: replace with the final icon set</code>.</li>
+  <li><strong>The row is not a link.</strong> No badge navigates anywhere. The moment one does,
+      every one of them has to, and the amenity list becomes a nav.</li>
+  <li><strong>Order is the order in the field</strong>, not alphabetical. Whoever writes the list
+      puts the reason-to-stop first, and that is the correct instinct to preserve.</li>
+  <li><strong>The Truck Stop’s badges come from its own record</strong>, never merged with the
+      store’s (<code>location-content-model</code>). Showers are the truck stop’s amenity, not
+      Exit 260’s.</li>
+  <li><strong>It does not appear on the card or the Locations index.</strong> A list view is for
+      choosing between places — street and hours only. The badge row is a detail-page block.</li>
+</ul>
+</section>
+
+</div>

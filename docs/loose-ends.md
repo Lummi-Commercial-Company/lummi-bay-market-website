@@ -10,6 +10,20 @@ Ordered by how much damage each could do, not by when it came up.
 
 ## 1. The biggest gap: nobody has looked at what people actually use the three sites for
 
+> **Downgraded 17 Sep 2026 — answered by the client, not by evidence.** Asked directly which of
+> the three could change work already done, the client's first answer was flat: **"Fuel prices are
+> the draw."** That is the person who runs the business, and it is the best answer available
+> without opening an analytics account, so the three-item nav (ADR 0008) and the price block on
+> every page stand as designed.
+>
+> **It is not the same as measurement, and the difference is worth keeping in view.** What the
+> client answered is *why people come*. What analytics would have shown is *what they could not
+> find* — the searches for a phone number, the Cove Kitchen menu, whether the showers are open to
+> non-drivers. Those do not contradict "fuel prices are the draw"; they sit underneath it, and
+> they are what would tell us whether anything on this site is hard to reach. So this is no longer
+> a risk to the IA. It is an ordinary pre-launch task with a much smaller blast radius, and the
+> half-day is still worth spending if the analytics exist at all.
+
 **The entire information architecture assumes fuel prices are the primary draw.** The price block
 is on every page, the nav is three items, and several rounds of work went into how a price
 condenses on scroll. That assumption has never been checked against a single piece of evidence.
@@ -23,6 +37,21 @@ have no analytics at all, that is itself the finding, and search-console impress
 top queries from the sites' own search boxes would beat nothing.
 
 ## 2. Nobody has watched staff update a price today
+
+> **Half-closed 17 Sep 2026.** The client described the process: *"Price changes today are
+> immediate and manual. 3-4 people have to get together and say 'change prices....now' and then do
+> their related tasks to change the price as close to the same time as possible."* That answers
+> the *shape* of it, and four consequences are now written into the `fuel-price-update` skill —
+> the website is a named task in that huddle, it goes **last** (after the pump signs, because
+> being early is a complaint and being late is invisible), the form has to work one-handed on a
+> phone at the counter, and somebody reads the numbers back off the public site afterwards. It
+> also confirms ADR 0024 was the right call: a rebuild wait would land in the exact window where
+> four people are watching.
+>
+> **Still open, and still half an hour:** nobody has watched it. Which screen the new price comes
+> off, who calls the number out, and whether the person who would edit the site is even in the
+> room are all things a description does not settle.
+
 The CMS design assumes a workflow that has not been observed. How do prices get changed *now* —
 a whiteboard, a call to a manager, a POS system, someone with FTP? Who physically changes the
 pump signs, and does the website need to match them or lead them?

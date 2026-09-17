@@ -74,17 +74,27 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
   plus the `/rewards` app-promo page and the footer. Nowhere else — see ADR 0006.
 - **Promos**: a full-width graphic promo region below the page title on interior pages, linking
   to a product info page (ADR 0007). Product info pages are the `infoPages` collection — ADR 0015.
+- **Hours**: each Location's `hours` is one line, plus `hoursOverrides` — a temporary second line
+  on a date window, live per visitor in Pacific time, so New Year's Eve hours are typed in November
+  and revert on their own (ADR 0027). `endsAt` is required. It is not the alert bar: the alert is
+  sitewide, instant and unplanned; the override is per-Location, scheduled, and fixes the hours
+  themselves wherever they render.
 - **Emergency notice**: a `siteAlert` singleton rides inside the sticky header on every page,
   published by on-demand revalidation in under a second rather than a rebuild — ADR 0017. It is
-  one of two reasons the build must never be `output: 'export'`; the other is fuel prices, which
-  render per request against the content API so a pushed price is live immediately — ADR 0024.
-  Static export would silently delete both rather than fail.
+  one of **three** reasons the build must never be `output: 'export'`; the others are fuel prices,
+  which render per request against the content API so a pushed price is live immediately (ADR 0024),
+  and the hours override, which is evaluated per request against the visitor's date (ADR 0027).
+  Static export would silently delete all three rather than fail.
 - Header is **sticky** on every page; the fuel-price rail is **not** — ADR 0006 records why the
   rail must never be sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
   carries the Rewards "Get the App" pill on every page.
 Footer: **About** (brand story grounded in the Lummi values + light community note; LCC
 corporate/enterprise content stays out), **Contact**, **Rewards**, **Careers** (editable
-link), and the single **Lummi Commercial Companies** link → lcc-lummi.com. The base row carries
+link), and the single **Lummi Commercial Companies** link → lcc-lummi.com. Below those columns
+and above the base row sits a **social row** — one icon-and-link per account, from a settings list,
+rendering nothing while the list is empty. **Links only, never embeds**: a feed, a follow button or
+an official share widget loads third-party code and sets cookies before anyone clicks, which would
+falsify the sentence below it (ADR 0028). The base row carries
 one line of plain text — **"No cookies. Visits counted anonymously."** — which is not a link. It
 is a factual claim the build has to keep true, so it is a constraint on analytics and embeds, not
 decoration (ADR 0025). Beside it the base row also carries a **Privacy Policy** link → `/privacy`.
@@ -114,9 +124,11 @@ the layout and cannot be lost or moved by a page.
   scheduler. `mainPages` is demoted to a redesign escape hatch and is never scheduled (ADR 0018).
 - `tenants` — independent businesses renting space on a Lummi Bay property. Known at Exit 260:
   Piroshky Piroshky (inside the store), Wendy's and Black Bear Diner (freestanding buildings;
-  Black Bear not yet built), and Hi-Tide Coffee (a coffee truck). All rent from LCC; the site never says so. **Whether to advertise them
-  is undecided** — the collection ships empty and nothing renders until a page is published
-  (ADR 0016). **A tenant is never a Location** (it would land in the Locations index and the
+  Black Bear not yet built), and Hi-Tide Coffee (a coffee truck). All rent from LCC; the site never says so. **Settled 17 Sep 2026: yes, they are advertised** — there
+  is a tenants page and each tenant gets a card on it. A card links either to a tenant page here or
+  straight out to the tenant's own website, chosen per tenant via `linkMode` and revisable; an
+  external card is visibly marked as leaving the site. Nothing renders until a tenant document is
+  published (ADR 0016). **A tenant is never a Location** (it would land in the Locations index and the
   fuel price table) and never an Amenity. **Settled 16 Sep 2026: the Cove Kitchen is an
   Amenity, not a tenant** — Lummi Bay Market runs it, so it stays in Fisherman's Cove's
   `amenities` and is unaffected by whether tenants are advertised at all.

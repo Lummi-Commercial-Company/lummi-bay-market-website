@@ -1,6 +1,6 @@
 # 0026 — A `/privacy` page, required by the app rather than by the website
 
-Status: Accepted. Amends **ADR 0025**, adds checklist items **A21** and **B14**, and attaches a
+Status: Accepted. Amends **ADR 0025**, adds checklist items **A21** and **B12**, and attaches a
 new precondition to **A8**.
 
 Not legal advice. The platform requirements below are product-submission rules, which is a

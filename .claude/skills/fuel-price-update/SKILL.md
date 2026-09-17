@@ -35,6 +35,48 @@ Rules that hold no matter who is editing:
 - **The Truck Stop is never touched by the checkbox.** Truck-lane diesel is not car-lane diesel.
 - The grades a place sells are the entries present in its price list. Don't declare grades twice.
 
+## How a price change actually happens (client, 17 Sep 2026)
+Described by the client when asked how prices get changed today:
+
+> *"Price changes today are immediate and manual. 3-4 people have to get together and say
+> 'change prices....now' and then do their related tasks to change the price as close to the same
+> time as possible."*
+
+Four things follow from that, and they are the reason this section exists rather than the
+procedure below being the whole story.
+
+**1. The website is one of the tasks in that huddle, and it has to be named as one.** Nobody is
+going to remember an unassigned step. Whoever owns it needs a CMS login (checklist A7) and needs
+it on whatever they are holding at that moment — which is a phone, standing at the counter, not a
+desk. **The fuel price form must be usable one-handed on a phone**, and that is a design
+constraint on the form, not a nice-to-have. It is also what Phase 2 training should rehearse:
+the price change, on a phone, timed.
+
+**2. The website goes last, after the pump signs.** If the site leads, a guest two miles out reads
+a price their phone says is live and arrives at a pump that has not changed yet — and the argument
+happens at the counter. If the site follows, the worst case is that it is thirty seconds stale and
+nobody can tell. **The asymmetry is the whole reason for the rule:** being early is a complaint,
+being late is invisible.
+
+**3. This is what ADR 0024 was for.** A build-and-deploy wait would have put the site visibly out
+of step with the pumps during the exact window in which four people are watching. Because the
+price block renders per request against the content API, Save is the last step and it is done —
+there is nothing to wait out and nothing to explain to the person holding the phone.
+
+**4. The failure mode is one person not doing their task, and the site is where it shows.** Four
+simultaneous manual changes have no confirmation step. The `updated` stamp is the only visible
+check there is, which is why a hand-edit must set it (see below). **Add thirty seconds to the
+huddle: one person loads the public site and reads the numbers back aloud.** That catches both the
+missed save and the fat-fingered digit, and it is cheaper than the phone call that finds them.
+
+The "apply one price to all three locations" checkbox exists for exactly this huddle — one number
+typed once when all three move together, which is what "change prices now" implies. It remains a
+convenience for the editor and never decides which price the site reads (ADR 0004).
+
+**Still not done:** nobody has *watched* this happen (`loose-ends.md` §2). Knowing the shape of
+the process is not the same as seeing which screen the price comes off and who reads it out. Half
+an hour of watching, before Phase 2 training, still beats any amount of reasoning about it.
+
 ## For non-technical staff (TinaCMS)
 1. Go to `/admin` and log in by email (no GitHub account needed).
 2. In the sidebar under **Site**, open **Fuel Prices**. The form opens directly.
