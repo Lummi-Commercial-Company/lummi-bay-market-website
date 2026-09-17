@@ -87,8 +87,8 @@ operations — they are pages on this website with nothing on them:
 
 | # | What we need | ID |
 |---|---|---|
-| 4.1 | **The App Store and Google Play URLs** for the `/rewards` page. Not an app question — `/rewards` is a page on this site whose two main buttons currently point nowhere | `A8` |
-| 4.2 | **What the Rewards app collects**, for `/privacy`. The page exists because neither store will publish an app without a public policy URL, and it cannot be written from guesswork | `A21`, ADR 0026 |
+| 4.1 | **The App Store and Google Play URLs** for the `/rewards` page. Not an app question — `/rewards` is a page on this site whose two main buttons point nowhere. Still open, but no longer waiting on the policy: 4.2 is answered | `A8` |
+| ~~4.2~~ | ~~**What the Rewards app collects**, for `/privacy`~~ — **answered 17 Sep 2026.** The client supplied the policy text; the page is written at `content/pages/privacy.mdx` and what it left open is in `docs/privacy-policy-notes.md` | `A21` closed |
 
 And one answer from the cut groups was kept, because it changed a document rather than a plan:
 
@@ -96,10 +96,12 @@ And one answer from the cut groups was kept, because it changed a document rathe
 > people have to get together and say 'change prices....now' and then do their related tasks to
 > change the price as close to the same time as possible."*
 
-That is now recorded in the `fuel-price-update` skill, with the consequence that follows from it:
-the website is a fourth task in that huddle, it needs a login that works on a phone, and **it goes
-last, after the pump signs** — a website price ahead of the pump is an argument at the counter; a
-website price thirty seconds behind is invisible.
+That is now recorded in the `fuel-price-update` skill — as facts about the **website**, not as a
+recommended order of operations. **Corrected 17 Sep 2026 at the client's direction:** an earlier
+draft of that skill told them where the website belonged in their sequence. It is not ours to say.
+What the skill records instead is that the site's own publish latency is effectively zero (Save is
+the last action, ADR 0024), that whoever types the price is holding a phone rather than sitting at
+a desk, and that the `updated` stamp is where a missed change becomes visible.
 
 ---
 

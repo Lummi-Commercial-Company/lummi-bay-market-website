@@ -33,10 +33,12 @@ Each location is one Markdown/MDX file in `content/locations/`, defined as a Tin
   the grades a place sells are the entries present in its price list (ADR 0004,
   skill `fuel-price-update`).
 - `amenities`: string list (drives the **badge row** — never hand-place per page). What that
-  looks like is drawn in `docs/proofs/amenity-badges.html`: one small chip per amenity, icon plus
-  two or three words, wrapping across the detail page rather than running down it. See the badge
-  rules below — the list *is* the layout, so a thin list is a visible problem and not a
-  styling one.
+  looks like is drawn in `docs/proofs/amenity-badges.html`: one small **badge** per amenity, icon
+  plus two or three words, wrapping across the detail page rather than running down it. A badge is
+  one rounded outline containing an icon and a couple of words — the word is *badge*, not *chip*.
+  **Treatment locked 17 Sep 2026 by the client: pill badges** (treatment A in the proof) — a
+  1px navy-tinted outline on paper, 999px radius, icon at 16px. See the badge rules below — the
+  list *is* the layout, so a thin list is a visible problem and not a styling one.
 - `truckStop`: a **record**, present only on exit-260 — `truckStop: { phone, hours, amenities }`.
   **Settled 16 Sep 2026** by the client: the Truck Stop is *not* an amenity of the Exit 260
   fuel station, it is a **separate fuel station for truckers**, with its own small c-store and
@@ -131,7 +133,7 @@ unaffected and still prints **The Cove** in the fuel price band.
   row has rules of its own (ADR 0027 is hours; these are the badges, proved in
   `docs/proofs/amenity-badges.html`):
   - **Fewer than two amenities and the row does not render** — a sentence renders instead. One
-    lone chip under a "What's here" heading reads as a failed load, not as a short list. The
+    lone badge under a "What's here" heading reads as a failed load, not as a short list. The
     Minimart is the live case: its recorded amenity list is the single string
     `fuel + convenience store`.
   - **Split compound strings.** `fuel + convenience store` is two facts typed into one field. The

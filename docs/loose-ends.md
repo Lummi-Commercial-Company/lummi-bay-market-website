@@ -41,12 +41,12 @@ top queries from the sites' own search boxes would beat nothing.
 > **Half-closed 17 Sep 2026.** The client described the process: *"Price changes today are
 > immediate and manual. 3-4 people have to get together and say 'change prices....now' and then do
 > their related tasks to change the price as close to the same time as possible."* That answers
-> the *shape* of it, and four consequences are now written into the `fuel-price-update` skill —
-> the website is a named task in that huddle, it goes **last** (after the pump signs, because
-> being early is a complaint and being late is invisible), the form has to work one-handed on a
-> phone at the counter, and somebody reads the numbers back off the public site afterwards. It
-> also confirms ADR 0024 was the right call: a rebuild wait would land in the exact window where
-> four people are watching.
+> the *shape* of it, and what follows for the **website** is now written into the
+> `fuel-price-update` skill: the form has to work one-handed on a phone at the counter, the site's
+> own latency is effectively zero because Save is the last action (ADR 0024), and the `updated`
+> stamp is where a missed change shows. **What that skill no longer does is tell them the order to
+> do their tasks in** — an earlier draft said the website should go last, and the client's
+> correction on 17 Sep 2026 was right: that is how the business operates, not a website concern.
 >
 > **Still open, and still half an hour:** nobody has watched it. Which screen the new price comes
 > off, who calls the number out, and whether the person who would edit the site is even in the
@@ -54,7 +54,7 @@ top queries from the sites' own search boxes would beat nothing.
 
 The CMS design assumes a workflow that has not been observed. How do prices get changed *now* —
 a whiteboard, a call to a manager, a POS system, someone with FTP? Who physically changes the
-pump signs, and does the website need to match them or lead them?
+pump signs, and at what point in that does somebody reach for the site?
 
 ADR 0004's whole model (one document, a checkbox that sets all three Locations) was reasoned from
 first principles and from what the owner asked for. It has never been shown to the person who

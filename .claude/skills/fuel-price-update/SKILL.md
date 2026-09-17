@@ -42,40 +42,45 @@ Described by the client when asked how prices get changed today:
 > 'change prices....now' and then do their related tasks to change the price as close to the same
 > time as possible."*
 
-Four things follow from that, and they are the reason this section exists rather than the
-procedure below being the whole story.
+What follows is about **the website's own timing and failure modes** — how long a saved price
+takes to be live, what the editor is holding when they save it, and what the site shows when
+something goes wrong. **How the business sequences its own tasks is not ours to specify**
+(client, 17 Sep 2026): the order the pumps, the signs and the site get changed in is an
+operations decision, and this document had no business prescribing it. What it can state is what
+the website does, so that whoever owns the sequence can decide with real numbers.
 
-**1. The website is one of the tasks in that huddle, and it has to be named as one.** Nobody is
-going to remember an unassigned step. Whoever owns it needs a CMS login (checklist A7) and needs
-it on whatever they are holding at that moment — which is a phone, standing at the counter, not a
-desk. **The fuel price form must be usable one-handed on a phone**, and that is a design
-constraint on the form, not a nice-to-have. It is also what Phase 2 training should rehearse:
-the price change, on a phone, timed.
+**1. Whoever changes the price on the site is doing it on a phone, standing up.** Not at a desk,
+and not afterwards. That is a constraint on the form, not a nice-to-have: **the fuel price form
+must be usable one-handed on a phone**, because the moment the price changes is the moment it gets
+typed. It is also what Phase 2 training should rehearse — the price change, on a phone, timed.
+Whoever it is needs a CMS login (checklist A7).
 
-**2. The website goes last, after the pump signs.** If the site leads, a guest two miles out reads
-a price their phone says is live and arrives at a pump that has not changed yet — and the argument
-happens at the counter. If the site follows, the worst case is that it is thirty seconds stale and
-nobody can tell. **The asymmetry is the whole reason for the rule:** being early is a complaint,
-being late is invisible.
+**2. The website's own latency is effectively zero, and that is the number that matters.** Save is
+the last action; there is no build, no deploy and no cache to wait out. The price block renders per
+request against the content API (ADR 0024), so the next person to load the page sees the new
+number. A page already open on somebody's phone keeps the old one until it is refreshed — that is
+true of every content edit here and is the only lag worth knowing about.
 
-**3. This is what ADR 0024 was for.** A build-and-deploy wait would have put the site visibly out
-of step with the pumps during the exact window in which four people are watching. Because the
-price block renders per request against the content API, Save is the last step and it is done —
-there is nothing to wait out and nothing to explain to the person holding the phone.
+**3. This is what ADR 0024 was for.** Had prices been baked into the build, a saved price would
+have been minutes behind a deploy queue, and the site would have sat visibly out of step with the
+pumps for exactly as long as the rebuild took — during the window when several people are watching
+it. Per-request rendering removes the website from the timing problem altogether: it cannot be the
+slow step, whatever order it is done in.
 
-**4. The failure mode is one person not doing their task, and the site is where it shows.** Four
-simultaneous manual changes have no confirmation step. The `updated` stamp is the only visible
-check there is, which is why a hand-edit must set it (see below). **Add thirty seconds to the
-huddle: one person loads the public site and reads the numbers back aloud.** That catches both the
-missed save and the fat-fingered digit, and it is cheaper than the phone call that finds them.
+**4. When a price is wrong, the site is where it is visible.** A pump and a sign are seen by whoever
+is standing in front of them; the site is seen from two miles out, and the `updated` stamp says how
+old the number is. That makes the public page the cheapest place to check the whole set at once,
+and it is why a hand-edit must set `updated` (see below) — a stale stamp is the only signal a
+missed save leaves behind.
 
-The "apply one price to all three locations" checkbox exists for exactly this huddle — one number
-typed once when all three move together, which is what "change prices now" implies. It remains a
-convenience for the editor and never decides which price the site reads (ADR 0004).
+The "apply one price to all three locations" checkbox exists because all three usually move
+together — one number typed once rather than three. It remains a convenience for the editor and
+never decides which price the site reads (ADR 0004).
 
-**Still not done:** nobody has *watched* this happen (`loose-ends.md` §2). Knowing the shape of
-the process is not the same as seeing which screen the price comes off and who reads it out. Half
-an hour of watching, before Phase 2 training, still beats any amount of reasoning about it.
+**Still not done:** nobody has *watched* a price change happen (`loose-ends.md` §2). Knowing the
+shape of it is not the same as seeing which screen the price comes off and who types it. Half an
+hour of watching, before Phase 2 training, still beats any amount of reasoning about it — and it
+is the way to learn what the site needs to support without telling anyone how to do their job.
 
 ## For non-technical staff (TinaCMS)
 1. Go to `/admin` and log in by email (no GitHub account needed).

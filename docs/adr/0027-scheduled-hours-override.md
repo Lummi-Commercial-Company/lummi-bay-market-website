@@ -89,6 +89,43 @@ That second line is not decoration. A guest who sees only `6am–6pm` has no way
 unusual, and the one thing a temporarily-different opening time must communicate is that it is
 temporary.
 
+### Switching by hand, not only by schedule
+The client asked directly whether the two lines can be switched **as needed**, from TinaCMS and
+from a chat session. Yes, both — and it is worth being exact about *how*, because the mechanism
+is a date window rather than an on/off switch, and the difference shows up the first time somebody
+wants the second line live *right now*.
+
+**There is no toggle, and deliberately so.** A toggle is a thing somebody has to come back and
+turn off; that is precisely the failure this field exists to avoid. What replaces it is that
+**the dates are editable at any moment**, which gives the same control:
+
+| What the editor wants | What they do |
+|---|---|
+| Second line live today only | `startsAt` and `endsAt` both today. Both default to today in the CMS, so this is: type the line, save |
+| Live now, for a while | Leave `startsAt` today, set `endsAt` to the last day |
+| Start it early | Set both dates in the future and forget it — the whole point |
+| End it sooner than planned | Change `endsAt` to today |
+| Cancel it before it starts | Delete the override |
+| **Back to normal, now** | Set `endsAt` to yesterday, or delete the override. The normal `hours` line returns on the next page load |
+
+Because `endsAt` is required, **"until further notice" has to be written as a date.** That is the
+one place this field asks for something a toggle would not, and it is the constraint doing its
+job: a date can be wrong, but it cannot be forgotten. An editor who genuinely does not know the
+end date picks one far enough out and shortens it later — the override is editable the whole time
+it is live.
+
+**From a chat session it is the same edit.** `hoursOverrides` is fields in a content file in this
+repository, so "put the Minimart on 6am–6pm for New Year's Eve" is a commit, and Vercel rebuilds
+on the push. The two routes write the same file and neither can produce a state the other cannot
+see — which is the reason the content lives in git rather than a database.
+
+**What neither route can do is make the change instant on a page already open.** The override is
+evaluated per request, so it is live for the next visitor, not for a phone sitting on the page.
+That is the same behaviour as every other content edit here and is only worth noting because the
+alert bar *is* different — it publishes by on-demand revalidation in under a second (ADR 0017).
+For a same-hour change to hours, both are worth using: the override fixes the hours line, the
+alert says so at the top of the page.
+
 ### The Truck Stop keeps its own
 `truckStop` carries its own `hours` and therefore its own `hoursOverrides`. The Location's
 override never applies to it. This follows the rule already in `location-content-model` — the

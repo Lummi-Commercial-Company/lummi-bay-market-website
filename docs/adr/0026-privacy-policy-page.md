@@ -99,10 +99,23 @@ What is needed from the app's builder, before a word is written:
   where that route is documented
 - who the data controller is: Lummi Bay Market, LCC, or the app vendor
 
-**Open question for the client:** if the Rewards app is a white-labelled product from a loyalty
+~~**Open question for the client:** if the Rewards app is a white-labelled product from a loyalty
 vendor, that vendor may already publish a policy covering their platform. Hosting a second,
 divergent policy is worse than either hosting one or linking theirs. Establish which before
-drafting — it changes who owns the document.
+drafting — it changes who owns the document.~~
+
+**Answered 17 Sep 2026, by the policy text itself.** The client supplied the document, and its
+Children's Privacy section names **Rovertown** as *"our app platform partner"* and links their
+policy. So the app **is** white-labelled, and the shape that resulted is the middle case this
+paragraph did not consider: one policy of our own that defers to the vendor's for one section.
+That is workable. It is also a live dependency — if Rovertown revise their policy, this page's
+answer on children's data changes and nobody here is told.
+
+The supplied text is now at `content/pages/privacy.mdx`, **reproduced verbatim**, with the
+labelled website section this ADR requires placed above it. What it leaves open — a probable
+copy defect in the Choice of Law clause, a `lastModified` date of 6/12/2025, and the store
+declarations that have to match it — is written up in `docs/privacy-policy-notes.md`, along with
+the rule that **legal text is revised by its owner, not by an engineer and not by Claude.**
 
 ## Consequences
 - **A8 gains a precondition.** The app cannot be submitted, so the real App Store / Play URLs

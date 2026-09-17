@@ -52,6 +52,23 @@ on navy.
   If an accent must carry small text, darken it first and verify.
 - Prices (`--lb-navy-deep`) on `--lb-paper` pass comfortably.
 
+### The pill ring (rule, not a style — client, 17 Sep 2026)
+**Every pill-shaped control carries a 1.5px bone ring**, no exceptions:
+`box-shadow: 0 0 0 1.5px var(--lb-bone)`.
+
+That means the Rewards "Get the App" pill in the header, the "See the truck stop" button, and
+any future pill — the same ring, the same weight, everywhere it appears.
+
+Why it is a rule rather than a judgement call: a cedar fill measures **2.43:1** against the navy
+header and a navy fill measures **2.20:1** against cedar. Both are under the 3:1 that WCAG 1.4.11
+requires of a control's own boundary, so **the ring is the only thing giving the control an edge**
+— without it the pill is a coloured smudge, not a button. It is not decoration that can be dropped
+to taste.
+
+It is written here because it drifted: the ring was added to the truck-stop button and missed on
+the header pill in the same file, and a third proof still carried the pre-revision bone fill. A
+rule in one place is checkable; the same declaration copied into eight files is not.
+
 ## Typography (APPROVED — locked)
 - Display / headings: **Space Grotesk** (700). Google Fonts, license-clean.
 - Body / labels: **Inter** (400 / 500 / 600).

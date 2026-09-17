@@ -103,6 +103,12 @@ section{margin:0 0 8px}
 /* ============================================================
    TREATMENT A — pill badges
    ============================================================ */
+/* a single badge shown inline in running prose, to name the object the word refers to */
+.inline-demo{
+  display:inline-flex; align-items:center; gap:5px; padding:3px 10px;
+  border:1px solid rgba(28,78,143,.3); border-radius:999px; background:var(--lb-paper);
+  font:600 12.5px/1.35 Inter,system-ui,sans-serif; color:var(--lb-ink); white-space:nowrap;
+}
 .badges{display:flex; flex-wrap:wrap; gap:8px; margin:0; padding:0; list-style:none}
 .badge{
   display:inline-flex; align-items:center; gap:7px;
@@ -196,9 +202,24 @@ refers to it twice as if it exists. No proof file renders one. So here it is, in
 treatments, with the real amenity list from each Location rather than filler.</p>
 
 <p>The short version: a <strong>badge row</strong> is the “what’s here” strip on a Location page —
-one small chip per amenity, icon plus two or three words, wrapping across the page instead of
-running down it as a bulleted list. It is the row you scan in a second at a fuel stop, not
-something you read.</p>
+one small <strong>badge</strong> per amenity, icon plus two or three words, wrapping across the
+page instead of running down it as a bulleted list. It is the row you scan in a second at a fuel
+stop, not something you read.</p>
+
+<p><strong>One word, not two.</strong> An earlier draft of this page said “chip” in places and
+“badge” in others. They meant the same object — <em>one rounded outline with an icon and a
+couple of words in it</em>, like <span class="inline-demo">⛽ Fuel</span> — and that object is
+called a <strong>badge</strong> from here on. “Chip” is interface jargon for the same shape and
+has been removed.</p>
+</div>
+
+<div class="note good">
+<p><strong>Decided 17 Sep 2026: Treatment A, pill badges.</strong> The rest of this page is kept as
+the reasoning behind that choice and as the record of what it costs. Two things follow from it and
+are now rules rather than options: the row <strong>suppresses itself below two badges</strong>, so
+the Minimart cannot ship as a single badge under a heading promising a list (§3); and the
+<code>amenities</code> field stays <strong>free text with a fallback dot</strong> for anything the
+icon set does not cover, so adding “propane” never needs an engineer (§5).</p>
 </div>
 
 <hr class="rule">
@@ -215,7 +236,7 @@ something you read.</p>
 <div class="compare">
 
   <div>
-    <p class="tlabel">A — Pill badges <span>· recommended</span></p>
+    <p class="tlabel">A — Pill badges <span>· CHOSEN</span></p>
     <div class="frame">
       <p class="sublabel">What’s here</p>
       <ul class="badges">
@@ -261,7 +282,7 @@ prices, the map link and the Truck Stop summary below the fold. The badge row ru
 costs one or two lines total. On a fuel stop the amenity list is the thing people scan and the
 thing they stop reading after three items — a horizontal row suits that, a vertical list argues
 for reading all of it.</p>
-<p><strong>B is the cheaper insurance.</strong> No border means no chip that looks broken when
+<p><strong>B is the cheaper insurance.</strong> No border means no badge that looks broken when
 there is only one of them — which is the Minimart’s exact problem, §3 below.</p>
 </div>
 </section>
@@ -329,7 +350,7 @@ there is only one of them — which is the Minimart’s exact problem, §3 below
 </div>
 
 <div class="note warn">
-<p><strong>Look at the Minimart.</strong> One chip, alone, under a heading that promises a list.
+<p><strong>Look at the Minimart.</strong> One badge, alone, under a heading that promises a list.
 It does not read as “this place has one thing” — it reads as “the other badges failed to load.”
 That is not a rendering bug, it is the honest state of the data: the Minimart’s recorded amenity
 list is the single string <em>“fuel + convenience store”</em>.</p>
@@ -461,7 +482,7 @@ earns its keep, and the Truck Stop has the longest list on the site.</strong></p
 <table class="spec">
   <tr><th>Option</th><th>How <code>amenities</code> behaves in the CMS</th><th>What happens to a new amenity</th></tr>
   <tr>
-    <td><strong>Free text + fallback dot</strong><br><span style="color:var(--c-dim)">recommended</span></td>
+    <td><strong>Free text + fallback dot</strong><br><span style="color:var(--c-dim)">chosen</span></td>
     <td>Staff type anything, as today. The component matches the text against a small icon map.</td>
     <td>Renders immediately with a neutral dot instead of an icon. Nothing breaks, nothing is
         blocked, and the icon gets drawn later if the amenity sticks around.</td>
@@ -483,7 +504,7 @@ earns its keep, and the Truck Stop has the longest list on the site.</strong></p
 <div class="note">
 <p><strong>Free text with a fallback is the only one that keeps the promise the whole build is
 built on</strong> — staff change content without an engineer. The icon map is an optimisation on
-top of it, not a gate in front of it. A missing icon is a slightly plainer chip; a picklist is a
+top of it, not a gate in front of it. A missing icon is a slightly plainer badge; a picklist is a
 phone call.</p>
 </div>
 

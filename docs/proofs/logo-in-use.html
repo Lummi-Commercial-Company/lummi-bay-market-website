@@ -59,8 +59,12 @@ p{margin:0 0 16px}
 .sitebar{background:var(--navy); display:flex; align-items:center; gap:12px; padding:12px 22px}
 .sitebar img{display:block; width:112px; height:auto; flex:0 0 auto}
 .nav{display:flex; gap:20px; margin-left:auto; font:500 .75rem/1 var(--body); color:var(--bone)}
+/* Cedar with the bone ring -- the treatment settled in the ADR 0014 revision. This frame
+   still carried the pre-revision bone fill, which is why the pill here looked unlike the
+   same pill everywhere else. */
 .pill{
-  flex:0 0 auto; background:var(--bone); color:var(--navy);
+  flex:0 0 auto; background:var(--cedar); color:#fff;
+  box-shadow:0 0 0 1.5px var(--bone);
   font:600 .6875rem/1 var(--body); padding:9px 12px; border-radius:999px; white-space:nowrap;
 }
 .pagebody{padding:24px 22px 30px; background:var(--ground)}
