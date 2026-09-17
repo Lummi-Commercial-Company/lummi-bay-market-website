@@ -257,10 +257,10 @@ footer{
   palette and type rules that govern them. Built so you can size, colour and export an asset
   correctly without reading the codebase.</p>
   <div class="meta">
-    <span><b>Version</b> 15 Sep 2026</span>
+    <span><b>Version</b> 17 Sep 2026</span>
     <span><b>Palette &amp; type</b> locked — approved 2026 refresh</span>
     <span><b>Content width</b> 1200px max</span>
-    <span><b>Density</b> supply at 2× — one exception, §06</span>
+    <span><b>Density</b> supply at 2× — one exception, §07</span>
   </div>
 </header>
 
@@ -446,7 +446,83 @@ footer{
 </section>
 
 <section>
-  <h2><span class="num">05 / page imagery</span>Every image slot, at the size it renders</h2>
+  <h2><span class="num">05 / layout &amp; dimensions</span>The measurements the page itself is built to</h2>
+  <p class="sec-lede">Section 06 sizes the artwork that goes <em>into</em> the page. These are the
+  numbers of the page around it — the column, the scales, the bar heights and the hit areas.
+  They are here so an asset can be checked against the space it has to live in.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Measure</th><th class="n">Value</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td><b>Content column</b></td><td class="n">1200px max</td><td>Everything is centred in it. Full-bleed bands (waterline, footer) cross it; content does not.</td></tr>
+        <tr><td><b>Phone content column</b></td><td class="n">≈351px</td><td>On a 375px device — the widest common phone. Design to 351, check at 320.</td></tr>
+        <tr><td><b>Spacing scale</b></td><td class="n">4 · 8 · 12 · 16 · 24<br>32 · 48 · 64 · 96</td><td>Nine steps. A gap that is not on this list is a mistake, not a refinement.</td></tr>
+        <tr><td><b>Type scale</b> (rem)</td><td class="n">3 · 2.25 · 1.75 · 1.375<br>1.125 · 1 · 0.875</td><td>At a 16px root: 48 · 36 · 28 · 22 · 18 · 16 · 14.</td></tr>
+        <tr><td><b>Line height</b></td><td class="n">1.1 / 1.5</td><td>1.1 display, 1.5 body. Sentence case throughout.</td></tr>
+        <tr><td><b>Corner radius</b></td><td class="n">8px / 12px</td><td>8 on controls, 12 on cards. Soft, no heavy shadows.</td></tr>
+        <tr><td><b>Waterline band</b></td><td class="n">full width × 18px</td><td>Vector. The recurring signature, teal into navy.</td></tr>
+        <tr><td><b>Sticky header, phone</b></td><td class="n">56px</td><td>About 7% of a 375×812 screen, held permanently. It grew 47 → 52 → 56 for measured reasons, never for taste.</td></tr>
+        <tr><td><b>Logo in the header</b></td><td class="n">112 × 40 desktop<br>95 × 34 phone</td><td>Plus the lockup's own clear space: the paddle-handle height on all sides, minimum width ≈72px.</td></tr>
+        <tr><td><b>Header art clearance</b></td><td class="n">20px</td><td>No header image comes within 20px of the navigation's right edge — a floor, not a target. Art starts at whichever lands further right, this or the lockup's clear space.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Controls and hit areas</h3>
+  <p>These are accessibility floors, measured on real frames rather than assumed. A control that
+  misses them is a defect, not a style choice.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Control</th><th class="n">Size</th><th>Rule</th></tr></thead>
+      <tbody>
+        <tr><td><b>Nav item, phone</b></td><td class="n">53–58 × 44</td><td>44px tall is what took the bar to 56px. A 44px min-width with 5px padding, so a short word is still a full target.</td></tr>
+        <tr><td><b>Nav item, desktop</b></td><td class="n">44–71 × 40</td><td>Desktop gets the lower bar it needs — but never below the 24px minimum that applies to any pointer target.</td></tr>
+        <tr><td><b>Footer link</b></td><td class="n">169 × 44</td><td>Two columns on a 375px frame, 12px gutter, 14px row gap. The gap stays: at ±30px, 9.3% of touches land on it and do nothing, which is the right outcome for a slip.</td></tr>
+        <tr><td><b>Rewards pill</b></td><td class="n">44 tall</td><td>Drops "Get the" below 370px — <code>★ Get the App</code> at 375 and up, <code>★ App</code> below.</td></tr>
+        <tr><td><b>Social icon</b></td><td class="n">≈20px glyph<br>44 × 44 target</td><td>The padding does the work. Bone fill on the navy footer — never the platform's own brand colour.</td></tr>
+        <tr><td><b>Every pill, without exception</b></td><td class="n">1.5px ring</td><td>A bone <code>#F5F1E8</code> ring, <code>box-shadow: 0 0 0 1.5px</code>. Not decoration: cedar on navy measures 2.43:1 and navy on cedar 2.20:1, both under the 3:1 a control's boundary requires. The ring is the only thing giving the pill an edge.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The fuel price block, which has the tightest numbers on the site</h3>
+  <p>It is on every page, it is the most-used thing here, and it carries no artwork at all — it is
+  a table. Nothing is ever supplied for it. The sizes are listed because they set the space
+  everything near it has to work in.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>State</th><th class="n">Desktop</th><th class="n">Phone</th></tr></thead>
+      <tbody>
+        <tr><td><b>Resting card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Location + Truck Stop</span></td><td class="n">400 × 110</td><td class="n">345 × 102</td></tr>
+        <tr><td><b>Condensed bar</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The page's own Location alone</span></td><td class="n">400 × 39</td><td class="n">one line</td></tr>
+        <tr><td><b>Never wider than</b></td><td class="n">400px</td><td class="n">400px</td></tr>
+        <tr><td><b>Cost before any page content</b></td><td class="n">—</td><td class="n">191px</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">On a phone that 191px is control 45 + gap 10 + block 135, on every page, with the
+  sticky header holding a further 56 above it. It is why a fourth element above a page title gets
+  measured before it gets added.</p>
+
+  <div class="note">
+    <h3>Three numbers that disagree between sources — check before you build to them</h3>
+    <p>Found while assembling this section, and left visible rather than quietly resolved, because
+    picking one at random is how a wrong number becomes the agreed one.</p>
+    <p><b>The resting card height.</b> Skill <code>fuel-price-update</code> gives the desktop
+    resting card as <b>400 × 110</b> in its state table and as <b>400 × 151</b> in the sentence
+    above it. <b>The condensed bar width</b> is <b>400px</b> in one table and <b>360px</b> in the
+    prose. <b>The phone header</b> is <b>56px</b> since tap targets were measured (ADR 0010), but
+    the promo stacking arithmetic still adds it as 52, so the "page title at 424px" figure is 4px
+    light. None of the three changes a design decision; all three would waste an afternoon if
+    built to blind.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">06 / page imagery</span>Every image slot, at the size it renders</h2>
   <p class="sec-lede">CSS pixels are what the browser draws. <b>Supply at 2× those numbers</b> so the
   art holds on a retina screen. The content column caps at 1200px wide; the phone column is about
   351px at a 375px device.</p>
@@ -455,7 +531,7 @@ footer{
     <table>
       <thead><tr><th>Slot</th><th class="n">Desktop (CSS px)</th><th class="n">Phone (CSS px)</th><th class="n">Supply at</th><th>Format</th></tr></thead>
       <tbody>
-        <tr><td><b>Promo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One master serves every slot — see section 07</span></td><td class="n">1200 × 240 &nbsp;(5:1)<br>down to 290 × 163</td><td class="n">351 × 197 &nbsp;(16:9)</td><td class="n">2400 × 1350<br>subject inside the<br>centre 2400 × 480</td><td>JPG</td></tr>
+        <tr><td><b>Promo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One master serves every slot — see section 08</span></td><td class="n">1200 × 240 &nbsp;(5:1)<br>down to 290 × 163</td><td class="n">351 × 197 &nbsp;(16:9)</td><td class="n">2400 × 1350<br>subject inside the<br>centre 2400 × 480</td><td>JPG</td></tr>
         <tr><td><b>Info page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The page a promo links to</span></td><td class="n">1200 × 200 &nbsp;(6:1)</td><td class="n">351 × 140</td><td class="n">2400 × 400</td><td>JPG</td></tr>
         <tr><td><b>Tenant page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Independent businesses on site</span></td><td class="n">1200 × 190</td><td class="n">351 × 132</td><td class="n">2400 × 380</td><td>JPG</td></tr>
         <tr><td><b>Tenant card thumbnail</b><br><span style="color:var(--ink-soft);font-size:.8125rem">On the index, 3 across</span></td><td class="n">391 × 78 &nbsp;(5:1)</td><td class="n">351 × 78</td><td class="n">782 × 156</td><td>JPG</td></tr>
@@ -464,11 +540,21 @@ footer{
         <tr><td><b>Page backdrop — narrow</b></td><td class="n">503 × 2948<br>renders ≈108 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
         <tr><td><b>Motif tile, single</b></td><td class="n">≈68 wide</td><td class="n">≈68 wide</td><td>vector</td><td>SVG mask</td></tr>
         <tr><td><b>Motif strip, four-up</b></td><td class="n">≈272 wide</td><td class="n">not used</td><td>vector</td><td>SVG mask</td></tr>
-        <tr><td><b>Social share card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Not an on-page slot — see section 06</span></td><td class="n">1200 &times; 630</td><td class="n">same file</td><td class="n">1200 &times; 630<br><b>not 2&times;</b></td><td>JPG</td></tr>
+        <tr><td><b>Social share card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Not an on-page slot — see section 07</span></td><td class="n">1200 &times; 630</td><td class="n">same file</td><td class="n">1200 &times; 630<br><b>not 2&times;</b></td><td>JPG</td></tr>
+        <tr><td><b>Social icon</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One per account, in the footer social row</span></td><td class="n">≈20 glyph<br>in a 44 × 44 target</td><td class="n">same</td><td>vector</td><td>inline SVG</td></tr>
         <tr><td><b>Waterline band</b></td><td class="n">full width × 18</td><td class="n">full width × 18</td><td>vector</td><td>SVG</td></tr>
       </tbody>
     </table>
   </div>
+  <h3>Social icons are drawn here, not fetched from the platform</h3>
+  <p>Each social icon is a single inline SVG held in this repository, filled with
+  <code>--lb-bone</code> — never the platform's own colour, never its official badge or follow
+  button, and never a file served from the platform's servers. The reason is not aesthetic. An
+  official widget loads third-party code and sets a cookie before anyone clicks it, and the
+  footer's own base row states in plain words that this site sets no cookies. So the icon set is a
+  drawing job: Facebook, Instagram and Yelp, in that order, Yelp last because customers speak
+  there and the business does not.</p>
+
   <p class="tnote">Location cards carry a 26 × 26 motif, not a photograph — do not supply store
   photography for them. The fuel-price block carries no art at all: it is the most-used thing on
   the site and it is a table.</p>
@@ -482,7 +568,7 @@ footer{
 </section>
 
 <section>
-  <h2><span class="num">06 / social share card</span>1200 &times; 630, and the square crop is what decides the layout</h2>
+  <h2><span class="num">07 / social share card</span>1200 &times; 630, and the square crop is what decides the layout</h2>
   <p class="sec-lede">The image a platform shows when somebody pastes a link to this site into
   Facebook, LinkedIn, Slack, iMessage, WhatsApp or X. It is the most-reproduced image the brand
   has off-site, and the only one third parties cache and keep. Full rules in ADR 0022.</p>
@@ -572,7 +658,7 @@ footer{
 </section>
 
 <section>
-  <h2><span class="num">07 / promos</span>The width ladder, and why art must survive a re-crop</h2>
+  <h2><span class="num">08 / promos</span>The width ladder, and why art must survive a re-crop</h2>
   <p class="sec-lede">The promo region is a stack of rows. Each row decides how many promos it
   holds — one, two, three or four across — drawn from a twelve-column grid with 14px gutters
   inside the 1200px content width.</p>
@@ -656,7 +742,7 @@ footer{
 </svg>
 
 <section>
-  <h2><span class="num">08 / files &amp; weight</span>There is a hard 100 MB ceiling on the whole library</h2>
+  <h2><span class="num">09 / files &amp; weight</span>There is a hard 100 MB ceiling on the whole library</h2>
   <p class="sec-lede">The content system's free tier allows 100 MB of assets in total, across the
   entire site, forever. A real set of store photography exceeds that on its own — so file weight
   is a live constraint on what can be commissioned, not a technical footnote.</p>
@@ -692,7 +778,7 @@ footer{
 </section>
 
 <section>
-  <h2><span class="num">09 / open items</span>Slots that exist but have no approved specification</h2>
+  <h2><span class="num">10 / open items</span>Slots that exist but have no approved specification</h2>
   <p class="sec-lede">Flagged so nobody produces artwork against a number that was never agreed.</p>
 
   <div class="tw">
@@ -700,15 +786,16 @@ footer{
       <thead><tr><th>Item</th><th>Status</th><th>What is missing</th></tr></thead>
       <tbody>
         <tr><td><b>All tribal motifs</b></td><td><span class="pill open">Placeholder</span></td><td>Every motif on the site is an interim silhouette. Authentic, commissioned or tribe-approved art must replace them before launch.</td></tr>
-        <tr><td><b>Tenant artwork</b></td><td><span class="pill open">Undecided</span></td><td>Whether the independent businesses on site are advertised at all is a business decision that has not been made. Templates show "ART TBD". Do not commission this yet.</td></tr>
-        <tr><td><b>Map on the contact page</b></td><td><span class="pill open">Open</span></td><td>The embed mechanism is undecided, so any styling or pin artwork is premature.</td></tr>
+        <tr><td><b>Tenant artwork</b></td><td><span class="pill locked">Settled 17 Sep 2026</span></td><td>Ownership decided that tenants <b>are</b> advertised: a tenants page with a card each. So the card thumbnail and page hero above are live slots, not hypothetical ones. What is still missing is the artwork itself, and it is not ours to draw — each tenant supplies their own, and an external card may carry no art at all. Commission nothing; collect it.</td></tr>
+        <tr><td><b>Map on the contact page</b></td><td><span class="pill open">Open</span></td><td>The embed mechanism is still undecided, so pin artwork and map styling stay premature. One asset is already specified and can be produced the moment the map exists: a still picture of the finished map, which is what the visitor sees until they click to load the live one. Both map fields are empty on purpose, and an empty map renders one section fewer, not a broken page.</td></tr>
+        <tr><td><b>Social icons</b></td><td><span class="pill proposed">Accounts supplied</span></td><td>Three accounts are in hand and in render order. The three glyphs still have to be drawn as inline SVG — see section 06. Nothing renders while the list is empty, so a missing icon is a blank row, never a broken link.</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
 <section>
-  <h2><span class="num">10 / summary</span>Do and don't</h2>
+  <h2><span class="num">11 / summary</span>Do and don't</h2>
   <div class="dd">
     <div class="do">
       <h3>Do</h3>
