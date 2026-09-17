@@ -13,8 +13,16 @@ record of why the design is the way it is. **Three groups were cut entirely**: t
 logistics, not design, layout or content, and the client was right to say so. See *What was cut*
 at the foot.
 
-**One item is still open and it is the only one that can change work already finished**: ★C, the
-real amenity list per Location.
+**Revised again 17 Sep 2026**, after the client answered the twelve open checklist items in one
+pass. The short version: **nothing on this list blocks the build any more.** ★C, the amenity list,
+was the one item that could change finished work — the client has moved it into the post-build
+content pass along with artwork, promotions and tenants, and the half of it that was mechanical
+rather than a question (the Minimart's compound string) has been split. Everything in §2 is
+answered the same way: *"Use current copy as placeholders."*
+
+That is a real decision with a real cost, and it is worth naming once here rather than arguing it
+twice: deferring words and pictures does not make them smaller, it makes them invisible until the
+site is public. §2 is kept in full, unstruck, for exactly that reason.
 
 ---
 
@@ -24,7 +32,7 @@ real amenity list per Location.
 |---|---|---|
 | ~~★A~~ | ~~**Analytics or Search Console access**~~ | **Answered by assertion, 17 Sep 2026** — *"Fuel prices are the draw."* The three-item nav stands. Recorded in `loose-ends.md` §1 with the one caveat worth keeping: that answers *why people come*, which is not the same question as *what they could not find*. Nothing is blocked |
 | ~~★B~~ | ~~**Do any hours vary?**~~ | **Answered and built, 17 Sep 2026** — *"most likely would be an alert bar mention… If you want to build in a second 'one line of text' variable for any changes, that would be smart."* That is now `hoursOverrides`: a second hours line on a date window, per Location, which swaps in and back out on its own. **ADR 0027**, checklist **B14**. The New Year's Eve case in the answer is the worked example in the ADR |
-| ★C | **The full amenity list for each Location, as a customer would ask for it** | **Still open — the one thing on this list that is.** Amenities drive a row of badges on every Location page, so the list *is* the layout: see `docs/proofs/amenity-badges.html`, which draws it. What we hold for the Minimart today is the single string `fuel + convenience store`, which renders as **one lone chip** under a heading promising a list. Two asks: split the compound strings we already have, and five minutes with whoever opens up. Things people search for and we have no record of: ATM, propane exchange, ice, lottery, hot food, restrooms, air and water, car wash, EV charging, RV lane, accessible parking and restrooms. Checklist **A23** |
+| ★C | **The full amenity list for each Location, as a customer would ask for it** | **Deferred 17 Sep 2026** — *"Not a hold up. This can be populated during the updating process of artwork, promotions, advertising, tenant creation."* It no longer blocks, and the one part that was not a question has been done: the Minimart's `fuel + convenience store` is **split into two**, so the badge row renders instead of falling back to a sentence. Two badges is a floor, not a finish. Amenities drive a row of badges on every Location page, so the list *is* the layout: see `docs/proofs/amenity-badges.html`, which draws it. What we hold for the Minimart today is the single string `fuel + convenience store`, which renders as **one lone chip** under a heading promising a list. Two asks: split the compound strings we already have, and five minutes with whoever opens up. Things people search for and we have no record of: ATM, propane exchange, ice, lottery, hot food, restrooms, air and water, car wash, EV charging, RV lane, accessible parking and restrooms. Checklist **A23** — now scheduled rather than pending |
 
 ---
 
@@ -37,6 +45,12 @@ The client's answer — *"All the text will be updated before launch. Is that th
 exactly the concern, and it is now answered: yes, and this is the list of what has to be written,
 so nothing is discovered missing on launch week.
 
+**17 Sep 2026: *"Not a hold up. Use current copy as placeholders."*** Accepted for the build —
+none of this is engineering and none of it blocks a line of code. The list stays whole and
+unstruck, because the deferral changes *when* these get written, not *whether*, and it moves the
+work to the side of the launch where placeholder text is public. Each row below is still a thing
+somebody has to write.
+
 | # | What we need |
 |---|---|
 | 2.1 | **Home headline and sub-headline.** Currently "Three stops on the bay" / "Fuel, food and a full truck stop — open where you need us, on Lummi land." Invented |
@@ -45,7 +59,7 @@ so nothing is discovered missing on launch week.
 | 2.4 | **The footer's four column headings** — About / Visit / Rewards / Work with us. Invented here; the architecture names the *links*, never the columns |
 | 2.5 | **The Truck Stop page: what a driver decides on.** The amenity list is settled, the decision factors are not — shower cost and whether towels are included, lounge access rules, how long a truck may park, any reservation, whether there is a scale, and which **fleet cards** are accepted |
 | 2.6 | **The Cove Kitchen** — hours (are they the store's?), whether there is a menu to publish, and a phone for orders. It is an Amenity, not a tenant (settled 16 Sep 2026), but customers will search for it by name |
-| 2.7 | **The Careers link destination** (`A9`), and whether "Careers" is the right label |
+| ~~2.7~~ | ~~**The Careers link destination**~~ — **supplied 17 Sep 2026**: `https://www.silverreefcasino.com/careers` (`A9`). The label question is answered by implication — "Careers" is what the destination calls itself. One thing went *to* the client rather than coming back closed: the destination is a sibling Lummi enterprise, and ADR 0001 keeps other Lummi companies to the single footer link. The link names no company, so it reads as a destination rather than a mention — but that is ownership's judgement to make. See `A9` |
 | 2.8 | **The Rewards app in one paragraph** — what a customer gets, for the `/rewards` page. This is a page on this website with nothing on it, which is why it survived the cut of the app group below |
 | 2.9 | **The legal entity name for the footer copyright line** — "Lummi Bay Market", or a registered company name |
 | ~~2.10~~ | ~~**Whether to advertise the businesses renting space at Exit 260 at all**~~ (`A14`) — **Answered: yes.** *"we will create a page for tenants and add their card to that page."* ADR 0016 amended, `A14` closed. What is still needed is ordinary content, and it is now item **2.11** |
@@ -66,7 +80,7 @@ change, not a content update, which is why they are asked before launch rather t
 | 3.2 | **Do the showers or driver lounge have their own hours or a cost?** | The content model has no field for either (`loose-ends.md` §7) |
 | 3.3 | **Is a newsletter or email signup expected?** | Nobody has ever mentioned one, and it is **not** in the architecture. It would be the only form on a site that deliberately has none (ADR 0015), so it is an architecture decision rather than a field |
 | ~~3.4~~ | ~~**Are there Facebook / Instagram accounts?**~~ | **Answered 17 Sep 2026** — *"Social site links should be added to the bottom of the page, within or below the footer links."* Built as a footer social row: **ADR 0028**, checklist **B13**. One rule came with it — **links only, never embedded feeds or follow buttons**, because an embed loads third-party code and sets cookies, which would falsify the footer's own "No cookies" line (ADR 0025). What is still needed is the accounts themselves: **3.5** |
-| 3.5 | **Which social accounts exist, and their URLs** — per brand or per Location, and who posts to them. An account linked from the footer and last posted to in 2023 is worse than no link at all |
+| ~~3.5~~ | ~~**Which social accounts exist, and their URLs**~~ — **supplied 17 Sep 2026.** Facebook `LBMat260`, Instagram `lbmexit260`, Yelp `lummi-bay-market-at-exit-260-bellingham`. All brand-level despite the Exit 260 handles, so the footer is three icons and no Location page gets its own. Yelp is a review listing rather than a posting account, which is why it is ordered last. Recorded in ADR 0028 (amended) and `content/settings/site.json`. The half-question that came with it is **not** answered and is not blocking: whether the two tended accounts are current. That is a five-minute look, not a decision |
 
 ---
 
@@ -87,7 +101,7 @@ operations — they are pages on this website with nothing on them:
 
 | # | What we need | ID |
 |---|---|---|
-| 4.1 | **The App Store and Google Play URLs** for the `/rewards` page. Not an app question — `/rewards` is a page on this site whose two main buttons point nowhere. Still open, but no longer waiting on the policy: 4.2 is answered | `A8` |
+| ~~4.1~~ | ~~**The App Store and Google Play URLs**~~ — **supplied 17 Sep 2026**, with one correction. Apple is right and live. The Play link given was a **search** URL; it was fetched, and the twelve apps it returns are all unrelated — the app is not among them, so as a store button it would land a customer on other companies' apps. The direct listing is `play.google.com/store/apps/details?id=com.rovertown.lummi`, recorded with a confirm-me flag in `content/settings/site.json`. Also learned in the looking: **the app is already published in both stores**, which retires the ADR 0026 worry that `/privacy` gated the submission — it never could have, because the submission already happened | `A8` |
 | ~~4.2~~ | ~~**What the Rewards app collects**, for `/privacy`~~ — **answered 17 Sep 2026.** The client supplied the policy text; the page is written at `content/pages/privacy.mdx` and what it left open is in `docs/privacy-policy-notes.md` | `A21` closed |
 
 And one answer from the cut groups was kept, because it changed a document rather than a plan:
@@ -106,7 +120,13 @@ a desk, and that the `updated` stamp is where a missed change becomes visible.
 ---
 
 ## What this list does not cover, by request
-**Artwork** (`A3`, `A4`, `A20`, and the static map still at `A19`), **promotions**, and **fuel
-prices**. All three are maintained in TinaCMS or through a chat session once the site is running,
-and none of them blocks the build — which is exactly why they are excluded and everything above
-is not.
+**Artwork** (`A3`, `A4`, and the static map still at `A19`), **promotions**, and **fuel prices**.
+All three are maintained in TinaCMS or through a chat session once the site is running, and none
+of them blocks the build — which is exactly why they are excluded and everything above is not.
+
+**The client confirmed that reading on 17 Sep 2026 and extended it**: artwork, promotions,
+advertising and Lummi art are all updated after the build, by chat session or in TinaCMS, and the
+build runs on placeholders (`A3`). `A20`, the per-Location share cards, was removed outright — the
+field stays, the assets are not a launch item. What the answer does not reach is `A4`: cultural
+approval was never a development question, and it still stands between a placeholder motif and a
+real one.

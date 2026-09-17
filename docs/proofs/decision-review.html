@@ -148,6 +148,10 @@ td code, th code{font-family:var(--mono); font-size:12px}
 
 h2.section{font-size:21px; margin:52px 0 6px; font-weight:600; letter-spacing:-.01em; padding-bottom:10px; border-bottom:2px solid var(--c-ink)}
 .lede{font-size:15px; color:var(--c-dim); max-width:66ch; margin:14px 0 0}
+.stamp{display:inline-block; margin:12px 0 0; padding:4px 10px; border-radius:999px;
+  background:var(--c-ok-soft); color:var(--c-ok); border:1px solid currentColor;
+  font:500 11px/1.4 var(--mono); letter-spacing:.04em; text-transform:uppercase}
+td.ok-cell{background:var(--c-ok-soft)}
 .lede strong{color:var(--c-ink); font-weight:600}
 .colophon{margin-top:56px; padding-top:18px; border-top:1px solid var(--c-rule); font-size:13px; color:var(--c-faint); max-width:66ch}
 .colophon code{font-family:var(--mono); font-size:12px}
@@ -166,7 +170,7 @@ h2.section{font-size:21px; margin:52px 0 6px; font-weight:600; letter-spacing:-.
     <div class="fig"><b>1</b><span>rejected after being built</span></div>
     <div class="fig"><b>$20</b><span>per month, all of it Vercel</span></div>
     <div class="fig"><b>0</b><span>lines of site code</span></div>
-    <div class="fig"><b>12</b><span>answers still needed</span></div>
+    <div class="fig"><b>0</b><span>answers blocking the build</span></div>
   </div>
 </header>
 
@@ -614,26 +618,33 @@ h2.section{font-size:21px; margin:52px 0 6px; font-weight:600; letter-spacing:-.
 
 <!-- ============ STILL OPEN ============ -->
 <h2 class="section">What is still open</h2>
-<p class="lede">Twelve answers are outstanding. <strong>None of them blocks starting the build</strong> —
-they block finishing it, and each one blocks a different, specific thing. The two at the top have lead
-times measured in weeks and should be started regardless of what happens to this review.</p>
+<p class="stamp">Answered by the client, 17 September 2026 — all twelve, in one pass.</p>
+<p class="lede"><strong>Nothing on this list blocks the build any more.</strong> Six items are closed
+outright. The rest were not closed but <em>moved</em>: artwork, promotions, copy, amenity lists and the
+map all shift into a content pass done after the build, in TinaCMS or a chat session, and the build runs
+on placeholders. That is a real decision with a real cost and it is named in the table rather than
+buried — deferring words and pictures does not make them smaller, it makes them invisible until the
+site is public.</p>
+<p class="lede">The one change worth reading twice: <strong>the Rewards app is already published in both
+stores.</strong> That retires a worry recorded in Block&nbsp;F — that <code>/privacy</code> gated the app
+submission. It never could have; the submission already happened.</p>
 
 <div class="tablewrap">
 <table>
-  <thead><tr><th>Item</th><th>What is needed</th><th>What it holds up</th></tr></thead>
+  <thead><tr><th>Item</th><th>The answer</th><th>What is left</th></tr></thead>
   <tbody>
-    <tr><td class="id">A3</td><td><strong>Art direction and budget</strong> — commissioned Lummi art, store photography, or both</td><td>Every page's finished look. Has a budget and a lead time; on the critical path</td></tr>
-    <tr><td class="id">A4</td><td><strong>Cultural approval</strong> for any Coast Salish artwork</td><td>Launch, unconditionally. Final art must be authentic, commissioned or tribe-approved</td></tr>
-    <tr><td class="id">A6</td><td><strong>Registrar access</strong> for lummibay.com and exit260.com</td><td>The DNS cutover and the 301. Costs an afternoon now; recovering a domain registered under a former employee takes weeks</td></tr>
-    <tr><td class="id">A12</td><td><strong>Real copy</strong>, everywhere</td><td>Technically nothing — which is the danger. Every word on the site today was written to fill a layout and reads as finished</td></tr>
-    <tr><td class="id">A7</td><td><strong>Two staff emails</strong> for the CMS logins, and which two people</td><td>Staff being able to edit at all, and the 5am emergency notice. Deferred by you — fine until training</td></tr>
-    <tr><td class="id">A8</td><td><strong>The real App Store and Play URLs</strong></td><td>The Get the App pill on every page and the two buttons on /rewards. Now blocked on submission, not on copy — the policy is written</td></tr>
-    <tr><td class="id">A17</td><td><strong>A company Google account</strong> for the map</td><td>The map, permanently. Same failure mode as A6</td></tr>
-    <tr><td class="id">A19</td><td><strong>The built map</strong> — three pins, set public, iframe handed over</td><td>/contact. It goes in a CMS field, not the markup</td></tr>
-    <tr><td class="id">A22</td><td><strong>Which social accounts exist</strong>, who controls them, whether any are per-Location</td><td>The footer's social row — which renders nothing at all until this is answered</td></tr>
-    <tr><td class="id">A23</td><td><strong>The real amenity list</strong> per Location</td><td>The badge row on all three detail pages. The recorded lists are thin</td></tr>
-    <tr><td class="id">A9</td><td><strong>Careers link destination</strong></td><td>One footer link. It is an editable field that needs a target</td></tr>
-    <tr><td class="id">A20</td><td><strong>Per-Location share cards</strong> — optional</td><td>Nothing. The sitewide default is already built and covers every link</td></tr>
+    <tr><td class="id">A3</td><td><strong>Art direction</strong> — <em>"updated after the build using either an AI session or TinaCMS. Use placeholders during the build."</em></td><td class="ok-cell">Closed. Only safe because of the rejection in Block&nbsp;E: no page is waiting on a picture to look finished</td></tr>
+    <tr><td class="id">A4</td><td><strong>Cultural approval</strong> — <em>"not a concern for development."</em></td><td>Agreed for the build, <strong>not closed</strong>. It was never a development question: real Coast Salish art still needs to be authentic or tribe-approved before it is placed. The placeholders carry a marker so this cannot be lost</td></tr>
+    <tr><td class="id">A6</td><td><strong>Registrar access</strong> — <em>"not a concern at this point."</em></td><td>Deferred to cutover. Nothing in the build touches DNS. Stays listed because it is the only item whose discovery time is <em>unbounded</em> — a login nobody has is found on launch day</td></tr>
+    <tr><td class="id">A12</td><td><strong>Real copy</strong> — <em>"use current copy as placeholders."</em></td><td>Moved to the post-build pass. Worth saying plainly: draft copy nobody can see is a draft; draft copy on lummibay.com is what the business says</td></tr>
+    <tr><td class="id">A7</td><td><strong>Two CMS logins</strong> — not a hold-up</td><td>Still due at training, and at the day-4 gate below. Which two people is an operational choice, not an admin one — one of them has to be able to publish an emergency notice at 5am</td></tr>
+    <tr><td class="id">A8</td><td><strong>Store URLs</strong> — both supplied</td><td><strong>One correction.</strong> Apple is right and live. The Play link given was a <em>search</em> URL; it was fetched, and the twelve apps it returns are all unrelated — the app is not among them. As a store button it would land a customer on other companies' apps. The direct listing is <code>play.google.com/store/apps/details?id=com.rovertown.lummi</code> — one click from the Play Console to confirm</td></tr>
+    <tr><td class="id">A17</td><td><strong>The map account</strong> — <em>"is there an area to input this or signin and connect the map?"</em></td><td class="ok-cell"><strong>Answered: there is no sign-in and nothing to connect.</strong> The site never talks to Google and holds no Google credential. The map is two paste-in-a-box fields in the CMS — the embed code, and a still of the finished map. A Google account is needed only to <em>build</em> the map, which is why it should be a company one</td></tr>
+    <tr><td class="id">A19</td><td><strong>The map itself</strong> — <em>"not built yet."</em></td><td>Blocks nothing. Both fields are empty-safe: no map pasted means <code>/contact</code> shows addresses, hours, phones and Directions links and simply has one section fewer</td></tr>
+    <tr><td class="id">A22</td><td><strong>Social accounts</strong> — Facebook, Instagram, Yelp, all supplied</td><td class="ok-cell">Closed. All three are brand-level despite the Exit&nbsp;260 handles, so the footer is three icons and no Location page gets its own. Yelp is a review listing rather than a posting account, so it is ordered last. One five-minute look left: are the two tended accounts current?</td></tr>
+    <tr><td class="id">A23</td><td><strong>Amenity lists</strong> — <em>"populated during the updating process."</em></td><td>Moved to the post-build pass. The half that was not a question is done: the Minimart's <code>fuel + convenience store</code> is split into two, so the badge row renders instead of falling back to a sentence. Two badges is a floor, not a finish</td></tr>
+    <tr><td class="id">A9</td><td><strong>Careers link</strong> — <code>silverreefcasino.com/careers</code></td><td>Supplied, and <strong>one call goes back to you</strong>: the destination is a sibling Lummi enterprise, and the rule keeps other Lummi companies to the single footer link. The link names no company — the label is "Careers", there is no logo — so it reads as a destination rather than a mention. That is ownership's judgement, not the build's</td></tr>
+    <tr><td class="id">A20</td><td><strong>Per-Location share cards</strong> — <em>"remove this for now."</em></td><td class="ok-cell">Closed. The <em>asset</em> is removed, not the field: drop a file into a page's slot next year and that page's card changes with no engineering. Until then every link unfurls with the sitewide default, which is finished</td></tr>
   </tbody>
 </table>
 </div>
@@ -683,26 +694,35 @@ would break a hard rule. It means launching clean and adding art when it is read
   registrar question (A6) is answered.</div></div>
 </div>
 
-<p class="lede" style="margin-top:22px"><strong>What does not fit, whatever happens:</strong> commissioned
-or approved artwork (A3, A4) and finished copy (A12) are the two that decide whether the site
-<em>looks</em> finished, and both sit with people outside the build. The app store links (A8) depend on an
-app submission, which now at least has the privacy URL it was waiting for. The map (A17, A19) needs a
-company Google account created first. The social row and the amenity badges simply render nothing until
-someone supplies the lists — that is by design, not a gap.</p>
+<p class="lede" style="margin-top:22px"><strong>What does not fit, whatever happens.</strong> The answers
+of 17 September changed this paragraph more than any other on the page. Artwork (A3) and copy (A12) were
+the two things that decided whether the site <em>looks</em> finished, and they are no longer in the
+build's way at all — they arrive afterwards, through the CMS, without an engineer. What is left outside
+the build is smaller than it was: the map has to be drawn in Google My Maps by somebody with a company
+account (A17, A19), the real amenity lists need five minutes with whoever opens up (A23), and cultural
+approval still stands between a placeholder motif and a real one (A4). None of those hold a launch. The
+social row and the amenity badges render nothing until the lists exist — by design, not as a gap.</p>
+<p class="lede">What that leaves is a genuine trade rather than a free win: a site that works completely
+and reads provisionally. Every price, every hour, every page and every scheduled thing is real and
+live; the words and the pictures are the build's own drafts until someone replaces them. That is a
+reasonable way to launch — it is not the same as launching finished, and it is worth agreeing to
+deliberately rather than discovering on the day.</p>
 
 <div class="callout" style="border-left-color:var(--c-mark)">
   <h3>What a two-week launch actually asks of you</h3>
   <p>Three things, and only the first is urgent:</p>
   <ol>
-    <li><strong>Check the registrar logins this week</strong> (A6). It costs an afternoon and it is the
-    only open item that can add <em>weeks</em> rather than days if the answer is bad.</li>
-    <li><strong>Name the two people who get CMS logins</strong> (A7) before day&nbsp;4, so the gate above
-    is a real test with a real person rather than a demo.</li>
-    <li><strong>Be reachable for same-day answers.</strong> A two-week build has no slack for a
-    three-day wait on a question about hours or amenity lists.</li>
+    <li><strong>Name the two people who get CMS logins</strong> (A7) before day&nbsp;4, so the gate
+    above is a real test with a real person rather than a demo. This is now the only dated ask.</li>
+    <li><strong>Confirm the Play Store listing URL</strong> (A8) — one click from the Play Console.
+    The link supplied is a search page that does not return the app.</li>
+    <li><strong>Check the registrar logins</strong> (A6) whenever it suits. Deferred, correctly, since
+    nothing in the build touches DNS — but it is the only open item that can add <em>weeks</em> rather
+    than days, and it costs an afternoon to rule out.</li>
   </ol>
-  <p style="margin:10px 0 0">Everything else can follow the site live. Copy, photography and artwork all
-  land through the CMS afterwards without an engineer — which is what Block&nbsp;C was for.</p>
+  <p style="margin:10px 0 0">Everything else follows the site live. Copy, photography, artwork,
+  promotions and tenant records all land through the CMS afterwards without an engineer — which is what
+  Block&nbsp;C was for, and it is now the plan of record rather than a capability held in reserve.</p>
 </div>
 
 <p class="colophon">

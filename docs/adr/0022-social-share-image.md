@@ -132,3 +132,23 @@ be drawn on one.
   spec sheet for that reason.
 - A change of brand ground colour or lockup file invalidates existing cards only for new shares.
   Old ones will keep showing the previous brand until they age out of every platform's cache.
+
+## Amendment — per-page cards removed from the launch list, 17 Sep 2026
+
+The client's answer to checklist item **A20** — the per-Location and `/truck-stop` share cards —
+was *"remove this for now."* Done, and the distinction matters: **the asset is removed, the field
+is not.**
+
+`shareImage` stays on the page collections exactly as specified above, optional, with the sitewide
+default as its fallback. Nothing about the component, the schema or the `og:image` handling
+changes. Somebody can drop a 1200 × 630 file into one page's field in TinaCMS a year from now and
+that page's card changes with no engineering work at all — which is the whole reason the field was
+made per-page rather than hard-coded.
+
+Until then every link the business shares unfurls with
+`public/brand/share/share-default-2026-09.jpg`, which is finished, correct and already covers the
+failure this ADR was written about: no link scrapes a 26px motif or comes up blank.
+
+The specifications stay on the designer spec sheet and in the asset guide rather than being
+deleted with the checklist item. A spec that is removed has to be rewritten; a spec that is parked
+is picked up.

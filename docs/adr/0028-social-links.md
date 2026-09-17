@@ -93,3 +93,33 @@ shown where that place is.
   say. Whoever supplies the list should be asked which ones are actually tended.
 - If a campaign ever genuinely needs a feed on the page, that is a decision to reopen ADR 0025
   with, not a component to add quietly. The cost of the embed is the sentence in the footer.
+
+## Amendment — the accounts, supplied 17 Sep 2026
+
+Three, all of them brand-level in practice:
+
+| Platform | URL | Note |
+|---|---|---|
+| Facebook | `https://www.facebook.com/LBMat260` | Tended account |
+| Instagram | `https://www.instagram.com/lbmexit260/` | Tended account |
+| Yelp | `https://www.yelp.com/biz/lummi-bay-market-at-exit-260-bellingham` | A review listing, not a posting account |
+
+Three consequences follow, and none of them changes the decision above.
+
+**They all go in the footer row and no Location detail page gets its own.** The handles are
+`LBMat260` and `lbmexit260` — Exit 260 names carrying the whole brand, which is how the business
+actually talks about itself. The ADR reserved per-Location links for per-Location accounts; there
+are none, so the footer is three icons rather than the nine this ADR was written to prevent.
+
+**Yelp is a different kind of thing and is ordered last.** Facebook and Instagram are places the
+business speaks. Yelp is a place customers speak about it — a guest who clicks arrives expecting
+opinions, not news. That is a reason to carry it (it is where a driver checks whether the coffee
+is any good) and a reason not to lead with it. Order: Facebook, Instagram, Yelp.
+
+**Yelp's icon has to be drawn.** Facebook and Instagram ship in every icon set; Yelp does not, and
+the build is not loading an icon font for one glyph. It is a single inline SVG in the same bone
+fill as the other two, per the rule above that platform colours stay out of the footer.
+
+What is still not answered is the question the consequences section asks: whether the two tended
+accounts are current. A link on every page to a feed last posted to in 2022 is worse than no link,
+and that is a five-minute look, not a decision.

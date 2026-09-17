@@ -77,7 +77,11 @@ The two naming questions that came back with them were **settled by the client o
 
 2. **minimart** — nav "Minimart". **CONFIRMED.** 4884 Haxton Way, Ferndale WA 98248 ·
    open daily 7am–8pm · 360-380-2049. Next to Silver Reef Casino.
-   Amenities: fuel + convenience store. No `truckStop` record.
+   Amenities: `fuel`, `convenience store` — **split into two, 17 Sep 2026**, from the single
+   compound string `fuel + convenience store` this document carried. Two facts, two fields, and
+   the badge row renders instead of falling back to a sentence. Nothing was invented: both were
+   already recorded, they were just typed into one box. The real list is still open (A23) and
+   arrives in the post-build content pass. No `truckStop` record.
    Full name **"Lummi Bay Market Minimart"** — one word, no space, confirmed by the client.
    **Hours corrected by the client 16 Sep 2026: 7am–8pm, superseding the 6am–10pm this
    document previously carried as confirmed.** It is the only value in the three Locations that
@@ -134,10 +138,13 @@ unaffected and still prints **The Cove** in the fuel price band.
   `docs/proofs/amenity-badges.html`):
   - **Fewer than two amenities and the row does not render** — a sentence renders instead. One
     lone badge under a "What's here" heading reads as a failed load, not as a short list. The
-    Minimart is the live case: its recorded amenity list is the single string
-    `fuel + convenience store`.
-  - **Split compound strings.** `fuel + convenience store` is two facts typed into one field. The
-    badge row is where that shows.
+    Minimart was the live case: its recorded list was the single string `fuel + convenience
+    store`, which drew exactly one badge.
+  - **Split compound strings.** `fuel + convenience store` is two facts typed into one field, and
+    the badge row is where that shows. **Done for the Minimart, 17 Sep 2026** — it is now `fuel`
+    and `convenience store`, which is two badges and clears the failure above. That is the floor,
+    not the finish: two badges is a row that renders, not a row worth reading, and the list that
+    makes a driver choose this exit is still A23.
   - **Free text, with a fallback.** Staff type any amenity; the component matches it against an
     icon map and falls back to a neutral dot when there is no icon yet. Never a fixed picklist —
     that turns "we sell propane now" into an engineering ticket, which is the exact thing this

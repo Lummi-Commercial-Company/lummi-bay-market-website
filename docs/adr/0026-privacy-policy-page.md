@@ -130,3 +130,33 @@ the rule that **legal text is revised by its owner, not by an engineer and not b
 - **The policy must be revised whenever the app changes what it collects**, and the store
   declarations revised with it. That is an ongoing obligation on whoever operates the app, and it
   is the part that gets forgotten.
+
+## Amendment — the app is already published, so the precondition on A8 is discharged, 17 Sep 2026
+
+This ADR attached a precondition to checklist item **A8**: the store links could not exist until
+`/privacy` was live, because neither store publishes an app without a public policy URL. That
+reasoning was sound and it is now moot — **the app is already in both stores**, and has been for
+some time:
+
+- Apple — `https://apps.apple.com/us/app/lummi-bay-market/id6744988483`, *Lummi Bay Market*,
+  seller **Lummi Commercial Company**, category Food & Drink.
+- Google Play — `https://play.google.com/store/apps/details?id=com.rovertown.lummi`.
+
+A submission that has already happened cannot be gated by a page that has not been built.
+**A8 is unblocked and always was**; what it needed was somebody to look up the two URLs, which the
+client did.
+
+**The decision to build `/privacy` is unchanged, and so is its ranking in Phase 3.** The page was
+never only a submission artifact: the footer links to it (ADR 0025 amended), the policy describes
+a product this business owns, and the reason the URL is permanent — that a store listing points at
+a policy URL and a dead one is an app-review problem — applies to whatever URL is in the listing
+today just as strongly.
+
+**What this opens is a question for the client, not a decision for this ADR.** The Apple listing's
+privacy policy currently points at `appcustomersupport.com/privacy-policy/470c696e-…`, a
+Rovertown-hosted URL — consistent with the white-label arrangement A21 uncovered. So there will be
+two public copies of substantially the same policy: one the business controls at
+`lummibay.com/privacy`, one it does not. Whether the store listings are repointed at the site's
+copy is theirs to decide with Rovertown. It is worth deciding rather than drifting: two policies
+that are meant to be identical will not stay identical, and the one customers are shown at
+install time is the one the business cannot edit.

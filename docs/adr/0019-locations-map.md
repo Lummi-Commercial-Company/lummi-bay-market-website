@@ -87,3 +87,36 @@ not moved there later, because ownership transfer on consumer Google products is
 
 Step 6 matters more than it reads: a hard-coded iframe means every future map change is an
 engineering task, which is the thing this whole project is built to avoid.
+
+## Amendment — "is there an area to input this, or a sign-in on the backend?", 17 Sep 2026
+
+The client asked, against checklist item **A17**, whether the map is entered somewhere or whether
+something signs in and connects on the backend. Worth answering in the ADR, because the answer is
+a property of the design rather than a detail of the setup.
+
+**There is no sign-in and there is nothing to connect.** The site never authenticates to Google,
+holds no Google credential, and has no Google integration to configure. If every Google account at
+the company were deleted tomorrow the site would keep building and deploying.
+
+**The map is two fields in TinaCMS, and both are paste-in-a-box.**
+
+1. **The embed code** — from Google My Maps, Share → Embed on my site. Paste the `<iframe>` it
+   gives you into the settings field. The map must be set to public first or the embed renders
+   nothing, silently.
+2. **A still image of the finished map** — uploaded like any other image. This is what `/contact`
+   shows at rest; the live embed mounts only when a guest clicks it, which is what keeps the
+   footer's "No cookies" sentence true (ADR 0025).
+
+Take the still *from* the finished My Maps, so the pins in the picture are the pins the click
+opens. A stock map screenshot with pins in the wrong places is worse than no image.
+
+**Why a company Google account, then?** Only to own the map itself. My Maps documents live in the
+account that created them, and consumer-product ownership transfer is not reliable — a map built
+in a personal account leaves when that person does, and the field on the site keeps pointing at an
+embed nobody can edit. It is the same failure as A6 and it is avoided the same way: create it in
+the right account the first time. The account is a condition on **building** the map, never on
+running the site.
+
+**Both fields are empty-safe.** Nothing pasted, no map section — `/contact` renders its addresses,
+hours, phones and per-Location Directions links and is simply a page with one section fewer. The
+client's *"map not built yet"* (A19) therefore blocks nothing.
