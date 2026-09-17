@@ -236,13 +236,16 @@ td.ok-cell{background:var(--c-ok-soft)}
   and four of them were settled by measurement rather than by opinion.</p>
 
   <div class="dec">
-    <div class="dec-top"><span class="adr">ADR 0001</span><h3>Only the three market pages come from lcc-lummi.com</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-top"><span class="adr">ADR 0001</span><h3>Only the three market pages come from lcc-lummi.com</h3><span class="tag t-amend">Accepted · amended 17 Sep</span></div>
     <div class="dec-body">
       <div><b>Why</b> The brief said "merge three sites", but lcc-lummi.com is the parent enterprise —
       casino, golf, billboards, the Salish Village development. Importing it would bury the retail brand
       inside a holding company.</div>
       <div><b>What it costs</b> The merge is deliberately partial. LCC appears <em>once</em>, as a single
-      footer link. If those businesses ever need surfacing, that is a separate site.</div>
+      footer link. If those businesses ever need surfacing, that is a separate site. <em>Amended 17 Sep:</em>
+      the Careers link tested this rule and you settled it — the rule is about <em>mentions</em>, not
+      destinations, so an outbound link labelled by the job it does is fine and the label must stay
+      "Careers", with no company name and no logo beside it.</div>
     </div>
   </div>
 
@@ -618,9 +621,10 @@ td.ok-cell{background:var(--c-ok-soft)}
 
 <!-- ============ STILL OPEN ============ -->
 <h2 class="section">What is still open</h2>
-<p class="stamp">Answered by the client, 17 September 2026 — all twelve, in one pass.</p>
+<p class="stamp">Answered by the client, 17 September 2026 — all twelve, plus three follow-ups the same day.</p>
 <p class="lede"><strong>Nothing on this list blocks the build any more.</strong> Six items are closed
-outright. The rest were not closed but <em>moved</em>: artwork, promotions, copy, amenity lists and the
+outright — two of them (A8, A9) on a second pass the same day, after the first answers raised a
+correction and a rule question. The rest were not closed but <em>moved</em>: artwork, promotions, copy, amenity lists and the
 map all shift into a content pass done after the build, in TinaCMS or a chat session, and the build runs
 on placeholders. That is a real decision with a real cost and it is named in the table rather than
 buried — deferring words and pictures does not make them smaller, it makes them invisible until the
@@ -636,14 +640,14 @@ submission. It never could have; the submission already happened.</p>
     <tr><td class="id">A3</td><td><strong>Art direction</strong> — <em>"updated after the build using either an AI session or TinaCMS. Use placeholders during the build."</em></td><td class="ok-cell">Closed. Only safe because of the rejection in Block&nbsp;E: no page is waiting on a picture to look finished</td></tr>
     <tr><td class="id">A4</td><td><strong>Cultural approval</strong> — <em>"not a concern for development."</em></td><td>Agreed for the build, <strong>not closed</strong>. It was never a development question: real Coast Salish art still needs to be authentic or tribe-approved before it is placed. The placeholders carry a marker so this cannot be lost</td></tr>
     <tr><td class="id">A6</td><td><strong>Registrar access</strong> — <em>"not a concern at this point."</em></td><td>Deferred to cutover. Nothing in the build touches DNS. Stays listed because it is the only item whose discovery time is <em>unbounded</em> — a login nobody has is found on launch day</td></tr>
-    <tr><td class="id">A12</td><td><strong>Real copy</strong> — <em>"use current copy as placeholders."</em></td><td>Moved to the post-build pass. Worth saying plainly: draft copy nobody can see is a draft; draft copy on lummibay.com is what the business says</td></tr>
-    <tr><td class="id">A7</td><td><strong>Two CMS logins</strong> — not a hold-up</td><td>Still due at training, and at the day-4 gate below. Which two people is an operational choice, not an admin one — one of them has to be able to publish an emergency notice at 5am</td></tr>
-    <tr><td class="id">A8</td><td><strong>Store URLs</strong> — both supplied</td><td><strong>One correction.</strong> Apple is right and live. The Play link given was a <em>search</em> URL; it was fetched, and the twelve apps it returns are all unrelated — the app is not among them. As a store button it would land a customer on other companies' apps. The direct listing is <code>play.google.com/store/apps/details?id=com.rovertown.lummi</code> — one click from the Play Console to confirm</td></tr>
+    <tr><td class="id">A12</td><td><strong>Real copy</strong> — <em>"use current copy as placeholders."</em></td><td>Moved to the post-build pass, and the numbering is now confirmed: this sentence is A12's, not A7's. Worth saying plainly: draft copy nobody can see is a draft; draft copy on lummibay.com is what the business says</td></tr>
+    <tr><td class="id">A7</td><td><strong>Two CMS logins</strong> — <em>"an implementation issue, not a concern for the creation of code."</em></td><td>Agreed, and it settles one ambiguity: <em>"use current copy as placeholders"</em> arrived under this number and belongs to A12 above. Still due at training, and at the day-4 gate below. Which two people is an operational choice, not an admin one — one of them has to be able to publish an emergency notice at 5am</td></tr>
+    <tr><td class="id">A8</td><td><strong>Store URLs</strong> — both supplied, Play link corrected and confirmed</td><td class="ok-cell">Closed. Apple was right and live. The Play link first given was a <em>search</em> URL; it was fetched, and the twelve apps it returns are all unrelated — the app was not among them, so as a store button it would have landed a customer on other companies' apps. The direct listing, <code>play.google.com/store/apps/details?id=com.rovertown.lummi</code>, is now confirmed. The habit is worth keeping: a search URL looks like a store link and behaves like a directory</td></tr>
     <tr><td class="id">A17</td><td><strong>The map account</strong> — <em>"is there an area to input this or signin and connect the map?"</em></td><td class="ok-cell"><strong>Answered: there is no sign-in and nothing to connect.</strong> The site never talks to Google and holds no Google credential. The map is two paste-in-a-box fields in the CMS — the embed code, and a still of the finished map. A Google account is needed only to <em>build</em> the map, which is why it should be a company one</td></tr>
     <tr><td class="id">A19</td><td><strong>The map itself</strong> — <em>"not built yet."</em></td><td>Blocks nothing. Both fields are empty-safe: no map pasted means <code>/contact</code> shows addresses, hours, phones and Directions links and simply has one section fewer</td></tr>
     <tr><td class="id">A22</td><td><strong>Social accounts</strong> — Facebook, Instagram, Yelp, all supplied</td><td class="ok-cell">Closed. All three are brand-level despite the Exit&nbsp;260 handles, so the footer is three icons and no Location page gets its own. Yelp is a review listing rather than a posting account, so it is ordered last. One five-minute look left: are the two tended accounts current?</td></tr>
     <tr><td class="id">A23</td><td><strong>Amenity lists</strong> — <em>"populated during the updating process."</em></td><td>Moved to the post-build pass. The half that was not a question is done: the Minimart's <code>fuel + convenience store</code> is split into two, so the badge row renders instead of falling back to a sentence. Two badges is a floor, not a finish</td></tr>
-    <tr><td class="id">A9</td><td><strong>Careers link</strong> — <code>silverreefcasino.com/careers</code></td><td>Supplied, and <strong>one call goes back to you</strong>: the destination is a sibling Lummi enterprise, and the rule keeps other Lummi companies to the single footer link. The link names no company — the label is "Careers", there is no logo — so it reads as a destination rather than a mention. That is ownership's judgement, not the build's</td></tr>
+    <tr><td class="id">A9</td><td><strong>Careers link</strong> — <code>silverreefcasino.com/careers</code>, one footer link labelled "Careers"</td><td class="ok-cell">Closed, including the call that went back to you. Ownership's answer: link straight out, no <code>/careers</code> page here. What it settles for the whole build is that the rule in Block&nbsp;A is about <em>mentions</em>, not destinations — so <strong>the label stays "Careers"</strong>, with no company name and no logo beside it. The moment the label names the company it stops being a signpost</td></tr>
     <tr><td class="id">A20</td><td><strong>Per-Location share cards</strong> — <em>"remove this for now."</em></td><td class="ok-cell">Closed. The <em>asset</em> is removed, not the field: drop a file into a page's slot next year and that page's card changes with no engineering. Until then every link unfurls with the sitewide default, which is finished</td></tr>
   </tbody>
 </table>
@@ -710,12 +714,11 @@ deliberately rather than discovering on the day.</p>
 
 <div class="callout" style="border-left-color:var(--c-mark)">
   <h3>What a two-week launch actually asks of you</h3>
-  <p>Three things, and only the first is urgent:</p>
+  <p>Two things now, down from three — the Play Store URL was confirmed on 17&nbsp;September and the
+  Careers question was decided the same day.</p>
   <ol>
     <li><strong>Name the two people who get CMS logins</strong> (A7) before day&nbsp;4, so the gate
-    above is a real test with a real person rather than a demo. This is now the only dated ask.</li>
-    <li><strong>Confirm the Play Store listing URL</strong> (A8) — one click from the Play Console.
-    The link supplied is a search page that does not return the app.</li>
+    above is a real test with a real person rather than a demo. This is the only dated ask on the page.</li>
     <li><strong>Check the registrar logins</strong> (A6) whenever it suits. Deferred, correctly, since
     nothing in the build touches DNS — but it is the only open item that can add <em>weeks</em> rather
     than days, and it costs an afternoon to rule out.</li>

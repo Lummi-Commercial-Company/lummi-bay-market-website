@@ -140,7 +140,8 @@ some time:
 
 - Apple — `https://apps.apple.com/us/app/lummi-bay-market/id6744988483`, *Lummi Bay Market*,
   seller **Lummi Commercial Company**, category Food & Drink.
-- Google Play — `https://play.google.com/store/apps/details?id=com.rovertown.lummi`.
+- Google Play — `https://play.google.com/store/apps/details?id=com.rovertown.lummi`, **confirmed by
+  the client 17 Sep 2026**.
 
 A submission that has already happened cannot be gated by a page that has not been built.
 **A8 is unblocked and always was**; what it needed was somebody to look up the two URLs, which the

@@ -13,19 +13,25 @@ against this file.
 
 **`rewards.appStoreUrl`** — verified live. *Lummi Bay Market*, seller Lummi Commercial Company.
 
-**`rewards.playStoreUrl`** — **`playStoreUrlNeedsConfirmation` is `true` on purpose.** The client
-supplied a Play *search* URL (`/store/search?q=lummi+bay+market`). That page was fetched and
-returns twelve unrelated apps; the Lummi Bay Market app is not among them, so shipped as a store
-button it would land a customer on other companies' apps. The URL recorded here is the direct
-listing found by search — the `com.rovertown.lummi` package, consistent with Rovertown being the
-app's platform partner (checklist A21). Whoever has the Play Console can confirm it in one click:
-open the listing, copy the address bar. Clear the flag then.
+**`rewards.playStoreUrl`** — **confirmed by the client, 17 Sep 2026.** The flag
+`playStoreUrlNeedsConfirmation` has been removed; this is the address the store button uses.
 
-**`footer.careersUrl`** — supplied. Opens in a new tab, marked as leaving the site. Flagged at
-checklist A9 for one ownership call: the destination is a sibling Lummi enterprise, and ADR 0001
-limits other Lummi companies to the single "Lummi Commercial Companies" footer link. The link as
-built names no company — the label is "Careers" — so it reads as a destination rather than a
-mention, but that is a judgement ownership should make rather than inherit.
+Why it was ever in doubt is worth keeping, because it is the failure this field exists to prevent:
+the URL first supplied was a Play *search* URL (`/store/search?q=lummi+bay+market`). That page was
+fetched and returns twelve unrelated apps — the Lummi Bay Market app is not among them — so shipped
+as a store button it would have landed a customer on other companies' apps. A search URL looks like
+a store link and behaves like a directory. **Whatever goes in this field is opened and checked, not
+pasted on trust.**
+
+**`footer.careersUrl`** — supplied, and **settled by the client 17 Sep 2026**: the footer link
+reads **"Careers"** and goes straight to this address. No `/careers` page is built on this site.
+Opens in a new tab, marked as leaving the site.
+
+That closes the ADR 0001 question raised at checklist A9 rather than leaving it hanging: ownership
+looked at it and the answer is that a label naming no company is a destination, not a mention of
+another Lummi company. The rule the build keeps from it: **the link text stays "Careers"** — no
+company name, no logo, no "at Silver Reef" — because that is the whole of what makes it a
+destination.
 
 **`social`** — the three accounts supplied, in render order. Facebook and Instagram are tended
 accounts; Yelp is a review listing and is ordered last for that reason (ADR 0028, amended). The

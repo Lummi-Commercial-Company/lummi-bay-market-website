@@ -45,7 +45,10 @@ The client's answer — *"All the text will be updated before launch. Is that th
 exactly the concern, and it is now answered: yes, and this is the list of what has to be written,
 so nothing is discovered missing on launch week.
 
-**17 Sep 2026: *"Not a hold up. Use current copy as placeholders."*** Accepted for the build —
+**17 Sep 2026: *"Not a hold up. Use current copy as placeholders."*** The sentence arrived numbered
+`A7`, and the client has since confirmed what `A7` meant — the CMS editor seats, deferred as an
+implementation matter — so this is the answer to `A12`, and the mapping is no longer in doubt.
+Accepted for the build —
 none of this is engineering and none of it blocks a line of code. The list stays whole and
 unstruck, because the deferral changes *when* these get written, not *whether*, and it moves the
 work to the side of the launch where placeholder text is public. Each row below is still a thing
@@ -59,7 +62,7 @@ somebody has to write.
 | 2.4 | **The footer's four column headings** — About / Visit / Rewards / Work with us. Invented here; the architecture names the *links*, never the columns |
 | 2.5 | **The Truck Stop page: what a driver decides on.** The amenity list is settled, the decision factors are not — shower cost and whether towels are included, lounge access rules, how long a truck may park, any reservation, whether there is a scale, and which **fleet cards** are accepted |
 | 2.6 | **The Cove Kitchen** — hours (are they the store's?), whether there is a menu to publish, and a phone for orders. It is an Amenity, not a tenant (settled 16 Sep 2026), but customers will search for it by name |
-| ~~2.7~~ | ~~**The Careers link destination**~~ — **supplied 17 Sep 2026**: `https://www.silverreefcasino.com/careers` (`A9`). The label question is answered by implication — "Careers" is what the destination calls itself. One thing went *to* the client rather than coming back closed: the destination is a sibling Lummi enterprise, and ADR 0001 keeps other Lummi companies to the single footer link. The link names no company, so it reads as a destination rather than a mention — but that is ownership's judgement to make. See `A9` |
+| ~~2.7~~ | ~~**The Careers link destination**~~ — **supplied and settled 17 Sep 2026**: `https://www.silverreefcasino.com/careers` (`A9`). The one thing that went *to* the client — whether linking a sibling Lummi enterprise sits inside ADR 0001 — came back decided: *"Should read as 'Careers' and link to the provided link I gave, not a /careers page on this website."* One footer link, labelled **Careers**, straight out. The rule that survives the decision: **the label stays "Careers"**, with no company name and no logo beside it, because a link naming no company is a destination rather than a mention |
 | 2.8 | **The Rewards app in one paragraph** — what a customer gets, for the `/rewards` page. This is a page on this website with nothing on it, which is why it survived the cut of the app group below |
 | 2.9 | **The legal entity name for the footer copyright line** — "Lummi Bay Market", or a registered company name |
 | ~~2.10~~ | ~~**Whether to advertise the businesses renting space at Exit 260 at all**~~ (`A14`) — **Answered: yes.** *"we will create a page for tenants and add their card to that page."* ADR 0016 amended, `A14` closed. What is still needed is ordinary content, and it is now item **2.11** |
@@ -101,7 +104,7 @@ operations — they are pages on this website with nothing on them:
 
 | # | What we need | ID |
 |---|---|---|
-| ~~4.1~~ | ~~**The App Store and Google Play URLs**~~ — **supplied 17 Sep 2026**, with one correction. Apple is right and live. The Play link given was a **search** URL; it was fetched, and the twelve apps it returns are all unrelated — the app is not among them, so as a store button it would land a customer on other companies' apps. The direct listing is `play.google.com/store/apps/details?id=com.rovertown.lummi`, recorded with a confirm-me flag in `content/settings/site.json`. Also learned in the looking: **the app is already published in both stores**, which retires the ADR 0026 worry that `/privacy` gated the submission — it never could have, because the submission already happened | `A8` |
+| ~~4.1~~ | ~~**The App Store and Google Play URLs**~~ — **supplied 17 Sep 2026**, with one correction. Apple is right and live. The Play link given was a **search** URL; it was fetched, and the twelve apps it returns are all unrelated — the app is not among them, so as a store button it would land a customer on other companies' apps. The direct listing is `play.google.com/store/apps/details?id=com.rovertown.lummi`, **confirmed by the client 17 Sep 2026** and recorded without a flag in `content/settings/site.json`. The moral is worth keeping even though the item is closed: a search URL looks like a store link and behaves like a directory, so whatever goes in that field gets opened and checked rather than pasted on trust. Also learned in the looking: **the app is already published in both stores**, which retires the ADR 0026 worry that `/privacy` gated the submission — it never could have, because the submission already happened | `A8` |
 | ~~4.2~~ | ~~**What the Rewards app collects**, for `/privacy`~~ — **answered 17 Sep 2026.** The client supplied the policy text; the page is written at `content/pages/privacy.mdx` and what it left open is in `docs/privacy-policy-notes.md` | `A21` closed |
 
 And one answer from the cut groups was kept, because it changed a document rather than a plan:
