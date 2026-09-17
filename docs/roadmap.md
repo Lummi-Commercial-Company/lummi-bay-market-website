@@ -60,7 +60,11 @@ These gate later phases and none of them are code. Start them now because they h
 ## Phase 3 — pages
 12. The fuel price block. The largest single component and the one with the most decisions
     behind it (ADR 0005) — build it from the ADR, not by copying the proof sheet.
-13. Home · Locations index · three Location pages · Truck Stop · Rewards · Fuel Prices · About.
+13. Home · Locations index · three Location pages · Truck Stop · Rewards · Fuel Prices · About ·
+    Contact · Privacy. The last three are footer-reached, not nav (ADR 0008). **`/privacy` is
+    not optional and not last**: the Rewards app cannot be submitted to either store until that
+    URL is live and public, so it gates A8 — ADR 0026. Its wording comes from the client (A21);
+    the page and the footer link do not wait for it.
 14. Promo region and the TinaCMS promo collection (ADR 0007), including scheduling.
 15. Copy: copy-editor merges the three source sites into one voice. Currently first-draft
     placeholder throughout.

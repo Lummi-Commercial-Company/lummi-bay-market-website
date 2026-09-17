@@ -85,9 +85,13 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
 Footer: **About** (brand story grounded in the Lummi values + light community note; LCC
 corporate/enterprise content stays out), **Contact**, **Rewards**, **Careers** (editable
 link), and the single **Lummi Commercial Companies** link → lcc-lummi.com. The base row carries
-one line of plain text — **"No cookies. Visits counted anonymously."** — not a link and not a
-policy page. It is a factual claim the build has to keep true, so it is a constraint on analytics
-and embeds, not decoration (ADR 0025).
+one line of plain text — **"No cookies. Visits counted anonymously."** — which is not a link. It
+is a factual claim the build has to keep true, so it is a constraint on analytics and embeds, not
+decoration (ADR 0025). Beside it the base row also carries a **Privacy Policy** link → `/privacy`.
+Both, not one: the sentence is a checkable claim about *this site*, the policy is a document that
+mostly describes the **Rewards app**, which is the only reason the page exists — neither store
+will publish the app without a public policy URL (ADR 0026). `/privacy` is a `pages` document, is
+never renamed or deleted once it is in a store listing, and is not in the nav.
 The contact form and the per-location hours/phone block are **not** in the footer. There is
 no form anywhere on the site; hours, addresses, phone and a per-Location synopsis live on
 `/contact`, derived from the Location data — ADR 0015. `/contact` also carries one map with a

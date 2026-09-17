@@ -1,7 +1,8 @@
 # 0025 — No banner, because the site sets nothing to consent to
 
-Status: Accepted. Settles checklist **A18**, constrains **B7**, and resolves the open cookie
-consequence in ADR 0019.
+Status: Accepted, amended 17 Sep 2026 by **ADR 0026** (a `/privacy` page is required by the
+Rewards app; no cookie decision here changes). Settles checklist **A18**, constrains **B7**, and
+resolves the open cookie consequence in ADR 0019.
 
 Not legal advice. It is a reasoned read of a small Washington retail site's exposure, and the
 decision below is deliberately built so that the read does not have to be right.
@@ -136,6 +137,14 @@ Three deliberate choices in that sentence:
   artifact somebody has to own, review and keep current. There is no page behind this because
   there is nothing a page would add: the claim is two facts, both checkable in about ten seconds
   by opening devtools.
+  **Amended 17 Sep 2026 by ADR 0026 — a page exists after all, for a reason this ADR did not
+  know about.** The Rewards mobile app cannot be submitted to either store without a publicly
+  reachable privacy policy URL, and the policy has to describe what the *app* collects, which
+  this site's cookielessness says nothing about. So `/privacy` is built and linked from the
+  footer — and **this sentence stays beside it**, unchanged. The reasoning above was right about
+  the website and is still right about the website; it was simply reasoning about the wrong
+  product. The sentence is a specific checkable claim about this site; the policy is a document
+  that mostly describes the app. The footer carries both.
 - **It says what is true, not what sounds best.** "We track nobody" would be the tempting line
   and it would be **false** — Vercel Web Analytics counts visits, anonymously and without
   cookies, but it counts them. A privacy claim that overstates is worse than no claim at all:
@@ -147,6 +156,9 @@ Three deliberate choices in that sentence:
   the façade notice discloses the *embed* at the point of use. Neither has to carry the other's
   nuance, and neither is wrong. If that ever feels too fine a distinction, the fix is a short
   `/privacy` page — a new decision, not a rewording of this one.
+  *That page now exists (ADR 0026), arrived at from a completely different direction — the app
+  store, not the map. It is available to carry this distinction if it ever needs carrying, but
+  that is not why it was built and the split above still stands as written.*
 
 **This line is a constraint, not a caption.** It is the most visible commitment on the site and
 the easiest to falsify by accident: the day someone adds a tag that sets a cookie, this sentence
