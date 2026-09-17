@@ -33,6 +33,18 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  /**
+   * Cache Components (Next's partial prerendering).
+   *
+   * This is how the site is BOTH static and live. Every page shell — header,
+   * footer, waterline, copy — is prerendered and served from the CDN, while the
+   * three things that must be current stream in per request inside their own
+   * <Suspense> boundaries: the fuel prices, the emergency notice and the hours
+   * override. Without it, one dynamic read makes the whole route dynamic and
+   * the site stops being static-cacheable.
+   */
+  cacheComponents: true,
+
   // The site sets no cookies and loads nothing third-party (ADR 0025), so the
   // image optimiser only ever serves files from this repo. No remotePatterns.
   images: {

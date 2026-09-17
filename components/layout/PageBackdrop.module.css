@@ -1,0 +1,38 @@
+.backdrop {
+  /* Phones get nothing: there is no room beside a 375px column. */
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .backdrop[data-side='left'] {
+    left: 0;
+    transform: translateX(-32%);
+  }
+
+  .backdrop[data-side='right'] {
+    right: 0;
+    transform: translateX(32%);
+  }
+}
+
+.art {
+  display: block;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media (prefers-contrast: more) {
+  .backdrop {
+    display: none;
+  }
+}

@@ -1,0 +1,122 @@
+/* ===========================================================================
+   Footer. Phone layout is the constraint: two columns, 169px wide with a 12px
+   gutter at 375px, every link a 44px-tall full-column-width hit area, 14px row
+   gap. The gap stays — at ±30px, 9.3% of touches land on it and do nothing,
+   which is the right outcome for a slip (spec sheet, ADR 0010).
+   =========================================================================== */
+
+.footer {
+  background: var(--lb-navy);
+  color: var(--lb-bone);
+  /* Room for the back-to-top button so it never sits on a link (ADR 0011). */
+  padding-bottom: 72px;
+}
+
+@media (min-width: 768px) {
+  .footer {
+    padding-bottom: 30px;
+  }
+}
+
+.inner {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: var(--sp-6) var(--sp-4) 0;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 12px;
+  row-gap: 14px;
+}
+
+@media (min-width: 768px) {
+  .cols {
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: var(--sp-5);
+  }
+}
+
+.col {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  width: 100%;
+  color: var(--lb-bone);
+  text-decoration: none;
+  font: 600 0.9375rem/1.2 var(--ff-body);
+}
+
+.col:hover {
+  text-decoration: underline;
+}
+
+/* "Lummi Commercial Companies" spans both phone columns, under a rule. */
+.colWide {
+  grid-column: 1 / -1;
+  border-top: 1px solid rgb(245 241 232 / 0.22);
+  padding-top: 14px;
+  font-weight: 500;
+}
+
+.extGlyph {
+  flex: 0 0 auto;
+  opacity: 0.8;
+}
+
+/* ---- Social row — ADR 0028 -------------------------------------------- */
+/* Sits between the link columns and the base row. Renders nothing when the
+   settings list is empty; that case is handled in the component, not here. */
+.social {
+  list-style: none;
+  margin: var(--sp-5) 0 0;
+  padding: 0;
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.socialLink {
+  display: grid;
+  place-items: center;
+  /* ~20px glyph in a 44 × 44 target — the padding does the work. */
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  color: var(--lb-bone);
+}
+
+.socialLink:hover {
+  background: rgb(245 241 232 / 0.12);
+}
+
+.socialGlyph {
+  display: block;
+}
+
+/* ---- Base row ---------------------------------------------------------- */
+.base {
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid rgb(245 241 232 / 0.22);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3) var(--sp-5);
+}
+
+.baseClaim {
+  margin: 0;
+  font: 500 0.8125rem/1.4 var(--ff-body);
+  color: var(--lb-bone);
+  opacity: 0.85;
+}
+
+.baseLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--lb-bone);
+  font: 500 0.8125rem/1.4 var(--ff-body);
+}

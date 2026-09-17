@@ -1,0 +1,295 @@
+/* ===========================================================================
+   Sticky header, waterline and emergency notice.
+   Measurements are from docs/design-spec-sheet.html and ADR 0006 / 0010 /
+   0014 / 0017 / 0021. Treat them as given, not as starting points.
+   =========================================================================== */
+
+.wrap {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+}
+
+.header {
+  background: var(--lb-navy);
+  /* The motif band is absolutely positioned inside this box. */
+  position: relative;
+  overflow: hidden;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  /* One line, always. The nav never wraps onto a second row. */
+  flex-wrap: nowrap;
+  gap: 8px;
+  height: 56px;              /* phone — spec sheet */
+  padding: 0 12px 0 10px;
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    height: 58px;            /* desktop — spec sheet */
+    gap: 22px;
+    padding: 0 26px;
+  }
+}
+
+/* ---- Lockup ------------------------------------------------------------ */
+/* The master mark. The paddle-alone icon is for small square slots only and
+   never stands in for the lockup here. */
+.lock {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 2;
+  /* The lockup carries its own clear space; this is the minimum around it. */
+  padding-right: 8px;
+}
+
+.lockmark {
+  display: block;
+  width: 95px;
+  height: 34px;
+}
+
+@media (min-width: 768px) {
+  .lockmark {
+    width: 112px;
+    height: 40px;
+  }
+}
+
+/* ---- Navigation -------------------------------------------------------- */
+.nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 4px;
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.navLink {
+  color: var(--lb-bone);
+  text-decoration: none;
+  font: 500 13px/1 var(--ff-body);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Phone: 53–58 × 44. 44px tall is what took the header bar to 56px. */
+  min-width: 53px;
+  height: 44px;
+  padding: 0 5px;
+  white-space: nowrap;
+}
+
+.navLink[aria-current] {
+  background: rgb(245 241 232 / 0.16);
+  font-weight: 600;
+}
+
+.navLink:hover {
+  background: rgb(245 241 232 / 0.1);
+}
+
+/* Home is hidden on a phone — the lockup carries Home there, which is what
+   keeps the bar on one line. */
+.navLinkWide {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .navLink {
+    /* Desktop: 44–71 × 40. */
+    min-width: 44px;
+    height: 40px;
+    padding: 0 13px;
+  }
+  .navLinkWide {
+    display: inline-flex;
+  }
+}
+
+/* ---- The Rewards pill -------------------------------------------------- */
+/* The anchor is the hit area and clears ADR 0010's 44px floor; the cedar shape
+   inside keeps its own size, so the control stays small without the tap target
+   being small. */
+.pill {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0;
+  text-decoration: none;
+  position: relative;
+  z-index: 2;
+}
+
+.pillIn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 99px;
+  font-family: var(--ff-body);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  font-size: 11px;
+  padding: 9px 14px;
+  background: var(--lb-cedar);
+  color: #fff;
+  white-space: nowrap;
+  /* The ring is the control's boundary, not decoration. Cedar on navy is
+     2.43:1, under the 3:1 WCAG 1.4.11 asks of a control's own edge. */
+  box-shadow: var(--pill-ring);
+}
+
+@media (min-width: 768px) {
+  .pillIn {
+    padding: 9px 15px;
+  }
+}
+
+/* "Get the App" at 375px and up; "App" below 370px (spec sheet). */
+.pillLong {
+  display: none;
+}
+.pillShort {
+  display: inline;
+}
+
+@media (min-width: 370px) {
+  .pillLong {
+    display: inline;
+  }
+  .pillShort {
+    display: none;
+  }
+}
+
+/* ---- The motif band — ADR 0021 ----------------------------------------- */
+/* TODO: replace with approved Lummi art.
+   Masked, not painted: the shape comes from the SVG and the colour from a
+   locked token, so a motif can never introduce an off-brand colour.
+     - one row, ever (`space no-repeat`; a bare `space` tiles both axes and
+       grows a second row);
+     - right-aligned, so slack falls on the nav side and never between the nav
+       and the first motif;
+     - at least 20px clear of the nav's right edge — a floor, not a target.
+       The band is a flex sibling with that margin, so the clearance holds at
+       every width without measuring anything at runtime. */
+.motifs {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: stretch;
+  margin-left: 20px;
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--lb-bone);
+  opacity: 0.14;
+  /* A phone tiles a single motif: the 272px four-up strip never fits the gap
+     a phone header leaves. */
+  -webkit-mask-image: url('/motifs/motif-single.svg');
+  mask-image: url('/motifs/motif-single.svg');
+  -webkit-mask-repeat: space no-repeat;
+  mask-repeat: space no-repeat;
+  -webkit-mask-position: right center;
+  mask-position: right center;
+  -webkit-mask-size: auto 86%;
+  mask-size: auto 86%;
+}
+
+@media (min-width: 768px) {
+  .motifs {
+    -webkit-mask-image: url('/motifs/header-strip.svg');
+    mask-image: url('/motifs/header-strip.svg');
+  }
+}
+
+/* Without mask support every motif renders as a solid coloured rectangle
+   across the header. Decoration degrades to nothing, never to debris. */
+@supports not ((-webkit-mask-image: none) or (mask-image: none)) {
+  .motifs {
+    display: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .motifs {
+    opacity: 0;
+  }
+}
+
+/* ---- Waterline --------------------------------------------------------- */
+.waterline {
+  display: block;
+  width: 100%;
+  height: 18px;
+  position: relative;
+  z-index: var(--z-waterline);
+}
+
+/* ---- Emergency notice — ADR 0017 --------------------------------------- */
+.alert {
+  background: var(--lb-navy-deep);
+  border-top: 3px solid var(--lb-cedar);
+}
+
+.alertInner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 14px;
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .alertInner {
+    align-items: center;
+    padding: 10px 26px;
+  }
+}
+
+.alertIcon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--lb-cedar);
+  color: var(--lb-ink);
+  font: 700 12px/1 var(--ff-body);
+  margin-top: 1px;
+}
+
+.alertText {
+  font: 500 0.75rem/1.4 var(--ff-body);
+  color: var(--lb-bone);
+}
+
+@media (min-width: 768px) {
+  .alertText {
+    font-size: 0.8125rem;
+  }
+}
+
+.alertDetail {
+  font-weight: 500;
+}
+
+.alertLink {
+  display: flex;
+  align-items: inherit;
+  gap: 10px;
+  color: inherit;
+  min-height: 44px;
+}

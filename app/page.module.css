@@ -1,0 +1,163 @@
+/* Page grid shared by the Phase 1 shell pages.
+   Two rows so the rail can span `1 / span 2` (ADR 0005). */
+.pagegrid {
+  display: block;
+  padding: var(--sp-5) var(--sp-4) var(--sp-8);
+  max-width: var(--content-max);
+  margin-inline: auto;
+}
+
+@media (min-width: 900px) {
+  .pagegrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--rail-w);
+    grid-template-rows: auto 1fr;
+    column-gap: var(--sp-7);
+    /* The rail is sticky against the header, so the content column carries the
+       top padding rather than the grid. */
+    padding-top: var(--sp-6);
+  }
+}
+
+.maincol {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.rest {
+  grid-column: 1;
+  grid-row: 2;
+  min-width: 0;
+}
+
+.lede {
+  font-size: var(--fs-lead);
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+
+.note {
+  margin-top: var(--sp-6);
+  padding: var(--sp-4);
+  border-left: 3px solid var(--lb-teal);
+  background: var(--lb-bone);
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+}
+
+.cards {
+  list-style: none;
+  margin: var(--sp-5) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}
+
+@media (min-width: 640px) {
+  .cards {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+}
+
+.card {
+  display: block;
+  background: var(--lb-paper);
+  border: 1px solid rgb(28 78 143 / 0.15);
+  border-radius: var(--radius-card);
+  padding: var(--sp-4);
+  min-height: 61px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardName {
+  font: 700 1.0625rem/1.2 var(--ff-display);
+  color: var(--lb-navy);
+  margin: 0 0 4px;
+}
+
+/* One line, truncating. It never wraps — ADR 0009 has the length budget. */
+.cardLine {
+  margin: 0;
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badges {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgb(28 78 143 / 0.35);
+  border-radius: 999px;
+  background: var(--lb-paper);
+  padding: 6px 12px;
+  font: 500 0.8125rem/1 var(--ff-body);
+  color: var(--lb-ink);
+}
+
+.dl {
+  margin: var(--sp-5) 0 0;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-body);
+}
+
+.dl dt {
+  font-weight: 600;
+  color: var(--lb-navy);
+}
+
+.dl dd {
+  margin: 0;
+}
+
+.overrideNote {
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+}
+
+.priceTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--sp-5);
+  background: var(--lb-paper);
+}
+
+.priceTable th,
+.priceTable td {
+  border-bottom: 1px solid rgb(28 78 143 / 0.15);
+  padding: var(--sp-3);
+  text-align: right;
+}
+
+.priceTable th:first-child,
+.priceTable td:first-child {
+  text-align: left;
+}
+
+.priceTable thead th {
+  font: 600 0.6875rem/1 var(--ff-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.priceTable tbody td {
+  font-weight: 700;
+  color: var(--lb-navy-deep);
+  font-variant-numeric: tabular-nums;
+}

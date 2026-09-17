@@ -1,0 +1,294 @@
+/* ===========================================================================
+   Fuel price block — ADR 0005.
+   Sizes are measured, not chosen: 400 x 110 desktop, 345 x 102 phone at rest;
+   both condense to a 39px bar at the SAME width. The bar keeps the card's
+   width because a narrow bar under a 400px panel reads as two objects.
+   =========================================================================== */
+
+.block {
+  position: relative;
+  /* The block is above the waterline and below the nav. */
+  z-index: var(--z-fuelblock);
+  width: 100%;
+  max-width: 345px;
+  /* The rail column is pointer-transparent; the block itself is not. */
+  pointer-events: auto;
+}
+
+@media (min-width: 768px) {
+  .block {
+    max-width: 400px;
+  }
+}
+
+.sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  /* Roughly half the resting card — the condense trigger, same at both widths. */
+  height: 51px;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .sentinel {
+    height: 55px;
+  }
+}
+
+/* The reserved box. Its height never changes, so condensing moves the page 0px. */
+.reserve {
+  position: relative;
+  min-height: 102px;
+  background: var(--lb-paper);
+  border: 1px solid rgb(28 78 143 / 0.18);
+  border-radius: var(--radius);
+  padding: 8px 10px 0;
+}
+
+@media (min-width: 768px) {
+  .reserve {
+    min-height: 110px;
+    padding: 10px 12px 0;
+  }
+}
+
+/* When the panel is open the card gives up its bottom border and its bottom
+   corners, so the panel butts onto it as one object. */
+.reserve[data-open='true'] {
+  border-bottom-color: transparent;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* ---- The two faces ----------------------------------------------------- */
+/* Both stay in the layout. Swapping by `visibility` is what keeps the reserved
+   height honest; `display: none` would collapse it. */
+.stacked,
+.oneline {
+  transition: opacity 0.12s linear;
+}
+
+.stacked[aria-hidden='true'],
+.oneline[aria-hidden='true'] {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.oneline {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  right: 10px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font: 600 0.8125rem/1 var(--ff-body);
+}
+
+@media (min-width: 768px) {
+  .oneline {
+    top: 10px;
+    left: 12px;
+    right: 12px;
+  }
+}
+
+.onelinePrices {
+  display: flex;
+  gap: var(--sp-3);
+  margin-left: auto;
+}
+
+.onelineCell {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  color: var(--lb-navy-deep);
+}
+
+.onelineGrade {
+  font: 600 0.625rem/1 var(--ff-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---- The table --------------------------------------------------------- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.placeHead,
+.gradeHead {
+  font: 600 0.625rem/1 var(--ff-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: right;
+  padding: 0 0 4px;
+  font-weight: 600;
+}
+
+.placeHead {
+  text-align: left;
+}
+
+.place {
+  font: 600 0.8125rem/1.3 var(--ff-body);
+  color: var(--lb-ink);
+  text-align: left;
+  padding: 3px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.place a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.place a:hover {
+  text-decoration: underline;
+}
+
+/* Prices are navy-deep everywhere so a price stays a recognisable cue. */
+.price,
+.priceNa {
+  font: 700 0.9375rem/1.3 var(--ff-body);
+  color: var(--lb-navy-deep);
+  text-align: right;
+  padding: 3px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.priceNa {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+/* "In the card, not in the bar" — the row that moves into the panel when the
+   block condenses. Named for the behaviour, not for whichever place it is on a
+   given page. */
+.oncond {
+  /* No treatment of its own at rest; the class is the hook the panel uses. */
+}
+
+/* ---- The control ------------------------------------------------------- */
+.cue {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: calc(100% + 20px);
+  margin: 0 -10px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-top: 1px solid rgb(28 78 143 / 0.12);
+  background: none;
+  color: var(--lb-navy);
+  font: 600 0.75rem/1 var(--ff-body);
+  cursor: pointer;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+@media (min-width: 768px) {
+  .cue {
+    width: calc(100% + 24px);
+    margin: 0 -12px;
+    padding: 0 12px;
+  }
+}
+
+/* ---- The panel --------------------------------------------------------- */
+/* Hidden by the wrapper's state, NEVER by `display: none` — suppressing it
+   while condensed once made "All prices" do nothing in the one state where it
+   is the only way to see them. It hangs off whichever face is showing, and it
+   butts onto it: negative insets so it lines up with the border box rather than
+   the padding box, square top corners, rounded bottom. */
+.panel {
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  width: auto;
+  top: 100%;
+  z-index: var(--z-fuelpanel);
+
+  background: var(--lb-paper);
+  border: 1px solid rgb(28 78 143 / 0.18);
+  border-top: 0;
+  border-radius: 0 0 6px 6px;
+  padding: 8px 10px 10px;
+  box-shadow: 0 10px 24px rgb(20 57 107 / 0.12);
+
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.12s linear, visibility 0s linear 0.12s;
+}
+
+.reserve[data-open='true'] .panel {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.12s linear, visibility 0s;
+}
+
+@media (min-width: 768px) {
+  .panel {
+    padding: 10px 12px 12px;
+  }
+}
+
+/* The panel supplies a header row only in the condensed state, where the card
+   is not on screen to carry one. */
+.panelHeadAtRest {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.stamp {
+  margin: var(--sp-2) 0 0;
+  font: 500 0.6875rem/1.4 var(--ff-body);
+  color: var(--ink-soft);
+}
+
+.allLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: 600 0.75rem/1 var(--ff-body);
+  color: var(--lb-navy);
+}
+
+/* ===========================================================================
+   The desktop rail.
+   A reserved 400px column that spans the first two page rows — `1 / span 2`,
+   never `1 / -1`, which would stretch the column to the end of the grid and
+   lose the condensed bar a screen later. The column is pointer-transparent so
+   the empty space below the block does not eat clicks meant for the page.
+   =========================================================================== */
+.rail {
+  display: contents;
+}
+
+@media (min-width: 900px) {
+  .rail {
+    display: block;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: var(--rail-w);
+    pointer-events: none;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--hd-h) + var(--sp-4));
+  }
+}
