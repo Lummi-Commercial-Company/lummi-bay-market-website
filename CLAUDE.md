@@ -68,8 +68,8 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, see ADR 0008.
 - Locations: index → 3 detail pages (nav labels: Exit 260 · Minimart · Fisherman's Cove).
 - Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it.
-- `/fuel-prices` still exists as a page — reached from the footer and the price block's
-  "All prices" panel, not from the nav (ADR 0008).
+- `/fuel-prices` still exists as a page — reached from the price block's "All prices" panel
+  only, not from the nav and not from the footer (ADR 0008, amended 18 Sep 2026).
 - **Rewards**: a "Get the App" pill in the header's right-hand utility slot on **every** page,
   plus the `/rewards` app-promo page and the footer. Nowhere else — see ADR 0006.
 - **Promos**: a full-width graphic promo region below the page title on interior pages, linking

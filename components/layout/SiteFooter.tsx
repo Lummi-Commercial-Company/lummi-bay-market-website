@@ -15,6 +15,11 @@ import { getSettings } from '@/lib/settings'
  * site) and the per-location hours/phone block. Hours, addresses, phone and a
  * per-Location synopsis live on /contact, derived from the Location data
  * (ADR 0015).
+ *
+ * Also deliberately NOT here: a /fuel-prices link. ADR 0008 originally named
+ * the footer as a second entry point; it was dropped on 18 Sep 2026 because
+ * the price block is on every page and its "All prices" panel link sits right
+ * under the prices the guest is already reading. Do not re-add it.
  */
 
 /** Marks a link as leaving the site without naming where it goes. */

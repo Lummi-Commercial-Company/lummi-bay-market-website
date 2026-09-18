@@ -22,7 +22,8 @@ export const metadata: Metadata = {
 
 /**
  * The full price page. It exists, but it is NOT in the nav — it is reached from
- * the footer and from the price block's "All prices" panel (ADR 0008).
+ * the price block's "All prices" panel, and from nowhere else on the site
+ * (ADR 0008, amended 18 Sep 2026 — the footer link was dropped).
  *
  * The heading and the shell prerender; the table itself resolves per request,
  * so a published price is live here immediately (ADR 0024).
