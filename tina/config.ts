@@ -151,6 +151,52 @@ const pageBlocks: Template[] = [
     ],
   },
   {
+    // The map itself is two fields in Settings — the embed code from Google My
+    // Maps and a still picture of it. Nothing is typed here, and while either
+    // setting is empty this block renders NOTHING: the page is one section
+    // shorter, never a placeholder box (ADR 0019).
+    name: 'locationsMap',
+    label: 'Map of our locations',
+    fields: [
+      {
+        type: 'string',
+        name: 'heading',
+        label: 'Heading',
+        description:
+          'Leave blank for "Find us". The map itself comes from Settings — if no map has been added yet, this section simply does not appear.',
+      },
+    ],
+  },
+  {
+    // Everything on the card — name, synopsis, amenities, address, phone and
+    // hours — is read from the Location documents. Nothing is typed here, so a
+    // phone number changed in one place changes everywhere it appears.
+    name: 'locationContacts',
+    label: 'Contact details for every location (always up to date)',
+    fields: [
+      {
+        type: 'string',
+        name: 'heading',
+        label: 'Heading',
+        description:
+          'Leave blank for "Where to find us". The Truck Stop gets its own card: it has its own phone and its own hours.',
+      },
+    ],
+  },
+  {
+    name: 'callout',
+    label: 'Highlighted note',
+    fields: [
+      { type: 'string', name: 'heading', label: 'Opening words (bold)' },
+      {
+        type: 'string',
+        name: 'text',
+        label: 'Note',
+        ui: { component: 'textarea' },
+      },
+    ],
+  },
+  {
     name: 'ctaRow',
     label: 'Button row',
     fields: [
@@ -186,6 +232,30 @@ const pageBlocks: Template[] = [
     ],
   },
 ]
+
+/**
+ * The page's own words, stored as the Markdown body of the .mdx file rather
+ * than inside the frontmatter.
+ *
+ * This field is not a convenience. Without an `isBody: true` field on the
+ * collection, TinaCMS has nowhere to put a Markdown body: it is dropped from
+ * the document the CMS shows, and the next save writes the file back WITHOUT
+ * it. `content/pages/privacy.mdx` — a legal document supplied by the client and
+ * reproduced verbatim — was in exactly that state. An editor would have opened
+ * an apparently empty page and saved the policy away.
+ *
+ * It is also the only place long prose can live and stay readable in git: a
+ * rich-text field nested in a block is serialised into the frontmatter, which
+ * is fine for a paragraph and unreadable for a policy.
+ */
+const pageBodyField: TinaField = {
+  type: 'rich-text',
+  name: 'body',
+  label: 'Page text',
+  description:
+    'The main text of this page — headings, paragraphs, lists and links. It renders directly under the page title, above any extra sections below.',
+  isBody: true,
+}
 
 const seoFields: TinaField[] = [
   {
@@ -288,6 +358,19 @@ const locations: Collection = {
     },
     hoursOverridesField,
     {
+      // ADR 0015 added this: /contact shows a short synopsis per Location, and
+      // it is a field on the Location rather than prose typed into the contact
+      // page, so the Location pages and any future index can use the same
+      // sentence. Not marketing copy — what somebody would say if you asked
+      // them what is there.
+      type: 'string',
+      name: 'summary',
+      label: 'One or two sentences about this place',
+      description:
+        'What makes this stop different, in a customer’s words. Shown on the contact page under the name. Leave it blank rather than writing something vague — the section simply omits it.',
+      ui: { component: 'textarea' },
+    },
+    {
       type: 'string',
       name: 'cardLine',
       label: 'One-line summary (street, then hours)',
@@ -317,6 +400,13 @@ const locations: Collection = {
           description: 'A driver asking about showers or the diesel lanes should reach the truck side, not the store.',
         },
         { type: 'string', name: 'hours', label: 'Truck Stop hours' },
+        {
+          type: 'string',
+          name: 'summary',
+          label: 'One or two sentences about the Truck Stop',
+          description: 'Shown on the contact page, where the Truck Stop is listed on its own.',
+          ui: { component: 'textarea' },
+        },
         {
           type: 'string',
           name: 'amenities',
@@ -442,24 +532,35 @@ function priceFields({ includeRegular = true } = {}): TinaField[] {
   return fields
 }
 
+/**
+ * The general page collection (ADR 0015). Adding a page is a content action:
+ * a new document here is a new URL, rendered by `app/[slug]/page.tsx`.
+ *
+ * THE WEB ADDRESS IS THE FILE NAME. There is deliberately no `slug` field.
+ * One existed and it was a trap: routing has always been by file name
+ * (`ui.router` below, and `generateStaticParams` over `content/pages/`), so a
+ * `slug` field labelled "the part after lummibay.com/" was a text box an editor
+ * could change with no effect on the address — or, worse, could disagree with
+ * the real address without anything saying so. `/privacy` is published inside
+ * two app store listings and must never move (ADR 0026); a field that promises
+ * to move it and does not is the wrong side of that risk in both directions.
+ *
+ * Deleting is off for the same reason. `/privacy` cannot be deleted without
+ * risking the app listings, and `/about` and `/contact` are linked from the
+ * footer of every page. Removing a page is rare enough to be an engineering
+ * change; losing one by accident is not recoverable from the CMS.
+ */
 const pages: Collection = {
   name: 'pages',
   label: 'Pages',
   path: 'content/pages',
   format: 'mdx',
   ui: {
+    allowedActions: { delete: false },
     router: (props) => `/${props.document._sys.filename}`,
   },
   fields: [
     { type: 'string', name: 'title', label: 'Page title', required: true, isTitle: true },
-    {
-      type: 'string',
-      name: 'slug',
-      label: 'Web address',
-      description:
-        'The part after lummibay.com/. Changing it breaks every existing link to this page. The privacy page in particular must keep its address — it is published in both app stores.',
-      required: true,
-    },
     {
       type: 'string',
       name: 'navLabel',
@@ -471,10 +572,11 @@ const pages: Collection = {
       label: 'Show the promotions band on this page',
     },
     ...seoFields,
+    pageBodyField,
     {
       type: 'object',
       name: 'blocks',
-      label: 'Page content',
+      label: 'Extra sections, after the text',
       list: true,
       templates: pageBlocks,
     },
@@ -497,10 +599,11 @@ const mainPages: Collection = {
       isTitle: true,
     },
     ...seoFields,
+    pageBodyField,
     {
       type: 'object',
       name: 'blocks',
-      label: 'Page content',
+      label: 'Extra sections, after the text',
       list: true,
       templates: pageBlocks,
     },
@@ -527,10 +630,11 @@ const infoPages: Collection = {
       isTitle: true,
     },
     ...seoFields,
+    pageBodyField,
     {
       type: 'object',
       name: 'blocks',
-      label: 'Page content',
+      label: 'Extra sections, after the text',
       list: true,
       templates: pageBlocks,
     },
@@ -731,10 +835,11 @@ const tenants: Collection = {
       label: 'We have permission to use their logo and photo',
       description: 'The logo and photo stay hidden until this is ticked. Somebody else’s trademark is not ours to publish.',
     },
+    pageBodyField,
     {
       type: 'object',
       name: 'blocks',
-      label: 'Page content',
+      label: 'Extra sections, after the text',
       list: true,
       templates: pageBlocks,
     },

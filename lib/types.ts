@@ -29,6 +29,8 @@ export interface TruckStopRecord {
   hours: string
   amenities: string[]
   hoursOverrides?: HoursOverride[]
+  /** One line, in a customer's words. Shown on /contact (ADR 0015). */
+  summary?: string
 }
 
 export interface LocationDoc {
@@ -47,6 +49,12 @@ export interface LocationDoc {
   hoursOverrides?: HoursOverride[]
   /** Street then hours. Truncates, never wraps (ADR 0009). */
   cardLine: string
+  /**
+   * One or two sentences: what makes THIS stop different, in a customer's
+   * words. Rendered on /contact (ADR 0015). Optional — a Location with none
+   * renders one paragraph fewer, never a placeholder line.
+   */
+  summary?: string
   lat?: number
   lng?: number
   amenities: string[]
@@ -111,4 +119,62 @@ export interface SiteSettings {
   backdrop: PageBackdropSettings
   /** Which `mainPages` document is live (ADR 0018). */
   liveMainPage?: string
+}
+
+/* ===========================================================================
+   Page documents (ADR 0015, ADR 0016)
+
+   A page on this site is a DOCUMENT in a TinaCMS collection, not a hand-written
+   route. `app/[slug]/page.tsx` renders any document in `content/pages/`, so
+   adding a page is a content action and the header, footer, waterline, fuel
+   block and back-to-top come from the layout where a page cannot lose them.
+   =========================================================================== */
+
+/** One row of an `imageBanner` block. */
+export interface PageImageBanner {
+  _template: 'imageBanner'
+  image?: string
+  alt?: string
+  caption?: string
+}
+
+export interface PageCtaButton {
+  label: string
+  href: string
+}
+
+export interface PageFaqItem {
+  question: string
+  answer?: string
+}
+
+/**
+ * The block vocabulary, mirroring `pageBlocks` in `tina/config.ts`. It is a
+ * closed list on purpose: a page assembled from arbitrary HTML is a page that
+ * can lose the shell.
+ */
+export type PageBlock =
+  | { _template: 'richText'; body?: string }
+  | PageImageBanner
+  | { _template: 'hoursTable'; heading?: string; includeTruckStop?: boolean }
+  | { _template: 'locationList'; heading?: string }
+  | { _template: 'locationContacts'; heading?: string }
+  | { _template: 'locationsMap'; heading?: string }
+  | { _template: 'callout'; heading?: string; text?: string }
+  | { _template: 'ctaRow'; buttons: PageCtaButton[] }
+  | { _template: 'faq'; heading?: string; items: PageFaqItem[] }
+
+export interface PageDoc {
+  /** The file name without its extension. This IS the web address. */
+  slug: string
+  title: string
+  navLabel?: string
+  seoDescription?: string
+  noindex: boolean
+  noBackdrop: boolean
+  showPromos: boolean
+  /** The Markdown body of the .mdx file — the page's own words. */
+  body: string
+  /** Extra sections, rendered after the body. */
+  blocks: PageBlock[]
 }

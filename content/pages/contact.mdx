@@ -1,0 +1,34 @@
+---
+title: Contact
+navLabel: Contact
+seoDescription: >-
+  Addresses, opening hours and a phone number for every Lummi Bay Market
+  location and the Exit 260 Truck Stop. No contact form — the phone is the
+  fastest answer.
+# No promos on /contact (CLAUDE.md). Somebody looking for a phone number is not
+# looking for an offer.
+showPromos: false
+noindex: false
+# THERE IS NO CONTACT FORM, here or anywhere on this site (ADR 0015, CONTEXT.md).
+# The `callout` block at the foot says so out loud rather than leaving a visitor
+# hunting for one. Do not add a form, and do not add a mailto styled as one.
+#
+# Nothing below contains an address, a phone number or an opening time. The
+# `locationContacts` block reads all of it from content/locations/*.mdx, so a
+# number changed there changes here. The `locationsMap` block renders NOTHING
+# until both map fields in Settings are filled — the page is then one section
+# shorter and still complete (ADR 0019).
+blocks:
+  - _template: locationContacts
+    heading: Where to find us
+  - _template: locationsMap
+    heading: Find us
+  - _template: callout
+    heading: No contact form.
+    text: Nothing on this site collects messages, so there is nothing to go
+      unanswered. Phone and address are the contact routes, and both are kept
+      current in one place.
+---
+
+Call the store you need, or come by. Every Location is staffed during opening
+hours — the fastest answer is always the phone.

@@ -62,6 +62,7 @@ function toLocation(data: Record<string, unknown>, body: string): LocationDoc | 
     hours: asString(data.hours),
     hoursOverrides: asOverrides(data.hoursOverrides),
     cardLine: asString(data.cardLine),
+    summary: asString(data.summary) || undefined,
     lat: typeof data.lat === 'number' ? data.lat : undefined,
     lng: typeof data.lng === 'number' ? data.lng : undefined,
     amenities: asStringList(data.amenities),
@@ -72,6 +73,7 @@ function toLocation(data: Record<string, unknown>, body: string): LocationDoc | 
             hours: asString(truckStopRaw.hours),
             amenities: asStringList(truckStopRaw.amenities),
             hoursOverrides: asOverrides(truckStopRaw.hoursOverrides),
+            summary: asString(truckStopRaw.summary) || undefined,
           }
         : undefined,
     hero: heroRaw

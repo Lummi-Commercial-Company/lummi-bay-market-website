@@ -1,0 +1,53 @@
+---
+title: About Lummi Bay Market
+navLabel: About
+seoDescription: >-
+  One company, three stores — Exit 260, the Minimart and Fisherman's Cove — plus
+  a separate truck stop on the Exit 260 property.
+showPromos: false
+noindex: false
+# ---------------------------------------------------------------------------
+# TODO — needed from the client, with Lummi Nation's approval, before launch.
+# Tracked as item 2.3 in docs/information-needed.md.
+#
+# This page is deliberately SHORT AND THIN. Three sentences that belong on it
+# are missing, and they are missing on purpose:
+#
+#   1. The Lummi Nation relationship, IN THE WORDING THE NATION PREFERS.
+#      Needed from: the client, cleared with the Nation.
+#   2. A light community note.
+#      Needed from: the client.
+#   3. Anything about the company's founding, history or values.
+#      Needed from: the client.
+#
+# Nothing on this page may be written on the Nation's behalf, and none of the
+# above may be drafted here and sent for approval afterwards — an invented
+# value or tradition that reads as finished is the failure this blank prevents.
+# Everything currently on the page is a plain fact already recorded in the repo.
+#
+# The boundary that also applies: Lummi Commercial Company and the other Lummi
+# businesses appear ONLY as the single "Lummi Commercial Companies" link in the
+# footer — never in this page's copy (CLAUDE.md, ADR 0001).
+# ---------------------------------------------------------------------------
+#
+# The three stores are NOT described one by one below. The `locationList` block
+# draws them from content/locations/*.mdx, so this page cannot drift from the
+# opening hours on the Location pages.
+blocks:
+  - _template: locationList
+    heading: Our three stores
+---
+
+Lummi Bay Market is one company with three stores. Each one keeps the name
+people already use for it — Exit 260, the Minimart and Fisherman's Cove.
+
+The flagship at Exit 260 also has a **truck stop on the same property**. It is a
+separate fuel station for drivers rather than a corner of the store: its own
+diesel lanes, its own small c-store, its own hours and its own phone.
+
+## One site instead of three
+
+Each store used to keep a website of its own. They are now a single site, which
+means a fuel price, a phone number or a set of opening hours is written once and
+is right everywhere it appears — on the store's own page, on
+[Contact](/contact), and in the price block at the top of every screen.
