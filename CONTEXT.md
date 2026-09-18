@@ -71,10 +71,19 @@ site it is a promo page (`/rewards`) that pitches the app and links to the downl
 no loyalty logic is built here. Carried over from exit260.com's rewards page.
 
 **Careers** — A single editable link (managed in the CMS), pointing wherever hiring is
-run (typically LCC). Lives in the footer; not a built jobs section.
+run. Lives in the footer; not a built jobs section, and there is no `/careers` page on this
+site. **The link text is exactly "Careers"** — never the destination company's name, a logo or
+a parenthetical. That is the whole test that keeps it a signpost rather than another Lummi
+company appearing on this site (ADR 0001, amended 17 Sep 2026).
 
-**Contact form** — One site-wide contact form. Per-Location address, hours, phone, and
-map are shown on each Location page.
+**Contact** — There is **no contact form**, on `/contact` or anywhere else on the site
+(ADR 0015). Address, hours and phone for a Location appear on that Location's own page and
+again on `/contact`, in both cases read from the Location record rather than typed a second
+time; `/contact` adds a one-line synopsis per Location. The single **map with a pin per
+Location lives on `/contact` and nowhere else** (ADR 0019) — a Location page links out for
+directions instead of embedding a map.
+_Avoid_: contact form, enquiry form, "get in touch" form. The term names something this site
+deliberately does not have; the glossary keeps it so it is not reintroduced.
 
 **Sub-brand** — A brand-book logo lockup (Market, Café, Marina, Deli). Out of scope as
 separate site sections; the system exists but this site does not build pages for them.
