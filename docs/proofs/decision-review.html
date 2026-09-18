@@ -300,17 +300,16 @@ more than the record said they would, and those are annotated in place. None of 
   <div class="dec">
     <div class="dec-top"><span class="adr">FROM THE BUILD</span><h3>Pages are prerendered; only the live parts are fetched per visitor</h3><span class="tag t-amend">Settled 18 Sep · constrains every later change</span></div>
     <div class="dec-body">
-      <div><b>Why</b> Three things on this site must be current to the second and everything else must be
-      instant: the <em>fuel prices</em>, the <em>emergency notice</em>, and the <em>holiday hours override</em>,
-      which depends on what today's date is where the visitor is standing. Next.js can do both at once — each
-      page is built once and served from a cache near the visitor, while those three stream in fresh. It is
-      what lets a pushed price be live immediately without every page being slow.</div>
-      <div><b>What it costs</b> The site can never be exported as flat files. That sounds like a technical
-      footnote and is not: it is the single change most likely to be proposed later as a simplification or a
-      hosting saving, and it would not fail — the build would succeed, the site would deploy, and the prices,
-      the emergency notice and the holiday hours would quietly freeze at whatever they said when it was built.
-      It is written into the code in three places for exactly that reason. <em>Anyone proposing to make the
-      hosting simpler needs to read those three first.</em></div>
+      <div><b>Why</b> The site has to be two contradictory things: instant everywhere, and current to the
+      second in three specific places (the box below Block&nbsp;C lists them). The build resolves that by
+      doing both — each page is assembled once and served from a cache near the visitor, while those three
+      pieces are fetched fresh on every visit. It is what lets a pushed price be live immediately without
+      making every page slow to load.</div>
+      <div><b>What it costs</b> It is now a property of the code rather than an intention, which is the
+      point of listing it here: the shape is fixed, and the three live pieces are the only ones. Anything
+      added later that must also be current to the second is a change to this decision, not a free
+      addition — and <em>the site can never be flattened to static files</em>, which is the failure the
+      box below Block&nbsp;C describes.</div>
     </div>
   </div>
 </section>
@@ -497,6 +496,10 @@ more than the record said they would, and those are annotated in place. None of 
   <p style="margin-top:10px">This is worth a sentence in a business review because of <em>how</em> it
   fails: a static export would not throw an error. The three features would simply never fire, and nobody
   would find out until the morning one of them mattered. It is a launch check, not a footnote.</p>
+  <p style="margin:10px 0 0"><strong>Built as described, 18&nbsp;September.</strong> All three now work
+  this way in code, and the constraint is written into the build in three separate places so that whoever
+  meets it next meets it three times. It stays on the launch checklist regardless: the failure is silent,
+  so the only way to know it has not happened is to look.</p>
 </div>
 
 <!-- ============ BLOCK D ============ -->
