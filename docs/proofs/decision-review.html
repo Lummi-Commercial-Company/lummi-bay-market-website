@@ -144,6 +144,31 @@ td code, th code{font-family:var(--mono); font-size:12px}
 .day .what{font-size:14px; color:var(--c-dim)}
 .day .what strong{display:block; color:var(--c-ink); font-weight:600; font-size:14.5px; margin-bottom:2px}
 .day.gate{background:var(--c-mark-soft)}
+.day.done{background:var(--c-ok-soft)}
+.day.done .when{color:var(--c-ok)}
+.day.part .when{color:var(--c-warn)}
+.status{
+  display:inline-block; font:500 10px/1.4 var(--mono); letter-spacing:.08em; text-transform:uppercase;
+  padding:2px 7px; border-radius:99px; margin-left:8px; vertical-align:1px; border:1px solid currentColor
+}
+.s-done{background:var(--c-ok-soft); color:var(--c-ok)}
+.s-part{background:var(--c-warn-soft); color:var(--c-warn)}
+.s-todo{background:var(--c-panel-2); color:var(--c-faint)}
+.built{
+  margin-block:28px; padding:18px; background:var(--c-panel); border:1px solid var(--c-rule);
+  border-left:3px solid var(--c-ok); border-radius:4px
+}
+.built h3{margin:0 0 4px; font-size:15px; font-weight:600}
+.built p{margin:10px 0 0; font-size:14px; color:var(--c-dim); max-width:66ch}
+.built p:first-of-type{margin-top:8px}
+.built code{font-family:var(--mono); font-size:12.5px; background:var(--c-panel-2); padding:1px 4px; border-radius:3px; color:var(--c-ink)}
+.built strong{color:var(--c-ink); font-weight:600}
+.ledger{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:1px; margin-top:14px;
+  background:var(--c-rule-soft); border:1px solid var(--c-rule-soft); border-radius:4px; overflow:hidden}
+.ledger div{background:var(--c-panel-2); padding:10px 12px; font-size:13px; color:var(--c-dim)}
+.ledger b{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--c-faint); margin-bottom:3px; font-weight:500}
+.ledger em{font-style:normal; color:var(--c-ink); font-weight:600}
 @media (max-width:560px){ .day{grid-template-columns:1fr; gap:4px} }
 
 h2.section{font-size:21px; margin:52px 0 6px; font-weight:600; letter-spacing:-.01em; padding-bottom:10px; border-bottom:2px solid var(--c-ink)}
@@ -160,33 +185,77 @@ td.ok-cell{background:var(--c-ok-soft)}
 <div class="wrap">
 
 <header class="mast">
-  <p class="kicker">Lummi Bay Market · stage review · 17 September 2026</p>
+  <p class="kicker">Lummi Bay Market · build review · 18 September 2026</p>
   <h1>Every decision, and what each one costs</h1>
-  <p class="standfirst">Twenty-eight decisions have been made, recorded and measured. <strong>No application
-  code has been written yet</strong> — and that is deliberate, because this is the record the build gets
-  written against, and changing it after the build is the expensive kind of change.</p>
+  <p class="standfirst">Twenty-eight decisions have been made, recorded and measured. Since this page was
+  last reviewed, <strong>the build has happened</strong> — written against this record rather than ahead of
+  it, which is what the record was for. Nothing below was re-opened to make the code work. What follows is
+  the same twenty-eight decisions, now annotated with what building them actually cost.</p>
   <div class="figs">
     <div class="fig"><b>28</b><span>decisions on record</span></div>
     <div class="fig"><b>1</b><span>rejected after being built</span></div>
     <div class="fig"><b>$20</b><span>per month, all of it Vercel</span></div>
-    <div class="fig"><b>0</b><span>lines of site code</span></div>
-    <div class="fig"><b>0</b><span>answers blocking the build</span></div>
+    <div class="fig"><b>5,580</b><span>lines of site code</span></div>
+    <div class="fig"><b>18/18</b><span>pages building green</span></div>
   </div>
 </header>
 
 <div class="howto">
   <p><strong>How to use this page.</strong> The decisions are grouped into six blocks, A&nbsp;to&nbsp;F.
   Each block can be approved, questioned or sent back on its own — you do not have to take or leave all
-  twenty-eight.</p>
+  twenty-eight. Two entries are marked <span class="adr">FROM THE BUILD</span> rather than with a decision
+  number: those were not decided in advance, they were forced by writing the code, and they are shown here
+  because each one constrains what can be changed later.</p>
   <p>Every entry says three things: <strong>what was decided</strong>, <strong>why</strong>, and
   <strong>what it costs</strong> — the constraint you are accepting along with the decision. Where a
   number appears it was measured in a browser, not estimated. The full reasoning for any entry is in
   <code>docs/adr/</code> under the number shown.</p>
 </div>
 
+<!-- ============ SINCE LAST REVIEW ============ -->
+<h2 class="section">What changed since 17 September</h2>
+<p class="lede">One thing changed, and it is the large one: <strong>the site was built.</strong> Every
+decision below was already settled when the first line was written, so this section is not a list of new
+decisions — it is the report on what happened when twenty-eight of them met a compiler. Three of them cost
+more than the record said they would, and those are annotated in place. None of them had to be reversed.</p>
+
+<div class="built">
+  <h3>What exists now</h3>
+  <p>Eleven pages, the layout shell they all sit in, the fuel price block, the data layer, and the CMS
+  schema staff will edit through. Three separate checks pass on every commit: the type checker, the Next.js
+  production build, and TinaCMS's own schema validation — which is the one that reads every content file
+  back against the shape the CMS expects, and the only one that would catch a field an editor could break.</p>
+  <div class="ledger">
+    <div><b>Pages live in the build</b><em>11</em> — Home, Locations index, three Location pages, Truck
+    Stop, Rewards, Fuel Prices, About, Contact, Privacy</div>
+    <div><b>Application code</b><em>5,580 lines</em> across 52 files, plus a <em>1,033-line</em> CMS schema</div>
+    <div><b>Build result</b><em>18 of 18</em> pages generated, no errors, no warnings suppressed</div>
+    <div><b>Decisions reversed to make it work</b><em>None</em> — the record held</div>
+  </div>
+  <p><strong>What is not built.</strong> Promotions, info pages and the tenants page exist in the CMS
+  schema but nothing renders them yet — that is the Day&nbsp;9 row in the plan below, and it is the honest
+  gap in this report. The scheduled things that <em>are</em> built are the three that change what a visitor
+  sees without anyone pressing publish: the emergency notice, the holiday hours override, and the footer
+  social row.</p>
+</div>
+
+<div class="built" style="border-left-color:var(--c-warn)">
+  <h3>Two things the build caught that no amount of reviewing would have</h3>
+  <p><strong>The privacy policy was one save away from being deleted.</strong> TinaCMS needs a field
+  explicitly marked as a document's body text. The page collections were first written without one — which
+  does not fail, it discards: the CMS would have opened <code>/privacy</code> showing everything except the
+  roughly four thousand words of policy, and the next save would have written the file back without them.
+  It was found before an editor ever opened the page. It is worth knowing the failure had no error message.</p>
+  <p><strong>The amenity badges were never going to render.</strong> The code that reads content files
+  mis-parsed indented lists, so every Location's amenity list came back as one empty entry. Both were fixed;
+  the second was confirmed by running the old parser against the files as they were committed, which
+  returned an empty list for all three Locations. Neither had reached a deployed site, because there is not
+  one yet — which is the argument for the order of work, not against it.</p>
+</div>
+
 <!-- ============ BLOCK A ============ -->
 <section class="block" id="block-a">
-  <div class="block-head"><span class="block-id">BLOCK A</span><h2>Stack, hosting and running cost</h2><span class="count">3 decisions</span></div>
+  <div class="block-head"><span class="block-id">BLOCK A</span><h2>Stack, hosting and running cost</h2><span class="count">3 decisions + 1 from the build</span></div>
   <p class="block-note">The three decisions that are genuinely hard to undo later. Everything in blocks B
   to F sits on top of these.</p>
 
@@ -225,6 +294,23 @@ td.ok-cell{background:var(--c-ok-soft)}
       <div><b>What it costs</b> $20/mo, and no approval gate before a staff edit goes live. That trade is
       acceptable <em>only because</em> every change is a commit with an author and a one-click revert.
       Side benefit: per-minute promo scheduling was going to cost extra on Hobby and is now included.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">FROM THE BUILD</span><h3>Pages are prerendered; only the live parts are fetched per visitor</h3><span class="tag t-amend">Settled 18 Sep · constrains every later change</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Three things on this site must be current to the second and everything else must be
+      instant: the <em>fuel prices</em>, the <em>emergency notice</em>, and the <em>holiday hours override</em>,
+      which depends on what today's date is where the visitor is standing. Next.js can do both at once — each
+      page is built once and served from a cache near the visitor, while those three stream in fresh. It is
+      what lets a pushed price be live immediately without every page being slow.</div>
+      <div><b>What it costs</b> The site can never be exported as flat files. That sounds like a technical
+      footnote and is not: it is the single change most likely to be proposed later as a simplification or a
+      hosting saving, and it would not fail — the build would succeed, the site would deploy, and the prices,
+      the emergency notice and the holiday hours would quietly freeze at whatever they said when it was built.
+      It is written into the code in three places for exactly that reason. <em>Anyone proposing to make the
+      hosting simpler needs to read those three first.</em></div>
     </div>
   </div>
 </section>
@@ -525,7 +611,7 @@ td.ok-cell{background:var(--c-ok-soft)}
 
 <!-- ============ BLOCK F ============ -->
 <section class="block" id="block-f">
-  <div class="block-head"><span class="block-id">BLOCK F</span><h2>Privacy, third parties, and things that change on a schedule</h2><span class="count">6 decisions</span></div>
+  <div class="block-head"><span class="block-id">BLOCK F</span><h2>Privacy, third parties, and things that change on a schedule</h2><span class="count">6 decisions + 1 from the build</span></div>
   <p class="block-note">The first three are one position held consistently: the site sets no cookies, so
   there is nothing to consent to. That is a promise printed in the footer, which makes it a standing
   constraint on everything added later.</p>
@@ -617,6 +703,22 @@ td.ok-cell{background:var(--c-ok-soft)}
       never flips the afternoon before.</div>
     </div>
   </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">FROM THE BUILD</span><h3>Three locks on <code>/privacy</code>, because losing it costs the app</h3><span class="tag t-amend">Settled 18 Sep · raised by a near-miss</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Both app stores hold the Rewards listing against a working public policy URL, so
+      <code>/privacy</code> is the one page on this site whose <em>absence</em> is an outage somewhere else.
+      It is now protected three ways: the CMS cannot delete the page, its address is fixed by the filename
+      rather than a field anyone can edit, and it is forced into the sitemap and out of the
+      hide-from-search setting in code — so it cannot be hidden by a checkbox on a page nobody is watching.</div>
+      <div><b>What it costs</b> The page is deliberately harder to change than every other page, and the
+      text inside it is harder still: <em>policy wording is replaced wholesale by whoever wrote it, never
+      tidied in passing.</em> One clause in the current text is still counsel's to resolve, and the date at
+      the bottom of the page moves only when they hand over new words — it is not a field to keep current.
+      A policy page that has been improved by a well-meaning editor is worse than a stale one.</div>
+    </div>
+  </div>
 </section>
 
 <!-- ============ STILL OPEN ============ -->
@@ -629,6 +731,10 @@ map all shift into a content pass done after the build, in TinaCMS or a chat ses
 on placeholders. That is a real decision with a real cost and it is named in the table rather than
 buried — deferring words and pictures does not make them smaller, it makes them invisible until the
 site is public.</p>
+<p class="lede"><strong>One item has been added to this list since, and it came from the build rather
+than from you:</strong> the CMS account. It was never asked about because it was assumed to exist, and it
+does not. It blocks no page and no deadline, but it blocks the one test that proves the site does what it
+was commissioned to do, so it now heads the asks at the foot of this page.</p>
 <p class="lede">The one change worth reading twice: <strong>the Rewards app is already published in both
 stores.</strong> That retires a worry recorded in Block&nbsp;F — that <code>/privacy</code> gated the app
 submission. It never could have; the submission already happened.</p>
@@ -644,9 +750,9 @@ submission. It never could have; the submission already happened.</p>
     <tr><td class="id">A7</td><td><strong>Two CMS logins</strong> — <em>"an implementation issue, not a concern for the creation of code."</em></td><td>Agreed, and it settles one ambiguity: <em>"use current copy as placeholders"</em> arrived under this number and belongs to A12 above. Still due at training, and at the day-4 gate below. Which two people is an operational choice, not an admin one — one of them has to be able to publish an emergency notice at 5am</td></tr>
     <tr><td class="id">A8</td><td><strong>Store URLs</strong> — both supplied, Play link corrected and confirmed</td><td class="ok-cell">Closed. Apple was right and live. The Play link first given was a <em>search</em> URL; it was fetched, and the twelve apps it returns are all unrelated — the app was not among them, so as a store button it would have landed a customer on other companies' apps. The direct listing, <code>play.google.com/store/apps/details?id=com.rovertown.lummi</code>, is now confirmed. The habit is worth keeping: a search URL looks like a store link and behaves like a directory</td></tr>
     <tr><td class="id">A17</td><td><strong>The map account</strong> — <em>"is there an area to input this or signin and connect the map?"</em></td><td class="ok-cell"><strong>Answered: there is no sign-in and nothing to connect.</strong> The site never talks to Google and holds no Google credential. The map is two paste-in-a-box fields in the CMS — the embed code, and a still of the finished map. A Google account is needed only to <em>build</em> the map, which is why it should be a company one</td></tr>
-    <tr><td class="id">A19</td><td><strong>The map itself</strong> — <em>"not built yet."</em></td><td>Blocks nothing. Both fields are empty-safe: no map pasted means <code>/contact</code> shows addresses, hours, phones and Directions links and simply has one section fewer</td></tr>
+    <tr><td class="id">A19</td><td><strong>The map itself</strong> — <em>"not built yet."</em></td><td>Blocks nothing, and this is now <strong>observed rather than intended</strong>: <code>/contact</code> is built, both fields are empty, and the page renders addresses, hours, phones and Directions links with one section fewer. Drawing the map is the only step left</td></tr>
     <tr><td class="id">A22</td><td><strong>Social accounts</strong> — Facebook, Instagram, Yelp, all supplied</td><td class="ok-cell">Closed. All three are brand-level despite the Exit&nbsp;260 handles, so the footer is three icons and no Location page gets its own. Yelp is a review listing rather than a posting account, so it is ordered last. One five-minute look left: are the two tended accounts current?</td></tr>
-    <tr><td class="id">A23</td><td><strong>Amenity lists</strong> — <em>"populated during the updating process."</em></td><td>Moved to the post-build pass. The half that was not a question is done: the Minimart's <code>fuel + convenience store</code> is split into two, so the badge row renders instead of falling back to a sentence. Two badges is a floor, not a finish</td></tr>
+    <tr><td class="id">A23</td><td><strong>Amenity lists</strong> — <em>"populated during the updating process."</em></td><td>Moved to the post-build pass. The half that was not a question is done: the Minimart's <code>fuel + convenience store</code> is split into two, so the badge row renders instead of falling back to a sentence. Two badges is a floor, not a finish. The build also found that the badge row would not have rendered <em>at all</em> for any Location — a parsing bug, now fixed</td></tr>
     <tr><td class="id">A9</td><td><strong>Careers link</strong> — <code>silverreefcasino.com/careers</code>, one footer link labelled "Careers"</td><td class="ok-cell">Closed, including the call that went back to you. Ownership's answer: link straight out, no <code>/careers</code> page here. What it settles for the whole build is that the rule in Block&nbsp;A is about <em>mentions</em>, not destinations — so <strong>the label stays "Careers"</strong>, with no company name and no logo beside it. The moment the label names the company it stops being a signpost</td></tr>
     <tr><td class="id">A20</td><td><strong>Per-Location share cards</strong> — <em>"remove this for now."</em></td><td class="ok-cell">Closed. The <em>asset</em> is removed, not the field: drop a file into a page's slot next year and that page's card changes with no engineering. Until then every link unfurls with the sitewide default, which is finished</td></tr>
   </tbody>
@@ -659,40 +765,49 @@ submission. It never could have; the submission already happened.</p>
 first-draft words.</strong> Everything that is engineering fits in two weeks. Nothing that needs a third
 party — artwork, cultural approval, an app submission, finished copy — does, and no amount of engineering
 speed changes that.</p>
+<p class="lede"><strong>This plan is now partly a progress report.</strong> The rows are marked with where
+the build actually got to, so the remaining estimate is a shorter read than the original one. The honest
+summary: the parts that are pure engineering went faster than the plan, and the two rows that are not
+— the day-4 gate and the cut-over — have not moved at all, because neither is waiting on engineering.</p>
 <p class="lede">The reason it is possible at all is the rejection in Block&nbsp;E. Because the illustrated
 art layer was removed, <strong>the current design does not depend on any artwork that has not been
 approved</strong> — so launching on schedule does not mean shipping placeholder Coast Salish motifs, which
 would break a hard rule. It means launching clean and adding art when it is ready.</p>
 
 <div class="plan">
-  <div class="day"><div class="when">Days 1–2</div><div class="what"><strong>Scaffold and shell</strong>
+  <div class="day done"><div class="when">Days 1–2</div><div class="what"><strong>Scaffold and shell<span class="status s-done">Built</span></strong>
   Next.js project, the locked colour and type tokens, the Vercel Pro project with a preview URL on every
   branch. Sticky header, footer, waterline, Get the App pill, back-to-top.</div></div>
 
-  <div class="day"><div class="when">Days 3–4</div><div class="what"><strong>Data, then the CMS</strong>
+  <div class="day part"><div class="when">Days 3–4</div><div class="what"><strong>Data, then the CMS<span class="status s-part">Half</span></strong>
   Location records and the fuel price document first — every page reads from these and nothing is typed
   into a page. Then TinaCMS: collections, field labels written for staff rather than developers, visual
-  editing wired, two logins.</div></div>
+  editing wired, two logins. <em>Done:</em> the data layer and the full CMS schema, all seven collections,
+  every field labelled in plain English. <em>Not done:</em> nothing can be logged into yet. That needs a
+  TinaCMS account for the business, which does not exist — see the ask below.</div></div>
 
   <div class="day gate"><div class="when">Day 4 — gate</div><div class="what"><strong>A real staff member
-  changes a fuel price, unaided, and sees it live</strong> That is must-have #1 and #2 in a single test.
+  changes a fuel price, unaided, and sees it live<span class="status s-todo">Not run</span></strong> That is must-have #1 and #2 in a single test.
   It is checked before any more pages are built on top of it, because everything after this assumes it
   works. This is also where A7 stops being deferrable.</div></div>
 
-  <div class="day"><div class="when">Days 5–6</div><div class="what"><strong>The fuel price block</strong>
+  <div class="day done"><div class="when">Days 5–6</div><div class="what"><strong>The fuel price block<span class="status s-done">Built</span></strong>
   The largest component on the site: one table, three states, per-request prices with the last known
   value as fallback. Built from the decision record, not copied from the proof sheet.</div></div>
 
-  <div class="day"><div class="when">Days 7–8</div><div class="what"><strong>Every page</strong>
+  <div class="day done"><div class="when">Days 7–8</div><div class="what"><strong>Every page<span class="status s-done">Built</span></strong>
   Home, the Locations index, three Location pages, Truck Stop, Rewards, Fuel Prices, About, Contact and
   Privacy. Nine of the twelve are the same handful of blocks arranged differently, which is why they fit
   in two days.</div></div>
 
-  <div class="day"><div class="when">Day 9</div><div class="what"><strong>The scheduled things</strong>
+  <div class="day part"><div class="when">Day 9</div><div class="what"><strong>The scheduled things<span class="status s-part">Half</span></strong>
   Promotions and info pages, holiday hours overrides, the emergency notice, the footer social row, share
-  card wiring, the tenants page.</div></div>
+  card wiring, the tenants page. <em>Done:</em> the three that change what a visitor sees with nobody
+  pressing publish — the emergency notice, the holiday hours override, the social row — plus the share
+  card. <em>Not done:</em> promotions, info pages and the tenants page. Their CMS fields exist; the part
+  that puts them on a page does not.</div></div>
 
-  <div class="day"><div class="when">Day 10</div><div class="what"><strong>Check and cut over</strong>
+  <div class="day"><div class="when">Day 10</div><div class="what"><strong>Check and cut over<span class="status s-todo">Not started</span></strong>
   Contrast script, keyboard and screen-reader pass, Lighthouse, sitemap and robots, the exit260.com
   redirect, DNS. <em>This day is the one that depends on somebody else</em> — it cannot start until the
   registrar question (A6) is answered.</div></div>
@@ -705,7 +820,9 @@ build's way at all — they arrive afterwards, through the CMS, without an engin
 the build is smaller than it was: the map has to be drawn in Google My Maps by somebody with a company
 account (A17, A19), the real amenity lists need five minutes with whoever opens up (A23), and cultural
 approval still stands between a placeholder motif and a real one (A4). None of those hold a launch. The
-social row and the amenity badges render nothing until the lists exist — by design, not as a gap.</p>
+social row and the amenity badges render nothing until the lists exist — by design, not as a gap, and now
+verified on a real page rather than promised. One item has moved the other way since 17 September: the CMS
+account, which was assumed and is not there.</p>
 <p class="lede">What that leaves is a genuine trade rather than a free win: a site that works completely
 and reads provisionally. Every price, every hour, every page and every scheduled thing is real and
 live; the words and the pictures are the build's own drafts until someone replaces them. That is a
@@ -714,11 +831,17 @@ deliberately rather than discovering on the day.</p>
 
 <div class="callout" style="border-left-color:var(--c-mark)">
   <h3>What a two-week launch actually asks of you</h3>
-  <p>Two things now, down from three — the Play Store URL was confirmed on 17&nbsp;September and the
-  Careers question was decided the same day.</p>
+  <p>Three things, and the first is new. Building the site turned one assumption into an ask: the CMS needs
+  an account in the business's name before anyone can log into it, and until that exists the day-4 gate
+  cannot be run at all — which means the two must-haves the whole project is for are, today, untested.</p>
   <ol>
+    <li><strong>Open the TinaCMS account for the business</strong> and hand over the two keys it issues.
+    It is the free tier, so this costs nothing and takes about ten minutes, but nobody else can do it: it
+    has to be a company account, not an engineer's. <em>Everything about editing is blocked behind it</em>
+    — logging in, the two seats, click-to-edit, and the fuel price test below.</li>
     <li><strong>Name the two people who get CMS logins</strong> (A7) before day&nbsp;4, so the gate
-    above is a real test with a real person rather than a demo. This is the only dated ask on the page.</li>
+    above is a real test with a real person rather than a demo. Now second in line behind the account,
+    not because it got less urgent but because it cannot happen first.</li>
     <li><strong>Check the registrar logins</strong> (A6) whenever it suits. Deferred, correctly, since
     nothing in the build touches DNS — but it is the only open item that can add <em>weeks</em> rather
     than days, and it costs an afternoon to rule out.</li>
@@ -729,7 +852,9 @@ deliberately rather than discovering on the day.</p>
 </div>
 
 <p class="colophon">
-  This page is a review document. It is not the site and no part of it ships. Each entry summarises a full
+  This page is a review document, revised 18&nbsp;September 2026 after the first build. It is not the site
+  and no part of it ships. Figures describing the build — page counts, line counts, what passes — were
+  taken from a clean build of the repository on the date above and go stale the moment the code changes. Each entry summarises a full
   decision record in <code>docs/adr/</code>; where the two differ, the record is authoritative. Figures
   quoted as measurements were taken in a browser and the scripts that produced them are in
   <code>docs/proofs/scripts/</code>. Open items are tracked in <code>docs/launch-checklist.md</code>.
