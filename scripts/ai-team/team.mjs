@@ -201,10 +201,13 @@ function runCli(agent, prompt, timeoutMs) {
     mkdirSync(OUT_DIR, { recursive: true });
     const promptFile = join(OUT_DIR, `prompt-${Date.now()}.md`);
     writeFileSync(promptFile, prompt);
-    let args = agent.args.map((x) => x.replaceAll('{promptFile}', promptFile));
+    // {runDir} is an empty scratch folder — agents that should not touch the repo get it as cwd.
+    const runDir = join(OUT_DIR, `cwd-${Date.now()}`);
+    mkdirSync(runDir, { recursive: true });
+    let args = agent.args.map((x) => x.replaceAll('{promptFile}', promptFile).replaceAll('{runDir}', runDir));
     // Windows runs npm shims (.cmd) through cmd.exe, which does not quote args for us.
     if (IS_WIN) args = args.map((x) => (/[\s"]/.test(x) ? `"${x.replaceAll('"', '\\"')}"` : x));
-    const child = spawn(agent.bin, args, { cwd: ROOT, shell: IS_WIN, stdio: ['pipe', 'pipe', 'pipe'] });
+    const child = spawn(agent.bin, args, { cwd: agent.cwd === 'runDir' ? runDir : ROOT, shell: IS_WIN, stdio: ['pipe', 'pipe', 'pipe'] });
     let out = '', err = '';
     const timer = setTimeout(() => { child.kill(); fail(new Error(`timed out after ${timeoutMs / 1000}s`)); }, timeoutMs);
     child.stdout.on('data', (d) => (out += d));
@@ -212,7 +215,14 @@ function runCli(agent, prompt, timeoutMs) {
     child.on('error', (e) => { clearTimeout(timer); fail(e); });
     child.on('close', (code) => {
       clearTimeout(timer);
-      code === 0 ? ok(out) : fail(new Error(`exit ${code}: ${err.slice(-2000)}`));
+      if (code !== 0) return fail(new Error(`exit ${code}: ${err.slice(-2000)}`));
+      if (!agent.jsonField) return ok(out);
+      // CLIs run with --json put one JSON envelope on stdout; pull out the answer field.
+      try {
+        const body = JSON.parse(out.trim().split('\n').filter(Boolean).at(-1));
+        if (body.ok === false) return fail(new Error(`${body.status || 'error'}: ${body.error?.message || 'agent reported failure'}`));
+        ok(String(body[agent.jsonField] ?? out));
+      } catch { ok(out); }
     });
     if (agent.stdin) child.stdin.write(prompt);
     child.stdin.end();

@@ -96,7 +96,7 @@ winget install --id Python.Python.3.12 -e
 winget install --id Ollama.Ollama -e
 ```
 Close and reopen VS Code, then check: `git --version; node --version; python --version; ollama --version`.
-Node must be **22 or newer** (OpenClaw needs 22; the others need 18–20).
+Node must be **24.16 or newer** — OpenClaw 2.0 refuses Node 22, 23 and 25 (Node 26 is its recommended runtime); the other tools are fine on 24.
 
 ## 5. Claude Code (the orchestrator)
 
@@ -132,17 +132,52 @@ Codex reads `AGENTS.md` at the repo root (already added — it points Codex at `
 The team runs it as `codex exec --sandbox read-only -` for reviews and
 `--sandbox workspace-write` inside a worktree for builds.
 
-## 7. Hermes Agent (researcher with memory)
+## 7. Hermes Agent (researcher)
 
 ```powershell
 iex (irm https://hermes-agent.nousresearch.com/install.ps1)
-hermes setup        # pick a model provider
-hermes doctor       # confirm it works
+hermes setup                     # pick a model provider
+hermes profile create aiteam     # a separate profile just for team runs
+hermes doctor
 ```
-**Free option:** in `hermes model`, choose a custom OpenAI-compatible endpoint and enter
-`http://localhost:11434/v1` with a local model such as `gpt-oss:20b`.
-Hermes' one-shot command may differ by version — run `hermes --help` and, if it isn't
-`hermes chat -q`, tell Claude to update the `hermes` entry in `.claude/ai-team/agents.json`.
+**Why a separate profile:** Hermes' docs warn never to point two agent processes at the same
+Hermes home. The team always runs `hermes -p aiteam …`, so your own Hermes chats keep their memory clean.
+
+**Lock down the `aiteam` profile.** Open `%LOCALAPPDATA%\hermes\profiles\aiteam\config.yaml`
+(`~/.hermes/profiles/aiteam/config.yaml` on WSL) and set:
+```yaml
+approvals:
+  mode: smart
+  single_query_mode: deny       # a one-shot run can never approve a dangerous command
+  unattended_mode: deny
+skills:
+  write_approval: true
+  external_dirs:
+    - C:/path/to/lummi-bay-market-website/.claude/skills   # share this repo's skills with Hermes
+```
+Claude's skills are the same `SKILL.md` format Hermes uses (agentskills.io), so Hermes follows
+the same brand and content rules.
+
+**Free local model (optional).** Hermes needs a **64K context**; Ollama defaults to 2K. Make a
+64K copy of a model, then point the profile at it:
+```powershell
+"FROM gpt-oss:20b`nPARAMETER num_ctx 64000" | Out-File -Encoding ascii Modelfile
+ollama create gpt-oss-64k -f Modelfile
+```
+```yaml
+model:
+  default: "gpt-oss-64k"
+  provider: "custom"
+  base_url: "http://localhost:11434/v1"     # API key: leave empty or type no-key
+```
+On a slow PC add `HERMES_API_TIMEOUT=1800` to the profile's `.env`. The docs note that models under
+about 30B sometimes *say* they saved a memory without doing it, which is another reason the team
+only trusts graded results.
+
+**How the team calls it:** `hermes -p aiteam chat -Q --oneshot --source tool -t web --query-file -`
+(the prompt goes in on stdin, quiet output, web tools only, and it runs in an empty scratch folder).
+One-shot runs **cannot create skills**, so Hermes' self-learning happens in your own chats and
+`hermes cron` jobs. The team's learning lives in `ledger.jsonl` + `learnings.md`.
 
 ## 8. JEV (the router)
 
@@ -183,13 +218,33 @@ Each model is rated best in one area; the registry maps it to that area only.
 ## 10. OpenClaw 2.0 (local-first agent platform)
 
 ```powershell
-npm install -g openclaw@latest
-openclaw onboard                 # 2.0 auto-detects Ollama, keys and subscriptions
+iwr -useb https://openclaw.ai/install.ps1 | iex      # needs Node 24.16+ (step 4)
+openclaw onboard          # 2.0 auto-detects Ollama, API keys and subscriptions
+openclaw doctor
+openclaw security audit   # run this once and fix anything it flags
 ```
 For a fully local setup pick an `ollama/<model>` model (e.g. `ollama/gpt-oss:20b`) and use
-`http://localhost:11434` — **no `/v1`** (OpenClaw's docs say `/v1` breaks tool calling).
-⚠️ OpenClaw can control a browser, files and messaging. The team only gives it research and
-brainstorm steps, never the repo or secrets. Skip it if you don't need it.
+`http://localhost:11434` with **no `/v1`**. OpenClaw's docs say `/v1` breaks tool calling;
+this is the opposite of Hermes, which needs `/v1`. WSL2 is the most compatible option if native Windows misbehaves.
+
+**How the team calls it:** `openclaw agent exec --message-file - --json --cwd <empty scratch folder>`.
+`agent exec` is OpenClaw's documented headless mode for automation: it needs no running Gateway,
+limits file tools to `--cwd`, and returns a JSON envelope (`ok`, `status`, `final`, `costUsd`).
+The script reads `final` and treats `ok:false` as a failed run.
+
+⚠️ **Security defaults to know:** OpenClaw's sandbox is **off by default**, and one Gateway is one
+trust boundary. The team therefore only gives it research and brainstorm steps, in an empty folder,
+never the repo or secrets. Skip OpenClaw entirely if you don't need a second researcher.
+
+**Optional extras (not needed for the team):**
+- **Task Flow / Lobster:** OpenClaw's Task Flow is a durable record of multi-step work, stored in
+  SQLite and able to survive restarts. The steps and human-approval gates themselves are written as
+  **Lobster** workflow files (`openclaw plugins install @openclaw/lobster`). Flows are inspected
+  with `openclaw tasks flow list --json` and cannot be launched from the CLI. Use it for recurring
+  chores OpenClaw owns end to end, such as a weekly broken-link check with an approval gate. The
+  team's own durability comes from the committed ledger, so it doesn't depend on Task Flow.
+- **`openclaw mcp serve`:** lets Claude Code connect to OpenClaw as a tool server, if you'd rather
+  drive it as MCP tools than through the script.
 
 ## 11. OpenCode and Aider (let local models edit code)
 
@@ -257,12 +312,12 @@ pass-rate scoreboard (a simple multi-armed-bandit idea) so new agents get a fair
 
 ### Sources
 - IBM, *What is AI agent orchestration?* — https://www.ibm.com/think/topics/ai-agent-orchestration
-- Hermes Agent install — https://hermes-agent.nousresearch.com/docs/getting-started/installation
+- Hermes Agent install / CLI / security / Ollama / skills — https://hermes-agent.nousresearch.com/docs/ (full dump: https://hermes-agent.nousresearch.com/llms-full.txt)
 - TypeSafe JEV quickstart / API / agent skill — https://docs.typesafe.ai/introduction/quickstart · https://docs.typesafe.ai/api · https://docs.typesafe.ai/agent-skill
 - jev-gateway — https://github.com/vinilana/jev-gateway
 - Codex non-interactive mode — https://learn.chatgpt.com/docs/non-interactive-mode
 - claude-mem — https://github.com/thedotmack/claude-mem
-- OpenClaw 2.0 release — https://docs.openclaw.ai/releases/2026.8.1 · Ollama provider — https://docs.openclaw.ai/providers/ollama
+- OpenClaw 2.0 release — https://docs.openclaw.ai/releases/2026.8.1 · `agent` CLI — https://docs.openclaw.ai/cli/agent · Task Flow — https://docs.openclaw.ai/automation/taskflow · Lobster — https://docs.openclaw.ai/tools/lobster · security — https://docs.openclaw.ai/gateway/security · Node — https://docs.openclaw.ai/install/node · Ollama — https://docs.openclaw.ai/providers/ollama
 - Aider scripting — https://aider.chat/docs/scripting.html · OpenCode CLI — https://opencode.ai/docs/cli/
 - Ollama model library (tags verified 2026-09-28) — https://ollama.com/library
 - Local model rankings — https://www.morphllm.com/best-ollama-models
@@ -273,6 +328,8 @@ pass-rate scoreboard (a simple multi-armed-bandit idea) so new agents get a fair
 | Symptom | Fix |
 |---|---|
 | `'npm' is not recognized` | Reinstall Node LTS (step 4), then restart VS Code. |
+| `hermes` answers with a banner or hangs | Make sure the `aiteam` profile exists (`hermes profile list`) and that the run uses `-Q --oneshot`. |
+| OpenClaw `exec` refuses to run | A Gateway owns its state folder. Stop the Gateway (see `openclaw gateway --help`), or run without `--state-dir` so exec uses temporary state (the team already does). |
 | `codex` does nothing | You installed plain `codex`. `npm uninstall -g codex; npm install -g @openai/codex`. |
 | `Ollama server: not reachable` | Start the Ollama app from the Start menu, or run `ollama serve`. |
 | A local model is very slow | It's too big for your GPU. Use a smaller tier from step 3. |
