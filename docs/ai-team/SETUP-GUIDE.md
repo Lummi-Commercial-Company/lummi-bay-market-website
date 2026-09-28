@@ -306,6 +306,29 @@ setx AIDER_MODEL "ollama_chat/qwen3.8:27b"
 Also good, not wired in by default: **Cline** (VS Code extension, point it at Ollama) and
 **Goose** (Block's open-source agent). Add them to `agents.json` if you want them.
 
+## 11b. Shared skills and plugins (make every agent better)
+
+A **skill** is a folder with a `SKILL.md` instruction file that teaches an agent one job.
+A **plugin** bundles skills and commands so they can be installed in one step.
+
+| Tool | What it does for the team | Install |
+|---|---|---|
+| **Matt Pocock skills** | Engineering habits: `tdd`, `code-review`, `to-spec`, `diagnosing-bugs`, `grilling`… Newly added: `wizard` (Claude writes a click-through script for steps only you can do, like logins and API keys), `to-questionnaire`, `wait-what`, `writing-for-agents`. | **Already in this repo** (`.claude/skills/`). Nothing to install. Codex, OpenCode, Aider and OpenClaw read them through `AGENTS.md`; Hermes reads them through `skills.external_dirs` (step 7). |
+| **Ponytail** | Makes agents write less code: skip it, reuse it, use the standard library, and only then write new code. The maker's benchmark reports ~54% fewer lines and ~22% fewer tokens. Adds `/ponytail-review` and `/ponytail-audit`. MIT license. | Claude Code: `/plugin marketplace add DietrichGebert/ponytail` then `/plugin install ponytail@ponytail`. Codex: `codex plugin marketplace add DietrichGebert/ponytail` then `codex plugin add ponytail@ponytail`. |
+| **Impeccable** | Design quality: 61 automatic checks plus `/impeccable audit`, `polish`, `typeset`, `layout`. | Claude Code: `/plugin marketplace add pbakaus/impeccable`, then `/plugin` and install it. Other agents: `npx skills add pbakaus/impeccable`. |
+| **Graphify** | Turns the repo (code, docs, ADRs) into a map that agents can query, so they read only the files that matter. That means fewer tokens and faster runs. Code is parsed on your PC and nothing leaves it; docs use your assistant's model. Apache-2.0/MIT. | `uv tool install graphifyy` (install `uv` with `pip install uv` if you don't have it), then `graphify install`. In Claude Code, type `/graphify .` once to build the map. |
+
+**Settings that matter for this project:**
+- **Ponytail mode:** start with `/ponytail full`. Use `lite` if it cuts too aggressively, and never
+  `ultra` on fuel-price or CMS code, where clarity beats brevity.
+- **Impeccable vs. the brand:** Impeccable reads a `DESIGN.md` file if one exists. Our brand rules
+  live in the `brand-system` skill and are **locked**, so Impeccable's color and "make it bolder"
+  suggestions never override them. Claude rejects any suggestion that touches the logo, the locked
+  tokens or the tribal art. Don't run `/impeccable colorize` on this site.
+- **Graphify files:** commit `graph.json`, which the docs say can be version-controlled, so every
+  session starts with the map. Rebuild with `/graphify .` after big changes.
+  `GRAPH_REPORT.md` is a handy tour for you as well.
+
 ## 12. Verify everything
 
 ```powershell
@@ -364,6 +387,7 @@ pass-rate scoreboard (a simple multi-armed-bandit idea) so new agents get a fair
 - Codex non-interactive mode — https://learn.chatgpt.com/docs/non-interactive-mode
 - claude-mem — https://github.com/thedotmack/claude-mem
 - OpenClaw 2.0 release — https://docs.openclaw.ai/releases/2026.8.1 · `agent` CLI — https://docs.openclaw.ai/cli/agent · Task Flow — https://docs.openclaw.ai/automation/taskflow · Lobster — https://docs.openclaw.ai/tools/lobster · security — https://docs.openclaw.ai/gateway/security · Node — https://docs.openclaw.ai/install/node · Ollama — https://docs.openclaw.ai/providers/ollama
+- Ponytail — https://github.com/dietrichgebert/ponytail · Impeccable — https://impeccable.style/ · Graphify — https://github.com/Graphify-Labs/graphify · Matt Pocock skills — https://github.com/mattpocock/skills
 - Aider scripting — https://aider.chat/docs/scripting.html · OpenCode CLI — https://opencode.ai/docs/cli/
 - Ollama model library (tags verified 2026-09-28) — https://ollama.com/library
 - Local model rankings — https://www.morphllm.com/best-ollama-models

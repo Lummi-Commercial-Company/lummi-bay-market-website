@@ -241,7 +241,9 @@ async function run(agentId, taskType, promptSrc) {
   const learnings = existsSync(join(TEAM_DIR, 'learnings.md')) ? readFileSync(join(TEAM_DIR, 'learnings.md'), 'utf8') : '';
   // Every outside agent gets the house rules + verified lessons prepended, so it never
   // works without the project's hard rules (logo lock, cultural guardrail, etc.).
-  const prompt = [reg.preamble, learnings && `Verified lessons from past runs:\n${learnings}`, '--- TASK ---', readPrompt(promptSrc)]
+  const skills = reg.taskSkills?.[taskType];
+  const skillHint = skills?.length && `Skills for this ${taskType} task (use the ones you have):\n${skills.map((x) => `- ${x}`).join('\n')}`;
+  const prompt = [reg.preamble, skillHint, learnings && `Verified lessons from past runs:\n${learnings}`, '--- TASK ---', readPrompt(promptSrc)]
     .filter(Boolean).join('\n\n');
 
   const runId = randomUUID().slice(0, 8);

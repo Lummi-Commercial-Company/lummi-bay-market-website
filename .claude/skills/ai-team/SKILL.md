@@ -18,13 +18,17 @@ Helper: `node scripts/ai-team/team.mjs <doctor|list|route|run|record|note|score>
    disagrees with its `args` in `agents.json`, fix the registry first. If nothing outside
    Claude is installed (e.g. a claude.ai/code web session), carry on with the native
    subagents only — the loop still works.
-2. **Recall.** If claude-mem is installed, search it for similar past work. Read
-   `.claude/ai-team/learnings.md` and `score`.
+2. **Recall.** If claude-mem is installed, search it for similar past work. If Graphify is
+   installed, `/graphify query "<question>"` to find the files involved instead of reading
+   the repo broadly (rebuild with `/graphify .` if `graph.json` is older than the last few
+   commits). Read `.claude/ai-team/learnings.md` and `score`.
 3. **Plan.** Split the request into steps. Each step gets: a `taskType` from the registry,
    the files in scope, its dependencies, and an **acceptance check** a machine can run
    (a test, `npm run build`, lint, a grep, a screenshot diff). No check → the step is not
-   ready; tighten it or ask the user. Load project skills a step needs (brand-system,
-   location-content-model, …) and put the relevant rules into that step's prompt.
+   ready; tighten it or ask the user. `taskSkills` in `agents.json` names the skills each task
+   type uses (they go into outside agents' prompts automatically). Native subagents load them
+   directly. Apply the ponytail ladder to every build step: skip it, reuse what exists, use
+   the standard library, and only then write new code.
 4. **Route.** For each step: `route <taskType> "<one-line summary>"`. JEV picks when a key is
    set and it is confident; otherwise the scoreboard picks. You may override — say why in
    one line. Always override to a native subagent when the step touches the logo, tribal art,
@@ -38,8 +42,10 @@ Helper: `node scripts/ai-team/team.mjs <doctor|list|route|run|record|note|score>
 6. **Verify.** Run the acceptance check **yourself**. An agent saying "done" or "tests pass"
    is not evidence. For `build` steps, get a review from a *different model family* than
    the builder (Claude builds → `codex-review` or `local-critic` reviews; Codex builds →
-   a native subagent reviews). Fix-and-recheck at most twice, then escalate to a native
-   subagent or the user.
+   a native subagent reviews). Add `/ponytail-review` on every diff, and `/impeccable audit`
+   when the diff touches UI. If a design tool suggests changing a locked brand token, the logo,
+   or tribal art, reject the suggestion (brand-system wins). Fix-and-recheck at most twice,
+   then escalate to a native subagent or the user.
 7. **Grade.** Every dispatched step gets graded with evidence:
    `record <runId> pass|fail "<what proved it>"` for outside agents,
    `note <agentId> <taskType> <seconds> pass|fail "<evidence>"` for native subagents.

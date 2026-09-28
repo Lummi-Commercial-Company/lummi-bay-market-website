@@ -30,15 +30,16 @@ frontmatter:
 - **No `disable-model-invocation` line** → Claude may load the skill on its own when the
   work matches, *and* you can type `/<name>`. These appear in Claude's list of available
   skills: `grilling`, `tdd`, `code-review`, `codebase-design`, `diagnosing-bugs`,
-  `domain-modeling`, `prototype`, `research`, `resolving-merge-conflicts`, plus the four
+  `domain-modeling`, `prototype`, `research`, `resolving-merge-conflicts`, `wizard`,
+  `writing-for-agents`, plus the four
   project skills (`brand-system`, `pnw-tribal-art`, `location-content-model`,
   `fuel-price-update`).
 - **`disable-model-invocation: true`** → **you** invoke it by typing `/<name>`. Claude will
   not start it unprompted, and it is deliberately **absent from Claude's available-skills
   list**. That is the flag working, not a broken install: `ai-team`, `ask-matt`, `grill-me`,
   `grill-with-docs`, `handoff`, `implement`, `improve-codebase-architecture`,
-  `setup-matt-pocock-skills`, `teach`, `to-spec`, `to-tickets`, `triage`, `wayfinder`,
-  `writing-great-skills`.
+  `setup-matt-pocock-skills`, `teach`, `to-questionnaire`, `to-spec`, `to-tickets`, `triage`,
+  `wait-what`, `wayfinder`, `writing-great-skills`.
 
 Nearly the whole documented flow — `/grill-with-docs` → `/to-spec` → `/to-tickets` →
 `/implement` — sits in the second group. So a session where Claude never mentions

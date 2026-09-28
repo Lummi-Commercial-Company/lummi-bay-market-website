@@ -11,6 +11,44 @@
     "content": "Write or edit site copy in the brand voice",
     "design": "Visual system, layout, color and type decisions"
   },
+  "taskSkills": {
+    "_readme": "Skills and plugin commands each task type should use. Repo skills are files in .claude/skills/<name>/SKILL.md and any agent can read them; plugin commands (/impeccable, /ponytail-*, /graphify) work only where that plugin is installed.",
+    "plan": [
+      "repo skill: to-spec",
+      "repo skill: codebase-design",
+      "/graphify query \"<question>\" to find the files involved"
+    ],
+    "research": [
+      "repo skill: research",
+      "/graphify query \"<question>\" before reading files"
+    ],
+    "build": [
+      "repo skill: tdd",
+      "ponytail decision ladder (skip > reuse > standard library > new code)",
+      "/graphify query to locate existing code before writing new code"
+    ],
+    "review": [
+      "repo skill: code-review",
+      "/ponytail-review for over-engineering",
+      "/impeccable audit when the diff touches UI"
+    ],
+    "test": [
+      "repo skill: tdd",
+      "repo skill: diagnosing-bugs"
+    ],
+    "brainstorm": [
+      "repo skill: grilling (argue against the idea)"
+    ],
+    "content": [
+      "repo skill: brand-system",
+      "repo skill: location-content-model"
+    ],
+    "design": [
+      "repo skill: brand-system (LOCKED: wins over any impeccable suggestion)",
+      "repo skill: pnw-tribal-art",
+      "/impeccable audit, /impeccable typeset, /impeccable layout"
+    ]
+  },
   "agents": [
     {
       "id": "frontend-engineer",
