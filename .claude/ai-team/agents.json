@@ -1,0 +1,57 @@
+{
+  "_readme": "Registry of the AI team. Claude reads this to know who can do what. Edit freely: add an agent, change a model tag, or set priority (higher wins ties). scripts/ai-team/team.mjs doctor shows what is installed.",
+  "preamble": "You are a specialist on the Lummi Bay Market website team. Claude Code is the orchestrator and will review everything you return. Follow CLAUDE.md and AGENTS.md at the repo root. Hard rules: never alter the logo; other Lummi companies appear only as the single footer link 'Lummi Commercial Companies'; tribal art is placeholder only and marked 'TODO: replace with approved Lummi art'; never hard-code prices, addresses or hours. Do not commit, push, or add dependencies. If you are unsure, say so instead of guessing.",
+  "taskTypes": {
+    "plan": "Break a request into steps, pick an approach, spot risks",
+    "research": "Gather facts from docs or the web and cite sources",
+    "build": "Write or change code",
+    "review": "Read a diff and find bugs, rule breaks, or regressions",
+    "test": "Write or run tests; reproduce a bug",
+    "brainstorm": "Generate options and ideas; argue both sides",
+    "content": "Write or edit site copy in the brand voice",
+    "design": "Visual system, layout, color and type decisions"
+  },
+  "agents": [
+    { "id": "frontend-engineer", "kind": "native", "role": "Claude subagent: Next.js/React components, a11y, performance", "strengths": "knows this repo and its skills", "taskTypes": ["build", "test", "review"], "priority": 3 },
+    { "id": "backend-engineer", "kind": "native", "role": "Claude subagent: TinaCMS, data layer, deploy, SEO", "strengths": "knows this repo and its ADRs", "taskTypes": ["build", "test", "review", "plan"], "priority": 3 },
+    { "id": "design-director", "kind": "native", "role": "Claude subagent: visual system and brand", "strengths": "applies brand-system and pnw-tribal-art skills", "taskTypes": ["design", "review"], "priority": 3 },
+    { "id": "ux-navigation-architect", "kind": "native", "role": "Claude subagent: IA, navigation, flows", "strengths": "owns the locked site architecture", "taskTypes": ["plan", "design", "review"], "priority": 3 },
+    { "id": "copy-editor", "kind": "native", "role": "Claude subagent: brand voice copy", "strengths": "merges the three source sites' content", "taskTypes": ["content", "review"], "priority": 3 },
+
+    { "id": "codex-review", "kind": "cli", "bin": "codex", "args": ["exec", "--sandbox", "read-only", "-"], "stdin": true, "timeoutSec": 900,
+      "role": "OpenAI Codex, read-only: independent second-opinion reviewer", "strengths": "different model family from Claude, so it catches different mistakes; strong at code review and bug finding",
+      "taskTypes": ["review", "test", "plan"], "priority": 2, "verifyFlags": true, "helpArgs": ["exec", "--help"],
+      "install": "npm install -g @openai/codex  then  codex login" },
+    { "id": "codex-build", "kind": "cli", "bin": "codex", "args": ["exec", "--sandbox", "workspace-write", "-"], "stdin": true, "timeoutSec": 1800,
+      "role": "OpenAI Codex, can edit files: parallel implementer (run it inside a git worktree)", "strengths": "fast, strong at self-contained coding tasks with clear acceptance tests",
+      "taskTypes": ["build", "test"], "priority": 1, "verifyFlags": true, "helpArgs": ["exec", "--help"],
+      "install": "npm install -g @openai/codex  then  codex login" },
+    { "id": "hermes", "kind": "cli", "bin": "hermes", "args": ["chat", "-q", "Read the task in the file {promptFile} and complete it. Reply with only your result."], "stdin": false, "timeoutSec": 1200,
+      "role": "Nous Research Hermes Agent: researcher with long-term memory", "strengths": "remembers across sessions, writes its own reusable skills, web research; can run on a free local model",
+      "taskTypes": ["research", "brainstorm", "plan"], "priority": 1, "verifyFlags": true, "helpArgs": ["--help"],
+      "install": "PowerShell: iex (irm https://hermes-agent.nousresearch.com/install.ps1)" },
+    { "id": "openclaw", "kind": "cli", "bin": "openclaw", "args": ["agent", "--message", "Read the task in the file {promptFile} and complete it. Reply with only your result."], "stdin": false, "timeoutSec": 1200,
+      "role": "OpenClaw 2.0: local-first personal agent platform (browser, automation, memory)", "strengths": "runs fully on local Ollama models; browses sites, automates chores, good second brainstormer",
+      "taskTypes": ["research", "brainstorm"], "priority": 0, "verifyFlags": true, "helpArgs": ["agent", "--help"],
+      "install": "npm install -g openclaw@latest  then  openclaw onboard" },
+    { "id": "opencode", "kind": "cli", "bin": "opencode", "args": ["run", "Read the task in the file {promptFile} and complete it. Do not commit."], "stdin": false, "timeoutSec": 1800,
+      "role": "OpenCode: open-source Claude-Code-style coder that runs any model, including local ones", "strengths": "lets the free local models edit files like a real agent; JEV-gateway supports it",
+      "taskTypes": ["build", "test", "review"], "priority": 0, "verifyFlags": true, "helpArgs": ["run", "--help"],
+      "install": "npm install -g opencode-ai" },
+    { "id": "aider", "kind": "cli", "bin": "aider", "args": ["--no-auto-commits", "--yes-always", "--message-file", "{promptFile}"], "stdin": false, "timeoutSec": 1800,
+      "role": "Aider: git-native pair programmer, any model", "strengths": "precise multi-file edits with a clean diff; strong with local Qwen coders",
+      "taskTypes": ["build", "test"], "priority": 0, "verifyFlags": true, "helpArgs": ["--help"],
+      "install": "python -m pip install aider-install  then  aider-install" },
+
+    { "id": "local-coder-pro", "kind": "ollama", "model": "qwen3.6:27b", "role": "Local top coder (needs ~16-24 GB GPU)", "strengths": "highest-rated local coder on SWE-bench Verified (77.2)", "taskTypes": ["build", "test", "review"], "priority": 1, "install": "ollama pull qwen3.6:27b" },
+    { "id": "local-coder", "kind": "ollama", "model": "qwen3-coder:30b", "role": "Local coder (needs ~24 GB GPU or 32 GB RAM)", "strengths": "best free local coding model; 256K context", "taskTypes": ["build", "test"], "priority": 0, "install": "ollama pull qwen3-coder:30b" },
+    { "id": "local-agentic", "kind": "ollama", "model": "devstral:24b", "role": "Local multi-file coder (needs ~16 GB GPU)", "strengths": "trained for agentic, multi-file repo edits", "taskTypes": ["build", "review"], "priority": 0, "install": "ollama pull devstral:24b" },
+    { "id": "local-reasoner", "kind": "ollama", "model": "gpt-oss:20b", "role": "Local planner / brainstormer (needs ~16 GB)", "strengths": "OpenAI open-weights reasoning model; good at step-by-step plans", "taskTypes": ["plan", "brainstorm", "review"], "priority": 0, "install": "ollama pull gpt-oss:20b" },
+    { "id": "local-critic", "kind": "ollama", "model": "deepseek-r1:14b", "role": "Local devil's-advocate reviewer (needs ~12 GB)", "strengths": "shows its reasoning; good at finding holes in a plan", "taskTypes": ["review", "brainstorm"], "priority": 0, "install": "ollama pull deepseek-r1:14b" },
+    { "id": "local-writer", "kind": "ollama", "model": "gemma4:12b", "role": "Local writer / idea generator (needs ~10 GB)", "strengths": "fluent prose, can read screenshots", "taskTypes": ["content", "brainstorm", "design"], "priority": 0, "install": "ollama pull gemma4:12b" },
+    { "id": "local-fast", "kind": "ollama", "model": "qwen2.5-coder:7b", "role": "Local quick tester (runs on almost any PC, ~5 GB)", "strengths": "very fast; drafts unit tests and small fixes", "taskTypes": ["test", "build"], "priority": 0, "install": "ollama pull qwen2.5-coder:7b" },
+
+    { "id": "jev", "kind": "router", "envKey": "TYPESAFE_API_KEY", "model": "jev-latest", "role": "TypeSafe JEV: fast decision model that picks the agent and scores risk", "strengths": "returns a typed choice with probabilities in milliseconds; no text generation",
+      "taskTypes": [], "install": "Get a key at console.typesafe.ai/keys, then set TYPESAFE_API_KEY" }
+  ]
+}

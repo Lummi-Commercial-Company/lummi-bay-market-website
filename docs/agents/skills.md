@@ -35,7 +35,7 @@ frontmatter:
   `fuel-price-update`).
 - **`disable-model-invocation: true`** → **you** invoke it by typing `/<name>`. Claude will
   not start it unprompted, and it is deliberately **absent from Claude's available-skills
-  list**. That is the flag working, not a broken install: `ask-matt`, `grill-me`,
+  list**. That is the flag working, not a broken install: `ai-team`, `ask-matt`, `grill-me`,
   `grill-with-docs`, `handoff`, `implement`, `improve-codebase-architecture`,
   `setup-matt-pocock-skills`, `teach`, `to-spec`, `to-tickets`, `triage`, `wayfinder`,
   `writing-great-skills`.

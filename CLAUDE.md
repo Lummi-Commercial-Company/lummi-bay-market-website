@@ -138,3 +138,9 @@ How they operate is configured in `docs/agents/`:
 - **Domain docs** — skills read `CONTEXT.md` + `docs/adr/`. See `docs/agents/domain.md`.
 Typical flow: `/grill-with-docs` → `/to-spec` → `/to-tickets` → `/implement` → `/code-review`.
 Not sure which skill fits? `/ask-matt` routes you.
+
+## Multi-model AI team
+`/ai-team <request>` runs a job through Claude (orchestrator) + JEV (router) + Codex, Hermes,
+OpenClaw, OpenCode, Aider and local Ollama models, verifying and grading every step.
+Setup: `docs/ai-team/SETUP-GUIDE.md`. Rules: skill `ai-team`. Roster: `.claude/ai-team/agents.json`.
+Other agents read `AGENTS.md`.
