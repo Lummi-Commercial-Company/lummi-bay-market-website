@@ -29,17 +29,16 @@ frontmatter:
 
 - **No `disable-model-invocation` line** → Claude may load the skill on its own when the
   work matches, *and* you can type `/<name>`. These appear in Claude's list of available
-  skills: `grilling`, `tdd`, `code-review`, `codebase-design`, `diagnosing-bugs`,
-  `domain-modeling`, `prototype`, `research`, `resolving-merge-conflicts`, `wizard`,
-  `writing-for-agents`, plus the four
-  project skills (`brand-system`, `pnw-tribal-art`, `location-content-model`,
+  skills: `code-review`, `codebase-design`, `diagnosing-bugs`, `domain-modeling`, `grilling`,
+  `prototype`, `research`, `resolving-merge-conflicts`, `tdd`, `wizard`, `writing-for-agents`,
+  plus the four project skills (`brand-system`, `pnw-tribal-art`, `location-content-model`,
   `fuel-price-update`).
 - **`disable-model-invocation: true`** → **you** invoke it by typing `/<name>`. Claude will
   not start it unprompted, and it is deliberately **absent from Claude's available-skills
   list**. That is the flag working, not a broken install: `ai-team`, `ask-matt`, `grill-me`,
   `grill-with-docs`, `handoff`, `implement`, `improve-codebase-architecture`,
   `setup-matt-pocock-skills`, `teach`, `to-questionnaire`, `to-spec`, `to-tickets`, `triage`,
-  `wait-what`, `wayfinder`, `writing-great-skills`.
+  `wait-what`, `wayfinder`.
 
 Nearly the whole documented flow — `/grill-with-docs` → `/to-spec` → `/to-tickets` →
 `/implement` — sits in the second group. So a session where Claude never mentions
@@ -81,3 +80,10 @@ If a `/name` doesn't autocomplete, check that list before assuming anything else
   `gh` CLI only where it exists).
 - `triage-labels.md` — the five canonical triage labels, all of which exist on the repo.
 - `domain.md` — where `CONTEXT.md` and the ADRs live.
+
+## Upstream version
+
+The Matt Pocock skills are vendored from `mattpocock/skills` at commit `c55ee46` (2026-09-18).
+To refresh: copy each `skills/<group>/<name>/` folder from upstream over `.claude/skills/<name>/`,
+then rebuild the two invocation lists above from each `SKILL.md` frontmatter. Files here were
+checked to be unedited upstream copies before the last refresh, so an overwrite loses nothing.
