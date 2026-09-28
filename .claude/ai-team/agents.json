@@ -414,7 +414,7 @@
       "id": "local-tiny",
       "kind": "ollama",
       "model": "gemma4:e4b",
-      "role": "Google Gemma 4 E4B, low-end PC helper (~4 GB)",
+      "role": "Google Gemma 4 E4B, low-end PC helper (9.6 GB download, runs on CPU)",
       "strengths": "tiny, has vision; runs on laptops",
       "taskTypes": [
         "content",

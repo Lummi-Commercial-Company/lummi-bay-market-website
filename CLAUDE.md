@@ -142,5 +142,5 @@ Not sure which skill fits? `/ask-matt` routes you.
 ## Multi-model AI team
 `/ai-team <request>` runs a job through Claude (orchestrator) + JEV (router) + Codex, Hermes,
 OpenClaw, OpenCode, Aider and local Ollama models, verifying and grading every step.
-Setup: `docs/ai-team/SETUP-GUIDE.md`. Rules: skill `ai-team`. Roster: `.claude/ai-team/agents.json`.
+Install: `docs/ai-team/INSTALL.md` (runs `scripts/ai-team/install.ps1`). Reference: `docs/ai-team/SETUP-GUIDE.md`. Rules: skill `ai-team`. Roster: `.claude/ai-team/agents.json`.
 Other agents read `AGENTS.md`.

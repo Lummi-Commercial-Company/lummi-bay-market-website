@@ -4,10 +4,9 @@ Connects several AI models into one team inside this project. **Claude Code is t
 orchestrator**: it plans the work, picks an agent for each step, checks the result, and
 keeps score so it picks better next time.
 
-> **Fastest path — paste this to Claude Code in VS Code:**
-> *"Read `docs/ai-team/SETUP-GUIDE.md` and install the AI team on this PC step by step.
-> Check my hardware first, pick the model tier that fits, run each command, stop when I
-> need to log in or paste a key, and finish with `node scripts/ai-team/team.mjs doctor`."*
+> **To install, follow [`INSTALL.md`](INSTALL.md)**: a 15-step checklist plus a script
+> (`scripts/ai-team/install.ps1`) that installs everything below except the logins. This guide
+> is the reference: what each piece is, why it's there, and how to configure it by hand.
 
 Once installed, start any job with **`/ai-team <what you want built>`**.
 
