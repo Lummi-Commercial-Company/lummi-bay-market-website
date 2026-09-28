@@ -243,96 +243,163 @@
     {
       "id": "local-coder-pro",
       "kind": "ollama",
-      "model": "qwen3.6:27b",
-      "role": "Local top coder (needs ~16-24 GB GPU)",
-      "strengths": "highest-rated local coder on SWE-bench Verified (77.2)",
+      "model": "qwen3.8:27b",
+      "role": "Alibaba Qwen 3.8, top local coder (~18 GB, 24 GB GPU)",
+      "strengths": "strongest verified local coding scores: SWE-bench Pro 61.7, LiveCodeBench v6 90.3",
       "taskTypes": [
         "build",
         "test",
         "review"
       ],
       "priority": 1,
-      "install": "ollama pull qwen3.6:27b"
+      "license": "Apache-2.0",
+      "install": "ollama pull qwen3.8:27b"
     },
     {
-      "id": "local-coder",
+      "id": "local-agentic",
       "kind": "ollama",
-      "model": "qwen3-coder:30b",
-      "role": "Local coder (needs ~24 GB GPU or 32 GB RAM)",
-      "strengths": "best free local coding model; 256K context",
+      "model": "devstral-small-2:24b",
+      "role": "Mistral Devstral Small 2, multi-file repo agent (~16-24 GB)",
+      "strengths": "built for agentic coding; SWE-bench Verified 68.0",
+      "taskTypes": [
+        "build",
+        "review"
+      ],
+      "priority": 1,
+      "license": "Apache-2.0",
+      "install": "ollama pull devstral-small-2:24b"
+    },
+    {
+      "id": "local-agent-moe",
+      "kind": "ollama",
+      "model": "qwen3.6:35b",
+      "role": "Alibaba Qwen 3.6 35B-A3B, tool-use agent (~24 GB, fast: 3B active)",
+      "strengths": "SWE-bench Verified 73.4; strong tool calling",
       "taskTypes": [
         "build",
         "test"
       ],
       "priority": 0,
-      "install": "ollama pull qwen3-coder:30b"
+      "license": "Apache-2.0",
+      "install": "ollama pull qwen3.6:35b"
     },
     {
-      "id": "local-agentic",
+      "id": "local-fast-coder",
       "kind": "ollama",
-      "model": "devstral:24b",
-      "role": "Local multi-file coder (needs ~16 GB GPU)",
-      "strengths": "trained for agentic, multi-file repo edits",
+      "model": "glm-4.7-flash",
+      "role": "Zhipu GLM-4.7-Flash, fast coder (3B active)",
+      "strengths": "quick agentic coding, SWE-bench Verified 59.2; different model family from Qwen",
       "taskTypes": [
         "build",
+        "test",
         "review"
       ],
       "priority": 0,
-      "install": "ollama pull devstral:24b"
+      "license": "MIT",
+      "install": "ollama pull glm-4.7-flash"
+    },
+    {
+      "id": "local-alt-coder",
+      "kind": "ollama",
+      "model": "north-mini-code-1.0:q4",
+      "role": "Cohere North Mini Code, second-opinion coder (3B active)",
+      "strengths": "different family, so a useful cross-check on Qwen and Mistral output",
+      "taskTypes": [
+        "review",
+        "build"
+      ],
+      "priority": -1,
+      "license": "Apache-2.0 + Cohere AUP",
+      "install": "ollama pull north-mini-code-1.0:q4"
     },
     {
       "id": "local-reasoner",
       "kind": "ollama",
       "model": "gpt-oss:20b",
-      "role": "Local planner / brainstormer (needs ~16 GB)",
-      "strengths": "OpenAI open-weights reasoning model; good at step-by-step plans",
+      "role": "OpenAI gpt-oss 20B, planner and brainstormer (~16 GB)",
+      "strengths": "step-by-step reasoning, AIME25 91.7",
       "taskTypes": [
         "plan",
         "brainstorm",
         "review"
       ],
       "priority": 0,
+      "license": "Apache-2.0",
       "install": "ollama pull gpt-oss:20b"
     },
     {
       "id": "local-critic",
       "kind": "ollama",
-      "model": "deepseek-r1:14b",
-      "role": "Local devil's-advocate reviewer (needs ~12 GB)",
-      "strengths": "shows its reasoning; good at finding holes in a plan",
+      "model": "phi4-reasoning:14b",
+      "role": "Microsoft Phi-4-reasoning, devil's-advocate reviewer (~12 GB)",
+      "strengths": "finds holes in plans and diffs; a separate model family",
       "taskTypes": [
         "review",
         "brainstorm"
       ],
       "priority": 0,
-      "install": "ollama pull deepseek-r1:14b"
+      "license": "MIT",
+      "install": "ollama pull phi4-reasoning:14b"
     },
     {
-      "id": "local-writer",
+      "id": "local-vision",
       "kind": "ollama",
-      "model": "gemma4:12b",
-      "role": "Local writer / idea generator (needs ~10 GB)",
-      "strengths": "fluent prose, can read screenshots",
+      "model": "gemma4:26b",
+      "role": "Google Gemma 4 26B MoE, writer + screenshot reviewer (~18 GB)",
+      "strengths": "reasoning (AIME26 88.3), reads images; good for copy drafts and visual QA",
       "taskTypes": [
         "content",
+        "design",
         "brainstorm",
-        "design"
+        "review"
       ],
       "priority": 0,
-      "install": "ollama pull gemma4:12b"
+      "license": "Apache-2.0",
+      "install": "ollama pull gemma4:26b"
     },
     {
       "id": "local-fast",
       "kind": "ollama",
-      "model": "qwen2.5-coder:7b",
-      "role": "Local quick tester (runs on almost any PC, ~5 GB)",
-      "strengths": "very fast; drafts unit tests and small fixes",
+      "model": "ministral-3:8b",
+      "role": "Mistral Ministral 3 8B, quick drafts and triage (~6 GB, any PC)",
+      "strengths": "very fast; small tests, summaries, triage",
       "taskTypes": [
         "test",
-        "build"
+        "build",
+        "brainstorm"
       ],
       "priority": 0,
-      "install": "ollama pull qwen2.5-coder:7b"
+      "license": "Apache-2.0",
+      "install": "ollama pull ministral-3:8b"
+    },
+    {
+      "id": "local-tiny",
+      "kind": "ollama",
+      "model": "gemma4:e4b",
+      "role": "Google Gemma 4 E4B, low-end PC helper (~4 GB)",
+      "strengths": "tiny, has vision; runs on laptops",
+      "taskTypes": [
+        "content",
+        "brainstorm",
+        "test"
+      ],
+      "priority": -1,
+      "license": "Apache-2.0",
+      "install": "ollama pull gemma4:e4b"
+    },
+    {
+      "id": "local-kat",
+      "kind": "ollama",
+      "model": "hf.co/bartowski/Kwaipilot_KAT-Coder-V2.5-Dev-GGUF:Q4_K_M",
+      "role": "Kwaipilot KAT-Coder V2.5 Dev, agentic coder via Hugging Face GGUF (~22 GB)",
+      "strengths": "SWE-bench Verified 69.4 (vendor card); not in the Ollama library, pulled from Hugging Face",
+      "taskTypes": [
+        "build",
+        "review"
+      ],
+      "priority": -1,
+      "license": "Apache-2.0",
+      "install": "ollama pull hf.co/bartowski/Kwaipilot_KAT-Coder-V2.5-Dev-GGUF:Q4_K_M"
     },
     {
       "id": "jev",

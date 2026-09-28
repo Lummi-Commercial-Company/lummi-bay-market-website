@@ -83,9 +83,9 @@ Get-CimInstance Win32_VideoController | Select-Object Name, @{n='VRAM_GB';e={[ma
 
 | Tier | Your hardware | Models to pull |
 |---|---|---|
-| **A — Small** | 16 GB RAM, no/small GPU | `qwen2.5-coder:7b`, `phi4-mini` |
-| **B — Medium** | 12–16 GB GPU or 32 GB RAM | Tier A + `gpt-oss:20b`, `deepseek-r1:14b`, `gemma4:12b`, `devstral:24b` |
-| **C — Large** | 24 GB+ GPU | Tier B + `qwen3.6:27b`, `qwen3-coder:30b` |
+| **A — Small** | 16 GB RAM, no/small GPU | `ministral-3:8b`, `gemma4:e4b` |
+| **B — Medium** | 12–16 GB GPU or 32 GB RAM | Tier A + `gpt-oss:20b`, `phi4-reasoning:14b`, `glm-4.7-flash`, `north-mini-code-1.0:q4` |
+| **C — Large** | 24 GB+ GPU (or 64 GB RAM, slower) | Tier B + `qwen3.8:27b`, `devstral-small-2:24b`, `gemma4:26b`, `qwen3.6:35b` |
 
 ## 4. Base tools (one time)
 
@@ -201,19 +201,65 @@ still works; the scoreboard routes instead.
 
 ## 9. Local models (free agents, testers, brainstormers)
 
-Ollama starts automatically after install. Pull your tier from step 3, for example:
+Ollama starts automatically after install. Every model below was checked on 2026-09-28: the
+Ollama tag exists and the license **allows commercial use**, which matters because this is a
+business website. Each one is used only for the area it rates best in.
 
-```powershell
-ollama pull qwen2.5-coder:7b     # local-fast   — quick tests and small fixes (any PC)
-ollama pull gpt-oss:20b          # local-reasoner — plans, brainstorming
-ollama pull deepseek-r1:14b      # local-critic — devil's-advocate reviewer
-ollama pull gemma4:12b           # local-writer — copy drafts, reads screenshots
-ollama pull devstral:24b         # local-agentic — multi-file repo edits
-ollama pull qwen3.6:27b          # local-coder-pro — best local coder (SWE-bench Verified 77.2)
-ollama pull qwen3-coder:30b      # local-coder — 256K context coder
-ollama list                      # see what you have
-```
-Each model is rated best in one area; the registry maps it to that area only.
+| Agent id | Pull command | Maker | Best at | Evidence | License |
+|---|---|---|---|---|---|
+| local-coder-pro | `ollama pull qwen3.8:27b` | Alibaba | Coding | SWE-bench Pro 61.7, LiveCodeBench v6 90.3 | Apache-2.0 |
+| local-agentic | `ollama pull devstral-small-2:24b` | Mistral | Multi-file repo edits | SWE-bench Verified 68.0 | Apache-2.0 |
+| local-agent-moe | `ollama pull qwen3.6:35b` | Alibaba | Tool use (fast, 3B active) | SWE-bench Verified 73.4 | Apache-2.0 |
+| local-fast-coder | `ollama pull glm-4.7-flash` | Zhipu (Z.ai) | Fast coding | SWE-bench Verified 59.2 | MIT |
+| local-alt-coder | `ollama pull north-mini-code-1.0:q4` | Cohere | Second-opinion coding | AA Coding Index 33.4 | Apache-2.0 + Cohere AUP |
+| local-reasoner | `ollama pull gpt-oss:20b` | OpenAI | Planning, brainstorming | AIME25 91.7 | Apache-2.0 |
+| local-critic | `ollama pull phi4-reasoning:14b` | Microsoft | Devil's-advocate review | AIME25 62.9 | MIT |
+| local-vision | `ollama pull gemma4:26b` | Google | Copy drafts, screenshot QA | AIME26 88.3, reads images | Apache-2.0 |
+| local-fast | `ollama pull ministral-3:8b` | Mistral | Quick drafts, triage | small and fast | Apache-2.0 |
+| local-tiny | `ollama pull gemma4:e4b` | Google | Low-end PCs | MMLU-Pro 69.4 | Apache-2.0 |
+| local-kat *(optional)* | `ollama pull hf.co/bartowski/Kwaipilot_KAT-Coder-V2.5-Dev-GGUF:Q4_K_M` | Kuaishou (StreamLake) | Agentic coding | SWE-bench Verified 69.4 | Apache-2.0 |
+
+Benchmarks are the makers' own numbers, and each maker tests differently, so treat them as
+a rough guide. The team's own scoreboard (step 13) is what actually decides who gets work.
+Run `ollama list` to see what you have installed.
+
+**Optional, for later:** `ollama pull snowflake-arctic-embed2:568m` (Snowflake, Apache-2.0) is an
+*embedding* model. An embedding model turns text into numbers so a computer can find
+similar-meaning text. It's useful if the site later gets search, or if the team's memory grows
+too large to read in full. It isn't wired into the team yet.
+
+### Models to avoid (their licenses forbid or limit commercial use)
+| Model | Why |
+|---|---|
+| `codestral:22b` (Mistral) | Non-Production license: no commercial use |
+| `command-r7b`, `aya-expanse` (Cohere) | CC-BY-NC: no commercial use |
+| `solar:10.7b` (Upstage) | CC-BY-NC: no commercial use |
+| `lfm2.5:*` (Liquid AI) | Free only for businesses under $10M a year in revenue; confirm before using |
+| Together `Tev1` | No license stated |
+
+### Free cloud backups (when your PC is too slow)
+- **Groq**: a free plan with rate limits.
+- **Cloudflare Workers AI**: 10,000 free "Neurons" (Cloudflare's usage units) per day.
+
+Both serve open models over the internet. Point Hermes, OpenCode or Aider at one if a local model is too slow.
+
+### Every company in the provider list, sorted
+- **Makes open models you can run (best ones are in the table above):** Alibaba (Qwen),
+  Mistral, Google (Gemma), OpenAI (gpt-oss), Microsoft (Phi), Zhipu (Z.ai), Cohere,
+  DeepSeek (`deepseek-r1:8b` is a good low-end reasoner), Kuaishou (StreamLake), Meta (Llama,
+  now outscored by the models above), Snowflake (embeddings).
+- **Open models, available only as GGUF files** (a single-file model format that LM Studio and
+  llama.cpp can load) **and untested with Ollama:** Arcee (Trinity Mini), InclusionAI (Ling),
+  Kimi (Kimi-VL), Xiaomi (MiMo 9B), Zyphra (ZAYA1), Multiverse (Pulsar), Sarvam, Reka (Flash 3.1),
+  Apodex, AI9Stars, LongCat (Flash-Lite needs 64 GB RAM).
+- **Open models too large for a PC** (100B–1T parameters): MiniMax, StepFun, Thinking Machines,
+  xAI Grok, plus the flagship models of DeepSeek, Kimi, Zhipu, Xiaomi and LongCat.
+- **Closed models only:** Anthropic (you already use Claude), Inception, Celeris, Blackbox AI, Amazon (Nova).
+- **Cloud hosts that run other companies' models (nothing to install):** Azure, Baseten, Bitdeer,
+  Cerebras, Cloudflare, CoreWeave, Crusoe, Databricks, DeepInfra, DigitalOcean, Fireworks,
+  FriendliAI, GMI, Groq, Hyperbolic, Inco, LithosAI, Makora, Modal, Modular, Nebius, Novita,
+  Parasail, PrimaLabs, Public AI, Replicate, SambaNova, Scaleway, SiliconFlow, Systalyze,
+  Together AI, Upstage (its newer models are large or custom-licensed), Wafer.
 
 ## 10. OpenClaw 2.0 (local-first agent platform)
 
@@ -250,12 +296,12 @@ never the repo or secrets. Skip OpenClaw entirely if you don't need a second res
 
 ```powershell
 npm install -g opencode-ai
-opencode                         # first run: choose Ollama as a provider, pick qwen3.6:27b
+opencode                         # first run: choose Ollama as a provider, pick qwen3.8:27b (or devstral-small-2:24b)
 
 python -m pip install aider-install
 aider-install
 setx OLLAMA_API_BASE "http://127.0.0.1:11434"
-setx AIDER_MODEL "ollama_chat/qwen3.6:27b"
+setx AIDER_MODEL "ollama_chat/qwen3.8:27b"
 ```
 Also good, not wired in by default: **Cline** (VS Code extension, point it at Ollama) and
 **Goose** (Block's open-source agent). Add them to `agents.json` if you want them.
@@ -321,6 +367,8 @@ pass-rate scoreboard (a simple multi-armed-bandit idea) so new agents get a fair
 - Aider scripting — https://aider.chat/docs/scripting.html · OpenCode CLI — https://opencode.ai/docs/cli/
 - Ollama model library (tags verified 2026-09-28) — https://ollama.com/library
 - Local model rankings — https://www.morphllm.com/best-ollama-models
+- Model licenses and benchmark figures: each model's Hugging Face card (huggingface.co/<maker>/<model>) and its Ollama page, checked 2026-09-28
+- Free tiers — https://developers.cloudflare.com/workers-ai/platform/pricing · https://console.groq.com/docs/rate-limits
 - Claude Code in Zed via ACP — https://zed.dev/blog/claude-code-via-acp
 
 ## 16. Troubleshooting
