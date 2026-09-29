@@ -1,0 +1,24 @@
+<!--
+  PLACEHOLDER MOTIF STRIP — header decoration band (ADR 0021).
+  TODO: replace with approved Lummi art.
+
+  Coast Salish design is specific to Lummi Nation. These four shapes are
+  deliberately generic stand-ins (canoe, paddle, salmon, wave) so the band can be
+  built and measured; they are not Coast Salish form-line and must not ship.
+  Used as a CSS mask, so the geometry matters and the colour does not.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 272 24" width="272" height="24" role="presentation">
+  <g fill="#000">
+    <!-- canoe -->
+    <path d="M4 10c14 0 34 0 48 0-2 6-8 9-24 9S6 16 4 10Z"/>
+    <rect x="4" y="6" width="48" height="2" rx="1"/>
+    <!-- paddle -->
+    <path d="M78 3c5 0 8 4 8 9s-3 8-8 8-8-3-8-8 3-9 8-9Z"/>
+    <rect x="76" y="14" width="4" height="8" rx="2"/>
+    <!-- salmon -->
+    <path d="M118 12c8-7 22-8 30-1-8 7-22 8-30 1Z"/>
+    <path d="M152 6l12 6-12 6z"/>
+    <!-- wave -->
+    <path d="M190 14c8-8 16 8 24 0s16 8 24 0 16 8 24 0v4c-8 8-16-8-24 0s-16-8-24 0-16-8-24 0z"/>
+  </g>
+</svg>

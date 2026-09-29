@@ -1,0 +1,1086 @@
+<meta charset="utf-8">
+<title>Promo Crop Ladder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* ============================================================
+   REVIEW CHROME — deliberately not the brand, matching the other
+   proofs: cool slate + a violet marker, so an annotation can never
+   be mistaken for site copy. Themed for the viewer.
+   ============================================================ */
+:root{
+  --c-bg:#EDEEF1; --c-surface:#FFFFFF; --c-sunk:#E3E5EA;
+  --c-text:#191C22; --c-dim:#5A616E; --c-line:#D3D7DE;
+  --c-mark:#6B4FA8; --c-mark-soft:#EFE9FA;
+  --c-warn:#9A5B12; --c-warn-soft:#FBEFDD;
+  --c-ok:#1D6A4F; --c-ok-soft:#E2F2EB;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --c-bg:#14161B; --c-surface:#1D2027; --c-sunk:#0F1115;
+    --c-text:#E7E9ED; --c-dim:#99A1AE; --c-line:#2E323B;
+    --c-mark:#A78BE8; --c-mark-soft:#241D33;
+    --c-warn:#E0A75E; --c-warn-soft:#2A2114;
+    --c-ok:#6FCBA6; --c-ok-soft:#13291F;
+  }
+}
+:root[data-theme="dark"]{
+  --c-bg:#14161B; --c-surface:#1D2027; --c-sunk:#0F1115;
+  --c-text:#E7E9ED; --c-dim:#99A1AE; --c-line:#2E323B;
+  --c-mark:#A78BE8; --c-mark-soft:#241D33;
+  --c-warn:#E0A75E; --c-warn-soft:#2A2114;
+  --c-ok:#6FCBA6; --c-ok-soft:#13291F;
+}
+
+/* LOCKED BRAND TOKENS — skill `brand-system`. Fixed in both themes on purpose:
+   the promo frames must render the site's own palette whatever theme the
+   reviewer happens to be using. */
+:root{
+  --lb-navy:#1C4E8F; --lb-navy-deep:#14396B; --lb-teal:#0FB5C4;
+  --lb-cedar:#C9772E; --lb-ground:#FBF9F4; --lb-paper:#FFFFFF;
+  --lb-ink:#2A2820; --lb-bone:#F5F1E8;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--c-bg); color:var(--c-text);
+  font:400 15px/1.6 "IBM Plex Sans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1300px; margin:0 auto; padding:40px 24px 80px}
+.lede{max-width:64ch}
+.fine{font-size:13.5px; color:var(--c-dim); max-width:72ch}
+h1{
+  font:600 30px/1.2 "IBM Plex Sans",system-ui,sans-serif;
+  letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance;
+}
+.eyebrow{
+  font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--c-mark);
+  margin:0 0 14px;
+}
+h2.sec{
+  font:600 21px/1.25 "IBM Plex Sans",system-ui,sans-serif;
+  margin:0 0 6px; letter-spacing:-.015em; text-wrap:balance;
+}
+h2.sec .n{
+  font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.14em;
+  color:var(--c-mark); display:block; margin:0 0 8px; text-transform:uppercase;
+}
+p{margin:0 0 14px; color:var(--c-dim); max-width:72ch}
+p strong{color:var(--c-text); font-weight:600}
+a{color:var(--c-mark)}
+code{
+  font:500 .88em/1 "IBM Plex Mono",ui-monospace,monospace;
+  background:var(--c-sunk); padding:2px 5px; border-radius:4px; color:var(--c-text);
+}
+hr.rule{border:0; border-top:1px solid var(--c-line); margin:46px 0}
+
+/* controls */
+.controls{
+  display:flex; flex-wrap:wrap; gap:10px 22px; align-items:center;
+  background:var(--c-surface); border:1px solid var(--c-line);
+  border-radius:10px; padding:14px 18px; margin:26px 0 0;
+  position:sticky; top:0; z-index:60;
+}
+.controls .ctl-lab{
+  font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--c-dim);
+}
+.sw{display:inline-flex; align-items:center; gap:9px; cursor:pointer; font-size:14px}
+.sw input{width:16px; height:16px; accent-color:var(--c-mark); cursor:pointer; margin:0}
+.sw:focus-within{outline:2px solid var(--c-mark); outline-offset:3px; border-radius:4px}
+
+/* stage furniture */
+.stage{margin:30px 0 0}
+.stage>.board{overflow-x:auto; overscroll-behavior-x:contain}
+.stage-hd{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:0 0 12px}
+h3.sub{font:600 15px/1.25 "IBM Plex Sans",system-ui,sans-serif;
+  margin:30px 0 8px; color:var(--c-text)}
+.stage-hd h3{font:600 16px/1.2 "IBM Plex Sans",system-ui,sans-serif; margin:0}
+.stage-hd .dims{
+  font:500 11px/1 "IBM Plex Mono",ui-monospace,monospace;
+  color:var(--c-dim); letter-spacing:.06em;
+}
+.board{
+  background:var(--c-sunk); border:1px solid var(--c-line); border-radius:12px;
+  padding:22px; overflow-x:auto;
+}
+.board.lit{background:var(--lb-ground)}
+
+/* ============================================================
+   THE PROMO SLOT — the thing under review.
+   Width and aspect ratio are set per instance from inline custom
+   properties, so every slot on the page is the same component.
+   ============================================================ */
+.slot{
+  position:relative; width:var(--w); aspect-ratio:var(--ar);
+  border-radius:10px; overflow:hidden; background:var(--lb-navy-deep);
+  flex:0 0 auto; display:block; text-decoration:none;
+}
+.slot img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center;      /* the crop under review */
+  display:block;
+}
+/* the safe band: the 5:1 centre strip, which is the intersection of every
+   crop in the ladder. Drawn over the image, never baked into it. */
+.slot::after{
+  content:""; position:absolute; left:0; right:0; top:50%; height:var(--band);
+  transform:translateY(-50%); opacity:0; transition:opacity .12s linear;
+  outline:1px dashed var(--c-mark); outline-offset:-1px;
+  background:linear-gradient(var(--c-mark-soft),var(--c-mark-soft));
+  mix-blend-mode:normal; pointer-events:none;
+}
+.showband .slot::after{opacity:.34}
+/* The live text fields staff type, laid over the image.
+   Metrics are lifted from the approved promo card in promo-system.html so the
+   budget measured here is the real one: padding 13/14, eyebrow 8.5px/1,
+   headline 17px/1.2 with a 4px lead, button 9px/1 in a 6/11 pill with a 9px
+   lead. Only the colours change — that card sits on a bone panel, this one on
+   a photograph, so the palette inverts. The body field has no approved size
+   because the approved card has no body field; it is set here at 12.5px/1.45,
+   about the smallest a body field plausibly runs. See F3. */
+.slot .tx{
+  position:absolute; inset:0; padding:13px 14px; display:none;
+  flex-direction:column; align-items:flex-start; justify-content:flex-end;
+  background:linear-gradient(90deg,rgba(20,57,107,.82) 0%,rgba(20,57,107,.62) 46%,rgba(20,57,107,0) 82%);
+  color:var(--lb-bone);
+}
+.showtext .slot .tx{display:flex}
+.slot .tx .ey{
+  font:600 8.5px/1 Inter,sans-serif;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--lb-teal);
+}
+.slot .tx .hd{font:700 17px/1.2 "Space Grotesk",Inter,sans-serif; letter-spacing:-.01em; margin-top:4px}
+.slot .tx .bd{font:400 12.5px/1.45 Inter,sans-serif; opacity:.92; margin-top:6px}
+.slot .tx .bt{
+  margin-top:9px; background:var(--lb-cedar); color:#fff;
+  font:600 9px/1 Inter,sans-serif; letter-spacing:.07em; text-transform:uppercase;
+  padding:6px 11px; border-radius:99px;
+}
+/* the overflow marker: the page measures each overlay against its slot at load
+   and stamps this on the ones that do not fit. Nothing here is hand-set. */
+.slot .tx.spill{outline:2px solid var(--c-warn); outline-offset:-2px}
+
+/* Section 05 compares the field sets, so its overlays cannot be behind the
+   global text toggle — they are the subject, not an annotation. .qz draws the
+   quiet zone: the strip of photograph the text actually sits on, sized at
+   runtime to the height measure() just calculated, never to a guessed number. */
+.slot.on .tx{display:flex}
+.slot .qz{position:absolute; left:0; right:0; bottom:0; height:var(--qz,0px);
+  opacity:0; pointer-events:none; z-index:2;
+  outline:1px dashed var(--c-warn); outline-offset:-1px;
+  background:linear-gradient(var(--c-warn-soft),var(--c-warn-soft));}
+.showqz .slot .qz{opacity:.40}
+.slot .qz b{position:absolute; right:7px; bottom:4px; font:500 9px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.06em; color:var(--c-warn);}
+.slot .tx .rd{
+  position:absolute; top:6px; right:7px; font:500 9px/1 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.06em; padding:3px 5px; border-radius:4px;
+  background:rgba(20,57,107,.72); color:var(--lb-bone); border:1px solid rgba(245,241,232,.3);
+}
+.slot .tx.spill .rd{background:var(--c-warn); color:#fff; border-color:transparent}
+
+.cap{
+  font:500 11px/1.45 "IBM Plex Mono",ui-monospace,monospace;
+  color:var(--c-dim); letter-spacing:.04em; margin:9px 0 0;
+}
+.cap b{display:block; color:var(--c-text); font-weight:600; letter-spacing:.06em}
+
+/* ladder + row layouts */
+.ladder{display:flex; flex-direction:column; gap:26px; width:1200px}
+.row{display:flex; gap:14px}
+.col{display:flex; flex-direction:column}
+
+/* side-by-side comparison columns */
+.cols{display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); margin:22px 0 0}
+.cols .slot{max-width:100%}
+.cols img{max-width:100%}
+
+/* annotation callouts */
+.notes{display:grid; gap:12px; margin:22px 0 0; grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.note{
+  background:var(--c-surface); border:1px solid var(--c-line);
+  border-left:3px solid var(--c-mark); border-radius:8px; padding:14px 16px;
+}
+.note.warn{border-left-color:var(--c-warn)}
+.note.ok{border-left-color:var(--c-ok)}
+.note h4{
+  font:500 10.5px/1.3 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--c-mark); margin:0 0 7px;
+}
+.note.warn h4{color:var(--c-warn)}
+.note.ok h4{color:var(--c-ok)}
+.note p{margin:0; font-size:13.5px; line-height:1.55; max-width:none}
+.note p + p{margin-top:8px}
+
+/* finding blocks */
+.finding{
+  background:var(--c-surface); border:1px solid var(--c-line); border-radius:10px;
+  padding:18px 20px; margin:22px 0 0;
+}
+.finding h4{
+  font:600 15px/1.3 "IBM Plex Sans",system-ui,sans-serif; margin:0 0 8px; color:var(--c-text);
+}
+.finding h4 .id{
+  font:500 10.5px/1 "IBM Plex Mono",ui-monospace,monospace; letter-spacing:.1em;
+  color:var(--c-mark); margin-right:9px;
+}
+.finding p{margin:0 0 10px}
+.finding p:last-child{margin:0}
+.finding .math{
+  font:400 12.5px/1.7 "IBM Plex Mono",ui-monospace,monospace;
+  background:var(--c-sunk); border-radius:7px; padding:12px 14px; margin:12px 0;
+  color:var(--c-text); overflow-x:auto; white-space:pre;
+}
+
+/* data table */
+table.audit{border-collapse:collapse; width:100%; margin:6px 0 0; font-size:13.5px}
+table.audit th,table.audit td{
+  text-align:left; padding:8px 14px 8px 0; border-bottom:1px solid var(--c-line);
+  vertical-align:top;
+}
+table.audit th{
+  font:500 10.5px/1.3 "IBM Plex Mono",ui-monospace,monospace;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--c-dim);
+}
+table.audit td.num,table.audit th.num{
+  text-align:right; font-variant-numeric:tabular-nums;
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px;
+}
+table.audit tr.fail td{color:var(--c-warn)}
+.tbl-scroll{overflow-x:auto}
+.tag{
+  display:inline-block; font:500 10px/1 "IBM Plex Mono",monospace; letter-spacing:.08em;
+  padding:4px 7px; border-radius:4px;
+}
+.tag.bad{background:var(--c-warn-soft); color:var(--c-warn)}
+.tag.good{background:var(--c-ok-soft); color:var(--c-ok)}
+.tag.mark{background:var(--c-mark-soft); color:var(--c-mark)}
+
+/* legend */
+.legend{display:flex; flex-wrap:wrap; gap:8px 22px; margin:16px 0 0; align-items:center}
+.legend span{display:inline-flex; align-items:center; gap:8px; font-size:13px; color:var(--c-dim)}
+.chip{display:inline-block; width:24px; height:12px; border-radius:3px; flex:0 0 auto}
+.chip-band{background:var(--c-mark-soft); border:1px dashed var(--c-mark)}
+.chip-spill{background:transparent; border:2px solid var(--c-warn)}
+
+/* the decision register */
+.decision{
+  background:var(--c-surface); border:1px solid var(--c-line);
+  border-top:3px solid var(--c-mark); border-radius:10px; padding:22px 24px; margin:26px 0 0;
+}
+.decision h3{font:600 17px/1.25 "IBM Plex Sans",system-ui,sans-serif; margin:0 0 10px}
+.decision ol{margin:0; padding-left:20px; color:var(--c-dim); font-size:14px; line-height:1.65}
+.decision li{margin:0 0 9px}
+.decision li:last-child{margin:0}
+.decision li b{color:var(--c-text)}
+.decision h3 ~ h3{margin:22px 0 10px}
+
+footer.pf{
+  margin:54px 0 0; padding:18px 0 0; border-top:1px solid var(--c-line);
+  font:400 12.5px/1.6 "IBM Plex Mono",ui-monospace,monospace; color:var(--c-dim);
+}
+
+@media (max-width:820px){
+  .wrap{padding:28px 16px 64px}
+  h1{font-size:25px}
+  .controls{position:static}
+}
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Proof · promo region · spec sheet §07</p>
+  <h1>The promo crop ladder</h1>
+  <div class="lede">
+    <p>Section 07 of the asset spec sheet proposed five aspect ratios — one per slot width on the
+    promo ladder. This page is the evidence they were signed off against, on 16 September 2026:
+    the same master image run through every crop at true pixel size, what happens when a row
+    re-divides and a promo is promoted to a wider slot, what a single fixed ratio would cost
+    instead, and how much copy each slot will carry. <b>Section 07 records what was decided</b> —
+    the five ratios as proposed, a 2400 × 1350 master, a 28-character headline, three text fields on
+    every slot and every device, and an editable button label. Sections 05 and 06 were argued and
+    measured against a four-field set that was signed and then withdrawn the same day; their
+    measurements stand and their verdicts are marked with what replaced them.</p>
+    <p><strong>The two photographs are stand-ins</strong>, generated by
+    <code>scripts/make-crop-proof-sources.py</code> because there is no store photography yet.
+    They are not proposed artwork. One is composed well for this ladder and one is composed
+    badly, which is the only thing they are here to show.
+    <span class="tag mark">TODO: re-run against real photography before sign-off</span></p>
+  </div>
+
+  <div class="controls">
+    <span class="ctl-lab">Overlays</span>
+    <label class="sw"><input type="checkbox" id="t-band" checked> Safe band (5:1)</label>
+    <label class="sw"><input type="checkbox" id="t-text"> Live text fields</label>
+    <label class="sw"><input type="checkbox" id="t-qz"> Quiet zone (§05)</label>
+    <span class="ctl-lab">Master</span>
+    <label class="sw"><input type="radio" name="src" value="img/crop-counter.jpg" checked> A — subject centred</label>
+    <label class="sw"><input type="radio" name="src" value="img/crop-storefront.jpg"> B — subject low in frame</label>
+  </div>
+
+  <div class="legend">
+    <span><i class="chip chip-band"></i> the 5:1 centre strip that survives every crop</span>
+    <span><i class="chip chip-spill"></i> text taller than the slot it sits in</span>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ===================================================== 01 -->
+  <h2 class="sec"><span class="n">01 / the ladder</span>Every slot width, at true size, from one master</h2>
+  <p>The five rows the promo region can build, drawn at the exact pixel widths the 12-column
+  grid produces inside the 1200px content width. Each slot holds the <em>same</em> image file —
+  only the crop differs. Scroll the board sideways if your window is narrower than 1200px.</p>
+
+  <div class="stage">
+    <div class="board lit">
+      <div class="ladder">
+
+        <div class="col">
+          <div class="row">
+            <div class="slot" style="--w:1200px; --ar:5/1; --band:100%">
+              <img alt="" data-src><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky, now inside Exit 260</span><span class="bd">Hand-filled, baked through the morning, and gone by lunch most days.</span><span class="bt">See what's baking</span></span>
+            </div>
+          </div>
+          <p class="cap"><b>1 across — full width</b>12 col · 1200 × 240 · 5:1 · supply 2400 px</p>
+        </div>
+
+        <div class="col">
+          <div class="row">
+            <div class="slot" style="--w:795px; --ar:3/1; --band:90.6%">
+              <img alt="" data-src><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky, now inside Exit 260</span><span class="bd">Hand-filled, baked through the morning.</span><span class="bt">See what's baking</span></span>
+            </div>
+            <div class="slot" style="--w:391px; --ar:2/1; --band:40.9%">
+              <img alt="" data-src><span class="tx"><span class="ey">New</span><span class="hd">Hi-Tide Coffee</span><span class="bd">Espresso by the fuel islands.</span><span class="bt">Hours &amp; menu</span></span>
+            </div>
+          </div>
+          <p class="cap"><b>2 across — wide half + third</b>8 + 4 col · 795 × 265 (3:1) and 391 × 196 (2:1)</p>
+        </div>
+
+        <div class="col">
+          <div class="row">
+            <div class="slot" style="--w:593px; --ar:3/1; --band:90.6%">
+              <img alt="" data-src><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky</span><span class="bd">Baked through the morning.</span><span class="bt">See what's baking</span></span>
+            </div>
+            <div class="slot" style="--w:593px; --ar:3/1; --band:90.6%">
+              <img alt="" data-src><span class="tx"><span class="ey">Open now</span><span class="hd">Showers &amp; driver lounge</span><span class="bd">Clean, staffed, and always open.</span><span class="bt">Truck stop</span></span>
+            </div>
+          </div>
+          <p class="cap"><b>2 across — halves</b>6 + 6 col · 593 × 198 · 3:1</p>
+        </div>
+
+        <div class="col">
+          <div class="row">
+            <div class="slot" style="--w:391px; --ar:2/1; --band:40.9%">
+              <img alt="" data-src><span class="tx"><span class="ey">New</span><span class="hd">Hi-Tide Coffee</span><span class="bd">Espresso by the islands.</span><span class="bt">Hours</span></span>
+            </div>
+            <div class="slot" style="--w:391px; --ar:2/1; --band:40.9%">
+              <img alt="" data-src><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky</span><span class="bd">Baked all morning.</span><span class="bt">Menu</span></span>
+            </div>
+            <div class="slot" style="--w:391px; --ar:2/1; --band:40.9%">
+              <img alt="" data-src><span class="tx"><span class="ey">Open now</span><span class="hd">Showers</span><span class="bd">Clean and staffed.</span><span class="bt">Truck stop</span></span>
+            </div>
+          </div>
+          <p class="cap"><b>3 across — thirds</b>4 + 4 + 4 col · 391 × 196 · 2:1</p>
+        </div>
+
+        <div class="col">
+          <div class="row">
+            <div class="slot" style="--w:290px; --ar:16/9; --band:35.6%">
+              <img alt="" data-src><span class="tx"><span class="ey">New</span><span class="hd">Hi-Tide Coffee</span><span class="bd">Espresso by the islands.</span><span class="bt">Hours</span></span>
+            </div>
+            <div class="slot" style="--w:290px; --ar:16/9; --band:35.6%">
+              <img alt="" data-src><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky</span><span class="bd">Baked all morning.</span><span class="bt">Menu</span></span>
+            </div>
+            <div class="slot" style="--w:290px; --ar:16/9; --band:35.6%">
+              <img alt="" data-src><span class="tx"><span class="ey">Open now</span><span class="hd">Showers</span><span class="bd">Clean and staffed.</span><span class="bt">Truck stop</span></span>
+            </div>
+            <div class="slot" style="--w:290px; --ar:16/9; --band:35.6%">
+              <img alt="" data-src><span class="tx"><span class="ey">Every visit</span><span class="hd">Rewards</span><span class="bd">Points on fuel.</span><span class="bt">Get the app</span></span>
+            </div>
+          </div>
+          <p class="cap"><b>4 across — quarters</b>3 + 3 + 3 + 3 col · 290 × 163 · 16:9</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <h4>The band is the same strip every time</h4>
+      <p>Turn the safe band on and it covers the whole of the full-width slot, a third of the
+      quarter. That is not a drawing convention — it is the same region of the same file in
+      every slot. Section 03 works out why.</p>
+    </div>
+    <div class="note">
+      <h4>Watch the readout with text on</h4>
+      <p>Switch on the live text fields and each slot reports <code>needed / available</code>,
+      measured in the browser rather than worked out on paper. The four fields fit every slot
+      in the ladder at short copy. What the quarter cannot absorb is length — sections 04 and 05 find
+      where it breaks.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ===================================================== 02 -->
+  <h2 class="sec"><span class="n">02 / the alternative</span>Why one fixed ratio cannot serve the ladder</h2>
+  <p>The obvious simplification is to pick a single aspect ratio and crop everything to it. It
+  does not survive contact with the two constraints that are already locked: a <strong>150px
+  minimum slot height</strong>, and a full-width promo that does not swallow the viewport.</p>
+
+  <div class="finding">
+    <h4><span class="id">F1</span>No single ratio clears both ends of the ladder</h4>
+    <p>The narrowest slot is 290px. To reach the 150px floor it needs a ratio no wider than
+    290 ÷ 150 = <b>1.93 : 1</b>. Apply that same ratio to the 1200px full-width slot:</p>
+    <div class="math">quarter floor      290 / 150      = 1.93 : 1   ← widest ratio the quarter allows
+full width at 1.93 : 1   1200 / 1.93   = 622 px      ← shortest full-width promo it permits
+laptop viewport (900px)  622 / 900      = 69%        ← of the screen, for one promo</div>
+    <p>So a single-ratio ladder forces a full-width promo <b>at least 622px tall</b> — over
+    two-thirds of a 900px laptop viewport, for what ADR 0007 positions as a secondary element
+    below the page title. The ratio has to vary down the ladder. That is the finding the
+    proposed ladder rests on.</p>
+  </div>
+
+  <div class="tbl-scroll">
+    <table class="audit">
+      <thead><tr>
+        <th>Ladder</th><th class="num">1200</th><th class="num">795</th><th class="num">593</th>
+        <th class="num">391</th><th class="num">290</th><th class="num">Band</th><th>Verdict</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><b>Proposed — varies</b></td><td class="num">240</td><td class="num">265</td><td class="num">198</td><td class="num">196</td><td class="num">163</td><td class="num">102</td><td><span class="tag good">all ≥ 150</span></td></tr>
+        <tr class="fail"><td>Fixed 5:1</td><td class="num">240</td><td class="num">159</td><td class="num">119</td><td class="num">78</td><td class="num">58</td><td class="num">182</td><td><span class="tag bad">3 slots under 150</span></td></tr>
+        <tr class="fail"><td>Fixed 3:1</td><td class="num">400</td><td class="num">265</td><td class="num">198</td><td class="num">130</td><td class="num">97</td><td class="num">303</td><td><span class="tag bad">2 slots under 150</span></td></tr>
+        <tr class="fail"><td>Fixed 2:1</td><td class="num">600</td><td class="num">398</td><td class="num">297</td><td class="num">196</td><td class="num">145</td><td class="num">455</td><td><span class="tag bad">quarter misses by 5px</span></td></tr>
+        <tr class="fail"><td>Fixed 16:9</td><td class="num">675</td><td class="num">447</td><td class="num">334</td><td class="num">220</td><td class="num">163</td><td class="num">512</td><td><span class="tag bad">full width 675px tall</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="cap" style="margin-top:12px">Slot heights in px. <b>Band</b> is the spread between the tallest and shortest row in that ladder — the proposed ladder holds 102px, every fixed ratio spreads three to five times wider, so rows stop looking like a set.</p>
+
+  <hr class="rule">
+
+  <!-- ===================================================== 03 -->
+  <h2 class="sec"><span class="n">03 / the master</span>One 16:9 file, one 5:1 safe band</h2>
+  <p>Because the ratio varies, a designer needs to know what to actually supply. This falls out
+  of the ladder rather than being a separate decision.</p>
+
+  <div class="finding">
+    <h4><span class="id">F2</span>Every crop in the ladder is a vertical trim of a single 16:9 master</h4>
+    <p>16:9 (1.78:1) is the <em>tallest</em> ratio in the ladder; 5:1 is the widest. Fit the
+    master to the tallest and no crop ever removes anything sideways — the slot is always
+    equal to or wider than the source, so <code>object-fit: cover</code> only ever trims top
+    and bottom.</p>
+    <div class="math">supply            2400 × 1350   (16:9, 2× the widest slot)
+tallest crop      16:9          → uses all 1350 rows      (quarter, and every phone slot)
+widest crop        5:1          → uses the centre 480     (full width)
+intersection      2400 × 480    ← the safe band: survives every crop
+horizontal loss   none, at any slot width</div>
+    <p>So the rule for a photographer is two numbers, not five: <b>deliver 2400 × 1350, and
+    keep the subject inside the centre 2400 × 480 strip.</b> Everything above and below that
+    strip is atmosphere that may or may not be shown.</p>
+    <p>One dependency worth naming: the safe band is set by the <em>widest</em> ratio in the
+    ladder. Sign off a full-width crop wider than 5:1 and the band gets thinner for every
+    photograph already shot; sign off a narrower one and the band grows. Changing that one
+    number re-specifies the whole library.</p>
+  </div>
+
+  <div class="cols">
+    <div>
+      <div class="stage-hd"><h3>A — subject inside the band</h3><span class="dims">survives every crop</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="gap:12px">
+          <div class="slot" style="--w:100%; --ar:16/9; --band:35.6%"><img src="img/crop-counter.jpg" alt=""></div>
+          <p class="cap">master 2400 × 1350 — the band is where the cup already sits</p>
+          <div class="slot" style="--w:100%; --ar:5/1; --band:100%"><img src="img/crop-counter.jpg" alt=""></div>
+          <p class="cap">promoted to full width 5:1 — subject intact, steam trimmed</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="stage-hd"><h3>B — subject below the band</h3><span class="dims">lost on promotion</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="gap:12px">
+          <div class="slot" style="--w:100%; --ar:16/9; --band:35.6%"><img src="img/crop-storefront.jpg" alt=""></div>
+          <p class="cap">master 2400 × 1350 — roofline at y 900, band ends at y 915</p>
+          <div class="slot" style="--w:100%; --ar:5/1; --band:100%"><img src="img/crop-storefront.jpg" alt=""></div>
+          <p class="cap">promoted to full width 5:1 — the store is gone; this is now a photo of sky</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note warn">
+      <h4>Nobody is asked before this happens</h4>
+      <p>A row re-divides the moment a promo's date window closes, because twelve divides evenly
+      by 1, 2, 3, 4 and 6 and a hole must never open in the layout (ADR 0018). The art is not
+      re-supplied and no one is notified. B was a perfectly good quarter on Monday.</p>
+    </div>
+    <div class="note">
+      <h4>Which is why the band is a supply rule, not a design preference</h4>
+      <p>It is the only instruction that makes a promo safe against a layout change it cannot
+      see coming. Composition outside the band is free — it just cannot be load-bearing.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ===================================================== 04 -->
+  <h2 class="sec"><span class="n">04 / the text</span>How much copy the narrowest slot will take</h2>
+  <p>Eyebrow, headline, body and button are live fields staff type, laid over the image
+  (spec sheet §07). They have to fit inside the slot, and the slot heights come from the ladder.
+  This section is the one that changed after measuring: the draft asserted the four fields do not
+  fit the quarter. They do. The constraint is copy length, and it is much tighter than a field
+  count.</p>
+
+  <p class="fine">Every figure below is read out of the browser by the page itself, at the type
+  sizes of the approved promo card in <code>promo-system.html</code> — eyebrow 8.5px, headline
+  17px/1.2, button 9px in a 6/11 pill, 13/14 padding. The body field has no approved size because
+  the approved card has no body field; it is set here at 12.5px/1.45, about the smallest a body
+  field plausibly runs, which makes these the most generous numbers available.</p>
+
+  <div class="finding">
+    <h4><span class="id">F3</span>All four fields fit every slot. Roughly 115 characters is where the quarter breaks</h4>
+    <div class="math">four fields, one line each, any slot width          = 113 px
+quarter slot height                                = 163 px
+                                                     ------
+headroom at the quarter                            =  50 px  — about two extra lines</div>
+    <p>So the field set is not the problem. Length is. Sweeping copy length against each slot
+    until the overlay overflows gives the budget below — headline and body combined, in
+    characters, at the point the text starts running past the image:</p>
+
+    <div class="tbl-scroll">
+      <table class="audit">
+        <thead><tr><th>Slot</th><th class="num">Size</th><th class="num">Headline stays one line to</th><th class="num">Body stays one line to</th><th class="num">Headline + body ceiling</th></tr></thead>
+        <tbody>
+          <tr><td>Full width</td><td class="num">1200 × 240</td><td class="num">120 ch</td><td class="num">160 ch</td><td class="num">no practical limit</td></tr>
+          <tr><td>Wide half</td><td class="num">795 × 265</td><td class="num">92 ch</td><td class="num">125 ch</td><td class="num">no practical limit</td></tr>
+          <tr><td>Half</td><td class="num">593 × 198</td><td class="num">67 ch</td><td class="num">92 ch</td><td class="num">no practical limit</td></tr>
+          <tr><td>Third</td><td class="num">391 × 196</td><td class="num">44 ch</td><td class="num">58 ch</td><td class="num">266 ch</td></tr>
+          <tr class="fail"><td><b>Quarter</b></td><td class="num">290 × 163</td><td class="num">32 ch</td><td class="num">43 ch</td><td class="num"><b>115 ch</b></td></tr>
+          <tr><td>Phone, any row</td><td class="num">351 × 197</td><td class="num">39 ch</td><td class="num">53 ch</td><td class="num">no practical limit</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Read the quarter row as: a headline of about 45 characters plus a body of about 70, and it
+    is full. One more sentence and the text runs off the bottom of the picture. Nothing in the
+    page stops an editor typing that sentence.</p>
+
+    <p class="fine">The quarter figure was tightened after section 05 was built. The first sweep
+    ran one word pool and returned 130 characters; run against six samples of realistic promo
+    prose it returns 115, because real sentences wrap worse than an evenly-worded string. The
+    table shows the six-sample worst case, which is the only number safe to put in a CMS.</p>
+
+    <p>Which points at a different remedy than the draft had. Not "drop the body field" — the
+    field fits — but <b>put character counters on the promo fields and set them to the narrowest
+    slot the promo can end up in</b>. That is every slot, because a row re-divides when a
+    neighbour expires (ADR 0018) and a promo written for full width can be showing as a quarter
+    by Tuesday. A single limit on every promo, enforced in the CMS, costs the full-width slot some
+    copy it could have carried and costs the quarter nothing it could ever have held.</p>
+
+    <p class="fine">What was actually signed is a good deal tighter than this ceiling:
+    <b>28 characters of headline and 30 of body</b> (section 07). At that length nothing wraps in
+    any slot, so the ceiling measured here stops being a constraint and becomes headroom — worth
+    knowing if the caps are ever revisited.</p>
+  </div>
+
+  <div class="note warn">
+    <h4>An inconsistency worth settling in the same decision</h4>
+    <p>Spec sheet §07 names <b>four</b> live fields — eyebrow, headline, body, button. The
+    approved promo card in <code>promo-system.html</code> renders <b>three</b>: eyebrow, headline,
+    button. There is no body field in the approved design and therefore no approved size for one.
+    The measurements above assume the four-field version because that is what the spec sheet said
+    at the time. <b>Three fields is what was signed</b> (§07), so the quarter ceiling is the higher
+    one — about 124 characters of headline alone — and the body row above is moot. It is kept
+    because section 05 puts the two field sets side by side and measures what the difference was
+    worth.</p>
+    <p><b>Settled:</b> three fields — eyebrow, headline, button — on every slot and every device,
+    so the approved card was right and the spec sheet is the file that changed. This reverses the
+    first reading of the same measurements, which kept the body field on desktop; §07 records why.
+    The three-field ceiling below is therefore the live one: about 124 characters of headline
+    alone at the quarter, against a 28-character cap.
+    <span class="tag good">§07, signed 16 Sep 2026</span></p>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ===================================================== 05 -->
+  <h2 class="sec"><span class="n">05 / the field set</span>Three fields or four, measured side by side</h2>
+  <p>Section 04 ends on a contradiction: the spec sheet names four live fields, the approved card
+  renders three. This section is that comparison drawn rather than argued. It is a question about
+  the <b>promo card</b> — the tile in the row — not about the info page it links to. The card is
+  the trailer; the info page is the film, and the film has as much room as it likes.</p>
+
+  <p class="fine">The overlays in this section are always on, independent of the toggles above,
+  because they are the subject. Every badge is measured in the browser: <code>text height /
+  slot height</code>. Turn on <b>Quiet zone (§05)</b> to shade the strip of photograph the text
+  actually covers.</p>
+
+  <h3 class="sub">A — the floor, at the narrowest slot</h3>
+  <p>One line in every field, the shortest copy anyone would ship. This is the cost of the field
+  set before an editor types anything long.</p>
+
+  <div class="cols">
+    <div>
+      <div class="stage-hd"><h3>Three fields</h3><span class="dims">eyebrow · headline · button</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="align-items:center">
+          <div class="slot on" style="--w:290px; --ar:16/9; --band:55.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap">290 × 163 · the approved card's field set</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="stage-hd"><h3>Four fields</h3><span class="dims">eyebrow · headline · body · button</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="align-items:center">
+          <div class="slot on" style="--w:290px; --ar:16/9; --band:55.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky</span><span class="bd">Baked through the morning.</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap">290 × 163 · the spec sheet's field set</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub">B — the same two cards with copy an editor would actually write</h3>
+  <p>A 42-character headline on both. The four-field card adds an 85-character body, which is
+  what the §04 draft budget allowed. Nothing else changes — and the four-field card does not
+  fit. The page stamps it, so the recommendation in §04 was corrected to 45/70 rather than the
+  copy being trimmed until the picture agreed.</p>
+
+  <div class="cols">
+    <div>
+      <div class="stage-hd"><h3>Three fields</h3><span class="dims">headline carries it</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="align-items:center">
+          <div class="slot on" style="--w:290px; --ar:16/9; --band:55.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here every morning</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap">290 × 163 · a third of the frame left clear</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="stage-hd"><h3>Four fields</h3><span class="dims">headline + body at the §04 cap</span></div>
+      <div class="board lit" style="padding:16px">
+        <div class="col" style="align-items:center">
+          <div class="slot on" style="--w:290px; --ar:16/9; --band:55.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here every morning</span><span class="bd">Hand-filled pastries, sweet and savoury, pulled from the oven from six until sold out.</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap"><b>Overflows by 7px</b>290 × 163 · the §04 draft cap is not safe</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note warn">
+      <h4>This is what the quiet zone toggle is for</h4>
+      <p>Whatever the shaded strip covers, the photograph cannot use. At the quarter the
+      three-field card leaves two thirds of the frame clear; the four-field card at the §04 cap
+      leaves almost none. The brief to a photographer is different in the two cases, and the
+      brief is written before anyone knows which slot a promo will end up in.</p>
+    </div>
+    <div class="note warn">
+      <h4>The spill in B is the point, not a mistake in the example</h4>
+      <p>B was written to the §04 draft cap of 45 characters of headline and 85 of body. It
+      overflows the quarter by 7px, because the headline takes two lines and the body three. The
+      cap was measured again against six samples of realistic promo prose and comes back at
+      <b>45 / 70</b>; the earlier 45 / 85 came from a single evenly-worded string, which wraps
+      more kindly than English does. The argument for three fields is still not that four
+      overflow — it is what four do to the picture underneath, and to how little an editor may
+      then write.</p>
+    </div>
+  </div>
+
+  <h3 class="sub">C — the same question at full width</h3>
+  <p>1200 × 240, the widest slot. Same field sets, same copy and the same photograph as B —
+  only the width changes.</p>
+
+  <div class="stage">
+    <div class="board lit">
+      <div class="col" style="gap:20px">
+        <div class="slot on" style="--w:1200px; --ar:5/1; --band:40%">
+          <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here every morning</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+        </div>
+        <p class="cap"><b>Three fields</b>1200 × 240 · 5:1</p>
+        <div class="slot on" style="--w:1200px; --ar:5/1; --band:40%">
+          <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here every morning</span><span class="bd">Hand-filled pastries, sweet and savoury, pulled from the oven from six until sold out.</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+        </div>
+        <p class="cap"><b>Four fields</b>1200 × 240 · 5:1 · the body field costs the picture nothing here</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="finding">
+    <h4><span class="id">F4</span>The body field costs the same everywhere and buys almost nothing where it is needed</h4>
+    <div class="math">three-field floor, one line each      =  89 px
+four-field floor, one line each       = 113 px
+                                        ------
+cost of the body field, before a word =  24 px   — identical at every slot width
+
+quarter slot                          = 163 px
+  three fields, worst case            = 110 ch  (headline alone)
+  four fields, worst case             = 115 ch  (45 headline + 70 body)
+                                        ------
+  what the fourth field buys          =   5 ch</div>
+    <p>Characters are the wrong unit for reading that, though. The overlay grows in whole lines:
+    above the four-field floor the quarter has 50px of headroom, one more headline line costs
+    about 20px and one more body line about 18px. So the quarter grants <b>two extra lines</b>
+    with four fields and about four with three. The body field does not buy an editor more room;
+    it spends the room on a second typographic register.</p>
+
+    <p>Sweeping both field sets against every slot, against copy someone would really write:</p>
+
+    <div class="tbl-scroll">
+      <table class="audit">
+        <thead><tr><th>Slot</th><th class="num">Size</th><th class="num">Three fields hold</th><th class="num">Four fields hold</th><th class="num">Bought by the body field</th></tr></thead>
+        <tbody>
+          <tr><td>Full width</td><td class="num">1200 × 240</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+          <tr><td>Wide half</td><td class="num">795 × 265</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+          <tr><td>Half</td><td class="num">593 × 198</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+          <tr><td>Third</td><td class="num">391 × 196</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+          <tr class="fail"><td><b>Quarter</b></td><td class="num">290 × 163</td><td class="num">110 ch</td><td class="num"><b>45 / 70 ch</b></td><td class="num"><b>+5 ch</b></td></tr>
+          <tr><td>Phone, any row</td><td class="num">351 × 197</td><td class="num">every sample</td><td class="num">every sample</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="fine">Method: six samples of realistic promo copy — bakery, truck stop, coffee
+    truck, fuel, Wendy's, the Cove — truncated at a word boundary and swept until the overlay
+    overflowed, with the worst of the six reported. "Every sample" means the longest copy in the
+    set fits with room left, so no cap is needed there.</p>
+
+    <p>Read down the last column: <b>the quarter is the only slot where any of this bites.</b>
+    Everywhere else both field sets hold copy longer than anyone will write, so the body field
+    is free. At the quarter it costs 24px of floor to buy five characters.</p>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <h4>A third option the comparison surfaces</h4>
+      <p>Keep the body field and hide it below a slot-width threshold. The table puts that
+      threshold in one place: it renders everywhere except the quarter, and drops out there,
+      where it costs 24px of floor to buy five characters. One field in the CMS, two behaviours
+      in the layout, and editors keep a body field for every promo that has room for one. It
+      needs a rule for what the body says when it is not shown: nothing load-bearing may live
+      there, which is the same discipline the safe band imposes on the picture. It also removes
+      the two-number cap — the CMS counts one budget, not a headline cap and a body cap that
+      interact.</p>
+      <p><b>Settled, and then settled again the same day — no threshold at all:</b> the body field
+      is dropped everywhere rather than hidden below one. It was first signed at four fields on
+      desktop and three on a phone, a threshold keyed to device rather than slot width, which
+      section 07 shows put the extra line in the <i>narrower</i> of the two frames. Removing the
+      field does what this option wanted — one budget in the CMS, not two caps that interact —
+      without a second behaviour in the layout.
+      <span class="tag good">§07, signed 16 Sep 2026</span></p>
+    </div>
+    <div class="note warn">
+      <h4>The button may not be an editable field either</h4>
+      <p>The approved card in <code>promo-system.html</code> hardcodes the label
+      <code>See details</code> — it is not read from the promo document. So the live count on the
+      approved design is two editable fields, not three: eyebrow and headline. Whichever way the
+      body field goes, the button label needs its own answer, and an editable label is the only
+      version that lets a promo say <i>Order ahead</i> or <i>Directions</i>.</p>
+      <p><b>Settled:</b> the label is an editable field, defaulting to <code>See details</code>.
+      <span class="tag good">§07, signed 16 Sep 2026</span></p>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ===================================================== 06 -->
+  <h2 class="sec"><span class="n">06 / the phone</span>Every row collapses to one column</h2>
+  <p>On a phone the row layout is irrelevant — one column, 351px wide inside a 390px viewport.
+  A promo designed as a quarter and a promo designed as full width render identically.</p>
+
+  <div class="stage">
+    <div class="board lit">
+      <div class="row" style="width:auto">
+        <div class="col">
+          <div class="slot" style="--w:351px; --ar:16/9; --band:35.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky</span><span class="bd">Baked through the morning.</span><span class="bt">See what's baking</span></span>
+          </div>
+          <p class="cap"><b>A — phone</b>351 × 197 · 16:9 · the master, uncropped</p>
+        </div>
+        <div class="col">
+          <div class="slot" style="--w:351px; --ar:16/9; --band:35.6%">
+            <img src="img/crop-storefront.jpg" alt=""><span class="tx"><span class="ey">Open 24 hours</span><span class="hd">Salish Village</span><span class="bd">Fuel, store and truck stop at Exit 260.</span><span class="bt">Directions</span></span>
+          </div>
+          <p class="cap"><b>B — phone</b>351 × 197 · 16:9 · the master, uncropped</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note ok">
+      <h4>The phone is the one place nothing is lost</h4>
+      <p>351 × 197 is 16:9, and the master is 16:9, so the phone shows the whole frame. B reads
+      correctly here and only here — which is exactly how a bad crop gets approved, if it is
+      only ever checked on a phone.</p>
+    </div>
+    <div class="note">
+      <h4>The phone is roomier than the quarter, and that is a trap</h4>
+      <p>351 × 197 holds every sample of realistic copy section 05 threw at it; the desktop
+      quarter stops at about 115 characters. So copy written and checked on a phone can be well
+      past what the narrowest desktop slot will hold — and the row that shows it as a quarter is
+      one expiry away.</p>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <!-- ===================================================== 07 -->
+  <h2 class="sec"><span class="n">07 / signed</span>What was decided, and the one thing still open</h2>
+  <p>Signed 16 September 2026, and <b>amended the same day</b>: the field set went from four
+  fields on desktop and three on a phone to <b>three fields everywhere</b>, and the 30-character
+  body cap went with the field it counted. The ratios, the master and the 28-character headline
+  cap are unchanged. Sections 01–06 are the evidence; this section is the answer. Every figure
+  below is a number to build to rather than a proposal, and the same values are carried in the
+  designer spec sheet and in ADR 0023 — if they ever disagree, the ADR is the record.</p>
+
+  <div class="decision">
+    <h3>Decided</h3>
+    <ol>
+      <li><b>The five ratios — approved as proposed.</b> 5:1 full width · 3:1 wide half · 3:1
+      half · 2:1 third · 16:9 quarter. Section 02 shows no single fixed ratio can serve the
+      ladder; this set holds every slot between 163 and 265px tall.
+      <span class="tag good">signed</span></li>
+
+      <li><b>The master file — approved as proposed.</b> Supply <b>2400 × 1350</b>, one file per
+      promo, with the subject inside the centre <b>2400 × 480</b> strip. 16:9 is the tallest
+      ratio on the ladder and 5:1 the widest, so a 16:9 master is never cropped horizontally and
+      the 5:1 band is the only region guaranteed to survive every slot. This is the instruction
+      that goes to a photographer.
+      <span class="tag good">signed</span></li>
+
+      <li><b>The text budget — a 28-character headline, and nothing else to count.</b> Signed
+      well inside the measured ceiling: section 04 put the quarter's limit at about 115 characters
+      across a four-field block, and with the body field gone it is about 124 of headline alone. F5 below is what that buys — every card sits at its 89px floor, one
+      line per field, in every slot on the ladder, and the worst case anyone can type, 28 wide
+      capitals in the quarter, still leaves 54px clear. The counter belongs in the CMS, set to the
+      same number for every promo regardless of the slot it was written for, because a row
+      re-divides when a neighbour expires (ADR 0018).
+      <span class="tag good">signed</span></li>
+
+      <li><b>The field set — three fields, everywhere.</b> Eyebrow, headline and button, on every
+      slot and every device. There is no body field and no responsive text rule: one block, 89px
+      tall, at every width. The contradiction section 05 opened is settled in favour of the
+      approved card — <code>promo-system.html</code> already rendered exactly these three, and with
+      the editable button label its card needed no change. It has since gained the field list
+      itself, matching the collection as ADR 0018 §2 now defines it. <i>Amended the same day:</i> the first
+      signature put four fields on desktop and three on a phone. All four did fit — the reason for
+      dropping the body field was not fit but what it cost: about five words of copy, a flat 24px
+      of picture in <i>every</i> slot before a word was typed — at the quarter, the difference
+      between 45% of the frame left clear and 31% — a second counter for staff, and a
+      device rule that put <i>more</i> text in the narrower of the two frames (see the note below).
+      <span class="tag good">signed</span></li>
+
+      <li><b>The button label is an editable field</b>, defaulting to <code>See details</code>.
+      The approved card hardcodes it, which made the live count on that design two editable
+      fields rather than three. A promo can now say <i>Order ahead</i>, <i>Directions</i> or
+      <i>See what's baking</i>.
+      <span class="tag good">signed</span></li>
+    </ol>
+
+    <h3>Still open</h3>
+    <ol>
+      <li><b>Re-run this page against real photography</b> once any exists. The stand-ins prove
+      the geometry; they cannot tell you whether a real subject reads at 290px, or whether the
+      centre band of a real frame is quiet enough to carry white text.</li>
+    </ol>
+  </div>
+
+  <div class="finding">
+    <h4><span class="id">F5</span>At 28 characters every card sits at its 89px floor, in every slot on every device</h4>
+    <div class="math">three fields, 28-character headline                     =  89 px — one line each, every slot
+
+worst case anywhere: 28 wide capitals, in the quarter   = 109 px / 163 px — fits, 54 px spare
+the same 28 wide capitals, every other slot             =  89 px — the headline still holds one line
+an unbreakable 28-character word, including the quarter =  89 px
+
+for the record, the superseded four-field set:
+four fields, 28-character headline + 30-character body  = 113 px — one line each, every slot
+worst case at the quarter: 28 wide capitals + 30        = 152 px / 163 px — fits, 11 px spare</div>
+    <p>This is the real consequence of signing the cap low, and it is worth more than the
+    characters given up: <b>nothing wraps on copy anyone would actually write</b>, and the one
+    stress case that does add a line still clears the slot by 54px. The card is geometrically
+    identical at every width on the ladder, so a promo re-divided from full width to a quarter
+    overnight changes size but never shape, and no slot has a spill condition left to design
+    for.</p>
+
+    <div class="tbl-scroll">
+      <table class="audit">
+        <thead><tr><th>Slot</th><th class="num">Size</th><th class="num">Text block, as signed</th><th class="num">Picture left clear</th><th class="num">Was, at four fields</th></tr></thead>
+        <tbody>
+          <tr><td>Full width</td><td class="num">1200 × 240</td><td class="num">89 px · 37%</td><td class="num">63%</td><td class="num">113 px · 47%</td></tr>
+          <tr><td>Wide half</td><td class="num">795 × 265</td><td class="num">89 px · 34%</td><td class="num">66%</td><td class="num">113 px · 43%</td></tr>
+          <tr><td>Half</td><td class="num">593 × 198</td><td class="num">89 px · 45%</td><td class="num">55%</td><td class="num">113 px · 57%</td></tr>
+          <tr><td>Third</td><td class="num">391 × 196</td><td class="num">89 px · 45%</td><td class="num">55%</td><td class="num">113 px · 58%</td></tr>
+          <tr><td><b>Quarter</b></td><td class="num"><b>290 × 163</b></td><td class="num"><b>89 px · 55%</b></td><td class="num"><b>45%</b></td><td class="num">113 px · 69% → 31% clear</td></tr>
+          <tr><td>Phone, any row</td><td class="num">351 × 197</td><td class="num">89 px · 45%</td><td class="num">55%</td><td class="num">89 px · 45% — unchanged</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fine">Method: six headlines written to exactly 28 characters, measured at every
+    slot width, worst of the six reported — then repeated with 28 characters of wide capitals,
+    with a single unbreakable 28-character word, and one character over the cap. The bolded row
+    is the slot that governs, because any promo can be re-divided into it. The last column is
+    what the withdrawn four-field set measured, kept so the change is legible rather than
+    silent.</p>
+  </div>
+
+  <h3 class="sub">The card as signed</h3>
+  <p>The same three fields in all three, because that is the decision: eyebrow, headline, button,
+  at every width and on every device. The headline is at the cap — 28 characters — so this is the
+  tallest an ordinary overlay gets, not a flattering example.</p>
+
+  <div class="stage">
+    <div class="board lit">
+      <div class="slot on" style="--w:1200px; --ar:5/1; --band:40%">
+        <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+      </div>
+      <p class="cap"><b>Full width, three fields</b>1200 × 240 · 5:1</p>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="board lit">
+      <div class="row" style="width:auto">
+        <div class="col">
+          <div class="slot on" style="--w:290px; --ar:16/9; --band:55.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap"><b>Quarter, three fields</b>290 × 163 · 16:9 · the narrowest desktop slot</p>
+        </div>
+        <div class="col">
+          <div class="slot on" style="--w:351px; --ar:16/9; --band:35.6%">
+            <img src="img/crop-counter.jpg" alt=""><span class="tx"><span class="ey">Fresh daily</span><span class="hd">Piroshky Piroshky bakes here</span><span class="bt">See what's baking</span></span><span class="qz"><b></b></span>
+          </div>
+          <p class="cap"><b>Phone, three fields</b>351 × 197 · 16:9 · the same card, nothing dropped</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <h4>Why the device rule went, and what it was</h4>
+      <p>The first signature said four fields on desktop and three on a phone. Fit was never the
+      objection — F5 measures four fields at 113px inside a 163px quarter. What settled it was
+      the arithmetic around the field: the body ran to 30 characters, about five words, and cost
+      a flat <b>24px of photograph in every slot</b> before a word was typed. At the quarter that
+      is the difference between leaving 45% of the frame clear and leaving 31%. It also needed a
+      second counter in the CMS, and the rule was keyed to <i>device</i> rather than slot width —
+      the phone slot is <b>351px wide and the desktop quarter is 290px</b>, so it put the extra
+      line of text in the narrower of the two frames and withheld it from the wider one. Three
+      everywhere removes the field, the second counter, the media query and that inversion in one
+      move. Putting it back is a one-line change in the component plus a counter; it is the cheap
+      part of this decision, and the ratios and the master are not.</p>
+    </div>
+    <div class="note">
+      <h4>The cap is a style rule, not a safety rule</h4>
+      <p>28 characters is under a quarter of the measured ceiling, and F5 shows nothing can
+      overflow any slot even in the worst case anyone can type. So the counter in the CMS is not
+      protecting the layout — it is keeping the copy punchy. That is a real change in what it is
+      for: if an editor ever asks for more room, the answer is an editorial one, and the geometry
+      will carry several times what has been signed.</p>
+    </div>
+    <div class="note">
+      <h4>What is locked and was never up for discussion here</h4>
+      <p>The 12-column ladder and the 150px minimum slot height (ADR 0007), rows re-dividing on
+      expiry (ADR 0018), no copy baked into artwork, no tribal motifs in the promo region, and
+      the filename rule — never <code>ad</code>, <code>advert</code>, <code>banner</code> or
+      <code>sponsored</code>, which ad blockers match on.</p>
+    </div>
+    <div class="note warn">
+      <h4>What changing the ratios would now cost</h4>
+      <p>They were cheap to change before sign-off and are expensive after a shoot: every
+      delivered frame gets re-cropped by hand, and re-cropping is where centred subjects drift
+      and heads get clipped. The safe band in particular is set by the widest ratio — moving it
+      invalidates the brief every photograph was shot to.</p>
+    </div>
+  </div>
+
+  <footer class="pf">
+    docs/proofs/promo-crop-ladder.html · evidence for spec sheet §07 · sources generated by
+    scripts/make-crop-proof-sources.py · stand-in photography, not proposed artwork
+  </footer>
+</div>
+
+<script>
+// Overlays and master switching. Kept to three listeners: the slots are all the
+// same component, so the state lives on <body> and the CSS does the rest.
+(function () {
+  var body = document.body;
+  function bind(id, cls) {
+    var el = document.getElementById(id);
+    var apply = function () { body.classList.toggle(cls, el.checked); };
+    el.addEventListener('change', apply);
+    apply();
+  }
+  bind('t-band', 'showband');
+  bind('t-text', 'showtext');
+  bind('t-qz', 'showqz');
+
+  // Section 01 swaps master; sections 03, 05 and 06 are fixed comparisons, so only
+  // images marked data-src follow the radio.
+  var swappable = document.querySelectorAll('img[data-src]');
+  function setSrc(v) { swappable.forEach(function (im) { im.src = v; }); }
+  document.querySelectorAll('input[name="src"]').forEach(function (r) {
+    r.addEventListener('change', function () { if (r.checked) setSrc(r.value); });
+  });
+  setSrc(document.querySelector('input[name="src"]:checked').value);
+
+  // The text budget is measured, not asserted. Each overlay is asked how tall
+  // its four fields actually are at this slot width, and the ones that do not
+  // fit are stamped. Re-run on resize because the headline rewraps.
+  var overlays = [].slice.call(document.querySelectorAll('.slot .tx'));
+  overlays.forEach(function (tx) {
+    var rd = document.createElement('span');
+    rd.className = 'rd';
+    tx.appendChild(rd);
+  });
+  function measure() {
+    overlays.forEach(function (tx) {
+      // An overlay behind the global toggle measures nothing; section 05's are
+      // always on. A field that is not laid out still reports its specified
+      // margin-top, so skip it outright rather than counting a phantom 6px.
+      if (getComputedStyle(tx).display === 'none') return;
+      var slot = tx.parentNode.getBoundingClientRect().height;
+      var cs = getComputedStyle(tx);
+      var need = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      [].slice.call(tx.children).forEach(function (k) {
+        if (k.className === 'rd') return;
+        var ks = getComputedStyle(k);
+        if (ks.display === 'none') return;
+        need += k.getBoundingClientRect().height + parseFloat(ks.marginTop);
+      });
+      need = Math.round(need);
+      var over = need - Math.round(slot);
+      tx.classList.toggle('spill', over > 0);
+      tx.parentNode.style.setProperty('--qz', need + 'px');
+      var qz = tx.parentNode.querySelector('.qz b');
+      if (qz) qz.textContent = Math.round(need / slot * 100) + '% of the slot';
+      tx.querySelector('.rd').textContent =
+        need + ' / ' + Math.round(slot) + (over > 0 ? '  +' + over : '');
+    });
+  }
+  document.getElementById('t-text').addEventListener('change', measure);
+  document.getElementById('t-qz').addEventListener('change', measure);
+  window.addEventListener('resize', measure);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(measure); }
+  measure();
+})();
+</script>

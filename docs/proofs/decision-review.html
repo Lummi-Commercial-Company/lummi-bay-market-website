@@ -1,0 +1,894 @@
+<title>Lummi Bay Decision Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --c-bg:#EDEEF1; --c-panel:#FFFFFF; --c-panel-2:#F6F7F9;
+  --c-ink:#1A1C22; --c-dim:#5A5F6B; --c-faint:#878D99;
+  --c-rule:#D5D8DF; --c-rule-soft:#E4E6EB;
+  --c-mark:#6B4FA8; --c-mark-soft:#EFEAF8; --c-mark-edge:#C9BCE6;
+  --c-ok:#1F6B4A; --c-ok-soft:#E2F0E9;
+  --c-warn:#8A5A12; --c-warn-soft:#F7EEDC;
+  --c-stop:#93321F; --c-stop-soft:#F6E5E1;
+  --sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  /* Locked brand tokens — identical in both themes, shown as reference only */
+  --lb-navy:#1C4E8F; --lb-navy-deep:#14396B; --lb-teal:#0FB5C4; --lb-cedar:#C9772E;
+  --lb-ground:#FBF9F4; --lb-paper:#FFFFFF; --lb-ink:#2A2820; --lb-bone:#F5F1E8;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --c-bg:#15171C; --c-panel:#1D2027; --c-panel-2:#22262E;
+    --c-ink:#E7E9ED; --c-dim:#A3AAB7; --c-faint:#7A8290;
+    --c-rule:#343A45; --c-rule-soft:#2A2F38;
+    --c-mark:#B49BE8; --c-mark-soft:#2A2440; --c-mark-edge:#4A3D6E;
+    --c-ok:#7FD3A9; --c-ok-soft:#182A22;
+    --c-warn:#E0B265; --c-warn-soft:#2E2617;
+    --c-stop:#E89C89; --c-stop-soft:#2E1C17;
+  }
+}
+:root[data-theme="dark"]{
+  --c-bg:#15171C; --c-panel:#1D2027; --c-panel-2:#22262E;
+  --c-ink:#E7E9ED; --c-dim:#A3AAB7; --c-faint:#7A8290;
+  --c-rule:#343A45; --c-rule-soft:#2A2F38;
+  --c-mark:#B49BE8; --c-mark-soft:#2A2440; --c-mark-edge:#4A3D6E;
+  --c-ok:#7FD3A9; --c-ok-soft:#182A22;
+  --c-warn:#E0B265; --c-warn-soft:#2E2617;
+  --c-stop:#E89C89; --c-stop-soft:#2E1C17;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--c-bg); color:var(--c-ink);
+  font-family:var(--sans); font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1040px; margin:0 auto; padding-inline:16px; padding-block:0 64px}
+a{color:var(--c-mark)}
+:focus-visible{outline:2px solid var(--c-mark); outline-offset:2px; border-radius:3px}
+
+/* ---- masthead ---- */
+.mast{padding-block:40px 28px; border-bottom:1px solid var(--c-rule)}
+.kicker{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--c-mark); margin:0 0 12px
+}
+h1{
+  font-size:clamp(28px,5.2vw,44px); line-height:1.08; margin:0 0 14px;
+  letter-spacing:-.02em; text-wrap:balance; font-weight:600
+}
+.standfirst{font-size:17px; color:var(--c-dim); max-width:62ch; margin:0 0 4px}
+.standfirst strong{color:var(--c-ink); font-weight:600}
+
+/* ---- figures strip ---- */
+.figs{display:flex; flex-wrap:wrap; gap:0; margin-block:26px 0; border-top:1px solid var(--c-rule-soft)}
+.fig{flex:1 1 150px; padding:14px 18px 14px 0; border-right:1px solid var(--c-rule-soft)}
+.fig:last-child{border-right:0}
+.fig b{display:block; font-family:var(--mono); font-size:24px; font-weight:500; letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+.fig span{display:block; font-size:12px; color:var(--c-faint); margin-top:2px}
+
+/* ---- how to read ---- */
+.howto{
+  margin-block:28px; padding:16px 18px; background:var(--c-mark-soft);
+  border:1px solid var(--c-mark-edge); border-radius:4px; font-size:14px; color:var(--c-ink)
+}
+.howto p{margin:0 0 8px} .howto p:last-child{margin:0}
+.howto strong{font-weight:600}
+
+/* ---- block ---- */
+.block{margin-block:44px 0; scroll-margin-top:16px}
+.block-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; padding-bottom:10px; border-bottom:2px solid var(--c-ink)}
+.block-id{
+  font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.08em;
+  background:var(--c-ink); color:var(--c-bg); padding:3px 8px; border-radius:3px
+}
+.block-head h2{font-size:21px; margin:0; font-weight:600; letter-spacing:-.01em}
+.block-head .count{margin-left:auto; font-family:var(--mono); font-size:12px; color:var(--c-faint)}
+.block-note{font-size:14px; color:var(--c-dim); margin:12px 0 0; max-width:66ch}
+
+/* ---- decision rows ---- */
+.dec{padding-block:18px; border-bottom:1px solid var(--c-rule-soft)}
+.dec-top{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap}
+.adr{
+  font-family:var(--mono); font-size:12px; font-weight:500; color:var(--c-mark);
+  background:var(--c-panel); border:1px solid var(--c-mark-edge); border-radius:3px;
+  padding:2px 6px; white-space:nowrap
+}
+.dec h3{font-size:16px; margin:0; font-weight:600; flex:1 1 300px; line-height:1.35}
+.tag{
+  font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  padding:3px 7px; border-radius:99px; white-space:nowrap; font-weight:500
+}
+.t-ok{background:var(--c-ok-soft); color:var(--c-ok)}
+.t-amend{background:var(--c-warn-soft); color:var(--c-warn)}
+.t-stop{background:var(--c-stop-soft); color:var(--c-stop)}
+.dec-body{display:grid; grid-template-columns:1fr 1fr; gap:4px 28px; margin-top:12px}
+.dec-body div{font-size:14px; color:var(--c-dim); max-width:56ch}
+.dec-body b{
+  display:block; font-family:var(--mono); font-size:10px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--c-faint); margin-bottom:3px; font-weight:500
+}
+.dec-body em{font-style:normal; color:var(--c-ink); font-weight:600}
+@media (max-width:640px){ .dec-body{grid-template-columns:1fr; gap:14px} }
+
+/* ---- callout ---- */
+.callout{
+  margin-block:28px; padding:18px; background:var(--c-panel); border-radius:4px;
+  border:1px solid var(--c-rule); border-left:3px solid var(--c-stop)
+}
+.callout h3{margin:0 0 8px; font-size:15px; font-weight:600}
+.callout p{margin:0 0 10px; font-size:14px; color:var(--c-dim); max-width:66ch}
+.callout ol{margin:0; padding-left:20px; font-size:14px; color:var(--c-dim)}
+.callout li{margin-bottom:5px}
+.callout li:last-child{margin-bottom:0}
+.callout code{font-family:var(--mono); font-size:12.5px; background:var(--c-panel-2); padding:1px 4px; border-radius:3px; color:var(--c-ink)}
+
+/* ---- tables ---- */
+.tablewrap{overflow-x:auto; margin-block:16px; border:1px solid var(--c-rule); border-radius:4px; background:var(--c-panel)}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:13.5px}
+th,td{text-align:left; padding:10px 14px; border-bottom:1px solid var(--c-rule-soft); vertical-align:top}
+thead th{
+  font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--c-faint); font-weight:500; background:var(--c-panel-2); border-bottom:1px solid var(--c-rule)
+}
+tbody tr:last-child td{border-bottom:0}
+td code, th code{font-family:var(--mono); font-size:12px}
+.id{font-family:var(--mono); font-weight:600; color:var(--c-mark); white-space:nowrap}
+.num{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap}
+
+/* ---- plan ---- */
+.plan{display:grid; gap:0; margin-block:18px; border:1px solid var(--c-rule); border-radius:4px; overflow:hidden; background:var(--c-panel)}
+.day{display:grid; grid-template-columns:104px 1fr; gap:18px; padding:14px 16px; border-bottom:1px solid var(--c-rule-soft)}
+.day:last-child{border-bottom:0}
+.day .when{font-family:var(--mono); font-size:12px; color:var(--c-mark); font-weight:500; padding-top:2px}
+.day .what{font-size:14px; color:var(--c-dim)}
+.day .what strong{display:block; color:var(--c-ink); font-weight:600; font-size:14.5px; margin-bottom:2px}
+.day.gate{background:var(--c-mark-soft)}
+.day.done{background:var(--c-ok-soft)}
+.day.done .when{color:var(--c-ok)}
+.day.part .when{color:var(--c-warn)}
+.status{
+  display:inline-block; font:500 10px/1.4 var(--mono); letter-spacing:.08em; text-transform:uppercase;
+  padding:2px 7px; border-radius:99px; margin-left:8px; vertical-align:1px; border:1px solid currentColor
+}
+.s-done{background:var(--c-ok-soft); color:var(--c-ok)}
+.s-part{background:var(--c-warn-soft); color:var(--c-warn)}
+.s-todo{background:var(--c-panel-2); color:var(--c-faint)}
+.built{
+  margin-block:28px; padding:18px; background:var(--c-panel); border:1px solid var(--c-rule);
+  border-left:3px solid var(--c-ok); border-radius:4px
+}
+.built h3{margin:0 0 4px; font-size:15px; font-weight:600}
+.built p{margin:10px 0 0; font-size:14px; color:var(--c-dim); max-width:66ch}
+.built p:first-of-type{margin-top:8px}
+.built code{font-family:var(--mono); font-size:12.5px; background:var(--c-panel-2); padding:1px 4px; border-radius:3px; color:var(--c-ink)}
+.built strong{color:var(--c-ink); font-weight:600}
+.ledger{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:1px; margin-top:14px;
+  background:var(--c-rule-soft); border:1px solid var(--c-rule-soft); border-radius:4px; overflow:hidden}
+.ledger div{background:var(--c-panel-2); padding:10px 12px; font-size:13px; color:var(--c-dim)}
+.ledger b{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--c-faint); margin-bottom:3px; font-weight:500}
+.ledger em{font-style:normal; color:var(--c-ink); font-weight:600}
+@media (max-width:560px){ .day{grid-template-columns:1fr; gap:4px} }
+
+h2.section{font-size:21px; margin:52px 0 6px; font-weight:600; letter-spacing:-.01em; padding-bottom:10px; border-bottom:2px solid var(--c-ink)}
+.lede{font-size:15px; color:var(--c-dim); max-width:66ch; margin:14px 0 0}
+.stamp{display:inline-block; margin:12px 0 0; padding:4px 10px; border-radius:999px;
+  background:var(--c-ok-soft); color:var(--c-ok); border:1px solid currentColor;
+  font:500 11px/1.4 var(--mono); letter-spacing:.04em; text-transform:uppercase}
+td.ok-cell{background:var(--c-ok-soft)}
+.lede strong{color:var(--c-ink); font-weight:600}
+.colophon{margin-top:56px; padding-top:18px; border-top:1px solid var(--c-rule); font-size:13px; color:var(--c-faint); max-width:66ch}
+.colophon code{font-family:var(--mono); font-size:12px}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="kicker">Lummi Bay Market · build review · revised 29 September 2026</p>
+  <h1>Every decision, and what each one costs</h1>
+  <p class="standfirst">Twenty-eight decisions have been made, recorded and measured. Since this page was
+  last reviewed, <strong>the build has happened</strong> — written against this record rather than ahead of
+  it, which is what the record was for. Nothing below was re-opened to make the code work. What follows is
+  the same twenty-eight decisions, now annotated with what building them actually cost.</p>
+  <div class="figs">
+    <div class="fig"><b>28</b><span>decisions on record</span></div>
+    <div class="fig"><b>1</b><span>rejected after being built</span></div>
+    <div class="fig"><b>$20</b><span>per month, all of it Vercel</span></div>
+    <div class="fig"><b>5,580</b><span>lines of site code</span></div>
+    <div class="fig"><b>18/18</b><span>pages building green</span></div>
+  </div>
+</header>
+
+<div class="howto">
+  <p><strong>How to use this page.</strong> The decisions are grouped into six blocks, A&nbsp;to&nbsp;F.
+  Each block can be approved, questioned or sent back on its own — you do not have to take or leave all
+  twenty-eight. Two entries are marked <span class="adr">FROM THE BUILD</span> rather than with a decision
+  number: those were not decided in advance, they were forced by writing the code, and they are shown here
+  because each one constrains what can be changed later.</p>
+  <p>Every entry says three things: <strong>what was decided</strong>, <strong>why</strong>, and
+  <strong>what it costs</strong> — the constraint you are accepting along with the decision. Where a
+  number appears it was measured in a browser, not estimated. The full reasoning for any entry is in
+  <code>docs/adr/</code> under the number shown.</p>
+</div>
+
+<!-- ============ SINCE LAST REVIEW ============ -->
+<h2 class="section">What changed since 17 September</h2>
+<p class="lede">The large change is that <strong>the site was built.</strong> Every
+decision below was already settled when the first line was written, so this section is not a list of new
+decisions — it is the report on what happened when twenty-eight of them met a compiler. Three of them cost
+more than the record said they would, and those are annotated in place. None of them had to be reversed.
+Since the build, reading the record back against the finished code has turned up three points where the
+two disagreed; that is the third box below.</p>
+
+<div class="built">
+  <h3>What exists now</h3>
+  <p>Eleven pages, the layout shell they all sit in, the fuel price block, the data layer, and the CMS
+  schema staff will edit through. Three separate checks pass on every commit: the type checker, the Next.js
+  production build, and TinaCMS's own schema validation — which is the one that reads every content file
+  back against the shape the CMS expects, and the only one that would catch a field an editor could break.</p>
+  <div class="ledger">
+    <div><b>Pages live in the build</b><em>11</em> — Home, Locations index, three Location pages, Truck
+    Stop, Rewards, Fuel Prices, About, Contact, Privacy</div>
+    <div><b>Application code</b><em>5,580 lines</em> across 52 files, plus a <em>1,033-line</em> CMS schema</div>
+    <div><b>Build result</b><em>18 of 18</em> pages generated, no errors, no warnings suppressed</div>
+    <div><b>Decisions reversed to make it work</b><em>None</em> — the record held</div>
+  </div>
+  <p><strong>What is not built.</strong> Promotions, info pages and the tenants page exist in the CMS
+  schema but nothing renders them yet — that is the Day&nbsp;9 row in the plan below, and it is the honest
+  gap in this report. The scheduled things that <em>are</em> built are the three that change what a visitor
+  sees without anyone pressing publish: the emergency notice, the holiday hours override, and the footer
+  social row.</p>
+</div>
+
+<div class="built" style="border-left-color:var(--c-warn)">
+  <h3>Two things the build caught that no amount of reviewing would have</h3>
+  <p><strong>The privacy policy was one save away from being deleted.</strong> TinaCMS needs a field
+  explicitly marked as a document's body text. The page collections were first written without one — which
+  does not fail, it discards: the CMS would have opened <code>/privacy</code> showing everything except the
+  roughly four thousand words of policy, and the next save would have written the file back without them.
+  It was found before an editor ever opened the page. It is worth knowing the failure had no error message.</p>
+  <p><strong>The amenity badges were never going to render.</strong> The code that reads content files
+  mis-parsed indented lists, so every Location's amenity list came back as one empty entry. Both were fixed;
+  the second was confirmed by running the old parser against the files as they were committed, which
+  returned an empty list for all three Locations. Neither had reached a deployed site, because there is not
+  one yet — which is the argument for the order of work, not against it.</p>
+</div>
+
+<div class="built" style="border-left-color:var(--c-mark)">
+  <h3>Three places where the written record and the built site disagreed — 29 September</h3>
+  <p>Each was found by checking one against the other rather than by anything failing. They are worth a
+  paragraph because of how they split: <strong>two were errors in the description, not in the build.</strong></p>
+  <p><strong>A route that was described but never built.</strong> The record gave the full price page two
+  ways in: a footer link and the "All prices" link inside the price block. Only the second was ever built.
+  Asked whether to build the first, you dropped it — the prices are already on the page the guest is
+  reading, and the panel link sits directly underneath them. <em>The record changed; the code did not.</em>
+  The page keeps its place in the sitemap, so search still finds it.</p>
+  <p><strong>One page had no prices on it.</strong> The rule is that prices appear on every page, and every
+  page did — except Rewards. The block is added page by page rather than inherited from the layout, and
+  that page had never been given one. Harmless while a footer link was still planned; not harmless the
+  moment it was dropped, because Rewards then had no route to the full price page at all. <em>The code
+  changed; the rule did not.</em> Eighteen of eighteen pages still build, and Rewards now fetches prices
+  per visitor like the rest.</p>
+  <p><strong>A rule written down more strictly than it was decided.</strong> The project brief said the
+  price rail must never be pinned. The site pins it on desktop. The decision record is the one that is
+  right: not pinned <em>while the panel is attached to the card</em>, which is the phone case, and pinned
+  on desktop, where the panel is positioned against the screen instead — the defect the rule exists to
+  prevent cannot happen there. The brief had turned a condition into an absolute, which made correct work
+  look like a breach. The condition is back, and with it the warning it carries: <em>if the panel is ever
+  re-attached to the card, the rail has to stop being pinned.</em></p>
+</div>
+
+<!-- ============ BLOCK A ============ -->
+<section class="block" id="block-a">
+  <div class="block-head"><span class="block-id">BLOCK A</span><h2>Stack, hosting and running cost</h2><span class="count">3 decisions + 1 from the build</span></div>
+  <p class="block-note">The three decisions that are genuinely hard to undo later. Everything in blocks B
+  to F sits on top of these.</p>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0002</span><h3>TinaCMS is the content system</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Staff log in <em>by email</em> — no GitHub account. Edits save as files in the repo,
+      so the live site keeps serving even if the editing service is down, and Claude can make the same
+      edits through chat. The alternative, Decap, lost its non-GitHub login path when Netlify deprecated
+      Git Gateway in 2026.</div>
+      <div><b>What it costs</b> The free tier is <em>2 editor logins</em>. A third person is $24/mo, five
+      is $41/mo — and neither includes an approval step. Assets are capped at 100&nbsp;MB, which a real
+      set of store photography exceeds. Reversing this is a CMS migration.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0003</span><h3>Next.js and React, not Astro</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> You asked for click-to-edit: open the page, click the words, change them, watch the
+      preview. TinaCMS delivers that through a React hook. On Astro staff would get a form-based admin
+      panel instead — good, but not click-to-edit. The framework was chosen by the editing experience,
+      not by preference.</div>
+      <div><b>What it costs</b> Every component carrying editable content is a client component. Reversing
+      this is a rebuild, not a migration.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0013</span><h3>Free tiers everywhere except Vercel</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Vercel's own fair-use terms restrict the free Hobby plan to <em>non-commercial,
+      personal use</em>. This is a commercial retail business, so <em>Vercel Pro at $20/mo is required by
+      the terms of service</em> rather than chosen for a feature. Running a commercial site on Hobby risks
+      the project being paused — on a site whose job is posting fuel prices, that is not a $20 saving.</div>
+      <div><b>What it costs</b> $20/mo, and no approval gate before a staff edit goes live. That trade is
+      acceptable <em>only because</em> every change is a commit with an author and a one-click revert.
+      Side benefit: per-minute promo scheduling was going to cost extra on Hobby and is now included.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">FROM THE BUILD</span><h3>Pages are prerendered; only the live parts are fetched per visitor</h3><span class="tag t-amend">Settled 18 Sep · constrains every later change</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> The site has to be two contradictory things: instant everywhere, and current to the
+      second in three specific places (the box below Block&nbsp;C lists them). The build resolves that by
+      doing both — each page is assembled once and served from a cache near the visitor, while those three
+      pieces are fetched fresh on every visit. It is what lets a pushed price be live immediately without
+      making every page slow to load.</div>
+      <div><b>What it costs</b> It is now a property of the code rather than an intention, which is the
+      point of listing it here: the shape is fixed, and the three live pieces are the only ones. Anything
+      added later that must also be current to the second is a change to this decision, not a free
+      addition — and <em>the site can never be flattened to static files</em>, which is the failure the
+      box below Block&nbsp;C describes.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLOCK B ============ -->
+<section class="block" id="block-b">
+  <div class="block-head"><span class="block-id">BLOCK B</span><h2>What the site is, and how people move through it</h2><span class="count">6 decisions</span></div>
+  <p class="block-note">"Exceptional navigation" was one of the three must-haves. These six are the answer,
+  and four of them were settled by measurement rather than by opinion.</p>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0001</span><h3>Only the three market pages come from lcc-lummi.com</h3><span class="tag t-amend">Accepted · amended 17 Sep</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> The brief said "merge three sites", but lcc-lummi.com is the parent enterprise —
+      casino, golf, billboards, the Salish Village development. Importing it would bury the retail brand
+      inside a holding company.</div>
+      <div><b>What it costs</b> The merge is deliberately partial. LCC appears <em>once</em>, as a single
+      footer link. If those businesses ever need surfacing, that is a separate site. <em>Amended 17 Sep:</em>
+      the Careers link tested this rule and you settled it — the rule is about <em>mentions</em>, not
+      destinations, so an outbound link labelled by the job it does is fine and the label must stay
+      "Careers", with no company name and no logo beside it.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0008</span><h3>Three nav items: Home · Locations · Truck Stop</h3><span class="tag t-amend">Accepted · amended 18 Sep</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Fuel Prices came out because the prices are already on every page, in front of the
+      guest, wherever they are. A nav item pointing at content the guest is currently looking at is
+      spent budget. Three items also fit a phone without a hamburger menu; four were tight.</div>
+      <div><b>What it costs</b> <code>/fuel-prices</code> still exists — it is the natural landing page for
+      "gas prices near me" — so it <em>must</em> stay linked from somewhere. <b>Amended 18 September:</b>
+      that is the price panel alone. A footer link was planned and dropped, because the prices are already
+      on the page the guest is reading and the panel link sits directly under them. The page stays in the
+      sitemap, so search still reaches it.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0006</span><h3>The header sticks; the price rail sticks only on desktop</h3><span class="tag t-amend">Accepted · amended</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Location pages are long. A pinned header is what stops a guest getting lost.
+      Pinning the price card under it was tried and <em>broke the panel</em>: after ~300px of scroll the
+      open panel was painted correctly but was not there for the finger — tapping a price closed it.
+      Reproduced 3 runs of 3.</div>
+      <div><b>What it costs</b> On a phone the price card scrolls away with the page. On desktop it
+      survives, because it condenses to a one-line bar whose panel is positioned against the screen
+      instead of the card.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0009</span><h3>Truck Stop leads the list, and a page never lists itself</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> The truck stop is the flagship's distinguishing feature and the reason a whole class
+      of guests is on the site. On the Exit 260 page, the Exit 260 card is dropped and the heading becomes
+      "Our other locations". The Exit 260 card <em>stays</em> on the truck stop page, because they are two
+      separate stores sharing one property.</div>
+      <div><b>What it costs</b> The list is derived from the location data, never hand-placed per page.
+      The grid must collapse the vacated column, or every Location page shows two cards and 288px of
+      dead space.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0010</span><h3>The phone footer runs two columns, at 44px per target</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> One column was 515px — a screen and a half of scrolling past six words. Two columns
+      makes it 324px. The obvious worry, that closer links get mistouched, was tested rather than argued:
+      22,568 simulated touches at a ±30px aim error produced <em>5.9% vertical errors and 0.0% horizontal
+      ones</em>. Not one crossed the gutter.</div>
+      <div><b>What it costs</b> Footer links are padded anchors, not text — so the hit area cannot be lost
+      by someone later restyling the text. The 14px row gap stays: a touch that does nothing beats a touch
+      that navigates somewhere the guest did not ask for.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0011</span><h3>Back-to-top appears only past 1.75 screens</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Measured across six built pages at four thresholds. At the obvious setting the
+      button flickers into life for the final <em>3%</em> of two pages — a control that arrives after the
+      guest has already landed. At 0.75 of a screen it is generous where the page is long and silent
+      everywhere else.</div>
+      <div><b>What it costs</b> Today only Home-on-a-phone gets one, and that is the rule working rather
+      than a feature missing. The footer reserves 74–78px for it instead of the button dodging.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLOCK C ============ -->
+<section class="block" id="block-c">
+  <div class="block-head"><span class="block-id">BLOCK C</span><h2>How pages and promotions get made</h2><span class="count">6 decisions</span></div>
+  <p class="block-note">This is the block that answers must-have #1 — easy updates by non-technical staff.
+  The short version: staff add pages and promotions without an engineer, and cannot break the site's
+  furniture while doing it.</p>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0015</span><h3>A page is a document, not a hand-built route</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Every page type was originally hard-wired, which means every new page is an
+      engineering ticket. Pages are now documents in four collections — general pages, the swappable main
+      page, product info pages, and promotions. Adding a page is a content action.</div>
+      <div><b>What it costs</b> The header, footer, waterline, price block and back-to-top belong to the
+      layout and are <em>not addressable from a page</em>. A staff-made page cannot lose the furniture or
+      move it — which is the point, but it also means genuinely new page <em>types</em> still need an
+      engineer.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0018</span><h3>Promotions are scheduled documents; pages compose them</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> A promotion carries its own start and end date and a placement, so it appears and
+      disappears on its own with no scheduler to maintain and no one to remember. Any number of them, on
+      any page, in rows of one to four across; a row re-divides evenly when one expires.</div>
+      <div><b>What it costs</b> Rows are capped at six per page. The whole-main-page swap is demoted to a
+      redesign escape hatch and is never scheduled. This only works because pages are rendered per
+      request — see the box below.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0016</span><h3>Tenants get cards and pages; a tenant is never a Location</h3><span class="tag t-amend">Accepted · you said yes, 17 Sep</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Piroshky Piroshky, Wendy's, Black Bear Diner and Hi-Tide Coffee are independent
+      businesses on the property. Filing one as a Location would put it in the Locations index, in the
+      footer, and <em>as a row in the fuel price table</em> — a Wendy's with a dash under Regular. The
+      index is called "Also at Exit 260", never "Salish Village".</div>
+      <div><b>What it costs</b> The template renders the disclosure — "Independently owned and operated.
+      Not part of Lummi Bay Market." — so it cannot be forgotten. <em>No third-party logo renders without
+      written permission</em>, enforced by a checkbox in the schema. The Cove Kitchen stays an amenity,
+      because Lummi Bay Market runs it.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0007</span><h3>The promo region sits below the page title</h3><span class="tag t-amend">Accepted · reversed on measurement</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> This ADR originally said "above the title" and the numbers reversed it. On an 812px
+      phone, a promo above the title pushes the page title to <em>388px — 48% down the screen</em>. A guest
+      who tapped "Exit 260" would be half a screen in before the page said Exit 260. Below the title it
+      sits at 190px and is still the first large graphic.</div>
+      <div><b>What it costs</b> Each promo picks a width from a fixed ladder — full, two-thirds, half,
+      third, quarter — so any mix tiles exactly. Free-typed percentages were rejected: 45% + 45% leaves a
+      10% orphan.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0023</span><h3>One promo image, cropped five ways</h3><span class="tag t-amend">Accepted · amended same day</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Five slot shapes need five crops, or one clever master. A 2400 × 1350 file with the
+      subject held inside the centre 2400 × 480 strip is never cropped sideways — every slot takes a
+      full-width cut and trims only top and bottom. One upload serves all five desktop slots and the
+      phone.</div>
+      <div><b>What it costs</b> Whoever supplies promo art has to compose to that strip. Three text
+      fields, everywhere — eyebrow, headline, button — and the headline is capped at <em>28
+      characters</em>, counted for the editor as they type.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0022</span><h3>One share card, 1200 × 630, with per-page overrides</h3><span class="tag t-ok">Accepted · default already built</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Every link pasted into Facebook, a text message or Slack unfurls into a card, and
+      with nothing specified that card is whatever the platform scrapes. Three different crops are in the
+      wild — WhatsApp cuts <em>285px off each side</em> — so the logo and any words live inside a
+      570 × 510 safe box.</div>
+      <div><b>What it costs</b> The file is opaque navy JPG under 200&nbsp;KB, never a transparent PNG:
+      several chat clients composite transparency onto black, which would put a navy wordmark on a black
+      field. Per-Location cards are optional; the sitewide default already covers every link.</div>
+    </div>
+  </div>
+</section>
+
+<div class="callout">
+  <h3>One technical constraint runs under three of these decisions</h3>
+  <p>The site must never be built as a fully static export. Three separate features depend on pages being
+  assembled at the moment a visitor asks for them:</p>
+  <ol>
+    <li><strong>The emergency notice</strong> — published globally in under a second (ADR 0017).</li>
+    <li><strong>Fuel prices</strong> — live the instant they are saved, with no rebuild (ADR 0024).</li>
+    <li><strong>Holiday hours</strong> — evaluated against today's date, in Pacific time (ADR 0027).</li>
+  </ol>
+  <p style="margin-top:10px">This is worth a sentence in a business review because of <em>how</em> it
+  fails: a static export would not throw an error. The three features would simply never fire, and nobody
+  would find out until the morning one of them mattered. It is a launch check, not a footnote.</p>
+  <p style="margin:10px 0 0"><strong>Built as described, 18&nbsp;September.</strong> All three now work
+  this way in code, and the constraint is written into the build in three separate places so that whoever
+  meets it next meets it three times. It stays on the launch checklist regardless: the failure is silent,
+  so the only way to know it has not happened is to look.</p>
+</div>
+
+<!-- ============ BLOCK D ============ -->
+<section class="block" id="block-d">
+  <div class="block-head"><span class="block-id">BLOCK D</span><h2>The fuel price system</h2><span class="count">3 decisions</span></div>
+  <p class="block-note">Must-have #2. Eight prices — regular and diesel at each of the three Locations,
+  diesel and DEF at the Truck Stop.</p>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0004</span><h3>All eight prices in one form, and "all locations" is a button</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> The proposal of a shared price plus per-location overrides was rejected, and the
+      reason is a failure mode rather than a preference: check the box and all three show the shared
+      value; uncheck it and they silently fall back to per-location numbers that may be weeks stale.
+      Nobody edits the number that changes. On a posted fuel price that is a wrong number in front of a
+      customer.</div>
+      <div><b>What it costs</b> One price per place per grade is stored, always. The checkbox types into
+      all three at once — it controls the keyboard, never what the site reads. The <em>Truck Stop is
+      always priced separately</em>: truck-lane diesel is not car-lane diesel. Prices are not
+      click-editable on their own page, because a CMS form covers one document.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0005</span><h3>One price table, one component, three states</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> One table with a column per grade, so a guest can see at a glance that one Location
+      is three cents cheaper — invisible in a run of inline text. A place that does not sell a grade gets
+      a dash, which is information rather than a gap. It rests as a card, condenses to a one-line bar as
+      the page scrolls, and opens a panel for all prices.</div>
+      <div><b>What it costs</b> This is the largest single component on the site and the one with the most
+      decisions behind it. The card is capped at 400px at both widths, and it overlays page content when
+      it opens rather than pushing it down.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0024</span><h3>A posted price is live the moment it is saved</h3><span class="tag t-ok">Accepted · your call, 16 Sep</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> You said it plainly: once a price is pushed it must go live immediately. So the page
+      is prebuilt and fast, and only the price block is assembled per visit, reading the content service
+      directly. There is no rebuild to wait for and no cache to clear, because no price was ever baked
+      into the page.</div>
+      <div><b>What it costs</b> If that service is slow or unreachable, the block shows the last known
+      price and its timestamp rather than an error or a blank — a gap where a number belongs reads as a
+      broken site. The <em>"updated" stamp ships and is not optional</em>: with publishing instant, it is
+      now the only thing on the page telling a guest how fresh the number is. The remaining lag is human:
+      if the pump changes at 6am and nobody opens the CMS until 9am, the site is wrong for three hours,
+      and no architecture reaches that.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLOCK E ============ -->
+<section class="block" id="block-e">
+  <div class="block-head"><span class="block-id">BLOCK E</span><h2>Brand, artwork and legibility</h2><span class="count">4 decisions</span></div>
+  <p class="block-note">The logo itself is locked and none of these touch it. One decision in this block
+  is a rejection — something was built, shown, and turned down.</p>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0012</span><h3>The illustrated art layer was built and rejected</h3><span class="tag t-stop">Rejected · 25 Aug</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Wave waterlines, a shoreline band, per-Location motifs and a paddle mark were built,
+      reviewed and turned down. They have been removed. What survives is the placement rule, which was
+      never the problem, and two defects worth not rediscovering.</div>
+      <div><b>What it costs</b> The site has no illustration or photography today; the waterline is a plain
+      colour bar. <em>That is also the one thing making a fast launch possible</em> — the current design
+      does not depend on any artwork that has yet to be commissioned or culturally approved.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0014</span><h3>Cedar and teal are graphic colours, not text colours</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Contrast had never been measured on this project — tap targets were measured to the
+      pixel and colour not at all. Measured, three places already failed. Cedar carries text only at 24px
+      or above; teal never carries text on a light ground.</div>
+      <div><b>What it costs</b> The "Get the App" pill changes from cedar fill to bone fill with navy text.
+      Cedar at 2.43:1 on the navy header and navy at 2.20:1 on cedar are both under the 3:1 a control's own
+      edge requires — which is why <em>every pill carries a fine bone ring</em>. That ring is an
+      accessibility requirement, not a style, and the two pills that had drifted apart have been corrected
+      to match. Cedar also never takes opacity: at 75% it measures 2.34 and fails even as large text.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0020</span><h3>The sasquatch backdrop, with a switch that turns him off</h3><span class="tag t-ok">Accepted · 27 Aug</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> A subtle figure held behind the page as it scrolls. It is built as <em>content, not
+      code</em>: image, on/off, opacity, side and height are all CMS fields, so swapping the art or
+      switching it off takes one checkbox and is live in under a second — no engineer, no deploy.</div>
+      <div><b>What it costs</b> The measured ceiling is <em>10% opacity</em>, because the supplied artwork
+      is a rendered figure whose fur is darker than any brand colour, and the dim grey label is the text it
+      threatens first. Above 12% that label fails contrast. The field is not clamped — the owner sets it —
+      but the schema shows the line and warns past it. Any page needing a clean ground opts out.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0021</span><h3>Motifs may sit in the header, under four rules</h3><span class="tag t-ok">Accepted · 15 Sep</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> This replaced a flat prohibition. Art may sit in the header, right-aligned, one row,
+      no closer than <em>20px to the right edge of the navigation</em>, masked over a brand colour. Each
+      rule prevents a failure that has already happened in this build.</div>
+      <div><b>What it costs</b> Art behind the navigation is out — measured, it eats the contrast of the
+      bone nav text, and the active item starts with most of its headroom already spent. The band is
+      decorative: hidden from screen readers, and hidden entirely for visitors using high-contrast
+      settings.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLOCK F ============ -->
+<section class="block" id="block-f">
+  <div class="block-head"><span class="block-id">BLOCK F</span><h2>Privacy, third parties, and things that change on a schedule</h2><span class="count">6 decisions + 1 from the build</span></div>
+  <p class="block-note">The first three are one position held consistently: the site sets no cookies, so
+  there is nothing to consent to. That is a promise printed in the footer, which makes it a standing
+  constraint on everything added later.</p>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0025</span><h3>No cookie banner, because there is nothing to consent to</h3><span class="tag t-amend">Accepted · amended by 0026</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Stronger than deciding a banner is not required: it makes the legal question moot
+      rather than answered. A banner on a site that sets no cookies is theatre every guest has to dismiss.
+      The footer says so in plain words — <em>"No cookies. Visits counted anonymously."</em> — which a
+      sceptic can verify in ten seconds.</div>
+      <div><b>What it costs</b> That sentence is a checkable claim the build has to keep true, so it
+      constrains every future embed. Analytics is Vercel's — cookieless, already included in the $20, one
+      line of code. Google Analytics was declined: it would not be illegal, but it costs exactly this
+      position, and it undercounts by 10–30% anyway. <em>The one thing that would reopen it is Google
+      Ads.</em></div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0026</span><h3>A /privacy page, required by the app rather than the website</h3><span class="tag t-ok">Accepted · text supplied 17 Sep</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Neither app store will publish the Rewards app without a public policy URL. The page
+      keeps the footer sentence <em>and</em> adds the link, because they are different kinds of statement:
+      one is a specific checkable fact about this website, the other a document that mostly describes the
+      app. The page opens with a short, labelled website section so the two never appear to contradict
+      each other.</div>
+      <div><b>What it costs</b> Once that URL is typed into a store listing it can <em>never</em> be
+      renamed or taken down. Your policy text is in the repo verbatim and carries three things for counsel
+      to look at — including a clause about raffle costs that appears to have come from a sweepstakes
+      document. It was left exactly as supplied: quietly rewording a policy changes what people already
+      agreed to.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0028</span><h3>Social links only — never an embedded feed</h3><span class="tag t-ok">Accepted · your call, 17 Sep</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> A plain link to Facebook sets nothing and loads nothing. A feed widget, a follow
+      button or an official share button loads third-party code and sets cookies <em>on arrival, before
+      anyone clicks</em> — which would make the sentence in the footer directly above it false.</div>
+      <div><b>What it costs</b> No feeds, no follow or like buttons, no follower counts, ever. The test is
+      plain enough to apply without a lawyer: does anything load from the platform before the visitor
+      clicks? The accounts are a CMS list, and <em>an empty list renders nothing</em> — no placeholder
+      icons, so nothing half-finished can survive to launch.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0019</span><h3>One map on /contact with three pins</h3><span class="tag t-amend">Accepted · amended by 0025</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> One map beats three. Built in Google My Maps and embedded — free, no API key, exact
+      control. Three pins, not four: the Truck Stop shares Exit 260's address, so a fourth would land on
+      top of the third and its pin note says it is there.</div>
+      <div><b>What it costs</b> Two hard conditions. <em>The map must be set to public or the embed renders
+      nothing for visitors</em>, silently. And it must be created in a <em>company</em> Google account from
+      the start — a map in a personal account leaves when that person does, and ownership transfer on
+      consumer Google products is not reliable. The page shows a static map with Directions links until a
+      guest clicks to load the interactive one.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0017</span><h3>An emergency notice, live in under a second</h3><span class="tag t-ok">Accepted</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Weather, a closure, a road. One switch turns on a bar that rides inside the pinned
+      header on every page, so it cannot be scrolled past. It publishes globally in under a second with no
+      rebuild. When it is off, nothing renders — no empty bar, no reserved space.</div>
+      <div><b>What it costs</b> <em>Somebody has to be able to publish it at 5am.</em> There are two editor
+      logins; if both belong to people who are asleep or whose laptop is at the office, the mechanism does
+      not work when it is needed. It is editable from a phone browser, and the person who would actually be
+      doing it should test that once, in the dark, before launch. Taking it down matters as much: a stale
+      storm notice on a sunny Tuesday costs more credibility than never posting one.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">ADR 0027</span><h3>A second hours line, on a date window</h3><span class="tag t-ok">Accepted · your call, 17 Sep</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Normal hours stay one line and are always there. Each Location can carry a temporary
+      second line with a start and end date — so New Year's Eve hours are typed in November and revert on
+      their own. It fixes the hours everywhere they appear at once: the cards, the index, the detail page
+      and /contact all read the same value.</div>
+      <div><b>What it costs</b> The end date is <em>required</em>. "Until further notice" has to be written
+      as a date, because an override with no end is a permanently wrong hours line waiting to happen — and
+      it fails silently, since the page still shows a perfectly plausible time. There is deliberately
+      <em>no on/off toggle</em>: a toggle is something someone must come back and switch off, which is the
+      exact failure this field exists to prevent. Dates are whole days in Pacific time, so an override
+      never flips the afternoon before.</div>
+    </div>
+  </div>
+
+  <div class="dec">
+    <div class="dec-top"><span class="adr">FROM THE BUILD</span><h3>Three locks on <code>/privacy</code>, because losing it costs the app</h3><span class="tag t-amend">Settled 18 Sep · raised by a near-miss</span></div>
+    <div class="dec-body">
+      <div><b>Why</b> Both app stores hold the Rewards listing against a working public policy URL, so
+      <code>/privacy</code> is the one page on this site whose <em>absence</em> is an outage somewhere else.
+      It is now protected three ways: the CMS cannot delete the page, its address is fixed by the filename
+      rather than a field anyone can edit, and it is forced into the sitemap and out of the
+      hide-from-search setting in code — so it cannot be hidden by a checkbox on a page nobody is watching.</div>
+      <div><b>What it costs</b> The page is deliberately harder to change than every other page, and the
+      text inside it is harder still: <em>policy wording is replaced wholesale by whoever wrote it, never
+      tidied in passing.</em> One clause in the current text is still counsel's to resolve, and the date at
+      the bottom of the page moves only when they hand over new words — it is not a field to keep current.
+      A policy page that has been improved by a well-meaning editor is worse than a stale one.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STILL OPEN ============ -->
+<h2 class="section">What is still open</h2>
+<p class="stamp">Answered by the client, 17 September 2026 — all twelve, plus three follow-ups the same day.</p>
+<p class="lede"><strong>Nothing on this list blocks the build any more.</strong> Six items are closed
+outright — two of them (A8, A9) on a second pass the same day, after the first answers raised a
+correction and a rule question. The rest were not closed but <em>moved</em>: artwork, promotions, copy, amenity lists and the
+map all shift into a content pass done after the build, in TinaCMS or a chat session, and the build runs
+on placeholders. That is a real decision with a real cost and it is named in the table rather than
+buried — deferring words and pictures does not make them smaller, it makes them invisible until the
+site is public.</p>
+<p class="lede"><strong>One item has been added to this list since, and it came from the build rather
+than from you:</strong> the CMS account. It was never asked about because it was assumed to exist, and it
+does not. It blocks no page and no deadline, but it blocks the one test that proves the site does what it
+was commissioned to do, so it now heads the asks at the foot of this page.</p>
+<p class="lede">The one change worth reading twice: <strong>the Rewards app is already published in both
+stores.</strong> That retires a worry recorded in Block&nbsp;F — that <code>/privacy</code> gated the app
+submission. It never could have; the submission already happened.</p>
+
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Item</th><th>The answer</th><th>What is left</th></tr></thead>
+  <tbody>
+    <tr><td class="id">A3</td><td><strong>Art direction</strong> — <em>"updated after the build using either an AI session or TinaCMS. Use placeholders during the build."</em></td><td class="ok-cell">Closed. Only safe because of the rejection in Block&nbsp;E: no page is waiting on a picture to look finished</td></tr>
+    <tr><td class="id">A4</td><td><strong>Cultural approval</strong> — <em>"not a concern for development."</em></td><td>Agreed for the build, <strong>not closed</strong>. It was never a development question: real Coast Salish art still needs to be authentic or tribe-approved before it is placed. The placeholders carry a marker so this cannot be lost</td></tr>
+    <tr><td class="id">A6</td><td><strong>Registrar access</strong> — <em>"not a concern at this point."</em></td><td>Deferred to cutover. Nothing in the build touches DNS. Stays listed because it is the only item whose discovery time is <em>unbounded</em> — a login nobody has is found on launch day</td></tr>
+    <tr><td class="id">A12</td><td><strong>Real copy</strong> — <em>"use current copy as placeholders."</em></td><td>Moved to the post-build pass, and the numbering is now confirmed: this sentence is A12's, not A7's. Worth saying plainly: draft copy nobody can see is a draft; draft copy on lummibay.com is what the business says</td></tr>
+    <tr><td class="id">A7</td><td><strong>Two CMS logins</strong> — <em>"an implementation issue, not a concern for the creation of code."</em></td><td>Agreed, and it settles one ambiguity: <em>"use current copy as placeholders"</em> arrived under this number and belongs to A12 above. Still due at training, and at the day-4 gate below. Which two people is an operational choice, not an admin one — one of them has to be able to publish an emergency notice at 5am</td></tr>
+    <tr><td class="id">A8</td><td><strong>Store URLs</strong> — both supplied, Play link corrected and confirmed</td><td class="ok-cell">Closed. Apple was right and live. The Play link first given was a <em>search</em> URL; it was fetched, and the twelve apps it returns are all unrelated — the app was not among them, so as a store button it would have landed a customer on other companies' apps. The direct listing, <code>play.google.com/store/apps/details?id=com.rovertown.lummi</code>, is now confirmed. The habit is worth keeping: a search URL looks like a store link and behaves like a directory</td></tr>
+    <tr><td class="id">A17</td><td><strong>The map account</strong> — <em>"is there an area to input this or signin and connect the map?"</em></td><td class="ok-cell"><strong>Answered: there is no sign-in and nothing to connect.</strong> The site never talks to Google and holds no Google credential. The map is two paste-in-a-box fields in the CMS — the embed code, and a still of the finished map. A Google account is needed only to <em>build</em> the map, which is why it should be a company one</td></tr>
+    <tr><td class="id">A19</td><td><strong>The map itself</strong> — <em>"not built yet."</em></td><td>Blocks nothing, and this is now <strong>observed rather than intended</strong>: <code>/contact</code> is built, both fields are empty, and the page renders addresses, hours, phones and Directions links with one section fewer. Drawing the map is the only step left</td></tr>
+    <tr><td class="id">A22</td><td><strong>Social accounts</strong> — Facebook, Instagram, Yelp, all supplied</td><td class="ok-cell">Closed. All three are brand-level despite the Exit&nbsp;260 handles, so the footer is three icons and no Location page gets its own. Yelp is a review listing rather than a posting account, so it is ordered last. One five-minute look left: are the two tended accounts current?</td></tr>
+    <tr><td class="id">A23</td><td><strong>Amenity lists</strong> — <em>"populated during the updating process."</em></td><td>Moved to the post-build pass. The half that was not a question is done: the Minimart's <code>fuel + convenience store</code> is split into two, so the badge row renders instead of falling back to a sentence. Two badges is a floor, not a finish. The build also found that the badge row would not have rendered <em>at all</em> for any Location — a parsing bug, now fixed</td></tr>
+    <tr><td class="id">A9</td><td><strong>Careers link</strong> — <code>silverreefcasino.com/careers</code>, one footer link labelled "Careers"</td><td class="ok-cell">Closed, including the call that went back to you. Ownership's answer: link straight out, no <code>/careers</code> page here. What it settles for the whole build is that the rule in Block&nbsp;A is about <em>mentions</em>, not destinations — so <strong>the label stays "Careers"</strong>, with no company name and no logo beside it. The moment the label names the company it stops being a signpost</td></tr>
+    <tr><td class="id">A20</td><td><strong>Per-Location share cards</strong> — <em>"remove this for now."</em></td><td class="ok-cell">Closed. The <em>asset</em> is removed, not the field: drop a file into a page's slot next year and that page's card changes with no engineering. Until then every link unfurls with the sitewide default, which is finished</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ============ TWO WEEKS ============ -->
+<h2 class="section">What two weeks would buy</h2>
+<p class="lede">Short answer: <strong>a complete, working site, live, with placeholder imagery and
+first-draft words.</strong> Everything that is engineering fits in two weeks. Nothing that needs a third
+party — artwork, cultural approval, an app submission, finished copy — does, and no amount of engineering
+speed changes that.</p>
+<p class="lede"><strong>This plan is now partly a progress report.</strong> The rows are marked with where
+the build actually got to, so the remaining estimate is a shorter read than the original one. The honest
+summary: the parts that are pure engineering went faster than the plan, and the two rows that are not
+— the day-4 gate and the cut-over — have not moved at all, because neither is waiting on engineering.</p>
+<p class="lede">The reason it is possible at all is the rejection in Block&nbsp;E. Because the illustrated
+art layer was removed, <strong>the current design does not depend on any artwork that has not been
+approved</strong> — so launching on schedule does not mean shipping placeholder Coast Salish motifs, which
+would break a hard rule. It means launching clean and adding art when it is ready.</p>
+
+<div class="plan">
+  <div class="day done"><div class="when">Days 1–2</div><div class="what"><strong>Scaffold and shell<span class="status s-done">Built</span></strong>
+  Next.js project, the locked colour and type tokens, the Vercel Pro project with a preview URL on every
+  branch. Sticky header, footer, waterline, Get the App pill, back-to-top.</div></div>
+
+  <div class="day part"><div class="when">Days 3–4</div><div class="what"><strong>Data, then the CMS<span class="status s-part">Half</span></strong>
+  Location records and the fuel price document first — every page reads from these and nothing is typed
+  into a page. Then TinaCMS: collections, field labels written for staff rather than developers, visual
+  editing wired, two logins. <em>Done:</em> the data layer and the full CMS schema, all seven collections,
+  every field labelled in plain English. <em>Not done:</em> nothing can be logged into yet. That needs a
+  TinaCMS account for the business, which does not exist — see the ask below.</div></div>
+
+  <div class="day gate"><div class="when">Day 4 — gate</div><div class="what"><strong>A real staff member
+  changes a fuel price, unaided, and sees it live<span class="status s-todo">Not run</span></strong> That is must-have #1 and #2 in a single test.
+  It is checked before any more pages are built on top of it, because everything after this assumes it
+  works. This is also where A7 stops being deferrable.</div></div>
+
+  <div class="day done"><div class="when">Days 5–6</div><div class="what"><strong>The fuel price block<span class="status s-done">Built</span></strong>
+  The largest component on the site: one table, three states, per-request prices with the last known
+  value as fallback. Built from the decision record, not copied from the proof sheet.</div></div>
+
+  <div class="day done"><div class="when">Days 7–8</div><div class="what"><strong>Every page<span class="status s-done">Built</span></strong>
+  Home, the Locations index, three Location pages, Truck Stop, Rewards, Fuel Prices, About, Contact and
+  Privacy. Nine of the twelve are the same handful of blocks arranged differently, which is why they fit
+  in two days.</div></div>
+
+  <div class="day part"><div class="when">Day 9</div><div class="what"><strong>The scheduled things<span class="status s-part">Half</span></strong>
+  Promotions and info pages, holiday hours overrides, the emergency notice, the footer social row, share
+  card wiring, the tenants page. <em>Done:</em> the three that change what a visitor sees with nobody
+  pressing publish — the emergency notice, the holiday hours override, the social row — plus the share
+  card. <em>Not done:</em> promotions, info pages and the tenants page. Their CMS fields exist; the part
+  that puts them on a page does not.</div></div>
+
+  <div class="day"><div class="when">Day 10</div><div class="what"><strong>Check and cut over<span class="status s-todo">Not started</span></strong>
+  Contrast script, keyboard and screen-reader pass, Lighthouse, sitemap and robots, the exit260.com
+  redirect, DNS. <em>This day is the one that depends on somebody else</em> — it cannot start until the
+  registrar question (A6) is answered.</div></div>
+</div>
+
+<p class="lede" style="margin-top:22px"><strong>What does not fit, whatever happens.</strong> The answers
+of 17 September changed this paragraph more than any other on the page. Artwork (A3) and copy (A12) were
+the two things that decided whether the site <em>looks</em> finished, and they are no longer in the
+build's way at all — they arrive afterwards, through the CMS, without an engineer. What is left outside
+the build is smaller than it was: the map has to be drawn in Google My Maps by somebody with a company
+account (A17, A19), the real amenity lists need five minutes with whoever opens up (A23), and cultural
+approval still stands between a placeholder motif and a real one (A4). None of those hold a launch. The
+social row and the amenity badges render nothing until the lists exist — by design, not as a gap, and now
+verified on a real page rather than promised. One item has moved the other way since 17 September: the CMS
+account, which was assumed and is not there.</p>
+<p class="lede">What that leaves is a genuine trade rather than a free win: a site that works completely
+and reads provisionally. Every price, every hour, every page and every scheduled thing is real and
+live; the words and the pictures are the build's own drafts until someone replaces them. That is a
+reasonable way to launch — it is not the same as launching finished, and it is worth agreeing to
+deliberately rather than discovering on the day.</p>
+
+<div class="callout" style="border-left-color:var(--c-mark)">
+  <h3>What a two-week launch actually asks of you</h3>
+  <p>Three things, and the first is new. Building the site turned one assumption into an ask: the CMS needs
+  an account in the business's name before anyone can log into it, and until that exists the day-4 gate
+  cannot be run at all — which means the two must-haves the whole project is for are, today, untested.</p>
+  <ol>
+    <li><strong>Open the TinaCMS account for the business</strong> and hand over the two keys it issues.
+    It is the free tier, so this costs nothing and takes about ten minutes, but nobody else can do it: it
+    has to be a company account, not an engineer's. <em>Everything about editing is blocked behind it</em>
+    — logging in, the two seats, click-to-edit, and the fuel price test below.</li>
+    <li><strong>Name the two people who get CMS logins</strong> (A7) before day&nbsp;4, so the gate
+    above is a real test with a real person rather than a demo. Now second in line behind the account,
+    not because it got less urgent but because it cannot happen first.</li>
+    <li><strong>Check the registrar logins</strong> (A6) whenever it suits. Deferred, correctly, since
+    nothing in the build touches DNS — but it is the only open item that can add <em>weeks</em> rather
+    than days, and it costs an afternoon to rule out.</li>
+  </ol>
+  <p style="margin:10px 0 0">Everything else follows the site live. Copy, photography, artwork,
+  promotions and tenant records all land through the CMS afterwards without an engineer — which is what
+  Block&nbsp;C was for, and it is now the plan of record rather than a capability held in reserve.</p>
+</div>
+
+<p class="colophon">
+  This page is a review document, revised 29&nbsp;September 2026. It is not the site
+  and no part of it ships. Figures describing the build — page counts, line counts, what passes — were
+  taken from a clean build of the repository on the date above and go stale the moment the code changes. Each entry summarises a full
+  decision record in <code>docs/adr/</code>; where the two differ, the record is authoritative. Figures
+  quoted as measurements were taken in a browser and the scripts that produced them are in
+  <code>docs/proofs/scripts/</code>. Open items are tracked in <code>docs/launch-checklist.md</code>.
+</p>
+
+</div>

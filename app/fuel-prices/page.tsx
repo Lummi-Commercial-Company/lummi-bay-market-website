@@ -1,24 +1,94 @@
-import type { Metadata } from "next";
-import PageShell from "@/components/PageShell";
-import { getFuelPrices } from "@/lib/content";
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { Suspense } from 'react'
+import styles from '../page.module.css'
+import { getLocations } from '@/lib/locations'
+import {
+  allPriceRows,
+  columnsFor,
+  FUEL_GRADE_LABELS,
+  formatPrice,
+  formatUpdated,
+  getFuelPrices,
+  latestUpdated,
+} from '@/lib/fuel-prices'
 
-export const metadata: Metadata = { title: "Fuel prices" };
+export const metadata: Metadata = {
+  title: 'Fuel prices',
+  description:
+    'Posted regular, diesel and DEF prices at every Lummi Bay Market location and the Exit 260 Truck Stop.',
+  alternates: { canonical: '/fuel-prices' },
+}
 
 /**
- * Reached from the footer and the price block's "All prices" panel — never from the
- * nav. The nav stays three items (ADR 0008).
+ * The full price page. It exists, but it is NOT in the nav — it is reached from
+ * the price block's "All prices" panel, and from nowhere else on the site
+ * (ADR 0008, amended 18 Sep 2026 — the footer link was dropped).
+ *
+ * The heading and the shell prerender; the table itself resolves per request,
+ * so a published price is live here immediately (ADR 0024).
  */
 export default function FuelPricesPage() {
-  const fuel = getFuelPrices();
-  const updated = fuel.truckStop.updated;
+  return (
+    <div className={styles.pagegrid}>
+      <div className={styles.maincol}>
+        <h1>Fuel prices</h1>
+        <Suspense fallback={<p className={styles.lede}>Loading today&rsquo;s prices…</p>}>
+          <PriceTable />
+        </Suspense>
+      </div>
+    </div>
+  )
+}
+
+async function PriceTable() {
+  const [locations, prices] = await Promise.all([getLocations(), getFuelPrices()])
+  const rows = allPriceRows(locations, prices)
+  const columns = columnsFor(rows)
+  const updated = formatUpdated(latestUpdated(rows))
 
   return (
-    <PageShell title="Fuel prices">
-      <p>
-        Prices for all four places are in the panel above &mdash; open &ldquo;View all
-        prices&rdquo;. Regular, diesel and DEF are the grades posted here.
+    <>
+      <table className={styles.priceTable}>
+        <caption className="visually-hidden">Posted fuel prices per gallon</caption>
+        <thead>
+          <tr>
+            <th scope="col">Place</th>
+            {columns.map((grade) => (
+              <th scope="col" key={grade}>
+                {FUEL_GRADE_LABELS[grade]}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.key}>
+              <th scope="row">
+                {row.href ? <Link href={row.href}>{row.label}</Link> : row.label}
+              </th>
+              {columns.map((grade) => {
+                const price = formatPrice(row.prices[grade])
+                return (
+                  <td key={grade}>
+                    {price ?? (
+                      <>
+                        <span aria-hidden="true">—</span>
+                        <span className="visually-hidden">not sold here</span>
+                      </>
+                    )}
+                  </td>
+                )
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <p className={styles.note}>
+        {updated ? <>Updated {updated}. </> : null}
+        Prices subject to change. Only regular, diesel and DEF are posted here.
       </p>
-      <p>Last updated {updated}. Prices subject to change.</p>
-    </PageShell>
-  );
+    </>
+  )
 }

@@ -1,0 +1,21 @@
+{
+  "$comment": "Seed values supplied by the client 17 Sep 2026; the Play Store URL confirmed by the client 17 Sep 2026. See content/settings/README.md before editing or before wiring this into the TinaCMS schema.",
+  "rewards": {
+    "appStoreUrl": "https://apps.apple.com/us/app/lummi-bay-market/id6744988483",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.rovertown.lummi"
+  },
+  "footer": {
+    "careersUrl": "https://www.silverreefcasino.com/careers",
+    "lummiCommercialCompaniesUrl": "https://lcc-lummi.com"
+  },
+  "social": [
+    { "platform": "facebook",  "label": "Facebook",  "url": "https://www.facebook.com/LBMat260" },
+    { "platform": "instagram", "label": "Instagram", "url": "https://www.instagram.com/lbmexit260/" },
+    { "platform": "yelp",      "label": "Yelp",      "url": "https://www.yelp.com/biz/lummi-bay-market-at-exit-260-bellingham" }
+  ],
+  "map": {
+    "embedCode": "",
+    "stillImage": ""
+  },
+  "liveMainPage": "content/main-pages/home.mdx"
+}

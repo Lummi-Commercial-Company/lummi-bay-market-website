@@ -24,6 +24,12 @@ page. Click-to-edit was the entire argument for folding prices into Location doc
 it turned out to serve a need this field does not have.
 
 ## How a price change reaches the site — corrected
+**Superseded in its conclusion by ADR 0024, 16 Sep 2026.** The analysis below stands and is why
+0024 chose what it chose; what changed is that the client answered the question this section
+defers to C7 — *"once a price is pushed it must go live immediately"* — which removes the premise
+the first two options rest on. The third path, the one this section names and declines to pick,
+is now the decision. Read this for the reasoning; read ADR 0024 for what is built.
+
 An earlier answer here claimed that on-demand revalidation would refresh "just the price
 pages" in seconds, against a full rebuild's one to two minutes. **That was wrong, and the
 reason is ADR 0005: the price block is on every page.** Invalidating prices invalidates the
@@ -55,7 +61,9 @@ answer is then to stop baking prices into the page at all: render the price bloc
 request. Prices are then always current, on every page, with no rebuild and no invalidation —
 at the cost of a little server work per page view. This is the same mechanism as the promo
 slot in ADR 0007, and it is the default shape of Next.js 16 with Cache Components, not an
-exotic option. **Decide this with register item C7**, not separately.
+exotic option. **Decide this with register item C7**, not separately. — *C7 was decided on
+16 Sep 2026 and took this path. ADR 0024, which also names the one way to build it wrong: reading
+the built `content/fuel-prices.json` per request is exactly as stale as a static page.*
 
 ## Decision
 All eight prices live in **one** document, `content/fuel-prices.json`, configured as a
@@ -98,6 +106,9 @@ misreport the Truck Stop, whose prices move on a different schedule from retail.
   taste.
 - `fuelGrades` per Location is no longer a separate declaration — the grades a place sells
   are the entries present in its price list.
-- Still unresolved: whether the `updated` stamp is stored on save or derived from the commit
-  that changed the price. Deriving is cleaner but needs per-file git history at build time,
-  and Vercel builds from a shallow clone by default. Settle with a spike, not an argument.
+- ~~Still unresolved: whether the `updated` stamp is stored on save or derived from the commit
+  that changed the price.~~ **Resolved 16 Sep 2026 — stored on save (ADR 0024).** Deriving is
+  cleaner but needs per-file git history, and once the block renders per request that history
+  would have to be read at request time from something the build cannot see: a second runtime
+  dependency bought for nothing. The stamp also matters more now, not less — with publish latency
+  at zero it is the only thing on the page telling a guest how fresh the number is.

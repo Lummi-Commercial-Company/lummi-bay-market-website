@@ -12,7 +12,7 @@ location, its fuel price, its hours, and (for Salish Village) truck-stop ameniti
 
 Principles:
 - One primary nav, mobile-first, thumb-reachable. Four top-level items.
-- Locked IA: Home · Locations (→ Exit 260, Mini Mart, Fisherman's Cove) · Truck Stop ·
+- Locked IA: Home · Locations (→ Exit 260, Minimart, Fisherman's Cove) · Truck Stop ·
   Fuel Prices. About lives in the FOOTER, not the top nav (the `/about` page still
   exists — it is just reached from the footer).
 - Surface live fuel prices on Home and each location page, plus a combined Fuel Prices

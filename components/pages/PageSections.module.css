@@ -1,0 +1,493 @@
+/* Sections a `pages` document can be built from (ADR 0015).
+
+   Measurements follow `docs/proofs/contact-page-template.html`. Every colour,
+   size and space is a token from `app/globals.css` — the proof's literal hex
+   values are the tokens' values, so nothing here is a new colour. The one
+   repeated literal is rgba(28, 78, 143, …), which is --lb-navy at low alpha for
+   hairline borders; CSS cannot take alpha from a hex custom property without
+   colour-mix, so it is written out and only ever used for a border. */
+
+/* ---- Long-form prose (the page body, and any richText block) ------------- */
+
+.prose {
+  max-width: 68ch;
+}
+
+.prose > * + * {
+  margin-top: var(--sp-4);
+}
+
+.prose h2 {
+  font-family: var(--ff-display);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-display);
+  letter-spacing: -0.02em;
+  color: var(--lb-navy);
+  margin-top: var(--sp-7);
+}
+
+.prose h3 {
+  font-family: var(--ff-display);
+  font-size: var(--fs-h3);
+  line-height: 1.2;
+  color: var(--lb-navy);
+  margin-top: var(--sp-6);
+}
+
+.prose h4 {
+  font-size: var(--fs-lead);
+  font-weight: 700;
+  color: var(--lb-navy);
+  margin-top: var(--sp-5);
+}
+
+.prose p,
+.prose li {
+  line-height: 1.65;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: var(--sp-5);
+}
+
+.prose li + li {
+  margin-top: var(--sp-2);
+}
+
+.prose blockquote {
+  margin-left: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 3px solid var(--lb-navy);
+  background: var(--lb-bone);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.prose blockquote p {
+  margin: 0;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid rgba(28, 78, 143, 0.16);
+}
+
+/* ---- Shared section heading --------------------------------------------- */
+
+.sectionHeading {
+  font-family: var(--ff-display);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-display);
+  letter-spacing: -0.02em;
+  color: var(--lb-navy);
+  margin: var(--sp-7) 0 var(--sp-4);
+}
+
+/* ---- Location contact cards --------------------------------------------- */
+
+/* The cards follow the page's opening sentence directly, 22px below it, as the
+   approved contact template draws them — not under a heading with 48px above. */
+.contactList {
+  margin-top: 22px;
+}
+
+.loclist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.loccontact {
+  background: var(--lb-paper);
+  border: 1px solid rgba(28, 78, 143, 0.16);
+  border-left: 3px solid var(--lb-teal);
+  border-radius: var(--radius-card);
+  padding: var(--sp-4);
+}
+
+@media (min-width: 720px) {
+  .loccontact {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 250px;
+    gap: var(--sp-5);
+    align-items: start;
+    padding: var(--sp-4) var(--sp-5);
+  }
+}
+
+.loccontactMain {
+  min-width: 0;
+}
+
+/* 17px on a phone, 18px from 720px — the approved `.loccontact h2`. It was
+   the 22px h3 step, one size up from what was approved. */
+.locname {
+  font-family: var(--ff-display);
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  color: var(--lb-navy);
+  margin: 0 0 6px;
+}
+
+@media (min-width: 720px) {
+  .locname {
+    font-size: 1.125rem;
+  }
+}
+
+.locsummary {
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0 0 var(--sp-3);
+  max-width: 52ch;
+}
+
+.amen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Sizes in this section are the approved contact template's, as drawn — the
+   owner's call on small text, 29 Sep 2026 (ADR 0029). Targets stay 44px. */
+.amen li {
+  font-size: 9.5px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--lb-navy);
+  background: var(--lb-bone);
+  border: 1px solid rgba(28, 78, 143, 0.16);
+  border-radius: 999px;
+  padding: 5px 9px;
+}
+
+.locactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+}
+
+/* Both controls are 44px tall: the WCAG 2.5.8 target size, and the reason the
+   proof's 11px label sits on a pill this large rather than a smaller one. */
+.miniPrimary,
+.miniGhost {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--sp-4);
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.miniPrimary {
+  background: var(--lb-navy);
+  color: var(--lb-bone);
+}
+
+.miniGhost {
+  color: var(--lb-navy);
+  border: 1px solid rgba(28, 78, 143, 0.35);
+}
+
+.miniPrimary:hover,
+.miniGhost:hover {
+  text-decoration: underline;
+}
+
+.locfacts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: var(--sp-3) 0 0;
+  padding-top: var(--sp-3);
+  border-top: 1px solid rgba(28, 78, 143, 0.13);
+}
+
+@media (min-width: 720px) {
+  .locfacts {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fact dt {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--lb-ink);
+  opacity: 0.6;
+}
+
+.fact dd {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--lb-ink);
+}
+
+.fact dd a {
+  color: var(--lb-navy);
+  font-weight: 600;
+}
+
+.hrs {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- The map ------------------------------------------------------------ */
+
+.mapwrap {
+  margin-top: var(--sp-5);
+}
+
+.mapbox {
+  position: relative;
+  height: 240px;
+  border: 1px solid rgba(28, 78, 143, 0.16);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--lb-bone);
+}
+
+@media (min-width: 900px) {
+  .mapbox {
+    height: 320px;
+  }
+}
+
+.mapstill {
+  object-fit: cover;
+}
+
+.mapframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* The notice and the button sit on a scrim, not straight on the picture: a map
+   still is a busy, mid-tone image and text on it cannot be guaranteed to clear
+   4.5:1 anywhere. The scrim makes the contrast a property of the CSS rather
+   than of whichever screenshot was uploaded. */
+.mapveil {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  text-align: center;
+  background: rgba(20, 57, 107, 0.72);
+}
+
+.mapnotice {
+  margin: 0;
+  max-width: 44ch;
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: var(--lb-bone);
+}
+
+.mapbutton {
+  min-height: 44px;
+  padding: 0 var(--sp-5);
+  border: 0;
+  border-radius: 999px;
+  background: var(--lb-cedar);
+  color: var(--lb-bone);
+  box-shadow: var(--pill-ring);
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pinlist {
+  display: grid;
+  gap: var(--sp-2);
+  margin: var(--sp-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .pinlist {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.pin {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+}
+
+.pinnum {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--lb-navy);
+  color: var(--lb-bone);
+  display: grid;
+  place-items: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.pinwho {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--lb-navy);
+}
+
+.pinwhere {
+  display: block;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+/* ---- Callout ------------------------------------------------------------ */
+
+.callout {
+  margin-top: 20px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--lb-navy);
+  background: var(--lb-bone);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--lb-ink);
+  max-width: 56ch;
+}
+
+.callout p {
+  display: inline;
+  margin: 0;
+}
+
+/* ---- Other blocks ------------------------------------------------------- */
+
+.banner {
+  margin: var(--sp-5) 0 0;
+}
+
+.banner img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+}
+
+.banner figcaption {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+}
+
+.ctarow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+}
+
+.hoursTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hoursTable th,
+.hoursTable td {
+  text-align: left;
+  padding: var(--sp-3) var(--sp-2);
+  border-bottom: 1px solid rgba(28, 78, 143, 0.13);
+  font-size: var(--fs-small);
+}
+
+.hoursTable th {
+  font-weight: 600;
+  color: var(--lb-navy);
+}
+
+.hoursTable td {
+  font-variant-numeric: tabular-nums;
+}
+
+.faq dt {
+  font-weight: 700;
+  color: var(--lb-navy);
+  margin-top: var(--sp-4);
+}
+
+.faq dd {
+  margin: var(--sp-2) 0 0;
+}
+
+/* ---- Location cards (shared with the Location pages) -------------------- */
+
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}
+
+@media (min-width: 720px) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.card {
+  display: block;
+  padding: var(--sp-4);
+  background: var(--lb-paper);
+  border: 1px solid rgba(28, 78, 143, 0.16);
+  border-left: 3px solid var(--lb-teal);
+  border-radius: var(--radius-card);
+  text-decoration: none;
+  height: 100%;
+}
+
+.cardName {
+  margin: 0;
+  font-family: var(--ff-display);
+  font-size: var(--fs-lead);
+  color: var(--lb-navy);
+}
+
+.cardLine {
+  margin: var(--sp-1) 0 0;
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

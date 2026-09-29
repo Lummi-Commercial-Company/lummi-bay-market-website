@@ -15,24 +15,93 @@ to white yourself — that needs an approved reversed lockup from the brand owne
 | `logo-market-on-dark.png` | 336 x 120, **white** wordmark, navy `#1D3D7C` outline, cedar paddle with visible grain | Goes on dark backgrounds — the sticky header |
 | `logo-market-on-dark@3x.png` | 1008 x 360, the same art at 3x. Verified: aligned against the 1x it differs only on edge anti-aliasing and finer paddle grain | Served to high-density screens via `srcset`; never referenced on its own |
 | `logo-market-on-light.png` | 512 x 512, **navy** `#1D3D7C` wordmark, letterboxed with ~65% empty vertical space | Goes on light backgrounds — home hero, `/rewards` |
-| `favicon.svg` | **Not a vector.** An SVG wrapper around one embedded base64 PNG — zero `<path>` elements. The payload is byte-identical to `logo-market.png` (sha256 `ff999899…`, 27,566 bytes) | Works, but does not scale |
-| `favicon.ico` | Multi-size ICO, 48px and 32px | Fine as a file |
-| `favicon-96x96.png` | 96 x 96 | Fine as a file |
+| `favicon.ico` | Multi-size ICO: 16, 32 and 48, all 32bpp BMP entries. **The 16 entry is the hand-tuned one** — see below; 32 and 48 are byte-for-byte as supplied | Legacy browsers and the bookmark bar |
+| `favicon-16x16.png` | 16 x 16, 760 bytes. **Hand-tuned, not a downscale** — see below | The common tab |
+| `favicon-32x32.png` | 32 x 32, 2.0 KB | Retina tab |
+| `apple-touch-icon.png` | 180 x 180, 37.9 KB | iOS home screen |
+| `android-chrome-192x192.png` | 192 x 192, 42.4 KB | Android, via `/site.webmanifest` |
+| `android-chrome-512x512.png` | 512 x 512, **278 KB** | Android splash. Oversized for flat two-colour art — worth re-encoding |
 
-The three favicons are RealFaviconGenerator output and they carry **the full lockup**, a ~3:1
-horizontal band. Rendered down to a browser tab it is a smear at 32px and unreadable at 16px. The
-files are correctly formed; the artwork inside them is the wrong crop for the job.
+`favicon.svg` and `favicon-96x96.png` were deleted in the same upload. **Losing the SVG costs
+nothing**: it was never a vector — an SVG wrapper around one embedded base64 PNG, zero `<path>`
+elements. See *Watch for wrapped bitmaps*, below, which is why it was worth checking.
 
-**Ownership has ruled that the paddle alone is not acceptable as a standalone mark.** That closes
-the obvious escape route — there is no croppable element in the lockup that may stand on its own —
-so a favicon needs **new art**: a monogram, or another device, designed and approved. Do not crop
-one out of the lockup to fill the gap in the meantime; it would be exactly the unauthorised
-standalone mark that was just ruled out.
+### The set was replaced on 27 Aug 2026, and the paddle ruling was reversed
 
-Until that art exists the current set stays. It is wrong-but-harmless: browsers render something
-rather than nothing, and nothing else depends on it. Tracked as A11 in `docs/launch-checklist.md`.
+The old set carried **the full lockup**, a ~3:1 horizontal band squeezed into a square: a smear at
+32px and unreadable at 16px. The replacement is **the paddle device alone, white on a navy disc.**
+At true size it reads cleanly at 48 and 32, and at 16 with the tuning described below.
 
-**Watch for wrapped bitmaps.** `favicon.svg` looks like vector from its extension and is not. To
+This was the one option the old ruling excluded. **Ownership approved the paddle as the icon mark
+on 27 Aug 2026**, reversing the earlier ruling that it was not acceptable standing alone. A11 is
+closed on that basis.
+
+**The approval is the icon and nothing more.** It covers the small square slots the lockup cannot
+fill — favicon, app icon, avatar — including the recolour those need (cedar with grain in the
+lockup, flat white on navy here). It does **not** loosen anything else: the lockup is the master
+mark everywhere, no other part of it may stand alone, and a bare paddle never substitutes for the
+lockup in the header, the hero, or any other lockup slot. `CLAUDE.md` and skill `brand-system`
+carry the same carve-out in the same words.
+
+### The 16px is hand-tuned, and only the 16px
+
+A straight downscale of the supplied art gives a paddle that is **8.5% of the disc** — about a
+one-pixel stroke once the browser renders it at 16. Anti-aliasing then smears that one pixel into
+grey and the icon reads as a navy dot. Alongside a tab of Gmail's solid red *G*, you would find
+your tab by position, not by recognising the mark.
+
+The fix, approved 27 Aug 2026: the paddle is **thickened to 16.3% of the disc** for the 16px size
+only. It is not redrawn. The shape is the supplied artwork with a dilation applied to the white
+mask at 512 and then downsampled — same silhouette, same proportions, more weight.
+
+| | Paddle as % of disc | Effective stroke at 16px |
+|---|---|---|
+| As supplied, downscaled | 8.5% | ~1.0px |
+| **Shipped 16px** | **16.3%** | **~1.6px** |
+
+Heavier weights were built and rejected on evidence: at ~2.1px the blade loses its taper and the
+handle starts merging into it; at ~2.6px it is a lozenge with no handle knob left. Scaling the
+paddle up 18% instead broke it through the disc edge at both ends.
+
+**This is why 32 and up are untouched.** One thickened master used at every size would wreck the
+large icon — the same dilation that rescues 16 destroys 180. Hand-tuning the smallest size is
+ordinary practice for icon sets; carrying that weight upward is not.
+
+Regenerating it: dilate the white mask of `android-chrome-512x512.png` by a radius of 10 at 512,
+clip to the disc, downsample to 16. The `.ico`'s own 16 entry is rebuilt from the same pixels as
+a 32bpp BMP so a browser falling back to `/favicon.ico` gets the tuned one too.
+
+### The bone ring, and why the tab icons carry one
+
+A navy disc has no edge on a dark tab bar. Measured against the browser chromes people actually
+run, the icon's outer boundary was **1.19:1 on Chrome dark, 1.58 on its tab strip, 1.39 on
+Firefox dark** — the shape simply dissolved. On light chrome the same disc measured 10.23 and
+7.80, so this was a dark-mode-only failure, and roughly half of users are in dark mode.
+
+The fix is the pattern this project already uses for anything crossing light and dark grounds
+(ADR 0014, the back-to-top disc, the Rewards pill): **a bone `#F5F1E8` ring, 20 units at 512.**
+
+| | Chrome dk | Chrome strip | Firefox dk | Light tab | Light strip |
+|---|---|---|---|---|---|
+| No ring | 1.19 — fails | 1.58 — fails | 1.39 — fails | 10.23 | 7.80 |
+| **Ring 20** | **4.70** | **5.86** | **5.23** | **10.23** | **7.80** |
+
+**It costs the light case nothing** — 10.23 and 7.80, unchanged to two decimals. The bone rim is
+invisible against white, but the navy disc still supplies that edge one pixel further in, so each
+ground is carried by whichever element contrasts with it. The ring occupies the transparent margin
+the supplied art already had, so neither the disc nor the paddle gives up a pixel.
+
+Measuring this needs care. The first two attempts were wrong: the brightest pixel in the icon is
+always the white paddle, which is identical in every variant, and the *outermost* opaque pixel is
+bone, which reads as a failure on white even though the disc behind it is perfectly visible. The
+honest metric is the strongest boundary anywhere in the outer 2px band, sampled on 64 rays.
+
+**Only the tab-facing icons carry it** — `favicon-16x16.png`, `favicon-32x32.png` and all three
+`.ico` entries. `apple-touch-icon.png` and the `android-chrome-*` files are left exactly as
+supplied: the OS masks them to a rounded rect and they sit on the user's wallpaper, never on
+browser chrome, so a rim there would be clipped for no gain.
+
+**Watch for wrapped bitmaps.** The deleted `favicon.svg` looked like vector from its extension and was not. To
 check any `.svg` in five seconds, open it in a text editor: `<path`, `<polygon` and friends mean
 real vector; `<image` with `base64` means a bitmap in an SVG costume, with none of the benefits.
 
@@ -107,7 +176,7 @@ ruled that vector masters stay with the designer rather than living here.
 
 | File | Why |
 |---|---|
-| A favicon mark — **new art** | See below. Not a crop of anything that exists |
+| ~~A favicon mark~~ **Done** | Supplied and approved 27 Aug 2026 — see above. A11 closed |
 
 Masters (`.ai`, `.eps`) belong in `assets/brand-source/`, which is empty.
 

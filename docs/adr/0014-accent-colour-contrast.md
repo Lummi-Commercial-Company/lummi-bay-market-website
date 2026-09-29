@@ -135,6 +135,36 @@ so the comparison stays available rather than becoming a memory. If accessibilit
 audited formally, this is the finding that will come back, and this section is the answer to it.
 
 
+## Revision — the truck stop pill follows the Rewards pill, 16 Sep 2026
+
+Ownership noticed that the "Truck Stop →" button in the truck stop callout was **not** cedar and
+asked for it to be. It is the same control in the same situation as the Rewards pill — a small
+pill on a navy ground — so it takes the same recipe and inherits the same exception rather than
+opening a new argument: **cedar fill, white label, bone ring.**
+
+Two things this settles, both of which were drift rather than decisions:
+
+- The callout's button was **bone in six proof pages and cedar in one**
+  (`fuel-strip-proof.html`). Nobody chose that split; the bone pages were written while the
+  Rewards pill was briefly bone and the cedar page was not updated with them. All seven now
+  match.
+- The one page that already had cedar had **no bone ring**, so its button edge measured 2.43:1
+  against the navy callout — a real 1.4.11 failure that the ring on the Rewards pill had been
+  hiding by example. Fixed in the same pass.
+
+Measured for this control, against the callout's navy rather than the header's:
+
+| Pair | Ratio | Needs | |
+|---|---|---|---|
+| bone ring vs navy callout | 7.35 | 3.0 (1.4.11) | passes — the ring carries the boundary |
+| cedar fill vs navy callout | 2.43 | 3.0 (1.4.11) | fails alone; the ring is why it does not matter |
+| white label on cedar | 3.41 | 4.5 | the accepted exception, unchanged |
+
+The exception is therefore on **two** controls now, not one. That is worth saying plainly: the
+section above calls it "one control, on every page", and it is now two. Nothing else about the
+trade changed, and no third control should acquire it without coming back here first.
+
+
 ## Revision — the pill's hit area, and clear space around the lockup
 
 Two defects found while changing the pill's colour, neither of them about colour.

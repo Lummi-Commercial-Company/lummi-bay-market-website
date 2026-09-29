@@ -10,12 +10,18 @@ description: Canonical, LOCKED brand design tokens for Lummi Bay Market — the 
 - Master mark = the "Market" lockup, used sitewide (header, home hero). Location
   pages may use their own name in type, but the mark stays the Market lockup.
 - Never redraw, recolor, distort, or re-typeset the logo.
-- **No part of the lockup may stand alone as a mark.** Ownership ruled specifically that the
-  paddle on its own is not acceptable, so there is no croppable element to fall back on. A mark
-  for small square slots — a favicon, an app icon, an avatar — needs new art, designed and
-  approved. This does not restrict the *decorative* paddle motif in skill `pnw-tribal-art`:
-  a divider or list marker drawn in that style is ornament, not the logo's paddle extracted.
+- **The paddle alone is the icon mark — approved 27 Aug 2026, for that and nothing else.** It
+  fills the small square slots the lockup cannot: favicon, app icon, avatar. It ships white on a
+  navy disc, and the 16px size carries a thickened paddle because a straight downscale reads as
+  a dot. **This reverses the earlier ruling** that the paddle alone was unacceptable — anything
+  written against that ruling is out of date.
+- **Otherwise no part of the lockup may stand alone**, and the carve-out is not a licence to
+  modify the lockup. Do not extract, recolour or re-weight any part of it for any other purpose.
+- Separate from all of the above: the *decorative* paddle motif in skill `pnw-tribal-art`.
+  A divider or list marker drawn in that style is ornament, not the logo's paddle extracted.
 - Clear space = the paddle-handle height on all sides. Minimum width ~72px.
+- **Header imagery keeps 20px clear of the text navigation's right edge** — a separate floor from
+  the logo's clear space; art starts at whichever lands further right. See `pnw-tribal-art`.
 - The logo art contains the original brand blue #000F9F. That blue lives INSIDE the
   logo only — it is NOT a UI color in this system. UI blues are the navies below.
 
@@ -45,6 +51,23 @@ on navy.
   small text on light backgrounds — never use them for body copy or small labels.
   If an accent must carry small text, darken it first and verify.
 - Prices (`--lb-navy-deep`) on `--lb-paper` pass comfortably.
+
+### The pill ring (rule, not a style — client, 17 Sep 2026)
+**Every pill-shaped control carries a 1.5px bone ring**, no exceptions:
+`box-shadow: 0 0 0 1.5px var(--lb-bone)`.
+
+That means the Rewards "Get the App" pill in the header, the "See the truck stop" button, and
+any future pill — the same ring, the same weight, everywhere it appears.
+
+Why it is a rule rather than a judgement call: a cedar fill measures **2.43:1** against the navy
+header and a navy fill measures **2.20:1** against cedar. Both are under the 3:1 that WCAG 1.4.11
+requires of a control's own boundary, so **the ring is the only thing giving the control an edge**
+— without it the pill is a coloured smudge, not a button. It is not decoration that can be dropped
+to taste.
+
+It is written here because it drifted: the ring was added to the truck-stop button and missed on
+the header pill in the same file, and a third proof still carried the pre-revision bone fill. A
+rule in one place is checkable; the same declaration copied into eight files is not.
 
 ## Typography (APPROVED — locked)
 - Display / headings: **Space Grotesk** (700). Google Fonts, license-clean.

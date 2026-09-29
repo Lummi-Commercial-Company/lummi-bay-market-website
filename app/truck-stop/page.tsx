@@ -1,52 +1,86 @@
-import type { Metadata } from "next";
-import LocationList from "@/components/LocationList";
-import PageShell from "@/components/PageShell";
-import { getTruckStopLocation } from "@/lib/content";
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
+import styles from '../page.module.css'
+import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
+import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
+import { AmenityBadges } from '@/components/locations/AmenityBadges'
+import { LiveHours } from '@/components/locations/LiveHours'
+import { LocationList } from '@/components/locations/LocationList'
+import { getLocation } from '@/lib/locations'
 
-export const metadata: Metadata = { title: "Truck Stop" };
+export const metadata: Metadata = {
+  title: 'Truck Stop',
+  description:
+    'Diesel lanes, DEF, a small c-store, driver lounge, showers and truck parking at Exit 260, open 24 hours.',
+  alternates: { canonical: '/truck-stop' },
+}
 
 /**
- * The Truck Stop is a second store, not a wing of Exit 260. It shares the property and
- * nothing else — two c-stores, two fuel needs, two sets of customers.
- *
- * The price block's subject here is "truck-stop", so diesel and DEF are the first
- * numbers a driver hits (ADR 0005).
+ * The Truck Stop is a separate fuel station sharing the Exit 260 property, not
+ * a wing of the store. It has its own phone, its own hours, its own amenities
+ * and its own hours overrides — the store closing early on a holiday while the
+ * diesel lanes stay open all night is the normal outcome, not an edge case.
  */
-export default function TruckStopPage() {
-  const host = getTruckStopLocation();
-  if (!host?.truckStop) return null;
+export default async function TruckStopPage() {
+  const exit260 = await getLocation('exit-260')
+  const truckStop = exit260?.truckStop
+  if (!exit260 || !truckStop) notFound()
 
   return (
-    <PageShell title="Truck Stop" subject="truck-stop">
-      <p>
-        A dedicated stop for drivers at Exit 260, just off I-5. Diesel lanes, DEF,
-        showers, a driver lounge, a driver store and truck parking.
-      </p>
+    <div className={styles.pagegrid}>
+      <div className={styles.maincol}>
+        <h1>Truck Stop at Exit 260</h1>
+        <p className={styles.lede}>
+          A fuel station for truckers, with its own small c-store — right off I-5 at
+          Exit 260.
+        </p>
 
-      <h2>Visit</h2>
-      <p>
-        {host.address}
-        <br />
-        {host.city}, {host.state} {host.zip}
-        <br />
-        {host.truckStop.hours}
-        <br />
-        Truck Stop:{" "}
-        <a href={`tel:${host.truckStop.phone.replace(/\D/g, "")}`}>
-          {host.truckStop.phone}
-        </a>
-      </p>
+        <dl className={styles.dl}>
+          <dt>Address</dt>
+          <dd>
+            {exit260.address}
+            <br />
+            {exit260.city}, {exit260.state} {exit260.zip}
+          </dd>
+          <dt>Hours</dt>
+          <dd>
+            <Suspense fallback={truckStop.hours}>
+              <LiveHours
+                hours={truckStop.hours}
+                overrides={truckStop.hoursOverrides}
+                showReason
+              />
+            </Suspense>
+          </dd>
+          {/* The Truck Stop's own number. A driver asking about showers or the
+              diesel lanes must not land on the C-Store line. */}
+          <dt>Truck Stop</dt>
+          <dd>
+            <a href={`tel:${truckStop.phone.replace(/[^\d+]/g, '')}`}>{truckStop.phone}</a>
+          </dd>
+        </dl>
 
-      <h2>What&rsquo;s here</h2>
-      <ul>
-        {host.truckStop.amenities.map((a) => (
-          <li key={a}>{a}</li>
-        ))}
-      </ul>
+        {/* The Truck Stop's badges come from its own record, never merged
+            with the store's (docs/proofs/amenity-badges.html). */}
+        <AmenityBadges amenities={truckStop.amenities} />
+      </div>
 
-      {/* Exit 260 is still listed here: the filter drops the page's SUBJECT (the
-          callout), never everything at the page's street address (ADR 0009). */}
-      <LocationList exclude="truck-stop" />
-    </PageShell>
-  );
+      {/* The Truck Stop leads the table here, so diesel and DEF are the first
+          numbers a driver hits, and Exit 260 becomes the row that moves into
+          the panel on condense. */}
+      <FuelPriceRail>
+        <Suspense fallback={<FuelPriceBlockFallback />}>
+          <FuelPriceBlock subject="truck-stop" />
+        </Suspense>
+      </FuelPriceRail>
+
+      <div className={styles.rest}>
+        {/* The page's subject is the Truck Stop, so the callout is dropped —
+            and ONLY the callout. Exit 260 is a different store at the same
+            address and stays, with the other Locations (ADR 0009). */}
+        <LocationList subject="truck-stop" />
+      </div>
+    </div>
+  )
 }

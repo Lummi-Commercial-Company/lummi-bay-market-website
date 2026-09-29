@@ -1,0 +1,255 @@
+/* ===========================================================================
+   The location list — ADR 0009, drawn from docs/proofs/home-review.html.
+   Values are the approved template's. Phone first; the cards become a grid of
+   columns from 768px, the same breakpoint the header uses.
+   =========================================================================== */
+
+.section {
+  margin-top: var(--sp-5);
+}
+
+/* "Our locations" — a small uppercase navy label, not a big heading. Navy, not
+   cedar: at this size cedar measured 3.24:1 (ADR 0014). */
+.label {
+  font: 700 0.625rem/1 var(--ff-body);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lb-navy);
+  margin: 0 0 12px;
+}
+
+/* ---- The Truck Stop callout — first, at both widths (ADR 0009) ---------- */
+.truckcall {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: var(--lb-navy);
+  border-radius: var(--radius-card);
+  color: var(--lb-bone);
+}
+
+.truckText {
+  min-width: 0;
+}
+
+.truckName {
+  font: 700 15px/1.2 var(--ff-display);
+  color: var(--lb-bone);
+  margin: 0 0 3px;
+}
+
+.truckLine {
+  font: 400 12px/1.45 var(--ff-body);
+  color: var(--lb-bone);
+  opacity: 0.86;
+  margin: 0;
+}
+
+/* The anchor is the 44px hit area; the pill inside keeps its drawn size. */
+.truckGo {
+  margin-left: auto;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+/* Cedar with a bone ring, on the owner's call — the same recorded exception as
+   the Rewards pill (ADR 0014). Cedar against navy is 2.43:1, so the ring
+   carries the control's visible boundary (bone/navy 7.35:1). */
+.truckGoIn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 13px;
+  border-radius: 99px;
+  background: var(--lb-cedar);
+  color: #fff;
+  box-shadow: 0 0 0 1.5px var(--lb-bone);
+  font: 600 11px/1 var(--ff-body);
+  white-space: nowrap;
+}
+
+.truckGo:hover .truckGoIn,
+.truckGo:focus-visible .truckGoIn {
+  text-decoration: underline;
+}
+
+/* ---- Location cards: rows on a phone ------------------------------------ */
+.cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* The link fills its list item, so cards in one grid row are one height and
+   "VISIT →" sits on the same line across the row. */
+.cards > li {
+  display: flex;
+  /* Lets the card line react to the card's own width, below. */
+  container-type: inline-size;
+}
+
+.card {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  height: 61px;
+  padding: 0 11px;
+  background: var(--lb-paper);
+  border: 1px solid rgba(28, 78, 143, 0.14);
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card:hover .cardName {
+  text-decoration: underline;
+}
+
+/* TODO: replace with approved Lummi art. Masked, not painted: the shape comes
+   from the placeholder SVG and the colour from a locked token, so a motif can
+   never introduce an off-brand colour. */
+.motif {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  background: var(--lb-cedar);
+  -webkit-mask: url('/motifs/motif-single.svg') center / contain no-repeat;
+  mask: url('/motifs/motif-single.svg') center / contain no-repeat;
+}
+
+/* Without mask support the motif would paint as a solid cedar square. Decoration
+   degrades to nothing, never to debris (ADR 0012). */
+@supports not ((-webkit-mask-image: none) or (mask-image: none)) {
+  .motif {
+    display: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .motif {
+    display: none;
+  }
+}
+
+.cardText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardName {
+  font: 700 13px/1.2 var(--ff-display);
+  color: var(--lb-navy);
+}
+
+/* Truncates, never wraps (ADR 0009). */
+.cardLine {
+  font: 400 11px/1.35 var(--ff-body);
+  color: var(--lb-ink);
+  opacity: 0.75;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ADR 0009: the line truncates, so its length is a copy budget, and on the
+   narrowest phones the answer is "a step down one type size below 340px". */
+@media (max-width: 339px) {
+  .cardLine {
+    font-size: 10px;
+  }
+}
+
+.visit {
+  display: none;
+}
+
+.chev {
+  margin-left: auto;
+  flex: 0 0 auto;
+  color: var(--lb-navy);
+  font-size: 15px;
+}
+
+/* ---- Desktop: callout wider, cards become columns ----------------------- */
+@media (min-width: 768px) {
+  .truckcall {
+    gap: 14px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+
+  .truckGoIn {
+    padding: 9px 16px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    height: auto;
+    padding: 15px 16px 14px;
+    border-radius: var(--radius-card);
+  }
+
+  .motif {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 9px;
+  }
+
+  .cardText {
+    width: 100%;
+    gap: 0;
+  }
+
+  .cardName {
+    font-size: 1.0625rem;
+    margin-bottom: 5px;
+  }
+
+  .cardLine {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    margin-bottom: 9px;
+  }
+
+  .visit {
+    display: block;
+    margin-top: auto;
+    font: 600 0.6875rem/1 var(--ff-body);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--lb-navy);
+  }
+
+  .chev {
+    display: none;
+  }
+}
+
+/* The same remedy on desktop. Three cards across a 720px column leave about
+   197px for "2570 Lummi View Dr · 6am–9pm", which clipped the closing time.
+   ADR 0009 measured the budget on phones only; a narrow card is the same
+   problem, and gets the same one-step answer. */
+@container (max-width: 240px) {
+  .cardLine {
+    font-size: 12px;
+  }
+}

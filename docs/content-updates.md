@@ -75,6 +75,28 @@ CDN-cached page can lag a little further. For hours, promos and store copy that 
 price must be correct to the minute, this stack is the wrong shape and that should be said out
 loud now rather than discovered at launch.
 
+> **Superseded in part, 17 Sep 2026.** That paragraph was written while the question was still
+> open, and the question has since been answered — in the direction the last line of *"Can't we
+> just refresh the price pages?"* below already pointed. **Three kinds of content no longer wait
+> for a build:**
+>
+> | Content | How fast | Decided by |
+> | --- | --- | --- |
+> | Fuel prices | live immediately | ADR 0024 — the block renders per request against the content API |
+> | Emergency notice (`siteAlert`) | under a second | ADR 0017 — on-demand revalidation, not a rebuild |
+> | Holiday hours (`hoursOverrides`) | on the date you typed | ADR 0027 — evaluated per request in Pacific time |
+>
+> Everything else — page copy, promos, tenants, settings — still publishes by rebuild, and the
+> one-to-two-minute figure stands for those.
+>
+> The consequence worth carrying forward is not a timing number, it is a build constraint: those
+> three features are why this site **can never be `output: 'export'`**. A static export would not
+> fail the build. It would silently drop all three and nobody would notice until a price was
+> wrong on the forecourt sign.
+>
+> Staff-facing procedures live in `docs/editors-handbook.html` (the editor's handbook PDF); this
+> file is the reasoning behind them.
+
 ## Is there a staging site?
 **Three different things get called staging, and they cost differently.** Two are free and
 already part of the stack; the third is the one people usually mean, and it is $41/mo.
@@ -176,6 +198,11 @@ For a site of about ten pages, the rebuild is the sane default: code changes nee
 anyway, and prebuilt pages cost nothing to serve. **If prices genuinely have to be current
 within seconds, the answer is neither** — it is to stop baking prices into the page and render
 that one block per visitor. See ADR 0004.
+
+**That last sentence is what was chosen** (ADR 0024). Prices do have to be current — a wrong
+price on the site while the right one is on the sign is the failure this whole section was
+circling — so the price block is not baked in. The eager-against-lazy trade above still describes
+every other kind of content accurately, and is kept for that reason.
 
 ## Fuel prices specifically
 All eight prices live in one file, `content/fuel-prices.json`, and every place the site shows a

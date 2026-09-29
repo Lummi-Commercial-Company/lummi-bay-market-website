@@ -1,57 +1,90 @@
-/*
- * Design tokens. These values are LOCKED — see skill `brand-system`.
- * Do not add colours or type families beyond what is defined here.
- */
+/* ===========================================================================
+   Lummi Bay Market — design tokens and base styles.
+
+   Tokens are the locked values from skill `brand-system` and
+   `docs/design-spec-sheet.html`. Do not invent new colours, type sizes or
+   spacing steps here: if a value is missing, it belongs in the skill first.
+   =========================================================================== */
+
 :root {
-  /* Colour (approved 2026 refresh) */
-  --lb-navy: #1c4e8f; /* structure: headers, headlines, labels, primary */
-  --lb-navy-deep: #14396b; /* fuel prices, emphasis */
-  --lb-teal: #0fb5c4; /* accent, dividers, the waterline motif */
-  --lb-cedar: #c9772e; /* warm accent, decorative only */
-  --lb-ground: #fbf9f4; /* page background */
-  --lb-paper: #ffffff; /* cards */
-  --lb-ink: #2a2820; /* body text */
-  --lb-bone: #f5f1e8; /* text on navy fills */
+  /* ---- Palette (LOCKED — skill `brand-system`) --------------------------- */
+  --lb-navy: #1C4E8F;        /* structure: header, headlines, labels, primary */
+  --lb-navy-deep: #14396B;   /* fuel prices and emphasis only                 */
+  --lb-teal: #0FB5C4;        /* accent, dividers, the waterline               */
+  --lb-cedar: #C9772E;       /* warm accent, decorative only                  */
+  --lb-ground: #FBF9F4;      /* page background                               */
+  --lb-paper: #FFFFFF;       /* cards                                         */
+  --lb-ink: #2A2820;         /* body text                                     */
+  --lb-bone: #F5F1E8;        /* text on navy fills                            */
+  --ink-soft: #6B6659;       /* secondary text — from the spec sheet          */
 
-  /* Spacing scale */
-  --s-1: 4px;
-  --s-2: 8px;
-  --s-3: 12px;
-  --s-4: 16px;
-  --s-5: 24px;
-  --s-6: 32px;
-  --s-7: 48px;
-  --s-8: 64px;
-  --s-9: 96px;
+  /* #000F9F and #1D3D7C exist inside the logo artwork only. They are never
+     UI colours. Teal and cedar never carry small text (ADR 0014). */
 
-  --max-width: 1200px;
-  --radius: 8px; /* controls */
-  --radius-card: 12px; /* cards */
+  /* ---- Type scale (rem) — LOCKED ---------------------------------------- */
+  --fs-display: 3rem;
+  --fs-h1: 2.25rem;
+  --fs-h2: 1.75rem;
+  --fs-h3: 1.375rem;
+  --fs-lead: 1.125rem;
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
 
-  /* Type scale */
-  --t-1: 3rem;
-  --t-2: 2.25rem;
-  --t-3: 1.75rem;
-  --t-4: 1.375rem;
-  --t-5: 1.125rem;
-  --t-6: 1rem;
-  --t-7: 0.875rem;
+  --lh-display: 1.1;
+  --lh-body: 1.5;
 
-  /* Stacking order — ADR 0005. Nav outranks the price panel deliberately. */
+  --ff-display: var(--font-space-grotesk), 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --ff-body: var(--font-inter), 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* ---- Spacing scale (px) — LOCKED -------------------------------------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+
+  /* ---- Layout ------------------------------------------------------------ */
+  --content-max: 1200px;
+  --grid-gutter: 14px;      /* 12-column grid, spec sheet                     */
+  --radius: 8px;            /* controls                                       */
+  --radius-card: 12px;      /* cards                                          */
+
+  /* ---- Shell measurements ------------------------------------------------ */
+  --hd-h-base: 56px;        /* phone header row                               */
+  --waterline-h: 5px;       /* flat teal rule under the nav — not the wave    */
+  --rail-w: 400px;          /* reserved fuel-price rail column (ADR 0005)     */
+
+  /* The live header height, alert bar included. Published at runtime by
+     <HeaderMetrics> because the emergency notice changes it (ADR 0017). The
+     value below is the no-alert phone default so the first paint is right. */
+  --hd-h: 61px;             /* 56px row + 5px rule                            */
+
+  /* ---- Stacking order (ADR 0005 / ADR 0006) ------------------------------ */
   --z-waterline: 1;
-  --z-price-block: 40;
-  --z-price-panel: 50;
+  --z-fuelblock: 40;
+  --z-fuelpanel: 50;
   --z-header: 60;
+  --z-totop: 70;
 
-  --header-height: 64px;
+  /* ---- The pill ring (LOCKED — skill `brand-system`) ---------------------
+     Every pill-shaped control carries this ring. Cedar on navy is 2.43:1 and
+     navy on cedar 2.20:1; both are under the 3:1 WCAG 1.4.11 asks of a
+     control's own boundary, so the ring IS the control's edge. Not optional. */
+  --pill-ring: 0 0 0 1.5px var(--lb-bone);
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   :root {
-    --header-height: 52px;
+    --hd-h-base: 58px;
+    --hd-h: 63px;
   }
 }
 
+/* ---- Reset ------------------------------------------------------------- */
 *,
 *::before,
 *::after {
@@ -59,89 +92,100 @@
 }
 
 html {
-  /* The sticky header must not cover an anchored heading. */
-  scroll-padding-top: calc(var(--header-height) + var(--s-4));
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
   background: var(--lb-ground);
   color: var(--lb-ink);
-  font-family: var(--font-inter), system-ui, sans-serif;
-  font-size: var(--t-6);
-  line-height: 1.5;
+  font-family: var(--ff-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+h1, h2, h3, h4 {
+  font-family: var(--ff-display);
   font-weight: 700;
-  line-height: 1.1;
+  line-height: var(--lh-display);
   color: var(--lb-navy);
-  margin: 0 0 var(--s-4);
-  /* Sentence case is a type rule; the logo's own caps are the logo's. */
-  text-transform: none;
+  margin: 0 0 var(--sp-4);
+  /* Sentence case is a copy rule, not a CSS one — never text-transform here. */
 }
 
+/* Page titles are 28px on a phone and 36px from 768px up — the size every
+   approved page template draws them at (home-review.html, contact-page-
+   template.html: `.p .hero h1 1.75rem`, `.d .hero h1 2.25rem`). They were one
+   step larger (36 / 48), which also pushed long titles off a phone screen.
+   The 3rem display step is not used for a page title. */
 h1 {
-  font-size: var(--t-2);
+  font-size: var(--fs-h2);
+  letter-spacing: -0.02em;
 }
-h2 {
-  font-size: var(--t-3);
-}
-h3 {
-  font-size: var(--t-4);
-}
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
 
 @media (min-width: 768px) {
-  h1 {
-    font-size: var(--t-1);
-  }
+  h1 { font-size: var(--fs-h1); }
 }
+
+p { margin: 0 0 var(--sp-4); }
 
 a {
   color: var(--lb-navy);
+  text-underline-offset: 2px;
 }
 
-p {
-  margin: 0 0 var(--s-4);
+img {
+  max-width: 100%;
+  height: auto;
 }
 
-/* Visible focus everywhere — the site is used one-handed at a fuel pump. */
+/* Visible focus everywhere. Never remove without a replacement. */
 :focus-visible {
   outline: 3px solid var(--lb-teal);
   outline-offset: 2px;
 }
 
-.container {
-  width: 100%;
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding-inline: var(--s-4);
+/* In-page anchors must clear the sticky header (ADR 0006). */
+:target {
+  scroll-margin-top: calc(var(--hd-h) + var(--sp-4));
 }
 
-@media (min-width: 768px) {
-  .container {
-    padding-inline: var(--s-5);
-  }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .skip-link {
   position: absolute;
-  left: -9999px;
-  top: 0;
-  background: var(--lb-navy);
-  color: var(--lb-bone);
-  padding: var(--s-3) var(--s-4);
-  z-index: calc(var(--z-header) + 1);
+  left: var(--sp-2);
+  top: -100px;
+  z-index: 100;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--lb-paper);
+  color: var(--lb-navy);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+}
+.skip-link:focus {
+  top: var(--sp-2);
 }
 
-.skip-link:focus {
-  left: var(--s-4);
-  top: var(--s-2);
+/* Shared page container. */
+.lb-container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--sp-4);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -149,6 +193,7 @@ p {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }

@@ -1,6 +1,9 @@
 # 0016 — Third-party tenants get pages; they are not Locations
 
 Status: Accepted — as a **capability**. Nothing is published until the business decides to.
+**Amended 17 Sep 2026: the business decided to.** Tenants are advertised, there will be a tenants
+page, and a tenant card links either to a page here or straight to the tenant's own website —
+see *The open question, answered* below. Closes checklist **A14**.
 
 Terms (Location, Truck Stop): `CONTEXT.md`. Bounded by ADR 0001 (what stays off this site)
 and the hard rules in CLAUDE.md. Built on the collection mechanism in ADR 0015.
@@ -25,6 +28,14 @@ in this document.
 **Whether to advertise them at all is undecided, and this ADR does not decide it.** The ask
 is narrower: the *ability* to publish such a page should exist before it is needed, because
 the moment it is needed it will be needed quickly.
+
+> **Answered 17 Sep 2026.** The client, asked directly, said yes: *"If you are referring to
+> Piroshky Piroshky, then we will create a page for tenants and add their card to that page. The
+> card will either link to a page about the tenant on our website or link directly to their
+> website, depending on the company's decision at that time."* Everything below stands as
+> written — the rules were settled in advance precisely so that this answer would not require
+> reopening them. The one thing it adds is the per-tenant choice of where a card points, which is
+> a new field and is specified at the end of this section.
 
 ### Why the page is about the guest, not the lease
 Every one of these businesses is LCC's tenant, not Lummi Bay Market's. ADR 0001 keeps LCC's
@@ -52,6 +63,12 @@ header image for the business, its hours, and a short description — the same s
 **The index is called "Also at Exit 260", not "Salish Village".** The property is named in
 market terms, which is how a guest thinks of it and which cannot be confused with the LCC
 development. `aka: Salish Village` stays on the Location record; it is not the page title.
+
+**A tenant is never an Amenity either.** The two are told apart by who owns the counter: if
+Lummi Bay Market hires the staff and takes the revenue it is an Amenity on that Location; if the
+business pays rent for the space it is a tenant. The **Cove Kitchen is an Amenity** (client,
+16 Sep 2026) — it stays in Fisherman's Cove's `amenities` and is unaffected by whether tenants
+are ever advertised. The known tenants are all at Exit 260.
 
 **A tenant is never a Location.** It goes in `content/tenants/`, not `content/locations/`.
 This is the load-bearing part of the decision, because Location is not just a label: the
@@ -99,6 +116,41 @@ to it render only when at least one tenant page is published. An empty collectio
 invisible to a guest — no stub page, no empty index, no dead link. Publishing the first
 tenant is what makes the entry point appear.
 
+### The open question, answered: a card points one of two ways
+
+The client's answer carries a requirement the original decision did not have. A tenant card links
+**either** to a tenant page on this site **or** directly to the tenant's own website, decided per
+tenant and revisable — *"depending on the company's decision at that time."*
+
+So the choice is a field, not a build-time assumption:
+
+| Field | Purpose |
+|---|---|
+| `linkMode` | `internal` (the tenant's page here) or `external` (their own site) |
+| `externalUrl` | Required when `linkMode` is `external`, ignored otherwise |
+
+**Why it has to be a field.** Piroshky Piroshky, Wendy's and Black Bear Diner are national or
+regional brands with their own sites and their own marketing rules; Hi-Tide Coffee's presence may
+be an Instagram account. Which way a card points is a decision made per business, sometimes by the
+business, and it can change after launch when a franchise asks. A boolean in the CMS answers that
+in ten seconds. Anything else answers it in a deploy.
+
+**An external card is marked as leaving the site, visibly.** An arrow glyph on the card and a new
+tab with `rel="noopener noreferrer"` — the same treatment as the social links in ADR 0028. A guest
+who taps what looks like a page on this site and lands on wendys.com has been bounced somewhere
+they did not choose to go, and on a phone the back button is the only way home. The mark is not
+politeness; it is what keeps the index usable.
+
+**`internal` still requires the page to exist and be published.** A card in `internal` mode
+pointing at an unpublished document does not render — the same rule that keeps the whole index
+invisible while the collection is empty. A card that links nowhere is worse than an absent card.
+
+**The disclosure is unaffected and non-negotiable either way.** An `external` card still sits
+under the index's single disclosure line, because a card in our theme carrying another company's
+name makes the same implication whichever way it points. Where an `external` tenant has no page
+here, that index line is the only place the disclosure can appear, which is an argument for its
+being on the index rather than only on tenant pages — as it already is.
+
 **Not in the navigation.** ADR 0008 is unchanged. The entry point is a link on the Exit 260
 Location page, plus a promo if one is wanted. If a contract later requires more prominence,
 that is a nav decision to take then, on its own merits.
@@ -119,8 +171,15 @@ that is a nav decision to take then, on its own merits.
   of scope, and ADR 0001's boundary is what keeps it narrow: **tenants of a Lummi Bay
   property, not businesses in the LCC portfolio.** A future request to add Silver Reef,
   Loomis Trail or the development itself is still refused by ADR 0001.
-- **Nothing here obliges the business to advertise anyone.** If the answer is that tenants
-  stay off the site, the cost of this decision is one unused collection definition.
+- ~~**Nothing here obliges the business to advertise anyone.** If the answer is that tenants
+  stay off the site, the cost of this decision is one unused collection definition.~~
+  **Overtaken 17 Sep 2026** — the answer is yes, and the collection will be used. Keeping the
+  line because it records why the capability was built before the decision: the cost of being
+  wrong was one unused definition, which is what made building it early the cheap move.
+- **The tenants page is now a real launch item, not a latent one.** It needs at least one
+  published tenant to exist at all, which means the roster above has to be turned into records:
+  hours, a description, `placement`, `linkMode`, and a logo only where `markApproved` is true.
+  Piroshky Piroshky is the one the client named, so it is the one to write first.
 - The roster above is a snapshot, not a specification. Tenants, hours and descriptions are
   fields in the CMS; nothing about them needs an engineer or an ADR revision.
 - Worth knowing at some point, though it does not block anything: whether a tenant contract

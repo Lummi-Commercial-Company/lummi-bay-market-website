@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Lummi Bay Lockup</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,8 +59,12 @@ p{margin:0 0 16px}
 .sitebar{background:var(--navy); display:flex; align-items:center; gap:12px; padding:12px 22px}
 .sitebar img{display:block; width:112px; height:auto; flex:0 0 auto}
 .nav{display:flex; gap:20px; margin-left:auto; font:500 .75rem/1 var(--body); color:var(--bone)}
+/* Cedar with the bone ring -- the treatment settled in the ADR 0014 revision. This frame
+   still carried the pre-revision bone fill, which is why the pill here looked unlike the
+   same pill everywhere else. */
 .pill{
-  flex:0 0 auto; background:var(--bone); color:var(--navy);
+  flex:0 0 auto; background:var(--cedar); color:#fff;
+  box-shadow:0 0 0 1.5px var(--bone);
   font:600 .6875rem/1 var(--body); padding:9px 12px; border-radius:999px; white-space:nowrap;
 }
 .pagebody{padding:24px 22px 30px; background:var(--ground)}
@@ -194,7 +199,7 @@ td.n{font-variant-numeric:tabular-nums; white-space:nowrap}
       <div class="waterline"></div>
       <div class="pagebody">
         <h4>Salish Village</h4>
-        <p>Fuel, convenience store and the full truck stop &mdash; showers, driver lounge, parking.</p>
+        <p>Fuel, convenience store and a separate truck stop &mdash; showers, driver lounge, parking.</p>
       </div>
     </div>
     <div class="meas">
@@ -236,7 +241,7 @@ td.n{font-variant-numeric:tabular-nums; white-space:nowrap}
       <div class="hero">
         <img src="../../public/brand/logo-market-on-light.png" alt="Lummi Bay Market">
         <p class="tag">Three locations on the Lummi Peninsula</p>
-        <div class="locs"><span>Salish Village</span><span>Lummi Bay Mini Mart</span><span>The Cove</span></div>
+        <div class="locs"><span>Salish Village</span><span>Lummi Bay Minimart</span><span>The Cove</span></div>
       </div>
     </div>
     <div class="meas">
@@ -300,33 +305,39 @@ td.n{font-variant-numeric:tabular-nums; white-space:nowrap}
 <div class="waterline"></div>
 <section class="band">
   <div class="in">
-    <p class="eyebrow">Open</p>
-    <h2>The one surface it does not work on</h2>
-    <p class="narrow muted">The favicon carries the full lockup, and the lockup is a 3:1 horizontal
-    band. Squeezed into a browser tab it stops being a logo. These are rendered at the true sizes a
-    browser uses.</p>
+    <p class="eyebrow">Resolved &mdash; A11 closed</p>
+    <h2>The tab now holds a mark, not a smear</h2>
+    <p class="narrow muted">A new favicon set was supplied on 27 Aug: the paddle device alone,
+    white on a navy disc. It replaces the old set, which carried the full 3:1 lockup squeezed into
+    a square and stopped being a logo at tab size. These are rendered at the true sizes a browser
+    uses, from the real files.</p>
     <div class="tabs">
       <div class="tab">
-        <div class="tabchrome"><img src="../../public/brand/favicon-96x96.png" width="16" height="16" alt="">
+        <div class="tabchrome"><img src="../../public/brand/favicon-16x16.png" width="16" height="16" alt="">
           <span class="t">Lummi Bay Market</span></div>
-        <p class="cap">16px &mdash; the common case</p>
+        <p class="cap">16px &mdash; the common case, hand-tuned</p>
       </div>
       <div class="tab">
-        <div class="tabchrome"><img src="../../public/brand/favicon-96x96.png" width="32" height="32" alt="">
+        <div class="tabchrome"><img src="../../public/brand/favicon-32x32.png" width="32" height="32" alt="">
           <span class="t">Lummi Bay Market</span></div>
         <p class="cap">32px &mdash; retina tab</p>
       </div>
       <div class="tab">
-        <div class="tabchrome" style="min-width:0"><img src="../../public/brand/favicon-96x96.png" width="48" height="48" alt=""></div>
+        <div class="tabchrome" style="min-width:0"><img src="../../public/brand/android-chrome-192x192.png" width="48" height="48" alt=""></div>
         <p class="cap">48px &mdash; bookmark bar</p>
       </div>
     </div>
     <div class="note narrow">
-      <p style="margin:0 0 10px">A favicon needs the mark alone, and ownership has ruled that
-      <b>the paddle on its own is not acceptable</b> as a standalone mark. There is no croppable
-      element left, so this needs new art &mdash; a monogram or another device, designed and approved.</p>
-      <p style="margin:0" class="foot-note">Tracked as A11 in the launch checklist. Nothing else
-      depends on it, so the current set stays until that art exists.</p>
+      <p style="margin:0 0 10px"><b>Ownership approved the paddle as the icon mark on 27 Aug
+      2026</b>, reversing the earlier ruling that it could not stand alone. A11 is closed. The 16px
+      shown above is hand-tuned rather than downscaled: a straight reduction leaves the paddle at
+      8.5% of the disc and it reads as a navy dot, so it is thickened to 16.3%. Sizes from 32 up
+      are byte-for-byte as supplied &mdash; the same thickening that rescues 16 flattens 180.</p>
+      <p style="margin:0" class="foot-note">The approval covers the icon only. The lockup is
+      unchanged and stays the master mark; a bare paddle never substitutes for it. The tab icons
+      also carry a bone ring: a navy disc had no edge on a dark tab bar &mdash; 1.19:1 on Chrome
+      dark &mdash; and the ring lifts that to 4.70 while leaving the light case untouched at 10.23.
+      It sits in the transparent margin, so the disc and paddle give up nothing.</p>
     </div>
   </div>
 </section>

@@ -24,7 +24,9 @@ Echo the logo's world: canoe + paddle (already in the logo), eagle, salmon, orca
 (killer whale), crab, and moving water.
 - **Waterline** — the signature. A horizontal blue wave band (using `--lb-teal`)
   separating sections, echoing the brand book's cyan wave. This is the theme's anchor.
-- **Paddle** — dividers, list markers, scroll accents (never alter the logo's paddle).
+- **Paddle** — dividers, list markers, scroll accents. Drawn in the motif style: ornament,
+  not the logo's paddle extracted. The logo's own paddle is still never altered here — the one
+  exception lives outside this skill, in the approved icon mark (see `brand-system`).
 - **Salmon / orca / crab / eagle** — spot illustrations, section icons, empty-state
   art, footer band.
 
@@ -38,8 +40,35 @@ Whenever art does arrive, this is the map. It survived the review that rejected 
 illustrated layer (ADR 0012) — the placement was never the objection.
 
 **Never:** the promo region (it already competes for attention; decorating it makes the page
-shout twice), the fuel price block (the most-used thing on the site, and it is a table), the
-sticky header (the locked logo owns it), and behind any body copy.
+shout twice), the fuel price block (the most-used thing on the site, and it is a table), and
+behind any body copy.
+
+**The sticky header, amended — ADR 0021.** It was on the Never list — the locked logo owns it.
+Art is allowed there now, under one hard rule:
+
+> **No image in the header may come within 20px of the right edge of the text navigation.**
+> Scaling a motif up may never cross that line.
+>
+> **One row of motifs, ever** — at every scale and every viewport width.
+>
+> **Right-aligned** — motifs gather at the far end from the navigation, and slack falls on the
+> nav side, never between the nav and the first motif.
+
+A floor, not a target: the lockup's clear space (skill `brand-system`) still applies, so art
+starts at whichever of the two lands further right. Where the nav collapses to a menu button
+there is no text navigation to measure from, and only the lockup rule binds.
+
+The rule settles placement by itself. Art *behind* the nav sits left of that edge, so it is out —
+just as well, because it was independently unusable: the active nav item already sits on a 16%
+bone highlight, and a band behind it caps at 6% opacity in bone, 5% in white, 11% in teal.
+
+A repeating band must use `mask-repeat: space no-repeat` — whole tiles across, nothing down.
+`space` alone tiles *both* axes, so a scale control silently grows a second row; `repeat-x` cuts
+the last motif in half wherever the width is not an exact multiple.
+
+Measure the gap off the rendered boxes rather than trusting the arithmetic. `docs/proofs/motif-header.html`
+reads it out live, which is how a NaN that silently dropped the band 243px inside the line
+was caught.
 
 **Ship motifs as masks, not coloured art.** A white-on-transparent SVG used as `mask-image` over
 a token background: shape from the mask, colour from `brand-system`, so a motif cannot introduce

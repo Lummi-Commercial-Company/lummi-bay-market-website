@@ -13,15 +13,23 @@ Lummi Bay Market brand.
   prices, (3) exceptional navigation.
 
 ## The brand = one company, three locations
-1. **Salish Village** (aka "Exit 260") — fuel + convenience store + full truck stop
-   (showers, driver lounge, secondary store, truck parking). The flagship.
-2. **Lummi Bay Mini Mart** — fuel + convenience store.
+1. **Salish Village** (aka "Exit 260") — fuel + convenience store, plus a **separate truck
+   stop** on the same property: its own fuel station for truckers with a small c-store,
+   driver lounge, showers and truck parking. Not an amenity of the store — see CONTEXT.md.
+   The flagship.
+2. **Lummi Bay Minimart** — fuel + convenience store.
 3. **The Cove** (aka "Fisherman's Cove") — fuel + convenience store.
 All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 
 ## Hard rules (never break)
 - **Logo is locked.** Use the existing logo art as-is. Never redraw, recolor, or
   restyle it. Colors and fonts *around* it may be enhanced; the logo may not.
+  **One carve-out, approved 27 Aug 2026: the paddle alone is the icon mark** — favicon,
+  app icon, avatar, any small square slot the lockup cannot fill. For that use it may be
+  recoloured (it ships white on a navy disc) and its 16px weight is deliberately thickened.
+  The carve-out is the icon and nothing else: the lockup is unchanged, stays the master mark
+  everywhere, and a bare paddle never stands in for it in the header, the hero, or any other
+  lockup slot. Method and measurements in `public/brand/README.md`.
 - **Other Lummi companies** appear ONLY as a single footer link labeled
   "Lummi Commercial Companies." Nowhere else in copy or nav.
 - **Cultural respect.** Coast Salish art is specific to Lummi Nation. For the build,
@@ -53,30 +61,65 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
 - Tribal motifs + the blue waterline → skill `pnw-tribal-art`.
 - Location schema + amenity differences → skill `location-content-model`.
 - Fuel-price editing procedure → skill `fuel-price-update`.
+- **No cookie banner** — the site sets no cookies to consent to, which is a constraint on every
+  future embed and on analytics, not just a decision already made — ADR 0025.
 
 ## Site architecture (locked — owned by ux-navigation-architect)
-Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, see ADR 0008.
-- Locations: index → 3 detail pages (nav labels: Exit 260 · Mini Mart · Fisherman's Cove).
+Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, see ADR 0008. On a
+**phone the three sit behind a ☰ menu** at the right of the header, after the pill: the header
+cannot hold the lockup, three links and the pill below ~430px, which is every common phone
+(ADR 0029). Still three items.
+- Locations: index → 3 detail pages (nav labels: Exit 260 · Minimart · Fisherman's Cove).
 - Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it.
-- `/fuel-prices` still exists as a page — reached from the footer and the price block's
-  "All prices" panel, not from the nav (ADR 0008).
+- `/fuel-prices` still exists as a page — reached from the price block's "All prices" panel
+  only, not from the nav and not from the footer (ADR 0008, amended 18 Sep 2026).
 - **Rewards**: a "Get the App" pill in the header's right-hand utility slot on **every** page,
   plus the `/rewards` app-promo page and the footer. Nowhere else — see ADR 0006.
 - **Promos**: a full-width graphic promo region below the page title on interior pages, linking
   to a product info page (ADR 0007). Product info pages are the `infoPages` collection — ADR 0015.
+- **Hours**: each Location's `hours` is one line, plus `hoursOverrides` — a temporary second line
+  on a date window, live per visitor in Pacific time, so New Year's Eve hours are typed in November
+  and revert on their own (ADR 0027). `endsAt` is required. It is not the alert bar: the alert is
+  sitewide, instant and unplanned; the override is per-Location, scheduled, and fixes the hours
+  themselves wherever they render.
 - **Emergency notice**: a `siteAlert` singleton rides inside the sticky header on every page,
   published by on-demand revalidation in under a second rather than a rebuild — ADR 0017. It is
-  why the build must never be `output: 'export'`.
-- Header is **sticky** on every page; the fuel-price rail is **not** — ADR 0006 records why the
-  rail must never be sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
+  one of **three** reasons the build must never be `output: 'export'`; the others are fuel prices,
+  which render per request against the content API so a pushed price is live immediately (ADR 0024),
+  and the hours override, which is evaluated per request against the visitor's date (ADR 0027).
+  Static export would silently delete all three rather than fail.
+- Header is **sticky** on every page. The fuel-price rail is sticky **on desktop only**, and only
+  because the condensed block's panel is positioned against the viewport there rather than
+  anchored to the block — a sticky anchor plus an anchor-positioned panel is broken, measured
+  (ADR 0006). On phones the rail sits at the top of the page and scrolls away. **The rule is
+  conditional on that mechanism:** if the panel is ever anchored to the block again, the rail
+  must stop being sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
   carries the Rewards "Get the App" pill on every page.
-Footer: **About** (brand story grounded in the Lummi values + light community note; LCC
-corporate/enterprise content stays out), **Contact**, **Rewards**, **Careers** (editable
-link), and the single **Lummi Commercial Companies** link → lcc-lummi.com.
+Footer: **four headed columns**, as the approved templates draw them (ADR 0029) — **About**
+(Our story → `/about`, a brand story grounded in the Lummi values + light community note, LCC
+corporate/enterprise content stays out; Contact), **Visit** (the three Locations and the Truck
+Stop, derived from the Location data), **Rewards** (Get the app → `/rewards`) and **Work with
+us** (Careers, an editable link). **No "Salish Village" link**, though the template draws one: it
+is an LCC development, so it falls under the hard rule on other Lummi companies. Below those
+columns and above the base row sits a **social row** — one icon-and-link per account, from a settings list,
+rendering nothing while the list is empty. **Links only, never embeds**: a feed, a follow button or
+an official share widget loads third-party code and sets cookies before anyone clicks (ADR 0028).
+The base row carries **© Lummi Bay Market**, a **Privacy Policy** link → `/privacy`, and the single
+**Lummi Commercial Companies** link → lcc-lummi.com — nothing else. **The
+"No cookies. Visits counted anonymously." line is no longer in the footer** — removed at the
+owner's direction 29 Sep 2026; the same claim is made in full in the "This website" section of
+`/privacy`, which is where it belongs (ADR 0025, amended). The *constraint* is unchanged and is
+still the reason embeds and analytics are limited: the site sets no cookies, and anything added
+later that sets one now falsifies a published policy page rather than a footer line. `/privacy`
+exists because neither app store will publish the **Rewards app** without a public policy URL
+(ADR 0026); it is a `pages` document, is never renamed or deleted once it is in a store listing,
+and is not in the nav.
 The contact form and the per-location hours/phone block are **not** in the footer. There is
 no form anywhere on the site; hours, addresses, phone and a per-Location synopsis live on
 `/contact`, derived from the Location data — ADR 0015. `/contact` also carries one map with a
-pin per Location and no promos; the embed mechanism is open — ADR 0019.
+pin per Location and no promos; the mechanism is settled — an embedded Google My Maps behind a
+click-to-load still image, ADR 0019 with ADR 0025. What is outstanding is that nobody has built
+the map yet, so both settings fields are empty and `/contact` renders one section fewer.
 Note: `/about` still exists as a page — it is reached from the footer, not the top nav.
 
 ## Page types (ADR 0015, ADR 0016)
@@ -95,10 +138,14 @@ the layout and cannot be lost or moved by a page.
   scheduler. `mainPages` is demoted to a redesign escape hatch and is never scheduled (ADR 0018).
 - `tenants` — independent businesses renting space on a Lummi Bay property. Known at Exit 260:
   Piroshky Piroshky (inside the store), Wendy's and Black Bear Diner (freestanding buildings;
-  Black Bear not yet built), and Hi-Tide Coffee (a coffee truck). All rent from LCC; the site never says so. **Whether to advertise them
-  is undecided** — the collection ships empty and nothing renders until a page is published
-  (ADR 0016). **A tenant is never a Location** (it would land in the Locations index and the
-  fuel price table) and never an Amenity (the Cove Kitchen is one; ownership decides).
+  Black Bear not yet built), and Hi-Tide Coffee (a coffee truck). All rent from LCC; the site never says so. **Settled 17 Sep 2026: yes, they are advertised** — there
+  is a tenants page and each tenant gets a card on it. A card links either to a tenant page here or
+  straight out to the tenant's own website, chosen per tenant via `linkMode` and revisable; an
+  external card is visibly marked as leaving the site. Nothing renders until a tenant document is
+  published (ADR 0016). **A tenant is never a Location** (it would land in the Locations index and the
+  fuel price table) and never an Amenity. **Settled 16 Sep 2026: the Cove Kitchen is an
+  Amenity, not a tenant** — Lummi Bay Market runs it, so it stays in Fisherman's Cove's
+  `amenities` and is unaffected by whether tenants are advertised at all.
   The index is its own page, "Also at Exit 260" — never "Salish Village" (ADR 0001 collision) — grouped by where each business is rather than alphabetically. Not in the nav.
 A new page never appears in the nav on its own — the nav stays three items (ADR 0008).
 

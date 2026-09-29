@@ -1,116 +1,50 @@
-import fs from "node:fs";
-import path from "node:path";
-
-const CONTENT = path.join(process.cwd(), "content");
-
-/** A Location's truck stop, when it has one. Only Exit 260 does. */
-export type TruckStop = {
-  phone: string;
-  hours: string;
-  amenities: string[];
-};
+import { readFile, readdir } from 'node:fs/promises'
+import path from 'node:path'
 
 /**
- * One of the three Lummi Bay Market stores. See CONTEXT.md — a Tenant is not a
- * Location, and this set is what the Locations index and the price table read from.
+ * Filesystem access to the content files in this repo.
+ *
+ * All content is Markdown/MDX/JSON committed to git — there is no content
+ * database and there is never going to be one. Phase 2 layers Tina's generated
+ * GraphQL client on top of these same files for visual editing and for the
+ * per-request price read (ADR 0024); the files stay the source of truth.
  */
-export type Location = {
-  /** Derived from the filename — Tina treats the filename as the slug. */
-  id: string;
-  name: string;
-  navLabel: string;
-  shortLabel: string;
-  aka: string;
-  order: number;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  phone: string;
-  phoneLabel: string;
-  hours: string;
-  cardLine: string;
-  intro: string;
-  amenities: string[];
-  truckStop?: TruckStop;
-};
 
-export type GradePrices = {
-  regular?: number;
-  diesel?: number;
-  def?: number;
-  updated: string;
-};
+export const CONTENT_DIR = path.join(process.cwd(), 'content')
 
-export type FuelPrices = {
-  linkLocations: boolean;
-  locations: Record<string, GradePrices>;
-  truckStop: GradePrices;
-};
-
-export type SiteAlert = {
-  active: boolean;
-  message: string;
-  linkLabel: string;
-  linkHref: string;
-};
-
-function readJson<T>(...segments: string[]): T {
-  return JSON.parse(fs.readFileSync(path.join(CONTENT, ...segments), "utf8")) as T;
+/** Read a content file. Returns null when it does not exist. */
+export async function readContentFile(relativePath: string): Promise<string | null> {
+  try {
+    return await readFile(path.join(CONTENT_DIR, relativePath), 'utf8')
+  } catch {
+    return null
+  }
 }
 
-/** All Locations, in the order the Locations index and price table use. */
-export function getLocations(): Location[] {
-  const dir = path.join(CONTENT, "locations");
-  return fs
-    .readdirSync(dir)
-    .filter((f) => f.endsWith(".json"))
-    .map((f) => ({
-      ...readJson<Omit<Location, "id">>("locations", f),
-      id: f.replace(/\.json$/, ""),
-    }))
-    .sort((a, b) => a.order - b.order);
+/** Read and parse a JSON content file. Returns null when absent or invalid. */
+export async function readContentJson<T>(relativePath: string): Promise<T | null> {
+  const raw = await readContentFile(relativePath)
+  if (raw === null) return null
+  try {
+    return JSON.parse(raw) as T
+  } catch {
+    // A malformed content file must not take the whole site down; the caller
+    // falls back and the problem shows up as missing data, not a 500.
+    console.error(`[content] ${relativePath} is not valid JSON`)
+    return null
+  }
 }
 
-export function getLocation(id: string): Location | undefined {
-  return getLocations().find((l) => l.id === id);
-}
-
-/** The Location that owns the Truck Stop. Exactly one does. */
-export function getTruckStopLocation(): Location | undefined {
-  return getLocations().find((l) => l.truckStop);
-}
-
-export function getFuelPrices(): FuelPrices {
-  return readJson<FuelPrices>("fuel-prices.json");
-}
-
-export function getSiteAlert(): SiteAlert {
-  return readJson<SiteAlert>("settings", "site-alert.json");
-}
-
-/** A row in the fuel price table: a place that posts prices. */
-export type PriceRow = {
-  key: string;
-  label: string;
-  prices: GradePrices;
-};
-
-/**
- * The four places that post prices, in table order: the three Locations then the
- * Truck Stop. Labels use `shortLabel` — the price band is the constrained slot
- * `shortLabel` exists for.
- */
-export function getPriceRows(): PriceRow[] {
-  const locations = getLocations();
-  const fuel = getFuelPrices();
-  const rows: PriceRow[] = locations
-    .filter((l) => fuel.locations[l.id])
-    .map((l) => ({
-      key: l.id,
-      label: l.shortLabel || l.navLabel,
-      prices: fuel.locations[l.id],
-    }));
-  rows.push({ key: "truck-stop", label: "Truck Stop", prices: fuel.truckStop });
-  return rows;
+export async function listContentFiles(
+  dir: string,
+  extensions: string[] = ['.md', '.mdx']
+): Promise<string[]> {
+  try {
+    const entries = await readdir(path.join(CONTENT_DIR, dir))
+    return entries
+      .filter((name) => extensions.some((ext) => name.endsWith(ext)))
+      .sort()
+  } catch {
+    return []
+  }
 }

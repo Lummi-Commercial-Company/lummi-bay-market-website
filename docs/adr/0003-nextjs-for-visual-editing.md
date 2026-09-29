@@ -37,4 +37,11 @@ Tina **free tier, 2 editor logins**. Deploy to **Vercel**.
 - Accepted trade-off: no granular role-based permissions, no built-in media library or
   document version history. With 2 trusted editors and git history as the audit trail,
   this is acceptable. Revisit only if editor count or workflow complexity grows.
-- Growth path: Tina Team tier ($29/mo) covers up to 5 editors if staff expands.
+- Growth path if staff expands: **Team $24/mo covers 3 editors, Team Plus $41/mo covers 5.**
+
+  *Corrected 17 Sep 2026.* This line previously read "Tina Team tier ($29/mo) covers up to 5
+  editors" — one tier that does not exist at a price that is not charged, and it made the jump
+  from 2 editors to 5 look like a single $29 step when it is two steps ending at $41. The figures
+  above are the ones verified against tina.io in Aug 2026 and locked in `CLAUDE.md`. A wrong
+  growth-path price is the kind of error that only surfaces in a budget conversation, which is the
+  worst moment to find it.

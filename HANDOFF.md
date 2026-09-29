@@ -44,8 +44,9 @@ In priority order. The first three are from `docs/loose-ends.md` and matter more
    70–75% opacity. The palette is locked, so a failure becomes a usage rule.
 4. **Phase 0 blockers** (`docs/roadmap.md`): confirmed hours and addresses, an art direction, the
    pricing decision, and registrar access for lummibay.com and exit260.com. ~~Logo files~~ and
-   ~~the navy-on-navy header~~ are **done** — see below. A favicon mark is the one logo item left
-   (launch-checklist A11) and it blocks nothing.
+   ~~the navy-on-navy header~~ are **done** — see below. ~~A favicon mark~~ is **done too**: a set
+   was supplied 27 Aug 2026 and ownership approved the paddle alone as the icon mark, reversing
+   the ruling that had blocked it (launch-checklist A11). No logo item is open.
 5. **Register items C5, C7, C9** — in `docs/proofs/fuel-strip-proof.html`. C7 is a business call.
 
 ## The logo is in, and the header is unblocked
@@ -68,6 +69,11 @@ In priority order. The first three are from `docs/loose-ends.md` and matter more
 - **One trap.** `logo-market-on-light.png` is a 512-square with ~65% of its height empty, so
   sized by width it renders 146px tall to show 46px of logo. Fine in the hero; crop to its ink
   before using it anywhere tight.
+- **`docs/design-spec-sheet.html` is what designers are sent**, and
+  `docs/lummi-bay-asset-specs-brand-guide.pdf` is printed from that same file by
+  `scripts/make-spec-pdf.cjs` — the `@media print` block at the end of its stylesheet is the
+  whole of the PDF's design. Edit the HTML, re-run the script, commit both. Never hand-edit
+  the PDF, and never let the two drift.
 
 ## How this project works
 - **Decisions go in `docs/adr/`**, including rejected ones (see 0012). A rejected decision that

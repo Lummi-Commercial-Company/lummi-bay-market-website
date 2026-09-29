@@ -1,0 +1,52 @@
+/* ===========================================================================
+   Amenity badges — docs/proofs/amenity-badges.html, Treatment A (chosen).
+   Sentence-case pills on white, a 16px navy line icon in each.
+   =========================================================================== */
+
+/* "What's here" — a small uppercase label above the row, not a big heading.
+   The proof sets it in cedar; navy instead, because cedar at this size fails
+   as text (ADR 0014) — the same correction the approved page templates make. */
+.label {
+  font: 600 10.5px/1 var(--ff-body);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--lb-navy);
+  margin: var(--sp-5) 0 10px;
+}
+
+/* Room below the row, so whatever section follows it does not sit on it. */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 var(--sp-6);
+  padding: 0;
+  list-style: none;
+}
+
+/* Not a link, and never styled like one (the proof: the moment one badge
+   navigates, every one has to, and the row becomes a nav). */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px 7px 11px;
+  border: 1px solid rgba(28, 78, 143, 0.22);
+  border-radius: 999px;
+  background: var(--lb-paper);
+  font: 600 13px/1 var(--ff-body);
+  color: var(--lb-ink);
+  white-space: nowrap;
+}
+
+.glyph {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--lb-navy);
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

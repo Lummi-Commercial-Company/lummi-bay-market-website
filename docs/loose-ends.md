@@ -10,6 +10,20 @@ Ordered by how much damage each could do, not by when it came up.
 
 ## 1. The biggest gap: nobody has looked at what people actually use the three sites for
 
+> **Downgraded 17 Sep 2026 — answered by the client, not by evidence.** Asked directly which of
+> the three could change work already done, the client's first answer was flat: **"Fuel prices are
+> the draw."** That is the person who runs the business, and it is the best answer available
+> without opening an analytics account, so the three-item nav (ADR 0008) and the price block on
+> every page stand as designed.
+>
+> **It is not the same as measurement, and the difference is worth keeping in view.** What the
+> client answered is *why people come*. What analytics would have shown is *what they could not
+> find* — the searches for a phone number, the Cove Kitchen menu, whether the showers are open to
+> non-drivers. Those do not contradict "fuel prices are the draw"; they sit underneath it, and
+> they are what would tell us whether anything on this site is hard to reach. So this is no longer
+> a risk to the IA. It is an ordinary pre-launch task with a much smaller blast radius, and the
+> half-day is still worth spending if the analytics exist at all.
+
 **The entire information architecture assumes fuel prices are the primary draw.** The price block
 is on every page, the nav is three items, and several rounds of work went into how a price
 condenses on scroll. That assumption has never been checked against a single piece of evidence.
@@ -23,9 +37,24 @@ have no analytics at all, that is itself the finding, and search-console impress
 top queries from the sites' own search boxes would beat nothing.
 
 ## 2. Nobody has watched staff update a price today
+
+> **Half-closed 17 Sep 2026.** The client described the process: *"Price changes today are
+> immediate and manual. 3-4 people have to get together and say 'change prices....now' and then do
+> their related tasks to change the price as close to the same time as possible."* That answers
+> the *shape* of it, and what follows for the **website** is now written into the
+> `fuel-price-update` skill: the form has to work one-handed on a phone at the counter, the site's
+> own latency is effectively zero because Save is the last action (ADR 0024), and the `updated`
+> stamp is where a missed change shows. **What that skill no longer does is tell them the order to
+> do their tasks in** — an earlier draft said the website should go last, and the client's
+> correction on 17 Sep 2026 was right: that is how the business operates, not a website concern.
+>
+> **Still open, and still half an hour:** nobody has watched it. Which screen the new price comes
+> off, who calls the number out, and whether the person who would edit the site is even in the
+> room are all things a description does not settle.
+
 The CMS design assumes a workflow that has not been observed. How do prices get changed *now* —
 a whiteboard, a call to a manager, a POS system, someone with FTP? Who physically changes the
-pump signs, and does the website need to match them or lead them?
+pump signs, and at what point in that does somebody reach for the site?
 
 ADR 0004's whole model (one document, a checkbox that sets all three Locations) was reasoned from
 first principles and from what the owner asked for. It has never been shown to the person who
@@ -130,63 +159,3 @@ written correctly, then applied to a subset instead of universally. DEF shown fo
 does not sell it; the panel's "carries what is off screen" rule applied to Locations but not the
 Truck Stop; "refresh the price pages" when prices are on every page. When a rule is written, check
 every place it should apply, not the place that prompted it.
-
-## 9. Open after the first build session (Sep 2026)
-The scaffold now exists: Next.js 16 + React 19 + TinaCMS 3, the layout shell, the three Location
-pages, the Truck Stop, and the fuel price block. Lint, typecheck and build pass; the price
-pipeline was verified by changing one value and watching it appear on three pages that never
-name that Location. What follows was **found by building**, and none of it is guesswork.
-
-**The header does not fit at 320px.** Measured: 39px of horizontal overflow with the logo at its
-locked ~72px minimum width. 360px and 375px are clean at 0px. A wordmark, three nav items and the
-Rewards pill cannot share one 320px row, and every available pixel has already been taken — the
-gutter is down to 8px and the nav to 0.75rem. The remaining options all change the IA (a
-hamburger, a two-row header, or dropping the pill below phone width, which ADR 0006 forbids),
-so this belongs to **ux-navigation-architect**, not to CSS. 320px matters: the `cardLine` budget
-in `location-content-model` is measured there.
-
-**`tina-lock.json` cannot be generated without the TinaCloud Client ID.** Verified: `tinacms build`
-fails the cloud check without it, and `--local` produces the generated client but no lock file.
-So TinaCloud checklist step 2 is genuinely blocked on credentials, not on schema work.
-
-**A missing Tina env var fails the BUILD, not the editor.** `docs/backend-setup.md` step 9 says the
-opposite — that a missing one "fails at the editor, not at the build, so it looks fine until
-someone tries to edit." Observed behaviour is the reverse: `tinacms build` exits non-zero with
-`ERR_CLOUD_CHECK_FAILED`. That is better, not worse — the failure is loud — but the note should be
-corrected before it misleads someone debugging a red deploy.
-
-**The fuel price block does not condense on scroll yet.** The resting card, the popover, the one
-table, the derived grade columns and the /truck-stop row order are all built to ADR 0005. The
-`IntersectionObserver` condensing is not, because ADR 0005 requires asserting zero pixel movement
-and cross-browser checks in Safari and Firefox, and this container has only Chromium. Everything
-the condensing needs is in the ADR; it was deferred for lack of a way to verify it, not for lack
-of a spec.
-
-**The popover is unverified outside Chromium.** CSS anchor positioning is the project's one
-dependency on a newer feature (ADR 0005). A `@supports` fallback centres the panel under the
-header where anchoring is unavailable, but neither path has been opened in Safari or Firefox.
-
-**`fuel-price-update` contradicts itself on the opening mechanism.** It states emphatically that
-every block loads collapsed on every page including Home and `/fuel-prices`, and says not to
-reintroduce a "loads expanded" variant. A table further down still lists "loads expanded (Home,
-`/fuel-prices`)" as a case. The build follows the emphatic rule — collapsed everywhere — and the
-stale table row should be deleted.
-
-**`truckStop` was built as a record, not a boolean.** `location-content-model` flagged that three
-fields hanging off a boolean is the schema asking to be `truckStop: { phone, hours, amenities }`,
-and that until it changed the Truck Stop's own phone had nowhere to live. Building fresh, the
-record was the only shape that worked. **This needs sign-off**, since the skill still documents
-the boolean.
-
-**The two naming questions are still open and are now visible on the site.** "Minimart" vs "Mini
-Mart", and whether Fisherman's Cove takes "at". The build kept this document's existing values.
-Both appear as page titles, so both are wrong in public if the client's wording was the right one.
-
-**The waterline carries no motif at all.** `CLAUDE.md` asks for representative placeholder motifs;
-`HANDOFF.md` says not to generate formline even as a placeholder, and ADR 0012 rejected an
-illustrated layer. The stricter instruction won: the band is a plain geometric wave in the
-approved teal. The two documents should be reconciled so the next person does not re-litigate it.
-
-**A Location's `id` is now derived from its filename.** TinaCMS reserves `id` on documents, so the
-field could not stay in the schema. The filename is the slug, which is also how Tina models it.
-No content change, but `location-content-model` lists `id` as a stored field and no longer should.

@@ -144,7 +144,12 @@ Three things about the supplied art that the header depends on:
   referenced only from `srcset`.
 - **2.8:1 held up.** See the amended consequence above.
 
-What is *not* resolved by this: the favicon. The supplied set carries the full lockup, which is a
-3:1 band and unreadable at 16px, and ownership has ruled that the paddle alone is not acceptable
-as a standalone mark. A favicon therefore needs new art. That is a brand item with a lead time,
-not a header question, and it does not block anything this ADR decides.
+What was *not* resolved by this: the favicon. The set of the day carried the full lockup, a 3:1
+band unreadable at 16px, and ownership had ruled that the paddle alone was not acceptable as a
+standalone mark, so a favicon needed new art.
+
+**Resolved 27 Aug 2026, and that ruling reversed.** A new set was supplied — the paddle alone,
+white on a navy disc — and ownership approved the paddle as the icon mark. The 16px size is
+hand-tuned: a straight downscale leaves the paddle at 8.5% of the disc and it reads as a dot.
+The approval covers the icon only. The header lockup this ADR decides is untouched, and a bare
+paddle never stands in for it.

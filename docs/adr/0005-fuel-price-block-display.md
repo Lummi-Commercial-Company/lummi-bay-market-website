@@ -56,7 +56,7 @@ visible at a glance in aligned columns and invisible in a run of inline text.
    happens — it moves into the panel, per rule 3. The bar keeps the card's width; sized by
    content it came out 365px, and a narrow bar under a 400px panel reads as two objects.
 3. **Expanded** — the panel adds **only the places not currently on screen**. Never a repeat.
-   At rest, two at both widths: Mini Mart and The Cove, because the Truck Stop is in the card.
+   At rest, two at both widths: Minimart and The Cove, because the Truck Stop is in the card.
    From the condensed line, three at both widths: those two *plus the Truck Stop*, because the
    one-line bar carries a single Location. This is one rule rather than a case per state, and
    getting it wrong is what dropped the Truck Stop out of the condensed view entirely.
@@ -76,9 +76,9 @@ open at rest (desktop)                  open while condensed (desktop)
 │ ⌃ Hide                         │      │ Exit 260 │ REG 3.79  DIESEL 4.29 ⌃ │
 │           REGULAR DIESEL   DEF │      ├────────────────────────────────────┤
 │ Exit 260     3.79    4.29    — │      │        REGULAR   DIESEL       DEF  │
-│ Truck Stop      —    4.55  3.29│      │ Mini Mart 3.79     4.29         —  │
+│ Truck Stop      —    4.55  3.29│      │ Minimart 3.79     4.29         —  │
 ├────────────────────────────────┤      │ The Cove  3.85     4.29         —  │
-│ Mini Mart    3.79    4.29    — │      │ Truck Stop   —     4.55       3.29 │
+│ Minimart    3.79    4.29    — │      │ Truck Stop   —     4.55       3.29 │
 │ The Cove     3.85    4.29    — │      └────────────────────────────────────┘
 └────────────────────────────────┘
                                         the bar carries one Location, so the
@@ -89,7 +89,7 @@ phone, shut — the same card as desktop  phone, condensed and open
 │ ⌄ View all prices                │    │ Exit 260 │ REG 3.79  DIESEL 4.29 ⌃│
 │          REGULAR  DIESEL     DEF │    ├──────────────────────────────────┤
 │ Exit 260    3.79    4.29       — │    │          REGULAR  DIESEL     DEF │
-│ Truck Stop     —    4.55    3.29 │    │ Mini Mart   3.79    4.29       — │
+│ Truck Stop     —    4.55    3.29 │    │ Minimart   3.79    4.29       — │
 └──────────────────────────────────┘    │ The Cove    3.85    4.29       — │
                                         │ Truck Stop     —    4.55    3.29 │
 truck prices are visible on arrival     └──────────────────────────────────┘

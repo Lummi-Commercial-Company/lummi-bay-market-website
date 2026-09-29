@@ -1,0 +1,166 @@
+/* ===========================================================================
+   Footer — the approved templates' four headed columns (ADR 0029).
+   Type is the template's: 9px column heads, 12px links, 10.5px base row.
+   Targets are ADR 0010's: on a phone every link is a 44px-tall, full-column
+   hit area — the template draws the links touching, which is a drawing
+   shortcut, not a spec. Two columns on a phone, four from 768px.
+   =========================================================================== */
+
+.footer {
+  background: var(--lb-navy);
+  color: var(--lb-bone);
+  /* Room for the back-to-top button so it never sits on a link (ADR 0011). */
+  padding-bottom: 72px;
+}
+
+@media (min-width: 768px) {
+  .footer {
+    padding-bottom: 30px;
+  }
+}
+
+/* Side padding is the page gutter, not the template's frame padding, so the
+   footer's left edge lines up with the page content above it. */
+.inner {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: 26px var(--sp-4) 0;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    padding-top: 30px;
+  }
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px 12px;
+}
+
+@media (min-width: 768px) {
+  .cols {
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 22px;
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.head {
+  font: 700 9px/1 var(--ff-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lb-bone);
+  opacity: 0.68;
+  margin: 0 0 4px;
+}
+
+/* The text is 12px; the row is the 44px target on a phone. */
+.link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  width: 100%;
+  color: var(--lb-bone);
+  opacity: 0.92;
+  text-decoration: none;
+  font: 400 12px/1.2 var(--ff-body);
+}
+
+.link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* A mouse is precise, so desktop rows close up to the template's rhythm. */
+@media (min-width: 768px) {
+  .head {
+    margin-bottom: 8px;
+  }
+
+  .link {
+    min-height: 28px;
+  }
+}
+
+.extGlyph {
+  flex: 0 0 auto;
+  opacity: 0.8;
+}
+
+/* ---- Social row — ADR 0028 -------------------------------------------- */
+/* Sits between the link columns and the base row. Renders nothing when the
+   settings list is empty; that case is handled in the component, not here. */
+.social {
+  list-style: none;
+  margin: var(--sp-5) 0 0;
+  padding: 0;
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.socialLink {
+  display: grid;
+  place-items: center;
+  /* ~20px glyph in a 44 × 44 target — the padding does the work. */
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  color: var(--lb-bone);
+}
+
+.socialLink:hover {
+  background: rgb(245 241 232 / 0.12);
+}
+
+.socialGlyph {
+  display: block;
+}
+
+/* ---- Base row — © · Privacy Policy · Lummi Commercial Companies ------ */
+.base {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgb(245 241 232 / 0.2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 18px;
+}
+
+@media (min-width: 768px) {
+  .base {
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+}
+
+.baseText {
+  font: 400 10.5px/1 var(--ff-body);
+  color: var(--lb-bone);
+  opacity: 0.7;
+}
+
+/* Each link keeps a 44px target on a phone (ADR 0010). */
+.baseLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  color: var(--lb-bone);
+  font: 600 10.5px/1 var(--ff-body);
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .baseLink {
+    min-height: 28px;
+  }
+}

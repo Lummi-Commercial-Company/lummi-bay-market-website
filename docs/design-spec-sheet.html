@@ -1,0 +1,838 @@
+<title>Lummi Bay Asset Specs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#FBF9F4; --paper:#FFFFFF; --ink:#2A2820; --ink-soft:#6B6659;
+  --navy:#1C4E8F; --navy-deep:#14396B; --teal:#0FB5C4; --cedar:#C9772E;
+  --bone:#F5F1E8; --rule:rgba(28,78,143,.16); --rule-soft:rgba(42,40,32,.10);
+  --swatch-edge:rgba(42,40,32,.22);
+  --flag-bg:#FBF1E6; --flag-edge:rgba(201,119,46,.42);
+  --note-bg:#F1F6FB;
+  --disp:"Space Grotesk",Inter,system-ui,sans-serif;
+  --body:Inter,system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E141C; --paper:#161F2A; --ink:#E6E2D6; --ink-soft:#9A9484;
+    --navy:#8FB4E4; --navy-deep:#A9C8EE; --teal:#3FD0DC; --cedar:#E3A264;
+    --bone:#F5F1E8; --rule:rgba(143,180,228,.22); --rule-soft:rgba(230,226,214,.12);
+    --swatch-edge:rgba(230,226,214,.28);
+    --flag-bg:#241C12; --flag-edge:rgba(227,162,100,.40);
+    --note-bg:#12202E;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E141C; --paper:#161F2A; --ink:#E6E2D6; --ink-soft:#9A9484;
+  --navy:#8FB4E4; --navy-deep:#A9C8EE; --teal:#3FD0DC; --cedar:#E3A264;
+  --bone:#F5F1E8; --rule:rgba(143,180,228,.22); --rule-soft:rgba(230,226,214,.12);
+  --swatch-edge:rgba(230,226,214,.28);
+  --flag-bg:#241C12; --flag-edge:rgba(227,162,100,.40);
+  --note-bg:#12202E;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font:400 15px/1.6 var(--body);
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:1020px; margin:0 auto; padding-block:0 72px; padding-left:20px; padding-right:20px}
+
+/* ---------- masthead ---------- */
+.mast{padding-block:44px 0}
+.eyebrow{
+  font:500 11px/1 var(--mono); letter-spacing:.17em; text-transform:uppercase;
+  color:var(--cedar); margin:0 0 14px;
+}
+h1{
+  font:700 clamp(2rem,6vw,3rem)/1.05 var(--disp); color:var(--navy);
+  margin:0 0 14px; letter-spacing:-.02em; text-wrap:balance;
+}
+.standfirst{font-size:1.0625rem; color:var(--ink); opacity:.88; max-width:62ch; margin:0}
+.meta{
+  display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:20px;
+  font:400 12px/1.5 var(--mono); color:var(--ink-soft);
+}
+.meta b{font-weight:500; color:var(--ink); opacity:.8}
+
+/* ---------- waterline divider (the brand's connective tissue) ---------- */
+.waterline{display:block; width:100%; height:18px; margin:40px 0 0; overflow:visible}
+
+/* ---------- sections ---------- */
+section{padding-block:40px 0}
+h2{
+  font:700 1.5rem/1.2 var(--disp); color:var(--navy); margin:0 0 6px;
+  letter-spacing:-.01em; text-wrap:balance;
+}
+h2 .num{
+  font:500 .6875rem/1 var(--mono); color:var(--cedar); letter-spacing:.14em;
+  display:block; margin-bottom:9px;
+}
+h3{font:700 1.0625rem/1.3 var(--disp); color:var(--ink); margin:30px 0 8px}
+.sec-lede{max-width:66ch; color:var(--ink); opacity:.84; margin:0 0 22px}
+p{margin:0 0 14px}
+p:last-child{margin-bottom:0}
+a{color:var(--navy); text-decoration-thickness:1px; text-underline-offset:2px}
+code{font:400 .875em/1.4 var(--mono); background:var(--note-bg); padding:1px 5px; border-radius:3px}
+
+/* ---------- the hard-rule flags ---------- */
+.flags{display:grid; gap:14px; margin-top:4px}
+.flag{
+  background:var(--flag-bg); border:1px solid var(--flag-edge);
+  border-left:3px solid var(--cedar); border-radius:4px; padding:16px 18px;
+}
+.flag h3{
+  margin:0 0 6px; font:700 .9375rem/1.3 var(--disp); color:var(--ink);
+  display:flex; align-items:baseline; gap:9px;
+}
+.flag h3 span{font:500 10px/1 var(--mono); letter-spacing:.13em; color:var(--cedar); text-transform:uppercase}
+.flag p{font-size:.9375rem; margin:0; color:var(--ink); opacity:.9; max-width:68ch}
+.flag p + p{margin-top:8px}
+
+/* ---------- colour ---------- */
+.swatches{
+  display:grid; gap:1px; background:var(--rule); border:1px solid var(--rule);
+  border-radius:6px; overflow:hidden;
+  grid-template-columns:repeat(auto-fit,minmax(224px,1fr));
+}
+.sw{background:var(--paper); padding:0 0 15px}
+.sw .chip{height:74px; display:block; border-bottom:1px solid var(--swatch-edge)}
+.sw .tok{
+  font:500 12px/1 var(--mono); color:var(--ink); margin:14px 15px 0; display:block;
+}
+.sw .role{font-size:.8125rem; color:var(--ink-soft); margin:5px 15px 10px; display:block; line-height:1.45}
+.sw dl{margin:0 15px; display:grid; grid-template-columns:auto 1fr; gap:3px 10px;
+  font:400 11.5px/1.4 var(--mono); font-variant-numeric:tabular-nums}
+.sw dt{color:var(--ink-soft)}
+.sw dd{margin:0; color:var(--ink)}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto; border:1px solid var(--rule); border-radius:6px; background:var(--paper)}
+table{border-collapse:collapse; width:100%; min-width:540px; font-size:.875rem}
+th,td{padding:11px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--rule-soft)}
+thead th{
+  font:600 10.5px/1.3 var(--body); letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-soft); background:var(--note-bg); border-bottom:1px solid var(--rule);
+  white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+td.n,th.n{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap; font-size:.8125rem}
+td b{font-weight:600}
+.tw + .tnote{
+  font-size:.8125rem; color:var(--ink-soft); margin:10px 0 0; max-width:70ch; line-height:1.55;
+}
+
+/* ---------- proportion previews ---------- */
+.props{display:flex; flex-wrap:wrap; gap:18px; margin:22px 0 0; align-items:flex-end}
+.prop{flex:0 0 auto; max-width:100%}
+.prop .box{
+  background:linear-gradient(135deg,var(--bone) 0%,#ECE5D8 100%);
+  border:1px dashed var(--cedar); border-radius:3px; max-width:100%;
+  display:grid; place-items:center;
+  font:500 9.5px/1 var(--mono); color:#6B6659; letter-spacing:.08em;
+}
+.prop .cap{
+  font:400 11px/1.4 var(--mono); color:var(--ink-soft); margin-top:7px;
+  font-variant-numeric:tabular-nums;
+}
+.prop .cap b{display:block; font-weight:500; color:var(--ink)}
+
+/* ---------- share card frame ---------- */
+.shareframe{margin:24px 0 0}
+.shareframe svg{
+  display:block; width:100%; height:auto; max-width:100%;
+  border-radius:5px; border:1px solid var(--rule);
+}
+.framecap{
+  font:400 11px/1.5 var(--mono); color:var(--ink-soft); margin:9px 0 0;
+  font-variant-numeric:tabular-nums;
+}
+.framecap b{font-weight:500; color:var(--ink)}
+
+/* ---------- notes ---------- */
+.note{
+  background:var(--note-bg); border-left:3px solid var(--teal);
+  border-radius:0 4px 4px 0; padding:14px 17px; margin:20px 0 0;
+}
+.note h3{margin:0 0 6px; font:700 .9375rem/1.3 var(--disp); color:var(--ink)}
+.note p{font-size:.9375rem; margin:0; opacity:.9; max-width:68ch}
+.note p + p{margin-top:8px}
+
+/* ---------- do / don't ---------- */
+.dd{display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); margin-top:6px}
+.dd > div{background:var(--paper); border:1px solid var(--rule); border-radius:6px; padding:18px 20px}
+.dd h3{margin:0 0 12px; font:700 .875rem/1 var(--disp); letter-spacing:.06em; text-transform:uppercase}
+.dd .do h3{color:var(--navy)}
+.dd .dont h3{color:var(--cedar)}
+.dd ul{margin:0; padding-left:18px; display:grid; gap:9px}
+.dd li{font-size:.875rem; line-height:1.55}
+
+/* ---------- status pills ---------- */
+.pill{
+  display:inline-block; font:600 9.5px/1 var(--body); letter-spacing:.09em;
+  text-transform:uppercase; padding:4px 8px; border-radius:99px; white-space:nowrap;
+  border:1px solid currentColor;
+}
+.pill.locked{color:var(--navy)}
+.pill.proposed{color:var(--cedar)}
+.pill.open{color:var(--ink-soft)}
+
+footer{
+  margin-top:48px; padding-top:22px; border-top:1px solid var(--rule);
+  font-size:.8125rem; color:var(--ink-soft); max-width:70ch; line-height:1.6;
+}
+@media (max-width:560px){
+  .page{padding-left:16px; padding-right:16px}
+  .meta{gap:4px 16px}
+}
+/* ---------- print: the PDF is generated from this same file ---------- */
+@page{size:Letter; margin:15mm 14mm 17mm}
+@media print{
+  /* Paper has one theme. Pin the light palette so a dark viewing profile can
+     never reach the PDF, and firm up the rules that thin out on paper. */
+  :root,:root[data-theme="dark"]{
+    --ground:#FFFFFF; --paper:#FFFFFF; --ink:#2A2820; --ink-soft:#5F5A4E;
+    --navy:#1C4E8F; --navy-deep:#14396B; --teal:#0FB5C4; --cedar:#C9772E;
+    --bone:#F5F1E8; --rule:rgba(28,78,143,.30); --rule-soft:rgba(42,40,32,.18);
+    --swatch-edge:rgba(42,40,32,.30);
+    --flag-bg:#FBF1E6; --flag-edge:rgba(201,119,46,.50);
+    --note-bg:#F1F6FB;
+  }
+  /* The swatch chips, the waterline and the share-card diagram are the
+     content, not decoration — they must survive background-stripping. */
+  *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  html{font-size:13px}
+  body{background:#fff; font-size:1rem; line-height:1.55}
+  .page{max-width:none; padding:0}
+
+  /* One numbered section per sheet: this is looked up, not read through.
+     The vertical rhythm is tightened throughout so that each section fits
+     the sheet it starts on — two lines spilling over is a wasted page. */
+  section{break-before:page; padding-block:0}
+  section:first-of-type{break-before:auto}
+  .mast{padding-block:0}
+  h1{font-size:2rem}
+  .meta{margin-top:12px}
+  h2{break-after:avoid}
+  h3{break-after:avoid; margin-top:16px}
+  .sec-lede{margin-bottom:12px}
+  /* Grid fragments unreliably across a page boundary in Chrome; as blocks
+     the three rules pack onto the opening sheet instead of orphaning one. */
+  .flags{display:block}
+  .flag{padding:11px 15px; margin-bottom:10px}
+  .flag p + p{margin-top:6px}
+  .flag:last-child{margin-bottom:0}
+  .note{margin-top:12px; padding:12px 15px}
+  .props{margin-top:16px}
+  .dd{gap:14px}
+  .dd>div{padding:15px 17px}
+  th,td{padding:8px 12px}
+  .tw + .tnote{margin-top:8px}
+  footer{margin-top:34px}
+
+  /* Nothing that reads as a single object may straddle a page. */
+  .flag,.note,.sw,.tw,.dd>div,.prop,.props,.shareframe,.swatches,table{break-inside:avoid}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  .tw{overflow:visible}          /* a scroll container clips on paper */
+
+  /* Four columns keeps the palette to two short rows. */
+  .swatches{grid-template-columns:repeat(4,1fr)}
+  .sw .chip{height:52px}
+
+  /* The masthead waterline opens the document. The interior ones would print
+     at the foot of a page whose next section has already been pushed over. */
+  svg.waterline{display:none}
+  .mast + svg.waterline{display:block; margin:20px 0 18px}
+}
+</style>
+
+<div class="page">
+
+<header class="mast">
+  <p class="eyebrow">Lummi Bay Market — for designers supplying artwork</p>
+  <h1>Asset specs &amp; brand guide</h1>
+  <p class="standfirst">Every image slot on the website, at the size it actually renders, with the
+  palette and type rules that govern them. Built so you can size, colour and export an asset
+  correctly without reading the codebase.</p>
+  <div class="meta">
+    <span><b>Version</b> 17 Sep 2026</span>
+    <span><b>Palette &amp; type</b> locked — approved 2026 refresh</span>
+    <span><b>Content width</b> 1200px max</span>
+    <span><b>Density</b> supply at 2× — one exception, §07</span>
+  </div>
+</header>
+
+<svg class="waterline" viewBox="0 0 1200 18" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="wl" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#0FB5C4"/><stop offset="1" stop-color="#1C4E8F"/>
+  </linearGradient></defs>
+  <path d="M0 11 C 100 2, 200 20, 300 11 S 500 2, 600 11 S 800 20, 900 11 S 1100 2, 1200 11 L1200 18 L0 18 Z" fill="url(#wl)"/>
+</svg>
+
+<section>
+  <h2><span class="num">01 / read before anything else</span>Three rules that override every other page here</h2>
+  <p class="sec-lede">These are not preferences and they are not negotiable at the design stage. Work
+  that breaks one of them gets sent back regardless of how good it is.</p>
+
+  <div class="flags">
+    <div class="flag">
+      <h3><span>Locked</span> The logo is used as-is. Never redrawn.</h3>
+      <p>Do not redraw, recolour, distort or re-typeset the lockup. Do not extract a piece of it.
+      Do not set the wordmark in a lookalike font. The "Market" lockup is the master mark
+      everywhere — header, hero, footer — and Location pages set their own name in type beside it
+      rather than getting their own mark.</p>
+      <p><b>One carve-out, approved 27 Aug 2026:</b> the paddle alone is the icon mark, for the
+      small square slots the lockup physically cannot fill — favicon, app icon, avatar. There it
+      ships flat white on a navy disc, which is a recolour, and the 16px size carries a
+      deliberately thickened paddle. That approval covers the icon and nothing else. A bare paddle
+      never stands in for the lockup in the header, the hero, or any other lockup slot.</p>
+    </div>
+
+    <div class="flag">
+      <h3><span>Cultural guardrail</span> Do not draw Coast Salish formline.</h3>
+      <p>Coast Salish formline is specific to Lummi Nation, and imitations — hand-drawn, stock or
+      AI-generated — can be inaccurate or appropriative. Every motif currently in the build is a
+      flat placeholder silhouette that looks like a placeholder <em>on purpose</em>: a convincing
+      imitation is the failure mode, not the goal.</p>
+      <p>Final art must be authentic, commissioned, or tribe-approved before launch. If you are
+      supplying interim art, keep it to simple flat silhouettes from the approved subject list —
+      canoe, paddle, eagle, salmon, orca, crab, moving water — and mark every file
+      <code>TODO: replace with approved Lummi art</code>.</p>
+    </div>
+
+    <div class="flag">
+      <h3><span>Scope</span> Other Lummi companies appear exactly once.</h3>
+      <p>The wider corporate group is represented by a single footer link reading "Lummi Commercial
+      Companies" and nowhere else — not in artwork, not in copy, not in navigation. Do not
+      introduce a second logo, a parent-company endorsement line, or a corporate lockup anywhere
+      in an asset.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">02 / colour</span>The palette, in hex and RGB</h2>
+  <p class="sec-lede">Eight tokens, approved and locked. Navy is dominant; teal and cedar are
+  accents; the waterline is the recurring signature. Do not add colours beyond these.</p>
+
+  <div class="swatches">
+    <div class="sw">
+      <span class="chip" style="background:#1C4E8F"></span>
+      <span class="tok">--lb-navy</span>
+      <span class="role">Identity and structure. Headers, headlines, labels, primary buttons.</span>
+      <dl><dt>HEX</dt><dd>#1C4E8F</dd><dt>RGB</dt><dd>28, 78, 143</dd></dl>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:#14396B"></span>
+      <span class="tok">--lb-navy-deep</span>
+      <span class="role">Fuel prices and emphasis only. Reserved — not available for decoration, so prices stay a recognisable cue.</span>
+      <dl><dt>HEX</dt><dd>#14396B</dd><dt>RGB</dt><dd>20, 57, 107</dd></dl>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:#0FB5C4"></span>
+      <span class="tok">--lb-teal</span>
+      <span class="role">Accent, dividers, and the waterline motif. Decorative — never small text.</span>
+      <dl><dt>HEX</dt><dd>#0FB5C4</dd><dt>RGB</dt><dd>15, 181, 196</dd></dl>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:#C9772E"></span>
+      <span class="tok">--lb-cedar</span>
+      <span class="role">Warm accent, decorative only. Fails AA as small text on light grounds.</span>
+      <dl><dt>HEX</dt><dd>#C9772E</dd><dt>RGB</dt><dd>201, 119, 46</dd></dl>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:#FBF9F4"></span>
+      <span class="tok">--lb-ground</span>
+      <span class="role">Page background. The warm off-white everything sits on.</span>
+      <dl><dt>HEX</dt><dd>#FBF9F4</dd><dt>RGB</dt><dd>251, 249, 244</dd></dl>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:#FFFFFF"></span>
+      <span class="tok">--lb-paper</span>
+      <span class="role">Cards and raised surfaces.</span>
+      <dl><dt>HEX</dt><dd>#FFFFFF</dd><dt>RGB</dt><dd>255, 255, 255</dd></dl>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:#2A2820"></span>
+      <span class="tok">--lb-ink</span>
+      <span class="role">Body text. A warm near-black, not a neutral grey.</span>
+      <dl><dt>HEX</dt><dd>#2A2820</dd><dt>RGB</dt><dd>42, 40, 32</dd></dl>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:#F5F1E8"></span>
+      <span class="tok">--lb-bone</span>
+      <span class="role">Text and rules on navy fills. Also the ring around the tab icons.</span>
+      <dl><dt>HEX</dt><dd>#F5F1E8</dd><dt>RGB</dt><dd>245, 241, 232</dd></dl>
+    </div>
+  </div>
+
+  <div class="note">
+    <h3>Two blues that are inside the artwork and are not UI colours</h3>
+    <p><b>#000F9F</b> (0, 15, 159) is the original brand blue and lives <em>inside the logo file
+    only</em>. <b>#1D3D7C</b> (29, 61, 124) is the navy actually present in the supplied raster
+    art. Neither is a UI colour and neither may be sampled out of the logo and used on a
+    surface — the interface navy is <code>#1C4E8F</code>. Picking a colour out of the logo with an
+    eyedropper is the most common way this rule gets broken.</p>
+  </div>
+
+  <h3>Contrast, as a working rule</h3>
+  <p>Body text must reach WCAG AA, 4.5:1. Navy, deep-navy and ink all pass on ground and paper.
+  <b>Teal and cedar do not</b> — they are large-graphic colours. If an accent has to carry small
+  text, darken it first and measure it; do not assume. Where an element crosses both light and
+  dark grounds, this project's established fix is a bone <code>#F5F1E8</code> rim, which is why
+  the tab icons carry one: without it the navy disc measured 1.19:1 on Chrome's dark chrome and
+  simply dissolved.</p>
+</section>
+
+<section>
+  <h2><span class="num">03 / type</span>Two faces, one scale</h2>
+  <p class="sec-lede">Both are Google Fonts and licence-clean. No third family, in artwork or on
+  the site.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Role</th><th>Face</th><th class="n">Weights</th><th>Setting</th></tr></thead>
+      <tbody>
+        <tr><td><b>Display &amp; headings</b></td><td>Space Grotesk</td><td class="n">700</td><td>Line-height 1.1. Sentence case.</td></tr>
+        <tr><td><b>Body, labels, UI</b></td><td>Inter</td><td class="n">400 / 500 / 600</td><td>Line-height 1.5. Sentence case.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">Type scale, in rem: 3 · 2.25 · 1.75 · 1.375 · 1.125 · 1 · 0.875. Stay on it.
+  The logo's own capitals belong to the logo and are not a type rule — do not set headings in
+  all-caps to match it.</p>
+</section>
+
+<svg class="waterline" viewBox="0 0 1200 18" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <path d="M0 11 C 100 2, 200 20, 300 11 S 500 2, 600 11 S 800 20, 900 11 S 1100 2, 1200 11 L1200 18 L0 18 Z" fill="url(#wl)"/>
+</svg>
+
+<section>
+  <h2><span class="num">04 / logo &amp; icon files</span>Already supplied — do not recreate these</h2>
+  <p class="sec-lede">These files exist and are approved. They are listed so you know what is
+  already covered, and so a rename or a re-export never happens by accident.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>File</th><th class="n">Pixels</th><th>Ink</th><th>Where it renders</th></tr></thead>
+      <tbody>
+        <tr><td><code>logo-market-on-dark.png</code></td><td class="n">336 × 120</td><td>White wordmark, cedar paddle</td><td class="n">112 × 40 desktop header<br>95 × 34 phone header</td></tr>
+        <tr><td><code>logo-market-on-dark@3x.png</code></td><td class="n">1008 × 360</td><td>Same art, 3× density</td><td>Loaded through <code>srcset</code> only — never as <code>src</code></td></tr>
+        <tr><td><code>logo-market-on-light.png</code></td><td class="n">512 × 512</td><td>Navy wordmark</td><td class="n">146 × 52 hero desktop<br>123 × 44 hero phone</td></tr>
+        <tr><td><code>favicon-16x16.png</code></td><td class="n">16 × 16</td><td>White paddle on navy, bone ring</td><td>The common browser tab</td></tr>
+        <tr><td><code>favicon-32x32.png</code></td><td class="n">32 × 32</td><td>as above</td><td>Retina tab</td></tr>
+        <tr><td><code>favicon.ico</code></td><td class="n">16 / 32 / 48</td><td>as above</td><td>Legacy browsers, bookmark bar</td></tr>
+        <tr><td><code>apple-touch-icon.png</code></td><td class="n">180 × 180</td><td>No ring — OS masks it</td><td>iOS home screen</td></tr>
+        <tr><td><code>android-chrome-192x192.png</code></td><td class="n">192 × 192</td><td>No ring</td><td>Android</td></tr>
+        <tr><td><code>android-chrome-512x512.png</code></td><td class="n">512 × 512</td><td>No ring</td><td>Android splash</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <h3>The filename names the background, never the ink</h3>
+    <p><code>on-dark</code> holds the <b>white</b> wordmark, for dark grounds.
+    <code>on-light</code> holds the <b>navy</b> one. The name answers "what do I put this on",
+    never "what colour is it" — those readings are opposites, and an earlier naming pair got
+    swapped, which would have shipped a navy wordmark on the navy header at 1.6:1, invisible, on
+    every page. If you ever rename or re-supply these, check the result by opening the file, not
+    by reading its name.</p>
+    <p>One trap worth knowing: <code>logo-market-on-light.png</code> is a 512 square with about 65%
+    of its height empty. Sized by width it renders roughly 146px tall to show 46px of logo. That
+    is fine in the hero and wrong anywhere tight — crop to the ink first.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">05 / layout &amp; dimensions</span>The measurements the page itself is built to</h2>
+  <p class="sec-lede">Section 06 sizes the artwork that goes <em>into</em> the page. These are the
+  numbers of the page around it — the column, the scales, the bar heights and the hit areas.
+  They are here so an asset can be checked against the space it has to live in.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Measure</th><th class="n">Value</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td><b>Content column</b></td><td class="n">1200px max</td><td>Everything is centred in it. Full-bleed bands (waterline, footer) cross it; content does not.</td></tr>
+        <tr><td><b>Phone content column</b></td><td class="n">≈351px</td><td>On a 375px device — the widest common phone. Design to 351, check at 320.</td></tr>
+        <tr><td><b>Spacing scale</b></td><td class="n">4 · 8 · 12 · 16 · 24<br>32 · 48 · 64 · 96</td><td>Nine steps. A gap that is not on this list is a mistake, not a refinement.</td></tr>
+        <tr><td><b>Type scale</b> (rem)</td><td class="n">3 · 2.25 · 1.75 · 1.375<br>1.125 · 1 · 0.875</td><td>At a 16px root: 48 · 36 · 28 · 22 · 18 · 16 · 14.</td></tr>
+        <tr><td><b>Line height</b></td><td class="n">1.1 / 1.5</td><td>1.1 display, 1.5 body. Sentence case throughout.</td></tr>
+        <tr><td><b>Corner radius</b></td><td class="n">8px / 12px</td><td>8 on controls, 12 on cards. Soft, no heavy shadows.</td></tr>
+        <tr><td><b>Waterline band</b></td><td class="n">full width × 18px</td><td>Vector. The recurring signature, teal into navy.</td></tr>
+        <tr><td><b>Sticky header, phone</b></td><td class="n">56px</td><td>About 7% of a 375×812 screen, held permanently. It grew 47 → 52 → 56 for measured reasons, never for taste.</td></tr>
+        <tr><td><b>Logo in the header</b></td><td class="n">112 × 40 desktop<br>95 × 34 phone</td><td>Plus the lockup's own clear space: the paddle-handle height on all sides, minimum width ≈72px.</td></tr>
+        <tr><td><b>Header art clearance</b></td><td class="n">20px</td><td>No header image comes within 20px of the navigation's right edge — a floor, not a target. Art starts at whichever lands further right, this or the lockup's clear space.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Controls and hit areas</h3>
+  <p>These are accessibility floors, measured on real frames rather than assumed. A control that
+  misses them is a defect, not a style choice.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Control</th><th class="n">Size</th><th>Rule</th></tr></thead>
+      <tbody>
+        <tr><td><b>Nav item, phone</b></td><td class="n">53–58 × 44</td><td>44px tall is what took the bar to 56px. A 44px min-width with 5px padding, so a short word is still a full target.</td></tr>
+        <tr><td><b>Nav item, desktop</b></td><td class="n">44–71 × 40</td><td>Desktop gets the lower bar it needs — but never below the 24px minimum that applies to any pointer target.</td></tr>
+        <tr><td><b>Footer link</b></td><td class="n">169 × 44</td><td>Two columns on a 375px frame, 12px gutter, 14px row gap. The gap stays: at ±30px, 9.3% of touches land on it and do nothing, which is the right outcome for a slip.</td></tr>
+        <tr><td><b>Rewards pill</b></td><td class="n">44 tall</td><td>Drops "Get the" below 370px — <code>★ Get the App</code> at 375 and up, <code>★ App</code> below.</td></tr>
+        <tr><td><b>Social icon</b></td><td class="n">≈20px glyph<br>44 × 44 target</td><td>The padding does the work. Bone fill on the navy footer — never the platform's own brand colour.</td></tr>
+        <tr><td><b>Every pill, without exception</b></td><td class="n">1.5px ring</td><td>A bone <code>#F5F1E8</code> ring, <code>box-shadow: 0 0 0 1.5px</code>. Not decoration: cedar on navy measures 2.43:1 and navy on cedar 2.20:1, both under the 3:1 a control's boundary requires. The ring is the only thing giving the pill an edge.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The fuel price block, which has the tightest numbers on the site</h3>
+  <p>It is on every page, it is the most-used thing here, and it carries no artwork at all — it is
+  a table. Nothing is ever supplied for it. The sizes are listed because they set the space
+  everything near it has to work in.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>State</th><th class="n">Desktop</th><th class="n">Phone</th></tr></thead>
+      <tbody>
+        <tr><td><b>Resting card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Location + Truck Stop</span></td><td class="n">400 × 110</td><td class="n">345 × 102</td></tr>
+        <tr><td><b>Condensed bar</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The page's own Location alone</span></td><td class="n">400 × 39</td><td class="n">one line</td></tr>
+        <tr><td><b>Never wider than</b></td><td class="n">400px</td><td class="n">400px</td></tr>
+        <tr><td><b>Cost before any page content</b></td><td class="n">—</td><td class="n">191px</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">On a phone that 191px is control 45 + gap 10 + block 135, on every page, with the
+  sticky header holding a further 56 above it. It is why a fourth element above a page title gets
+  measured before it gets added.</p>
+
+  <div class="note">
+    <h3>Three numbers that disagree between sources — check before you build to them</h3>
+    <p>Found while assembling this section, and left visible rather than quietly resolved, because
+    picking one at random is how a wrong number becomes the agreed one.</p>
+    <p><b>The resting card height.</b> Skill <code>fuel-price-update</code> gives the desktop
+    resting card as <b>400 × 110</b> in its state table and as <b>400 × 151</b> in the sentence
+    above it. <b>The condensed bar width</b> is <b>400px</b> in one table and <b>360px</b> in the
+    prose. <b>The phone header</b> is <b>56px</b> since tap targets were measured (ADR 0010), but
+    the promo stacking arithmetic still adds it as 52, so the "page title at 424px" figure is 4px
+    light. None of the three changes a design decision; all three would waste an afternoon if
+    built to blind.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">06 / page imagery</span>Every image slot, at the size it renders</h2>
+  <p class="sec-lede">CSS pixels are what the browser draws. <b>Supply at 2× those numbers</b> so the
+  art holds on a retina screen. The content column caps at 1200px wide; the phone column is about
+  351px at a 375px device.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Slot</th><th class="n">Desktop (CSS px)</th><th class="n">Phone (CSS px)</th><th class="n">Supply at</th><th>Format</th></tr></thead>
+      <tbody>
+        <tr><td><b>Promo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One master serves every slot — see section 08</span></td><td class="n">1200 × 240 &nbsp;(5:1)<br>down to 290 × 163</td><td class="n">351 × 197 &nbsp;(16:9)</td><td class="n">2400 × 1350<br>subject inside the<br>centre 2400 × 480</td><td>JPG</td></tr>
+        <tr><td><b>Info page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The page a promo links to</span></td><td class="n">1200 × 200 &nbsp;(6:1)</td><td class="n">351 × 140</td><td class="n">2400 × 400</td><td>JPG</td></tr>
+        <tr><td><b>Tenant page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Independent businesses on site</span></td><td class="n">1200 × 190</td><td class="n">351 × 132</td><td class="n">2400 × 380</td><td>JPG</td></tr>
+        <tr><td><b>Tenant card thumbnail</b><br><span style="color:var(--ink-soft);font-size:.8125rem">On the index, 3 across</span></td><td class="n">391 × 78 &nbsp;(5:1)</td><td class="n">351 × 78</td><td class="n">782 × 156</td><td>JPG</td></tr>
+        <tr><td><b>Rewards app screenshot</b></td><td class="n">8:5 box (1.6)</td><td class="n">8:5 box</td><td class="n">2× the rendered box</td><td>PNG</td></tr>
+        <tr><td><b>Page backdrop — wide</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Cropped at the page edge, ~10% opacity</span></td><td class="n">866 × 2948<br>renders ≈186 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
+        <tr><td><b>Page backdrop — narrow</b></td><td class="n">503 × 2948<br>renders ≈108 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
+        <tr><td><b>Motif tile, single</b></td><td class="n">≈68 wide</td><td class="n">≈68 wide</td><td>vector</td><td>SVG mask</td></tr>
+        <tr><td><b>Motif strip, four-up</b></td><td class="n">≈272 wide</td><td class="n">not used</td><td>vector</td><td>SVG mask</td></tr>
+        <tr><td><b>Social share card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Not an on-page slot — see section 07</span></td><td class="n">1200 &times; 630</td><td class="n">same file</td><td class="n">1200 &times; 630<br><b>not 2&times;</b></td><td>JPG</td></tr>
+        <tr><td><b>Social icon</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One per account, in the footer social row</span></td><td class="n">≈20 glyph<br>in a 44 × 44 target</td><td class="n">same</td><td>vector</td><td>inline SVG</td></tr>
+        <tr><td><b>Waterline band</b></td><td class="n">full width × 18</td><td class="n">full width × 18</td><td>vector</td><td>SVG</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Social icons are drawn here, not fetched from the platform</h3>
+  <p>Each social icon is a single inline SVG held in this repository, filled with
+  <code>--lb-bone</code> — never the platform's own colour, never its official badge or follow
+  button, and never a file served from the platform's servers. The reason is not aesthetic. An
+  official widget loads third-party code and sets a cookie before anyone clicks it, and the
+  footer's own base row states in plain words that this site sets no cookies. So the icon set is a
+  drawing job: Facebook, Instagram and Yelp, in that order, Yelp last because customers speak
+  there and the business does not.</p>
+
+  <p class="tnote">Location cards carry a 26 × 26 motif, not a photograph — do not supply store
+  photography for them. The fuel-price block carries no art at all: it is the most-used thing on
+  the site and it is a table.</p>
+
+  <h3>Motifs ship as masks, not as coloured artwork</h3>
+  <p>Supply decorative motifs as <b>white-on-transparent SVG</b>. The site uses them as a
+  <code>mask-image</code> over a brand colour, so the shape comes from your file and the colour
+  comes from the token layer. That is deliberate: a motif then cannot introduce an off-brand
+  colour, and re-tinting every motif on the site is one value. A motif supplied as flat coloured
+  art cannot be used this way.</p>
+</section>
+
+<section>
+  <h2><span class="num">07 / social share card</span>1200 &times; 630, and the square crop is what decides the layout</h2>
+  <p class="sec-lede">The image a platform shows when somebody pastes a link to this site into
+  Facebook, LinkedIn, Slack, iMessage, WhatsApp or X. It is the most-reproduced image the brand
+  has off-site, and the only one third parties cache and keep. Full rules in ADR 0022.</p>
+
+  <div class="shareframe">
+    <svg viewBox="0 0 1200 630" role="img" aria-label="A 1200 by 630 share card showing the centred 630 by 630 square crop, the 1200 by 600 two-to-one crop, and the 570 by 510 title-safe box inside them.">
+      <rect x="0" y="0" width="1200" height="630" fill="#1C4E8F"/>
+      <rect x="0" y="0" width="285" height="630" fill="#0B2547" opacity=".72"/>
+      <rect x="915" y="0" width="285" height="630" fill="#0B2547" opacity=".72"/>
+      <rect x="285" y="0" width="630" height="15" fill="#0B2547" opacity=".45"/>
+      <rect x="285" y="615" width="630" height="15" fill="#0B2547" opacity=".45"/>
+      <rect x="285.5" y="0.5" width="629" height="629" fill="none" stroke="#0FB5C4" stroke-width="3"/>
+      <rect x="315" y="60" width="570" height="510" fill="none" stroke="#F5F1E8" stroke-width="3" stroke-dasharray="14 10" opacity=".85"/>
+      <rect x="390" y="240" width="420" height="150" fill="none" stroke="#F5F1E8" stroke-width="2" opacity=".55"/>
+      <text x="600" y="322" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="21" letter-spacing="2" text-anchor="middle" opacity=".92">LOCKUP &#183; 570 MAX</text>
+      <text x="142" y="300" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".78">285 lost</text>
+      <text x="142" y="326" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".78">in square</text>
+      <text x="1058" y="300" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".78">285 lost</text>
+      <text x="1058" y="326" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".78">in square</text>
+      <text x="600" y="106" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle">630 &#215; 630 square crop</text>
+      <text x="600" y="540" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="20" text-anchor="middle" opacity=".85">title-safe 570 &#215; 510</text>
+      <text x="600" y="600" fill="#F5F1E8" font-family="IBM Plex Mono, monospace" font-size="18" text-anchor="middle" opacity=".68">15px strips lost at 2:1</text>
+    </svg>
+    <p class="framecap"><b>1200 &times; 630</b> &nbsp;&middot;&nbsp; outer margin 60 &nbsp;&middot;&nbsp; title-safe box x&nbsp;315&ndash;885, y&nbsp;60&ndash;570</p>
+  </div>
+
+  <h3>The same file is shown at three different aspect ratios</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Where</th><th class="n">Ratio</th><th class="n">Crop of 1200 &times; 630</th><th>What is lost</th></tr></thead>
+      <tbody>
+        <tr><td>Facebook feed, LinkedIn, Slack unfurl</td><td class="n">1.91:1</td><td class="n">1200 &times; 630</td><td>Nothing — shown whole</td></tr>
+        <tr><td>X, <code>summary_large_image</code></td><td class="n">2:1</td><td class="n">1200 &times; 600</td><td>15px off the top and bottom</td></tr>
+        <tr><td>WhatsApp, many mobile chat thumbnails</td><td class="n">1:1</td><td class="n">630 &times; 630</td><td><b>285px off each side</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">The square is the binding crop. Compose for it: the lockup and every word sit
+  inside the centred title-safe box, and everything outside it is ground, texture or photography
+  that can be lost without the card failing.</p>
+
+  <h3>Supply</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Item</th><th class="n">Value</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Canvas</td><td class="n">1200 &times; 630</td><td>1.905:1</td></tr>
+        <tr><td>Outer margin</td><td class="n">60</td><td>Nothing of consequence nearer any edge</td></tr>
+        <tr><td>Title-safe box</td><td class="n">570 &times; 510</td><td>Centred. The lockup and all text live inside it</td></tr>
+        <tr><td>Lockup width</td><td class="n">570 max</td><td>The on-dark 3&times; art is 1008 wide, so it is always downsampled</td></tr>
+        <tr><td>Ground</td><td class="n">#1C4E8F</td><td>Opaque navy, or full-bleed photography</td></tr>
+        <tr><td>Format</td><td class="n">JPG</td><td>Quality 75&ndash;82, sRGB, EXIF stripped. <b>Never PNG with alpha</b></td></tr>
+        <tr><td>Weight</td><td class="n">&lt; 200 KB</td><td></td></tr>
+        <tr><td>Files at launch</td><td class="n">1 required</td><td>One sitewide default. Then the three Locations, then <code>/truck-stop</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <h3>This is the one asset on this sheet that is <em>not</em> supplied at 2&times;</h3>
+    <p>Everywhere else, export at twice the CSS size. Not here: 1200 &times; 630 is the delivered
+    pixel size, platforms re-encode to their own dimensions, and a 2400 &times; 1260 file buys
+    nothing but weight. The floor matters more than the ceiling — <b>below 600 &times; 315 the
+    large card silently degrades to a small square thumbnail</b> beside the text, with no warning
+    and no error.</p>
+  </div>
+
+  <div class="note">
+    <h3>Nothing that can go out of date may be drawn on this card</h3>
+    <p>No fuel prices, no price of any kind, no phone number, no hours, no address. Platforms
+    cache an unfurl against the page URL for days to indefinitely, so a card outlives the fact
+    printed on it — and a link already shared keeps the old image even after the file is replaced.
+    A new card ships as a <b>new filename</b>, never an overwrite.</p>
+    <p>The page title and description are live text supplied by the platform beside the image, so
+    <b>do not set the page title inside the artwork</b> — it appears twice. A short standing line
+    is fine; unlike a promo, nothing is overlaid on this image.</p>
+  </div>
+
+  <div class="note">
+    <h3>No tribal motif on a share card until the approved art exists</h3>
+    <p>Interim motifs elsewhere get swapped before launch. A card that has been scraped cannot be
+    recalled — it sits in other companies' caches. The waterline is the single exception, being an
+    abstract gradient wave band rather than formline.</p>
+    <p>The card is a lockup slot, so the paddle icon carve-out does <b>not</b> apply: a bare paddle
+    never stands in for the lockup here, whatever the crop does.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">08 / promos</span>The width ladder, and why art must survive a re-crop</h2>
+  <p class="sec-lede">The promo region is a stack of rows. Each row decides how many promos it
+  holds — one, two, three or four across — drawn from a twelve-column grid with 14px gutters
+  inside the 1200px content width.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Row layout</th><th class="n">Columns</th><th class="n">Slot width</th><th class="n">Supply at 2×</th><th class="n">Crop <span class="pill locked">Approved</span></th></tr></thead>
+      <tbody>
+        <tr><td>1 across — full width</td><td class="n">12</td><td class="n">1200 px</td><td class="n">2400 px</td><td class="n">5:1 → 1200 × 240</td></tr>
+        <tr><td>2 across — wide half</td><td class="n">8</td><td class="n">795 px</td><td class="n">1590 px</td><td class="n">3:1 → 795 × 265</td></tr>
+        <tr><td>2 across — halves</td><td class="n">6</td><td class="n">593 px</td><td class="n">1186 px</td><td class="n">3:1 → 593 × 198</td></tr>
+        <tr><td>3 across — thirds</td><td class="n">4</td><td class="n">391 px</td><td class="n">782 px</td><td class="n">2:1 → 391 × 196</td></tr>
+        <tr><td>4 across — quarters</td><td class="n">3</td><td class="n">290 px</td><td class="n">580 px</td><td class="n">16:9 → 290 × 163</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote"><b>All five crops were signed off on 16 September 2026</b> and recorded in
+  ADR 0023 — build to them. What was already locked is the column ladder and a 150px minimum slot
+  height; the crops clear that floor and hold every row height inside a consistent band
+  (163–265px). The working behind them, measured in a browser, is in
+  <code>docs/proofs/promo-crop-ladder.html</code>.</p>
+
+  <div class="props">
+    <div class="prop"><div class="box" style="width:300px;aspect-ratio:5/1">5:1</div><div class="cap"><b>Full width</b>1200 × 240</div></div>
+    <div class="prop"><div class="box" style="width:265px;aspect-ratio:3/1">3:1</div><div class="cap"><b>Wide half</b>795 × 265</div></div>
+    <div class="prop"><div class="box" style="width:198px;aspect-ratio:3/1">3:1</div><div class="cap"><b>Half</b>593 × 198</div></div>
+    <div class="prop"><div class="box" style="width:130px;aspect-ratio:2/1">2:1</div><div class="cap"><b>Third</b>391 × 196</div></div>
+    <div class="prop"><div class="box" style="width:96px;aspect-ratio:16/9">16:9</div><div class="cap"><b>Quarter</b>290 × 163</div></div>
+    <div class="prop"><div class="box" style="width:96px;aspect-ratio:16/9">16:9</div><div class="cap"><b>Phone, any row</b>351 × 197</div></div>
+  </div>
+
+  <div class="note">
+    <h3>A row re-divides when a promo expires, so the art gets re-cropped</h3>
+    <p>Twelve divides evenly by 1, 2, 3, 4 and 6. That is the point: a three-across row holding two
+    live promos becomes two halves, and holding one it becomes full width — a hole can never
+    appear. The consequence for you is that <b>a promo you designed as a quarter may be displayed
+    as a half or full width</b>, without anyone re-supplying art.</p>
+    <p>So keep the subject centred, away from the edges, and never let the composition depend on a
+    specific crop. On a phone every row collapses to one column regardless of its desktop layout.</p>
+  </div>
+
+  <div class="note">
+    <h3>Supply one master per promo — 2400 × 1350, subject inside the centre strip</h3>
+    <p>16:9 is the tallest crop on the ladder and 5:1 the widest, so a 16:9 master is only ever cut
+    from the top and bottom — never horizontally. <b>Supply 2400 × 1350 and keep the subject inside
+    the centre 2400 × 480 band</b>, and the same file serves all five desktop slots and the phone.
+    One file per promo — not two, and not one per ratio.</p>
+    <p>That centre band is where the full-width 5:1 crop lands; everything above and below it is
+    breathing room the narrower slots use. Anything that has to be seen — a face, a product, a logo
+    on a cup — belongs inside the band.</p>
+  </div>
+
+  <div class="note">
+    <h3>Never bake copy into a promo image</h3>
+    <p>Eyebrow, headline, body and button are <b>live text fields</b> the store staff type, laid
+    over your image. Text inside the artwork will be duplicated, will not translate, will not
+    scale on a phone, and will not be readable by a screen reader. Supply imagery only — and
+    leave the image dark enough, or quiet enough, in the area where that text sits.</p>
+    <p><b>How much text, signed off 16 September 2026:</b> three fields — eyebrow, headline,
+    button — on every slot and every device. There is no body field. The headline is capped at
+    <b>28 characters</b>, which is short enough that nothing wraps: the text block is <b>89px tall
+    in every slot on every device</b>. The button label is editable too, and defaults to
+    “See details”. In the tightest slot — the 290 × 163 quarter — that block covers 55% of the
+    frame, so <b>treat the bottom half as the clear picture area</b> and compose the subject
+    there.</p>
+    <p>Tribal motifs are <b>not</b> permitted in the promo region. It already competes for
+    attention; decorating it makes the page shout twice.</p>
+  </div>
+
+  <div class="note">
+    <h3>Never name a promo file <code>ad</code>, <code>advert</code>, <code>banner</code> or <code>sponsored</code></h3>
+    <p>Those exact strings sit on every ad-blocker filter list and are matched against filenames,
+    class names and ids. A first-party promo named that way is silently hidden from a large share
+    of visitors, with nothing in the build to indicate anything is wrong. Name files for what they
+    show — <code>piroshky-winter-2026.jpg</code>, not <code>promo-banner-3.jpg</code>.</p>
+  </div>
+</section>
+
+<svg class="waterline" viewBox="0 0 1200 18" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <path d="M0 11 C 100 2, 200 20, 300 11 S 500 2, 600 11 S 800 20, 900 11 S 1100 2, 1200 11 L1200 18 L0 18 Z" fill="url(#wl)"/>
+</svg>
+
+<section>
+  <h2><span class="num">09 / files &amp; weight</span>There is a hard 100 MB ceiling on the whole library</h2>
+  <p class="sec-lede">The content system's free tier allows 100 MB of assets in total, across the
+  entire site, forever. A real set of store photography exceeds that on its own — so file weight
+  is a live constraint on what can be commissioned, not a technical footnote.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Asset</th><th>Format</th><th class="n">Target weight</th><th>Export notes</th></tr></thead>
+      <tbody>
+        <tr><td>Promo, full width</td><td>JPG</td><td class="n">&lt; 200 KB</td><td>Quality 72–80, sRGB, progressive</td></tr>
+        <tr><td>Promo, half or smaller</td><td>JPG</td><td class="n">&lt; 120 KB</td><td>as above</td></tr>
+        <tr><td>Page or tenant hero</td><td>JPG</td><td class="n">&lt; 250 KB</td><td>as above</td></tr>
+        <tr><td>Card thumbnail</td><td>JPG</td><td class="n">&lt; 60 KB</td><td>as above</td></tr>
+        <tr><td>Anything with transparency</td><td>PNG-8 where possible</td><td class="n">&lt; 150 KB</td><td>Flat art rarely needs PNG-24</td></tr>
+        <tr><td>Motifs, waterline, icons</td><td>SVG</td><td class="n">&lt; 10 KB</td><td>Outline all text before export</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">At an average of 250 KB, 100 MB is roughly 400 images for the life of the site.
+  Strip EXIF, convert to sRGB, and do not upload camera originals. If the photography library is
+  going to be large, that is a decision to raise early — the alternatives are hosting images
+  outside the CMS or changing plan, and both are cheaper to choose than to retrofit.</p>
+
+  <div class="note">
+    <h3>Watch for bitmaps wearing an SVG costume</h3>
+    <p>A file ending <code>.svg</code> is not necessarily vector. One supplied to this project
+    turned out to be a single base64 PNG in an SVG wrapper, with zero <code>&lt;path&gt;</code>
+    elements and none of the benefits. To check in five seconds, open it in a text editor:
+    <code>&lt;path&gt;</code> or <code>&lt;polygon&gt;</code> means real vector;
+    <code>&lt;image&gt;</code> with <code>base64</code> means a bitmap. Also confirm the root
+    element has a <code>viewBox</code>, and that text has been converted to outlines — live
+    <code>&lt;text&gt;</code> reflows wherever the brand font is not installed.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">10 / open items</span>Slots that exist but have no approved specification</h2>
+  <p class="sec-lede">Flagged so nobody produces artwork against a number that was never agreed.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Item</th><th>Status</th><th>What is missing</th></tr></thead>
+      <tbody>
+        <tr><td><b>All tribal motifs</b></td><td><span class="pill open">Placeholder</span></td><td>Every motif on the site is an interim silhouette. Authentic, commissioned or tribe-approved art must replace them before launch.</td></tr>
+        <tr><td><b>Tenant artwork</b></td><td><span class="pill locked">Settled 17 Sep 2026</span></td><td>Ownership decided that tenants <b>are</b> advertised: a tenants page with a card each. So the card thumbnail and page hero above are live slots, not hypothetical ones. What is still missing is the artwork itself, and it is not ours to draw — each tenant supplies their own, and an external card may carry no art at all. Commission nothing; collect it.</td></tr>
+        <tr><td><b>Map on the contact page</b></td><td><span class="pill proposed">Waiting on the map</span></td><td>The mechanism is settled — an embedded Google My Maps behind a click-to-load still image (ADR 0019, ADR 0025) — so there is no pin artwork to draw: My Maps supplies its own. What is outstanding is one asset, and it cannot be made until the map is: <b>a picture of the finished map</b>, which is what a visitor sees until they click to load the live one. Until then both map fields stay empty, and an empty map renders one section fewer, not a broken page.</td></tr>
+        <tr><td><b>Social icons</b></td><td><span class="pill proposed">Accounts supplied</span></td><td>Three accounts are in hand and in render order. The three glyphs still have to be drawn as inline SVG — see section 06. Nothing renders while the list is empty, so a missing icon is a blank row, never a broken link.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">11 / summary</span>Do and don't</h2>
+  <div class="dd">
+    <div class="do">
+      <h3>Do</h3>
+      <ul>
+        <li>Make navy dominant. Teal and cedar are accents, and the waterline is the recurring signature that ties pages together.</li>
+        <li>Supply one 2400 × 1350 master for every promo, with the subject inside the centre 2400 × 480 band. It serves all five desktop slots and the phone.</li>
+        <li>Export at 2× the CSS size listed, in sRGB, with EXIF stripped.</li>
+        <li>Keep the subject centred in promo art, so it survives a row re-dividing.</li>
+        <li>Send motifs as white-on-transparent SVG masks.</li>
+        <li>Mark every placeholder motif <code>TODO: replace with approved Lummi art</code>.</li>
+        <li>Compose the share card for the centred square — 285px is cut off each side in a chat thumbnail.</li>
+        <li>Name files for what they show.</li>
+      </ul>
+    </div>
+    <div class="dont">
+      <h3>Don't</h3>
+      <ul>
+        <li>Touch the logo — no redraw, no recolour, no re-typeset, no extracting a piece of it.</li>
+        <li>Sample a colour out of the logo art. <code>#000F9F</code> and <code>#1D3D7C</code> are not UI colours.</li>
+        <li>Set body copy or small labels in teal or cedar. They fail AA on light grounds.</li>
+        <li>Bake headlines, prices or buttons into a promo image.</li>
+        <li>Use <code>--lb-navy-deep</code> for decoration. It belongs to fuel prices.</li>
+        <li>Put artwork in the promo region, the fuel-price block, or behind body copy.</li>
+        <li>Draw Coast Salish formline, or pass interim art off as final.</li>
+        <li>Put a price, a phone number or opening hours on a share card. It is cached for weeks after the fact changes.</li>
+        <li>Add a typeface or a colour that is not on this sheet.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Specifications are drawn from the project's locked brand system and its recorded architecture
+  decisions. A figure derived rather than approved carries a <span class="pill proposed">Proposed</span>
+  marker — treat those as a question to settle, not a number to build to; there are none left on
+  this sheet. Section 09 lists what is still open. Anything not covered here is a question worth
+  asking before the artwork is made rather than after.</p>
+</footer>
+
+</div>

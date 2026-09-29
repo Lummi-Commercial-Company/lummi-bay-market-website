@@ -1,0 +1,12 @@
+<!--
+  PLACEHOLDER MOTIF — single tile for the phone header band (ADR 0021).
+  TODO: replace with approved Lummi art.
+
+  The 272px four-up strip never fits the ~115px gap left on a phone, so the
+  phone tiles one motif instead of shrinking the strip.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 24" width="40" height="24" role="presentation">
+  <g fill="#000">
+    <path d="M2 14c5-6 11 6 16 0s11 6 16 0v4c-5 6-11-6-16 0s-11-6-16 0z"/>
+  </g>
+</svg>
