@@ -13,6 +13,7 @@
     "build:cms": "tinacms build && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "test": "node --test --experimental-strip-types \"lib/**/*.test.ts\"",
     "lint": "next lint"
   },
   "dependencies": {
