@@ -1,0 +1,133 @@
+/* Sticky on every page at every width — ADR 0006. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--lb-navy);
+  color: var(--lb-bone);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  height: var(--header-height);
+}
+
+/* Tighter gutter than the global container on phones — the bar is the one row that
+   has to fit a wordmark, three nav items and the Rewards pill. */
+@media (max-width: 767px) {
+  .bar.bar {
+    padding-inline: var(--s-2);
+  }
+}
+
+@media (min-width: 768px) {
+  .bar {
+    gap: var(--s-4);
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.logo img {
+  display: block;
+  /* 26px tall renders 72.8px wide against the 336x120 art — at the locked ~72px
+     minimum width in skill `brand-system`. Do not go smaller. */
+  height: 26px;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .logo img {
+    height: 36px;
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-inline-start: auto;
+}
+
+@media (min-width: 768px) {
+  .nav {
+    gap: var(--s-2);
+  }
+}
+
+.nav a {
+  display: inline-flex;
+  align-items: center;
+  /* 44px hit area — ADR 0010. */
+  min-height: 44px;
+  padding-inline: var(--s-1);
+  color: var(--lb-bone);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  /* "Truck Stop" wrapped to two lines at 375px and pushed the bar taller. */
+  white-space: nowrap;
+}
+
+@media (min-width: 480px) {
+  .nav a {
+    padding-inline: var(--s-3);
+    font-size: var(--t-6);
+  }
+}
+
+.nav a:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/*
+ * Rewards, once per page, always here (ADR 0006). Cedar on navy so it reads as a
+ * product rather than a fourth nav item. The label is an instruction, not a noun.
+ */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: var(--s-3);
+  flex: 0 0 auto;
+  background: var(--lb-cedar);
+  color: #ffffff;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: var(--t-7);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .pill {
+    padding-inline: var(--s-2);
+    font-size: 0.75rem;
+  }
+}
+
+/* The emergency notice rides inside the header — ADR 0017. */
+.alert {
+  background: var(--lb-cedar);
+  color: #ffffff;
+  font-size: var(--t-7);
+}
+
+.alertInner {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding-block: var(--s-2);
+}
+
+.alertLink {
+  color: #ffffff;
+  font-weight: 600;
+}

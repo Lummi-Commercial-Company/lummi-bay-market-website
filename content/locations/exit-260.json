@@ -1,0 +1,34 @@
+{
+  "name": "Lummi Bay Market at Exit 260",
+  "navLabel": "Exit 260",
+  "shortLabel": "Exit 260",
+  "aka": "Salish Village",
+  "order": 1,
+  "address": "4839 Rural Ave",
+  "city": "Bellingham",
+  "state": "WA",
+  "zip": "98226",
+  "phone": "360-778-1894",
+  "phoneLabel": "C-Store",
+  "hours": "Open 24 hours",
+  "cardLine": "4839 Rural Ave · Open 24 hours",
+  "intro": "Our flagship. A 24-hour convenience store with roughly sixteen fuel lanes, a tobacco and liquor drive-thru, quick-serve food, and a separate truck stop for drivers.",
+  "amenities": [
+    "24-hour convenience store",
+    "~16 fuel lanes",
+    "Tobacco & liquor drive-thru",
+    "Quick-serve food"
+  ],
+  "truckStop": {
+    "phone": "360-778-1696",
+    "hours": "Open 24 hours",
+    "amenities": [
+      "Diesel lanes",
+      "DEF",
+      "Showers",
+      "Driver lounge",
+      "Driver store",
+      "Truck parking"
+    ]
+  }
+}

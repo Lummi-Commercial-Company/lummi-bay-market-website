@@ -1,0 +1,64 @@
+fragment FuelPricesParts on FuelPrices {
+  __typename
+  linkLocations
+  locations {
+    __typename
+    exit_260 {
+      __typename
+      regular
+      diesel
+      updated
+    }
+    mini_mart {
+      __typename
+      regular
+      diesel
+      updated
+    }
+    fishermans_cove {
+      __typename
+      regular
+      diesel
+      updated
+    }
+  }
+  truckStop {
+    __typename
+    diesel
+    def
+    updated
+  }
+}
+
+fragment LocationParts on Location {
+  __typename
+  order
+  name
+  navLabel
+  shortLabel
+  aka
+  address
+  city
+  state
+  zip
+  phone
+  phoneLabel
+  hours
+  cardLine
+  intro
+  amenities
+  truckStop {
+    __typename
+    phone
+    hours
+    amenities
+  }
+}
+
+fragment SiteAlertParts on SiteAlert {
+  __typename
+  active
+  message
+  linkLabel
+  linkHref
+}

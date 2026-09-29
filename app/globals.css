@@ -1,0 +1,155 @@
+/*
+ * Design tokens. These values are LOCKED — see skill `brand-system`.
+ * Do not add colours or type families beyond what is defined here.
+ */
+:root {
+  /* Colour (approved 2026 refresh) */
+  --lb-navy: #1c4e8f; /* structure: headers, headlines, labels, primary */
+  --lb-navy-deep: #14396b; /* fuel prices, emphasis */
+  --lb-teal: #0fb5c4; /* accent, dividers, the waterline motif */
+  --lb-cedar: #c9772e; /* warm accent, decorative only */
+  --lb-ground: #fbf9f4; /* page background */
+  --lb-paper: #ffffff; /* cards */
+  --lb-ink: #2a2820; /* body text */
+  --lb-bone: #f5f1e8; /* text on navy fills */
+
+  /* Spacing scale */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+
+  --max-width: 1200px;
+  --radius: 8px; /* controls */
+  --radius-card: 12px; /* cards */
+
+  /* Type scale */
+  --t-1: 3rem;
+  --t-2: 2.25rem;
+  --t-3: 1.75rem;
+  --t-4: 1.375rem;
+  --t-5: 1.125rem;
+  --t-6: 1rem;
+  --t-7: 0.875rem;
+
+  /* Stacking order — ADR 0005. Nav outranks the price panel deliberately. */
+  --z-waterline: 1;
+  --z-price-block: 40;
+  --z-price-panel: 50;
+  --z-header: 60;
+
+  --header-height: 64px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --header-height: 52px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* The sticky header must not cover an anchored heading. */
+  scroll-padding-top: calc(var(--header-height) + var(--s-4));
+}
+
+body {
+  margin: 0;
+  background: var(--lb-ground);
+  color: var(--lb-ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: var(--t-6);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--lb-navy);
+  margin: 0 0 var(--s-4);
+  /* Sentence case is a type rule; the logo's own caps are the logo's. */
+  text-transform: none;
+}
+
+h1 {
+  font-size: var(--t-2);
+}
+h2 {
+  font-size: var(--t-3);
+}
+h3 {
+  font-size: var(--t-4);
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: var(--t-1);
+  }
+}
+
+a {
+  color: var(--lb-navy);
+}
+
+p {
+  margin: 0 0 var(--s-4);
+}
+
+/* Visible focus everywhere — the site is used one-handed at a fuel pump. */
+:focus-visible {
+  outline: 3px solid var(--lb-teal);
+  outline-offset: 2px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--s-4);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: var(--s-5);
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--lb-navy);
+  color: var(--lb-bone);
+  padding: var(--s-3) var(--s-4);
+  z-index: calc(var(--z-header) + 1);
+}
+
+.skip-link:focus {
+  left: var(--s-4);
+  top: var(--s-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
