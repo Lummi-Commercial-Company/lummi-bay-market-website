@@ -190,3 +190,30 @@ approved teal. The two documents should be reconciled so the next person does no
 **A Location's `id` is now derived from its filename.** TinaCMS reserves `id` on documents, so the
 field could not stay in the schema. The filename is the slug, which is also how Tina models it.
 No content change, but `location-content-model` lists `id` as a stored field and no longer should.
+
+## 10. Closed on 29 Sep 2026 — the price pipeline, end to end
+`HANDOFF.md` named "nobody has watched staff change a price today" as the second most important
+open question. It is now **half closed**, and the half that remains is the half that matters.
+
+**What was proven.** A price typed into the TinaCMS editor at `/admin` became the commit
+`cf76e3a "TinaCMS content update"` on `main`, Vercel rebuilt, and the new value appeared on every
+page carrying prices — including pages that never name the Location that changed. No database, no
+manual step, a commit with an author and a one-click revert. The design works as designed.
+
+**What was not proven.** The person who did it is the person who built it. Roadmap item 11 asks
+for *a staff member, unaided*. That test has still never been run, and it is the one that can
+change the content model. Run it from a phone.
+
+**One finding worth keeping.** The first refresh after Publish showed the **old** price, and read
+as a failure. It was the documented 1–2 minute rebuild. This is the single most predictable
+support call the site will generate, and the remedy is a sentence of training rather than any
+code — `docs/content-updates.md` now carries it where a staff member will actually see it, rather
+than only in the "Timing, honestly" section further down.
+
+**A pattern, repeated from §8.** Four things went wrong in this session and every one was found by
+running something rather than reasoning about it: TinaCMS rejects dashed field names; `id` is
+reserved on Tina documents; `tina-lock.json` comes from `tinacms dev`, not `tinacms build`; and a
+Vercel project created before the code existed serves `public/` as a static site, returning 404 on
+every route **with a green build**. That last one is worth naming on its own — **a successful
+deploy is not a working site**, and twice in one session a green check was taken as evidence and
+was wrong both times. Load the page.
