@@ -55,13 +55,13 @@
 
   /* ---- Shell measurements ------------------------------------------------ */
   --hd-h-base: 56px;        /* phone header row                               */
-  --waterline-h: 18px;      /* full width vector, teal into navy              */
+  --waterline-h: 5px;       /* flat teal rule under the nav — not the wave    */
   --rail-w: 400px;          /* reserved fuel-price rail column (ADR 0005)     */
 
   /* The live header height, alert bar included. Published at runtime by
      <HeaderMetrics> because the emergency notice changes it (ADR 0017). The
      value below is the no-alert phone default so the first paint is right. */
-  --hd-h: 74px;             /* 56px row + 18px waterline                      */
+  --hd-h: 61px;             /* 56px row + 5px rule                            */
 
   /* ---- Stacking order (ADR 0005 / ADR 0006) ------------------------------ */
   --z-waterline: 1;
@@ -80,7 +80,7 @@
 @media (min-width: 768px) {
   :root {
     --hd-h-base: 58px;
-    --hd-h: 76px;
+    --hd-h: 63px;
   }
 }
 

@@ -227,11 +227,15 @@
   }
 }
 
-/* ---- Waterline --------------------------------------------------------- */
+/* ---- The rule under the nav -------------------------------------------- */
+/* Flat teal, full width, 5px — as drawn on the approved page templates. It is
+   NOT the wavy waterline: that is a section divider (Waterline.tsx), and
+   putting it here gave the header a decorative wave nobody approved. */
 .waterline {
   display: block;
   width: 100%;
-  height: 18px;
+  height: var(--waterline-h);
+  background: var(--lb-teal);
   position: relative;
   z-index: var(--z-waterline);
 }

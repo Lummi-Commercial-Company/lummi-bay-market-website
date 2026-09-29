@@ -5,7 +5,6 @@ import { HeaderMetrics } from './HeaderMetrics'
 import { HeaderMotifs } from './HeaderMotifs'
 import { SiteAlert } from './SiteAlert'
 import { SiteNav } from './SiteNav'
-import { Waterline } from './Waterline'
 import { getSettings } from '@/lib/settings'
 
 const HEADER_ID = 'site-header'
@@ -13,7 +12,7 @@ const HEADER_ID = 'site-header'
 /**
  * The sticky site header — on every page (ADR 0006).
  *
- * Order inside the sticky wrapper: the header row, the teal waterline, then the
+ * Order inside the sticky wrapper: the header row, the teal rule, then the
  * emergency notice. The fuel-price rail is NOT sticky and never joins this
  * wrapper; ADR 0006 records why.
  *
@@ -56,7 +55,11 @@ export async function SiteHeader() {
         </div>
       </header>
 
-      <Waterline className={styles.waterline} />
+      {/* A solid teal rule, not the wave. The wavy waterline is the section
+          divider from the spec sheet; the approved page has a flat 5px teal
+          line under the nav, and the two are not interchangeable. See
+          components/layout/Waterline.tsx. */}
+      <div className={styles.waterline} />
 
       <SiteAlert alert={settings.siteAlert} />
 

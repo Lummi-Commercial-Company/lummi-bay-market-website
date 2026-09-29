@@ -2,8 +2,16 @@
  * The waterline — the brand's recurring signature, teal into navy.
  *
  * Geometry and gradient are the locked artwork from
- * `docs/design-spec-sheet.html`: full width, 18px tall, vector. It rides under
- * the header on every page and is reused as a section divider.
+ * `docs/design-spec-sheet.html`: full width, 18px tall, vector.
+ *
+ * IT IS A SECTION DIVIDER, NOT THE RULE UNDER THE NAV. This component was
+ * mounted in the sticky header, which put a decorative wave in a slot the
+ * approved page templates draw as a flat 5px teal line
+ * (`docs/proofs/contact-page-template.html`: `.waterline{height:5px;
+ * background:var(--lb-teal)}`). The header now draws that rule itself. Use
+ * this between sections, where the spec sheet uses it, and nowhere else.
+ *
+ * Currently unused: no section divider is built yet.
  *
  * TODO: replace with approved Lummi art.
  */
