@@ -85,8 +85,12 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
   which render per request against the content API so a pushed price is live immediately (ADR 0024),
   and the hours override, which is evaluated per request against the visitor's date (ADR 0027).
   Static export would silently delete all three rather than fail.
-- Header is **sticky** on every page; the fuel-price rail is **not** — ADR 0006 records why the
-  rail must never be sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
+- Header is **sticky** on every page. The fuel-price rail is sticky **on desktop only**, and only
+  because the condensed block's panel is positioned against the viewport there rather than
+  anchored to the block — a sticky anchor plus an anchor-positioned panel is broken, measured
+  (ADR 0006). On phones the rail sits at the top of the page and scrolls away. **The rule is
+  conditional on that mechanism:** if the panel is ever anchored to the block again, the rail
+  must stop being sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
   carries the Rewards "Get the App" pill on every page.
 Footer: **About** (brand story grounded in the Lummi values + light community note; LCC
 corporate/enterprise content stays out), **Contact**, **Rewards**, **Careers** (editable
