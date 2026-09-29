@@ -4,8 +4,8 @@ import { Suspense } from 'react'
 import { LocationContacts } from './LocationContacts'
 import { LocationsMap } from './LocationsMap'
 import styles from './PageSections.module.css'
-import { LiveCardLine } from '@/components/locations/LiveCardLine'
 import { LiveHours } from '@/components/locations/LiveHours'
+import { LocationList } from '@/components/locations/LocationList'
 import { getLocations } from '@/lib/locations'
 import { Markdown } from '@/lib/markdown'
 import type { HoursOverride, PageBlock } from '@/lib/types'
@@ -60,7 +60,7 @@ function PageBlockRow({ block }: { block: PageBlock }) {
       )
 
     case 'locationList':
-      return <LocationCards heading={block.heading} />
+      return <LocationList heading={block.heading} />
 
     case 'locationContacts':
       return <LocationContacts heading={block.heading} />
@@ -97,32 +97,6 @@ function PageBlockRow({ block }: { block: PageBlock }) {
         </section>
       ) : null
   }
-}
-
-/** The standard Location card grid — the same one the Location pages use. */
-async function LocationCards({ heading }: { heading?: string }) {
-  const locations = await getLocations()
-  if (locations.length === 0) return null
-
-  return (
-    <section>
-      <h2 className={styles.sectionHeading}>{heading || 'Our locations'}</h2>
-      <ul className={styles.cards}>
-        {locations.map((location) => (
-          <li key={location.id}>
-            <Link className={styles.card} href={`/locations/${location.id}`}>
-              <p className={styles.cardName}>{location.navLabel}</p>
-              <p className={styles.cardLine}>
-                <Suspense fallback={location.cardLine}>
-                  <LiveCardLine location={location} />
-                </Suspense>
-              </p>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </section>
-  )
 }
 
 /**

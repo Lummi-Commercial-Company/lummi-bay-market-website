@@ -50,6 +50,13 @@ server, which is the one thing the façade exists to avoid, so it is rejected an
 does not render. That is deliberate: a rejected still gives a page one section shorter, where
 accepting it would give a broken picture with a working button under it.
 
+**`liveMainPage`** — which home page visitors see: `content/main-pages/home.mdx`, set 29 Sep
+2026 when Home stopped being typed into the code and became a document staff can edit (ADR 0015).
+More than one version may live in `content/main-pages/`; this one field switches between them, so
+a redesign is built in full and turned on in one change (ADR 0018). If it is blank or points at a
+file that no longer exists, the site shows the first version it finds and logs the fault — a bad
+setting never leaves the site without a home page.
+
 ## What is deliberately not here
 Fuel prices (`content/fuel-prices.json`, ADR 0004), Locations, promos, tenants and pages are their
 own collections. Nothing about hours, prices or addresses belongs in a settings file.

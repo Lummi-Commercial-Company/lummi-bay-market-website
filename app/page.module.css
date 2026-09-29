@@ -31,10 +31,29 @@
   min-width: 0;
 }
 
+/* The sentence under a page title. 15px on a phone, 16px from 768px — the
+   approved templates' `.hero p` / `.page-lede`, not the 18px lead step. */
 .lede {
-  font-size: var(--fs-lead);
+  font-size: 0.9375rem;
+  line-height: 1.6;
   color: var(--ink-soft);
-  max-width: 60ch;
+  max-width: 52ch;
+}
+
+@media (min-width: 768px) {
+  .lede {
+    font-size: var(--fs-body);
+  }
+}
+
+/* The divider band on Home — docs/proofs/home-review.html `.waterline-band`.
+   Flat, 10px, teal into navy. TODO: replace with approved Lummi art. */
+.band {
+  height: 10px;
+  margin: 20px 0 18px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--lb-teal), var(--lb-navy));
+  opacity: 0.9;
 }
 
 .note {
@@ -44,47 +63,6 @@
   background: var(--lb-bone);
   font-size: var(--fs-small);
   color: var(--ink-soft);
-}
-
-.cards {
-  list-style: none;
-  margin: var(--sp-5) 0 0;
-  padding: 0;
-  display: grid;
-  gap: var(--sp-3);
-}
-
-@media (min-width: 640px) {
-  .cards {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  }
-}
-
-.card {
-  display: block;
-  background: var(--lb-paper);
-  border: 1px solid rgb(28 78 143 / 0.15);
-  border-radius: var(--radius-card);
-  padding: var(--sp-4);
-  min-height: 61px;
-  text-decoration: none;
-  color: inherit;
-}
-
-.cardName {
-  font: 700 1.0625rem/1.2 var(--ff-display);
-  color: var(--lb-navy);
-  margin: 0 0 4px;
-}
-
-/* One line, truncating. It never wraps — ADR 0009 has the length budget. */
-.cardLine {
-  margin: 0;
-  font-size: var(--fs-small);
-  color: var(--ink-soft);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .badges {

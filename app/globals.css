@@ -114,12 +114,20 @@ h1, h2, h3, h4 {
   /* Sentence case is a copy rule, not a CSS one — never text-transform here. */
 }
 
-h1 { font-size: var(--fs-h1); }
+/* Page titles are 28px on a phone and 36px from 768px up — the size every
+   approved page template draws them at (home-review.html, contact-page-
+   template.html: `.p .hero h1 1.75rem`, `.d .hero h1 2.25rem`). They were one
+   step larger (36 / 48), which also pushed long titles off a phone screen.
+   The 3rem display step is not used for a page title. */
+h1 {
+  font-size: var(--fs-h2);
+  letter-spacing: -0.02em;
+}
 h2 { font-size: var(--fs-h2); }
 h3 { font-size: var(--fs-h3); }
 
 @media (min-width: 768px) {
-  h1 { font-size: var(--fs-display); }
+  h1 { font-size: var(--fs-h1); }
 }
 
 p { margin: 0 0 var(--sp-4); }

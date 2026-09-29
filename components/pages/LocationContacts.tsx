@@ -81,29 +81,36 @@ export async function LocationContacts({ heading }: { heading?: string }) {
   const entries = locations.flatMap(entriesFor)
   if (entries.length === 0) return null
 
+  // The approved page (docs/proofs/contact-page-template.html) has NO heading
+  // above the cards: they follow the page's opening sentence directly. So the
+  // heading is the editor's to add, and there is no default — a default is
+  // how "Where to find us" appeared on a page that was approved without it.
+  // Without one, each store's name is the section's heading (h2); with one, the
+  // names sit a level under it (h3), so the outline never skips a level.
+  const nameLevel = heading ? 'h3' : 'h2'
+
   return (
-    <section aria-labelledby="contact-locations">
-      <h2 id="contact-locations" className={styles.sectionHeading}>
-        {heading || 'Where to find us'}
-      </h2>
+    <section className={styles.contactList}>
+      {heading ? <h2 className={styles.sectionHeading}>{heading}</h2> : null}
       <div className={styles.loclist}>
         {entries.map((entry) => (
-          <ContactCard key={entry.key} entry={entry} />
+          <ContactCard key={entry.key} entry={entry} nameLevel={nameLevel} />
         ))}
       </div>
     </section>
   )
 }
 
-function ContactCard({ entry }: { entry: ContactEntry }) {
+function ContactCard({ entry, nameLevel }: { entry: ContactEntry; nameLevel: 'h2' | 'h3' }) {
+  const Name = nameLevel
   const telHref = `tel:${entry.phone.replace(/[^\d+]/g, '')}`
 
   return (
     <article className={styles.loccontact} aria-labelledby={`contact-${entry.key}`}>
       <div className={styles.loccontactMain}>
-        <h3 id={`contact-${entry.key}`} className={styles.locname}>
+        <Name id={`contact-${entry.key}`} className={styles.locname}>
           {entry.name}
-        </h3>
+        </Name>
 
         {entry.summary ? <p className={styles.locsummary}>{entry.summary}</p> : null}
 

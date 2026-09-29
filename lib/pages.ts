@@ -2,7 +2,7 @@ import { cacheLife, cacheTag } from 'next/cache'
 import { CACHE_TAGS } from './cache-tags'
 import { listContentFiles, readContentFile } from './content'
 import { splitFrontmatter } from './frontmatter'
-import type { PageBlock, PageCtaButton, PageDoc, PageFaqItem } from './types'
+import type { MainPageDoc, PageBlock, PageCtaButton, PageDoc, PageFaqItem } from './types'
 
 /**
  * The `pages` collection (ADR 0015).
@@ -135,6 +135,17 @@ function asBlock(value: unknown): PageBlock | null {
   }
 }
 
+function asBlocks(value: unknown): PageBlock[] {
+  const blocks: PageBlock[] = []
+  if (Array.isArray(value)) {
+    for (const entry of value) {
+      const block = asBlock(entry)
+      if (block) blocks.push(block)
+    }
+  }
+  return blocks
+}
+
 function toPage(slug: string, data: Record<string, unknown>, body: string): PageDoc | null {
   const title = asString(data.title).trim()
   // A document with no title has no <h1> and no <title>. Rather than render a
@@ -144,13 +155,7 @@ function toPage(slug: string, data: Record<string, unknown>, body: string): Page
     return null
   }
 
-  const blocks: PageBlock[] = []
-  if (Array.isArray(data.blocks)) {
-    for (const entry of data.blocks) {
-      const block = asBlock(entry)
-      if (block) blocks.push(block)
-    }
-  }
+  const blocks = asBlocks(data.blocks)
 
   return {
     slug,
@@ -197,4 +202,71 @@ export async function getPages(): Promise<PageDoc[]> {
 
 export async function getPage(slug: string): Promise<PageDoc | undefined> {
   return (await getPages()).find((page) => page.slug === slug)
+}
+
+/* ===========================================================================
+   Home page versions — the `mainPages` collection (ADR 0015, ADR 0018)
+   =========================================================================== */
+
+function toMainPage(slug: string, data: Record<string, unknown>, body: string): MainPageDoc | null {
+  const headline = asString(data.headline).trim()
+  // The headline is the home page's <h1>. Without one the page has no heading
+  // at all, so the version is skipped and the next one is used instead.
+  if (!headline) {
+    console.error(`[main-pages] ${slug}.mdx has no headline; skipped`)
+    return null
+  }
+  return {
+    slug,
+    title: asString(data.title).trim() || slug,
+    headline,
+    intro: asString(data.intro).trim() || undefined,
+    seoDescription: asString(data.seoDescription) || undefined,
+    noBackdrop: data.noBackdrop === true,
+    body,
+    blocks: asBlocks(data.blocks),
+  }
+}
+
+export async function getMainPages(): Promise<MainPageDoc[]> {
+  'use cache'
+  // Same tag as `pages`: publishing a home page edit revalidates like any page.
+  cacheTag(CACHE_TAGS.pages)
+  cacheLife('max')
+
+  const files = await listContentFiles('main-pages')
+  const docs: MainPageDoc[] = []
+  for (const file of files) {
+    const slug = file.replace(/\.mdx?$/, '')
+    const raw = await readContentFile(`main-pages/${file}`)
+    if (!raw) continue
+    const { data, body } = splitFrontmatter(raw)
+    const doc = toMainPage(slug, data, body)
+    if (doc) docs.push(doc)
+  }
+  return docs.sort((a, b) => a.slug.localeCompare(b.slug))
+}
+
+/**
+ * The home page visitors see: the version Settings points at.
+ *
+ * A reference field stores a path (`content/main-pages/home.mdx`), so the
+ * match is on the file name. If the setting is empty or points at a version
+ * that no longer exists, the first version is used and the fault is logged —
+ * a bad setting must never leave the site without a home page.
+ */
+export async function getLiveMainPage(liveMainPage: string | undefined): Promise<MainPageDoc | undefined> {
+  const versions = await getMainPages()
+  if (versions.length === 0) return undefined
+
+  const wanted = liveMainPage?.split('/').pop()?.replace(/\.mdx?$/, '')
+  const live = wanted ? versions.find((doc) => doc.slug === wanted) : undefined
+  if (!live) {
+    console.error(
+      wanted
+        ? `[main-pages] Settings points at "${wanted}", which does not exist. Showing "${versions[0]?.slug}" instead.`
+        : `[main-pages] No live home page is chosen in Settings. Showing "${versions[0]?.slug}".`
+    )
+  }
+  return live ?? versions[0]
 }

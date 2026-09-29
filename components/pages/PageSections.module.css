@@ -85,6 +85,12 @@
 
 /* ---- Location contact cards --------------------------------------------- */
 
+/* The cards follow the page's opening sentence directly, 22px below it, as the
+   approved contact template draws them — not under a heading with 48px above. */
+.contactList {
+  margin-top: 22px;
+}
+
 .loclist {
   display: flex;
   flex-direction: column;
@@ -116,12 +122,20 @@
   min-width: 0;
 }
 
+/* 17px on a phone, 18px from 720px — the approved `.loccontact h2`. It was
+   the 22px h3 step, one size up from what was approved. */
 .locname {
   font-family: var(--ff-display);
-  font-size: var(--fs-h3);
+  font-size: 1.0625rem;
   line-height: 1.2;
   color: var(--lb-navy);
-  margin: 0 0 var(--sp-1);
+  margin: 0 0 6px;
+}
+
+@media (min-width: 720px) {
+  .locname {
+    font-size: 1.125rem;
+  }
 }
 
 .locsummary {

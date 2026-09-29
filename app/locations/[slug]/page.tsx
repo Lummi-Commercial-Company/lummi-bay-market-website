@@ -5,9 +5,10 @@ import { Suspense } from 'react'
 import styles from '../../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
-import { LiveCardLine } from '@/components/locations/LiveCardLine'
+import { AmenityBadges } from '@/components/locations/AmenityBadges'
 import { LiveHours } from '@/components/locations/LiveHours'
-import { getLocation, getLocations, LOCATION_ORDER } from '@/lib/locations'
+import { LocationList } from '@/components/locations/LocationList'
+import { getLocation, LOCATION_ORDER } from '@/lib/locations'
 import { JsonLd, locationJsonLd } from '@/lib/structured-data'
 import type { LocationSlug } from '@/lib/types'
 
@@ -38,8 +39,6 @@ export default async function LocationPage({
   const { slug } = await params
   const location = await getLocation(slug as LocationSlug)
   if (!location) notFound()
-
-  const others = (await getLocations()).filter((other) => other.id !== location.id)
 
   return (
     <div className={styles.pagegrid}>
@@ -78,30 +77,24 @@ export default async function LocationPage({
             Under two amenities it does not render; a single badge under a
             "What's here" heading reads as a failed load, not a short list. */}
         {location.amenities.length >= 2 ? (
-          <>
-            <h2>What&rsquo;s here</h2>
-            <ul className={styles.badges}>
-              {location.amenities.map((amenity) => (
-                <li key={amenity} className={styles.badge}>
-                  <span aria-hidden="true">•</span>
-                  {amenity}
-                </li>
-              ))}
-            </ul>
-          </>
+          <AmenityBadges amenities={location.amenities} />
         ) : location.amenities.length === 1 ? (
           <p>{location.amenities[0]} available at this location.</p>
         ) : null}
 
         {/* Only exit-260 carries a Truck Stop record. The summary reads from
-            that record and never from `amenities` — the showers and the driver
-            lounge are the Truck Stop's, not the store's. */}
+            that record and never from the store's `amenities` — the showers and
+            the driver lounge are the Truck Stop's, not the store's.
+
+            It reads the record's own `summary`, the prose field staff write.
+            It used to build a sentence by lowercasing the amenity list, which
+            turned "DEF" into "def". Never case-fold content to fit a sentence. */}
         {location.truckStop ? (
           <>
             <h2>Truck Stop</h2>
             <p>
-              A separate fuel station for truckers on the same property:{' '}
-              {location.truckStop.amenities.join(', ').toLowerCase()}.{' '}
+              {location.truckStop.summary ||
+                `A separate fuel station on the same property: ${location.truckStop.amenities.join(', ')}.`}{' '}
               <Suspense fallback={location.truckStop.hours}>
                 <LiveHours
                   hours={location.truckStop.hours}
@@ -124,21 +117,9 @@ export default async function LocationPage({
       </FuelPriceRail>
 
       <div className={styles.rest}>
-        <h2>Our other locations</h2>
-        <ul className={styles.cards}>
-          {others.map((other) => (
-            <li key={other.id}>
-              <Link className={styles.card} href={`/locations/${other.id}`}>
-                <p className={styles.cardName}>{other.navLabel}</p>
-                <p className={styles.cardLine}>
-                  <Suspense fallback={other.cardLine}>
-                    <LiveCardLine location={other} />
-                  </Suspense>
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {/* The page's own card is dropped and the label reads "Our other
+            locations"; the Truck Stop callout stays on Exit 260 (ADR 0009). */}
+        <LocationList subject={location.id} />
       </div>
 
       {/* Structured data carries the STANDARD hours, never a temporary

@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { Suspense } from 'react'
 import styles from '../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
-import { LiveCardLine } from '@/components/locations/LiveCardLine'
-import { getLocations } from '@/lib/locations'
+import { LocationList } from '@/components/locations/LocationList'
 
 export const metadata: Metadata = {
   title: 'Locations',
@@ -13,10 +11,11 @@ export const metadata: Metadata = {
     'Lummi Bay Market at Exit 260, the Minimart on Haxton Way and Fisherman’s Cove on Lummi View Drive.',
 }
 
-/** The index is derived from the Location files — never authored (ADR 0009). */
+/**
+ * The index is derived from the Location files — never authored (ADR 0009).
+ * It is the full list, Truck Stop callout first, like Home.
+ */
 export default async function LocationsPage() {
-  const locations = await getLocations()
-
   return (
     <div className={styles.pagegrid}>
       <div className={styles.maincol}>
@@ -31,20 +30,7 @@ export default async function LocationsPage() {
       </FuelPriceRail>
 
       <div className={styles.rest}>
-        <ul className={styles.cards}>
-          {locations.map((location) => (
-            <li key={location.id}>
-              <Link className={styles.card} href={`/locations/${location.id}`}>
-                <p className={styles.cardName}>{location.navLabel}</p>
-                <p className={styles.cardLine}>
-                <Suspense fallback={location.cardLine}>
-                  <LiveCardLine location={location} />
-                </Suspense>
-              </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <LocationList />
       </div>
     </div>
   )

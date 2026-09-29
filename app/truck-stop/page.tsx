@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import styles from '../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
-import { LiveCardLine } from '@/components/locations/LiveCardLine'
+import { AmenityBadges } from '@/components/locations/AmenityBadges'
 import { LiveHours } from '@/components/locations/LiveHours'
+import { LocationList } from '@/components/locations/LocationList'
 import { getLocation } from '@/lib/locations'
 
 export const metadata: Metadata = {
@@ -61,19 +61,9 @@ export default async function TruckStopPage() {
           </dd>
         </dl>
 
-        {truckStop.amenities.length >= 2 ? (
-          <>
-            <h2>What&rsquo;s here</h2>
-            <ul className={styles.badges}>
-              {truckStop.amenities.map((amenity) => (
-                <li key={amenity} className={styles.badge}>
-                  <span aria-hidden="true">•</span>
-                  {amenity}
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : null}
+        {/* The Truck Stop's badges come from its own record, never merged
+            with the store's (docs/proofs/amenity-badges.html). */}
+        <AmenityBadges amenities={truckStop.amenities} />
       </div>
 
       {/* The Truck Stop leads the table here, so diesel and DEF are the first
@@ -86,22 +76,10 @@ export default async function TruckStopPage() {
       </FuelPriceRail>
 
       <div className={styles.rest}>
-        {/* The filter drops the page's subject — the Truck Stop — never
-            everything at the page's street address, so Exit 260 is still
-            listed here (ADR 0009). */}
-        <h2>Also at this exit</h2>
-        <ul className={styles.cards}>
-          <li>
-            <Link className={styles.card} href="/locations/exit-260">
-              <p className={styles.cardName}>{exit260.navLabel}</p>
-              <p className={styles.cardLine}>
-                <Suspense fallback={exit260.cardLine}>
-                  <LiveCardLine location={exit260} />
-                </Suspense>
-              </p>
-            </Link>
-          </li>
-        </ul>
+        {/* The page's subject is the Truck Stop, so the callout is dropped —
+            and ONLY the callout. Exit 260 is a different store at the same
+            address and stays, with the other Locations (ADR 0009). */}
+        <LocationList subject="truck-stop" />
       </div>
     </div>
   )

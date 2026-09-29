@@ -598,6 +598,21 @@ const mainPages: Collection = {
       required: true,
       isTitle: true,
     },
+    {
+      type: 'string',
+      name: 'headline',
+      label: 'Headline',
+      description:
+        'The large heading at the top of the home page. A few words — it is the first thing a visitor reads.',
+      required: true,
+    },
+    {
+      type: 'string',
+      name: 'intro',
+      label: 'Intro sentence',
+      description: 'One sentence under the headline. Leave blank to show the headline alone.',
+      ui: { component: 'textarea' },
+    },
     ...seoFields,
     pageBodyField,
     {

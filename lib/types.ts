@@ -178,3 +178,20 @@ export interface PageDoc {
   /** Extra sections, rendered after the body. */
   blocks: PageBlock[]
 }
+
+/**
+ * A home page version (ADR 0015, ADR 0018). More than one may exist; the one
+ * `settings.liveMainPage` points at is what visitors see.
+ */
+export interface MainPageDoc {
+  /** The file name without its extension. */
+  slug: string
+  /** Internal name. Staff see it in the CMS; visitors never do. */
+  title: string
+  headline: string
+  intro?: string
+  seoDescription?: string
+  noBackdrop: boolean
+  body: string
+  blocks: PageBlock[]
+}

@@ -19,8 +19,9 @@ noindex: false
 # until both map fields in Settings are filled — the page is then one section
 # shorter and still complete (ADR 0019).
 blocks:
+  # No heading on the store cards: the approved page runs them straight on from
+  # the opening sentence. Add a `heading:` here only if a heading is wanted.
   - _template: locationContacts
-    heading: Where to find us
   - _template: locationsMap
     heading: Find us
   - _template: callout

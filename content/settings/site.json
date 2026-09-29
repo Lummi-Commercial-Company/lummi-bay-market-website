@@ -16,5 +16,6 @@
   "map": {
     "embedCode": "",
     "stillImage": ""
-  }
+  },
+  "liveMainPage": "content/main-pages/home.mdx"
 }
