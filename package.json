@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tinacms dev -c \"next dev\"",
     "dev:next": "next dev",
-    "build": "tinacms build && next build",
+    "build": "node scripts/tina-build.mjs && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
