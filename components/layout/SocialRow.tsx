@@ -6,9 +6,9 @@ import type { SocialLink } from '@/lib/types'
  *
  * LINKS ONLY, NEVER EMBEDS. A feed, a follow button or an official share widget
  * loads third-party code and sets cookies before anyone clicks it, which would
- * make the line directly below this row — "No cookies. Visits counted
- * anonymously." — false. That sentence is a checkable claim, so this row is
- * constrained by it (ADR 0025).
+ * make the "This website" section of /privacy false — it says the site sets no
+ * cookies, and that is a checkable claim, so this row is constrained by it
+ * (ADR 0025, amended 29 Sep 2026: the claim moved there from the footer).
  *
  * When the list is empty this renders NOTHING: no placeholder, no greyed icon,
  * and never `href="#"`. An account we do not have is not a disabled button.

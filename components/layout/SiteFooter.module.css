@@ -106,13 +106,6 @@
   gap: var(--sp-3) var(--sp-5);
 }
 
-.baseClaim {
-  margin: 0;
-  font: 500 0.8125rem/1.4 var(--ff-body);
-  color: var(--lb-bone);
-  opacity: 0.85;
-}
-
 .baseLink {
   display: inline-flex;
   align-items: center;

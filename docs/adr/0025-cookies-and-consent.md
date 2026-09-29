@@ -1,6 +1,7 @@
 # 0025 — No banner, because the site sets nothing to consent to
 
-Status: Accepted, amended 17 Sep 2026 by **ADR 0026** (a `/privacy` page is required by the
+Status: Accepted, amended 17 Sep 2026 and again 29 Sep 2026 (the footer line moved to
+`/privacy` — see the amendment at the foot) by **ADR 0026** (a `/privacy` page is required by the
 Rewards app; no cookie decision here changes). Settles checklist **A18**, constrains **B7**, and
 resolves the open cookie consequence in ADR 0019.
 
@@ -188,3 +189,35 @@ this line first.
   it is not a bug report when someone notices it.
 - **This is worth one plain sentence to the client**, since they asked a legal question: no
   banner is required, and we went further and built the site so the question does not arise.
+
+## Amendment — the footer sentence moves to /privacy, 29 Sep 2026
+
+Owner's direction:
+
+> *"'No cookies. Visits counted anonymously.' should not be in the footer. That information
+> should be included on the Privacy Policy page."*
+
+**So the line comes out of the footer.** The Privacy Policy link stays where it was; the base
+row now carries the link alone.
+
+Nothing is lost by the move, because `/privacy` already said it, at more length and with the
+distinction the one-liner could not draw — that the *website* sets no cookies while the
+*Rewards app* does collect personal information. A visitor who wants the claim now reads it
+where the reasoning sits next to it, rather than as a fragment above a link.
+
+### What does NOT change
+
+**The constraint.** This ADR's substance was never the sentence; it was that the site sets no
+cookies and therefore needs no banner. That still holds, and it is still a standing limit on
+every future embed, feed, share widget and analytics tag — see ADR 0028, which forbids social
+embeds for exactly this reason.
+
+**What it costs to break it** is now slightly different, and worth stating plainly: the claim
+used to be visible on every page, so a cookie-setting addition falsified something a reader
+could see anywhere. It is now on one page. A regression is therefore *less* likely to be
+noticed and *more* likely to matter, since what it falsifies is a published policy document
+rather than a line of footer text. The check moves to the launch list rather than to the eye.
+
+**The Privacy Policy link stays.** It is published inside both app store listings, so the page
+must remain reachable and must never be renamed or deleted (ADR 0026). Removing the sentence
+does not touch that.

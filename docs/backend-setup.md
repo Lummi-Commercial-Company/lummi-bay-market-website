@@ -23,7 +23,7 @@ and if it lands on a keyed provider that adds an API key and a cookie/consent qu
 Maps**, and ADR 0025 settled the click-to-load still image in front of it, precisely so that no
 third-party code loads before a visitor asks for it. So the keyed-provider worry above is resolved
 rather than pending — there is no API key and no consent question, which is what keeps the
-footer's "No cookies" line true.
+no-cookies claim on `/privacy` true.
 
 What is genuinely outstanding is smaller and is a task, not a decision: **nobody has made the map
 yet.** Someone builds it in Google My Maps with three pins, sets it public, and pastes the

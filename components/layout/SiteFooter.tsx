@@ -102,18 +102,18 @@ export async function SiteFooter() {
 
         <div className={styles.base}>
           {/*
-            Not a link, and not decoration. It is a factual claim about this
-            site that the build has to keep true, which makes it a standing
-            constraint on analytics and on every future embed (ADR 0025).
-          */}
-          <p className={styles.baseClaim}>No cookies. Visits counted anonymously.</p>
+            The "No cookies. Visits counted anonymously." line used to sit here
+            beside this link. Removed at the owner's direction, 29 Sep 2026: the
+            same statement is made in full in the "This website" section of
+            /privacy, which is where it belongs (ADR 0025, amended).
 
-          {/*
-            Both the sentence and the policy, never one or the other. The
-            sentence is a checkable claim about this site; the policy is a
-            document that mostly describes the Rewards app, and neither app
-            store will publish without a public policy URL (ADR 0026).
-            /privacy is never renamed or deleted once it is in a store listing.
+            What has NOT changed is the constraint behind it. The site still
+            sets no cookies, and anything added later that would set one — an
+            embed, a feed, an analytics tag — now falsifies a page rather than a
+            footer line. The claim moved; it did not go away.
+
+            /privacy is never renamed or deleted once it is in a store listing
+            (ADR 0026), which is also why this link stays.
           */}
           <Link className={styles.baseLink} href="/privacy">
             Privacy Policy

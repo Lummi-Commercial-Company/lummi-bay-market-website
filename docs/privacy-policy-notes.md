@@ -56,8 +56,10 @@ most likely to be read closely by somebody who is unhappy.
 ## 3. The app says cookies; this site says no cookies. Both are true, and the page has to show it
 
 The policy's Cookies section says the Service *"may use third party code and libraries that use
-cookies."* Every page of this website carries, in the footer, **"No cookies. Visits counted
-anonymously."** (ADR 0025).
+cookies."* The "This website" section at the top of `/privacy` says **this site sets no
+cookies** (ADR 0025). *(Until 29 Sep 2026 every page also carried "No cookies. Visits counted
+anonymously." in the footer; that line was removed at the owner's direction and the claim now
+lives on this page alone.)*
 
 Those are not in conflict — they are about two different products — but a reader who lands on
 `/privacy` from the footer link sees them ten seconds apart, and if the page opens with the app's

@@ -7,8 +7,8 @@
  * swapped without a deploy.
  *
  * Nothing here loads Google. The still image is served from this origin and the
- * iframe mounts only after a guest clicks, which is what keeps the footer's
- * "No cookies. Visits counted anonymously." true (ADR 0025).
+ * iframe mounts only after a guest clicks, which is what keeps /privacy's
+ * "this site sets no cookies" true (ADR 0025).
  */
 
 /** Hosts a My Maps embed can legitimately point at. */

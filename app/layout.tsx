@@ -11,9 +11,9 @@ import { SITE_URL } from '@/lib/site'
 /**
  * Fonts are self-hosted, not fetched from a third party at runtime.
  * `next/font` downloads them at build time and serves them from this origin,
- * which keeps the footer's "No cookies. Visits counted anonymously." true —
- * a runtime request to fonts.googleapis.com is a third-party connection made
- * before anybody clicks anything (ADR 0025).
+ * which keeps /privacy's "this site sets no cookies" true — a runtime request
+ * to fonts.googleapis.com is a third-party connection made before anybody
+ * clicks anything (ADR 0025).
  */
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
