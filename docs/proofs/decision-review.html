@@ -185,7 +185,7 @@ td.ok-cell{background:var(--c-ok-soft)}
 <div class="wrap">
 
 <header class="mast">
-  <p class="kicker">Lummi Bay Market · build review · 18 September 2026</p>
+  <p class="kicker">Lummi Bay Market · build review · revised 29 September 2026</p>
   <h1>Every decision, and what each one costs</h1>
   <p class="standfirst">Twenty-eight decisions have been made, recorded and measured. Since this page was
   last reviewed, <strong>the build has happened</strong> — written against this record rather than ahead of
@@ -214,10 +214,12 @@ td.ok-cell{background:var(--c-ok-soft)}
 
 <!-- ============ SINCE LAST REVIEW ============ -->
 <h2 class="section">What changed since 17 September</h2>
-<p class="lede">One thing changed, and it is the large one: <strong>the site was built.</strong> Every
+<p class="lede">The large change is that <strong>the site was built.</strong> Every
 decision below was already settled when the first line was written, so this section is not a list of new
 decisions — it is the report on what happened when twenty-eight of them met a compiler. Three of them cost
-more than the record said they would, and those are annotated in place. None of them had to be reversed.</p>
+more than the record said they would, and those are annotated in place. None of them had to be reversed.
+Since the build, reading the record back against the finished code has turned up three points where the
+two disagreed; that is the third box below.</p>
 
 <div class="built">
   <h3>What exists now</h3>
@@ -251,6 +253,30 @@ more than the record said they would, and those are annotated in place. None of 
   the second was confirmed by running the old parser against the files as they were committed, which
   returned an empty list for all three Locations. Neither had reached a deployed site, because there is not
   one yet — which is the argument for the order of work, not against it.</p>
+</div>
+
+<div class="built" style="border-left-color:var(--c-mark)">
+  <h3>Three places where the written record and the built site disagreed — 29 September</h3>
+  <p>Each was found by checking one against the other rather than by anything failing. They are worth a
+  paragraph because of how they split: <strong>two were errors in the description, not in the build.</strong></p>
+  <p><strong>A route that was described but never built.</strong> The record gave the full price page two
+  ways in: a footer link and the "All prices" link inside the price block. Only the second was ever built.
+  Asked whether to build the first, you dropped it — the prices are already on the page the guest is
+  reading, and the panel link sits directly underneath them. <em>The record changed; the code did not.</em>
+  The page keeps its place in the sitemap, so search still finds it.</p>
+  <p><strong>One page had no prices on it.</strong> The rule is that prices appear on every page, and every
+  page did — except Rewards. The block is added page by page rather than inherited from the layout, and
+  that page had never been given one. Harmless while a footer link was still planned; not harmless the
+  moment it was dropped, because Rewards then had no route to the full price page at all. <em>The code
+  changed; the rule did not.</em> Eighteen of eighteen pages still build, and Rewards now fetches prices
+  per visitor like the rest.</p>
+  <p><strong>A rule written down more strictly than it was decided.</strong> The project brief said the
+  price rail must never be pinned. The site pins it on desktop. The decision record is the one that is
+  right: not pinned <em>while the panel is attached to the card</em>, which is the phone case, and pinned
+  on desktop, where the panel is positioned against the screen instead — the defect the rule exists to
+  prevent cannot happen there. The brief had turned a condition into an absolute, which made correct work
+  look like a breach. The condition is back, and with it the warning it carries: <em>if the panel is ever
+  re-attached to the card, the rail has to stop being pinned.</em></p>
 </div>
 
 <!-- ============ BLOCK A ============ -->
@@ -349,7 +375,7 @@ more than the record said they would, and those are annotated in place. None of 
   </div>
 
   <div class="dec">
-    <div class="dec-top"><span class="adr">ADR 0006</span><h3>The header sticks; the price rail does not</h3><span class="tag t-amend">Accepted · amended</span></div>
+    <div class="dec-top"><span class="adr">ADR 0006</span><h3>The header sticks; the price rail sticks only on desktop</h3><span class="tag t-amend">Accepted · amended</span></div>
     <div class="dec-body">
       <div><b>Why</b> Location pages are long. A pinned header is what stops a guest getting lost.
       Pinning the price card under it was tried and <em>broke the panel</em>: after ~300px of scroll the
@@ -857,7 +883,7 @@ deliberately rather than discovering on the day.</p>
 </div>
 
 <p class="colophon">
-  This page is a review document, revised 18&nbsp;September 2026 after the first build. It is not the site
+  This page is a review document, revised 29&nbsp;September 2026. It is not the site
   and no part of it ships. Figures describing the build — page counts, line counts, what passes — were
   taken from a clean build of the repository on the date above and go stale the moment the code changes. Each entry summarises a full
   decision record in <code>docs/adr/</code>; where the two differ, the record is authoritative. Figures
