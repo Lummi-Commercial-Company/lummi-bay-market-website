@@ -48,6 +48,18 @@ fuel price they want to change, edit it in a sidebar with live preview, and pres
 never see git, a file, or a branch. This is the route the whole stack was chosen for — TinaCMS
 needs React, which is why Next.js is the framework and not Astro (ADR 0003).
 
+> **Tell staff this before they touch it:** after pressing Publish, the new price takes
+> **one to two minutes** to appear on the site. Nothing is wrong during that time — the page
+> keeps showing the old price until the rebuild finishes, so visitors never see a broken or
+> blank page. **Do not press Publish again.** A second publish does not make it faster; it
+> starts a second build.
+>
+> *Confirmed in production on 29 Sep 2026: a price changed in the editor became the commit
+> `cf76e3a "TinaCMS content update"`, and appeared on every page that shows prices after the
+> rebuild. The refresh done a few seconds after Publish still showed the old price — which is
+> exactly the behaviour described here, and exactly what will generate the first support call
+> if nobody is told.*
+
 **2. Claude, in chat.** "Set Fisherman's Cove diesel to 4.19" — Claude edits
 `content/fuel-prices.json` and pushes a commit. Same file, same rebuild, same result. This works
 *because* content is files in the repo; it would not be possible against a hosted CMS database.
