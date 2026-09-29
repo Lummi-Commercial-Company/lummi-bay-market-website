@@ -1,6 +1,9 @@
 # 0010 — Touch targets on phones: the footer goes two columns
 
 Status: Accepted
+**Amended 29 Sep 2026 by ADR 0029:** the phone header no longer carries the nav (it is behind a
+☰), so the phone nav measurements below describe a header that is gone. The footer rule — two
+columns, every link a 44px-tall target — stands.
 
 Header and the Rewards pill: ADR 0006. Nav: ADR 0008. Footer contents: `CLAUDE.md`.
 

@@ -1,8 +1,9 @@
 /* ===========================================================================
-   Footer. Phone layout is the constraint: two columns, 169px wide with a 12px
-   gutter at 375px, every link a 44px-tall full-column-width hit area, 14px row
-   gap. The gap stays — at ±30px, 9.3% of touches land on it and do nothing,
-   which is the right outcome for a slip (spec sheet, ADR 0010).
+   Footer — the approved templates' four headed columns (ADR 0029).
+   Type is the template's: 9px column heads, 12px links, 10.5px base row.
+   Targets are ADR 0010's: on a phone every link is a 44px-tall, full-column
+   hit area — the template draws the links touching, which is a drawing
+   shortcut, not a spec. Two columns on a phone, four from 768px.
    =========================================================================== */
 
 .footer {
@@ -18,47 +19,75 @@
   }
 }
 
+/* Side padding is the page gutter, not the template's frame padding, so the
+   footer's left edge lines up with the page content above it. */
 .inner {
   max-width: var(--content-max);
   margin-inline: auto;
-  padding: var(--sp-6) var(--sp-4) 0;
+  padding: 26px var(--sp-4) 0;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    padding-top: 30px;
+  }
 }
 
 .cols {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  column-gap: 12px;
-  row-gap: 14px;
+  gap: 22px 12px;
 }
 
 @media (min-width: 768px) {
   .cols {
     grid-template-columns: repeat(4, 1fr);
-    column-gap: var(--sp-5);
+    column-gap: 22px;
   }
 }
 
-.col {
+.group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.head {
+  font: 700 9px/1 var(--ff-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lb-bone);
+  opacity: 0.68;
+  margin: 0 0 4px;
+}
+
+/* The text is 12px; the row is the 44px target on a phone. */
+.link {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   min-height: 44px;
   width: 100%;
   color: var(--lb-bone);
+  opacity: 0.92;
   text-decoration: none;
-  font: 600 0.9375rem/1.2 var(--ff-body);
+  font: 400 12px/1.2 var(--ff-body);
 }
 
-.col:hover {
+.link:hover {
+  opacity: 1;
   text-decoration: underline;
 }
 
-/* "Lummi Commercial Companies" spans both phone columns, under a rule. */
-.colWide {
-  grid-column: 1 / -1;
-  border-top: 1px solid rgb(245 241 232 / 0.22);
-  padding-top: 14px;
-  font-weight: 500;
+/* A mouse is precise, so desktop rows close up to the template's rhythm. */
+@media (min-width: 768px) {
+  .head {
+    margin-bottom: 8px;
+  }
+
+  .link {
+    min-height: 28px;
+  }
 }
 
 .extGlyph {
@@ -95,21 +124,43 @@
   display: block;
 }
 
-/* ---- Base row ---------------------------------------------------------- */
+/* ---- Base row — © · Privacy Policy · Lummi Commercial Companies ------ */
 .base {
-  margin-top: var(--sp-5);
-  padding-top: var(--sp-4);
-  border-top: 1px solid rgb(245 241 232 / 0.22);
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgb(245 241 232 / 0.2);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--sp-3) var(--sp-5);
+  gap: 0 18px;
 }
 
+@media (min-width: 768px) {
+  .base {
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+}
+
+.baseText {
+  font: 400 10.5px/1 var(--ff-body);
+  color: var(--lb-bone);
+  opacity: 0.7;
+}
+
+/* Each link keeps a 44px target on a phone (ADR 0010). */
 .baseLink {
   display: inline-flex;
   align-items: center;
+  gap: 5px;
   min-height: 44px;
   color: var(--lb-bone);
-  font: 500 0.8125rem/1.4 var(--ff-body);
+  font: 600 10.5px/1 var(--ff-body);
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .baseLink {
+    min-height: 28px;
+  }
 }

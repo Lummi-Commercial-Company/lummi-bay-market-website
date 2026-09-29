@@ -3,6 +3,7 @@ import Link from 'next/link'
 import styles from './SiteHeader.module.css'
 import { HeaderMetrics } from './HeaderMetrics'
 import { HeaderMotifs } from './HeaderMotifs'
+import { MobileMenu } from './MobileMenu'
 import { SiteAlert } from './SiteAlert'
 import { SiteNav } from './SiteNav'
 import { getSettings } from '@/lib/settings'
@@ -52,6 +53,9 @@ export async function SiteHeader() {
               <span className={styles.pillShort}>App</span>
             </span>
           </Link>
+
+          {/* Phone only: the three nav items, behind the ☰ (ADR 0029). */}
+          <MobileMenu />
         </div>
       </header>
 

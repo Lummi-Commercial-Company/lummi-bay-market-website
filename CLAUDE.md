@@ -65,7 +65,10 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
   future embed and on analytics, not just a decision already made — ADR 0025.
 
 ## Site architecture (locked — owned by ux-navigation-architect)
-Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, see ADR 0008.
+Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, see ADR 0008. On a
+**phone the three sit behind a ☰ menu** at the right of the header, after the pill: the header
+cannot hold the lockup, three links and the pill below ~430px, which is every common phone
+(ADR 0029). Still three items.
 - Locations: index → 3 detail pages (nav labels: Exit 260 · Minimart · Fisherman's Cove).
 - Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it.
 - `/fuel-prices` still exists as a page — reached from the price block's "All prices" panel
@@ -92,13 +95,17 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
   conditional on that mechanism:** if the panel is ever anchored to the block again, the rail
   must stop being sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
   carries the Rewards "Get the App" pill on every page.
-Footer: **About** (brand story grounded in the Lummi values + light community note; LCC
-corporate/enterprise content stays out), **Contact**, **Rewards**, **Careers** (editable
-link), and the single **Lummi Commercial Companies** link → lcc-lummi.com. Below those columns
-and above the base row sits a **social row** — one icon-and-link per account, from a settings list,
+Footer: **four headed columns**, as the approved templates draw them (ADR 0029) — **About**
+(Our story → `/about`, a brand story grounded in the Lummi values + light community note, LCC
+corporate/enterprise content stays out; Contact), **Visit** (the three Locations and the Truck
+Stop, derived from the Location data), **Rewards** (Get the app → `/rewards`) and **Work with
+us** (Careers, an editable link). **No "Salish Village" link**, though the template draws one: it
+is an LCC development, so it falls under the hard rule on other Lummi companies. Below those
+columns and above the base row sits a **social row** — one icon-and-link per account, from a settings list,
 rendering nothing while the list is empty. **Links only, never embeds**: a feed, a follow button or
 an official share widget loads third-party code and sets cookies before anyone clicks (ADR 0028).
-The base row carries a **Privacy Policy** link → `/privacy` and nothing else. **The
+The base row carries **© Lummi Bay Market**, a **Privacy Policy** link → `/privacy`, and the single
+**Lummi Commercial Companies** link → lcc-lummi.com — nothing else. **The
 "No cookies. Visits counted anonymously." line is no longer in the footer** — removed at the
 owner's direction 29 Sep 2026; the same claim is made in full in the "This website" section of
 `/privacy`, which is where it belongs (ADR 0025, amended). The *constraint* is unchanged and is

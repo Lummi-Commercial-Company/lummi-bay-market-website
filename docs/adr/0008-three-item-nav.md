@@ -2,6 +2,7 @@
 
 Status: Accepted, amended 18 Sep 2026 — the footer link is dropped; the panel is the only
 entry point.
+Amended again 29 Sep 2026 by ADR 0029 — on a phone the three items sit behind a ☰ menu.
 
 Terms (Location, Truck Stop, Fuel Price): `CONTEXT.md`.
 
@@ -30,7 +31,10 @@ choice — so if it is kept, it must be linked.
   pill (ADR 0006) and the logo lockup is 2.8:1 rather than the 4.5:1 first assumed.
 - `/fuel-prices` still loads its block expanded and in flow, per ADR 0005's rule that a panel
   open on arrival cannot overlay. Nothing about that changes.
-- Three items sit comfortably on a phone without a hamburger, where four were tight.
+- ~~Three items sit comfortably on a phone without a hamburger, where four were tight.~~
+  **Superseded 29 Sep 2026 (ADR 0029):** measured at true device widths, the header clipped
+  the Get the App pill on nearly every phone, so on a phone the three items are behind a ☰.
+  Still three items.
 - Anything that linked to Fuel Prices as a nav destination — sitemap, footer, any copy written
   against the old IA — needs checking. ~~The footer link becomes load-bearing rather than
   decorative.~~ **Amended 18 Sep 2026: there is no footer link. The panel carries it alone.**

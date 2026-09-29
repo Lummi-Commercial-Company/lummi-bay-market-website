@@ -155,8 +155,11 @@
   padding: 0;
 }
 
+/* Sizes in this section are the approved contact template's, as drawn — the
+   owner's call on small text, 29 Sep 2026 (ADR 0029). Targets stay 44px. */
 .amen li {
-  font-size: 0.6875rem;
+  font-size: 9.5px;
+  line-height: 1;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -164,7 +167,7 @@
   background: var(--lb-bone);
   border: 1px solid rgba(28, 78, 143, 0.16);
   border-radius: 999px;
-  padding: var(--sp-1) var(--sp-2);
+  padding: 5px 9px;
 }
 
 .locactions {
@@ -183,7 +186,8 @@
   min-height: 44px;
   padding: 0 var(--sp-4);
   border-radius: 999px;
-  font-size: var(--fs-small);
+  font-size: 11px;
+  line-height: 1;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-decoration: none;
@@ -228,16 +232,18 @@
 }
 
 .fact dt {
-  font-size: 0.6875rem;
+  font-size: 9px;
+  line-height: 1;
   font-weight: 600;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--lb-ink);
+  opacity: 0.6;
 }
 
 .fact dd {
   margin: 0;
-  font-size: var(--fs-small);
+  font-size: 0.8125rem;
   line-height: 1.45;
   color: var(--lb-ink);
 }
@@ -370,12 +376,12 @@
 /* ---- Callout ------------------------------------------------------------ */
 
 .callout {
-  margin-top: var(--sp-5);
-  padding: var(--sp-3) var(--sp-4);
+  margin-top: 20px;
+  padding: 12px 14px;
   border-left: 3px solid var(--lb-navy);
   background: var(--lb-bone);
   border-radius: 0 var(--radius) var(--radius) 0;
-  font-size: var(--fs-small);
+  font-size: 0.8125rem;
   line-height: 1.55;
   color: var(--lb-ink);
   max-width: 56ch;

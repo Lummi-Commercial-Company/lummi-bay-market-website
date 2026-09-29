@@ -64,8 +64,11 @@
 }
 
 /* ---- Navigation -------------------------------------------------------- */
+/* Desktop only. Below 768px the three items are behind the ☰ menu, because a
+   phone header cannot hold the lockup, three links and the Get the App pill:
+   it needs about 430px and clipped the pill on every common phone (ADR 0029). */
 .nav {
-  display: flex;
+  display: none;
   align-items: center;
   flex-wrap: nowrap;
   gap: 4px;
@@ -74,6 +77,13 @@
   z-index: 2;
 }
 
+@media (min-width: 768px) {
+  .nav {
+    display: flex;
+  }
+}
+
+/* Desktop: 44–71 × 40 (ADR 0010). */
 .navLink {
   color: var(--lb-bone);
   text-decoration: none;
@@ -82,10 +92,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* Phone: 53–58 × 44. 44px tall is what took the header bar to 56px. */
-  min-width: 53px;
-  height: 44px;
-  padding: 0 5px;
+  min-width: 44px;
+  height: 40px;
+  padding: 0 13px;
   white-space: nowrap;
 }
 
@@ -98,21 +107,91 @@
   background: rgb(245 241 232 / 0.1);
 }
 
-/* Home is hidden on a phone — the lockup carries Home there, which is what
-   keeps the bar on one line. */
-.navLinkWide {
+/* ---- The ☰ menu — phone only (ADR 0029) --------------------------------- */
+/* Rightmost in the row, after the pill, as the approved template places it. */
+.menuBtn {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--lb-bone);
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.menuBtn:hover,
+.menuBtn[aria-expanded='true'] {
+  background: rgb(245 241 232 / 0.12);
+}
+
+.menuBtn:focus-visible {
+  outline: 3px solid var(--lb-teal);
+  outline-offset: 2px;
+}
+
+/* Fixed at the header's live height (HeaderMetrics publishes it, alert and
+   all), so it opens directly under whatever the sticky header is showing. */
+.menuPanel {
+  position: fixed;
+  top: var(--hd-h);
+  left: 0;
+  right: 0;
+  z-index: var(--z-header);
+  background: var(--lb-navy);
+  border-bottom: 1px solid rgb(245 241 232 / 0.18);
+  padding: 6px 10px 12px;
+}
+
+.menuPanel[hidden] {
   display: none;
 }
 
+.menuList {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: var(--content-max);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 48px rows: above ADR 0010's 44px floor, with the whole row as the target. */
+.menuLink {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: var(--lb-bone);
+  text-decoration: none;
+  font: 500 15px/1 var(--ff-body);
+}
+
+.menuLink[aria-current] {
+  background: rgb(245 241 232 / 0.16);
+  font-weight: 600;
+}
+
+.menuLink:hover {
+  background: rgb(245 241 232 / 0.1);
+}
+
+.menuLink:focus-visible {
+  outline: 3px solid var(--lb-teal);
+  outline-offset: -3px;
+}
+
 @media (min-width: 768px) {
-  .navLink {
-    /* Desktop: 44–71 × 40. */
-    min-width: 44px;
-    height: 40px;
-    padding: 0 13px;
-  }
-  .navLinkWide {
-    display: inline-flex;
+  .menuBtn,
+  .menuPanel {
+    display: none;
   }
 }
 
