@@ -44,6 +44,12 @@ with one section fewer, not a broken one. `embedCode` takes the `<iframe>` from 
 (Share → Embed on my site, map set to public); `stillImage` takes a picture of that same finished
 map for the click-to-load façade (ADR 0019, ADR 0025).
 
+**The still has to be uploaded, not linked.** It must be a file on this site — a path like
+`/uploads/locations-map.png`. An address starting with `http` or `//` points at somebody else's
+server, which is the one thing the façade exists to avoid, so it is rejected and the map section
+does not render. That is deliberate: a rejected still gives a page one section shorter, where
+accepting it would give a broken picture with a working button under it.
+
 ## What is deliberately not here
 Fuel prices (`content/fuel-prices.json`, ADR 0004), Locations, promos, tenants and pages are their
 own collections. Nothing about hours, prices or addresses belongs in a settings file.

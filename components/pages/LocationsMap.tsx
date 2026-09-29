@@ -1,7 +1,7 @@
 import { MapEmbed } from './MapEmbed'
 import styles from './PageSections.module.css'
 import { getLocations } from '@/lib/locations'
-import { mapEmbedSrc } from '@/lib/map'
+import { mapEmbedSrc, mapStillSrc } from '@/lib/map'
 import { getSettings } from '@/lib/settings'
 
 /**
@@ -21,11 +21,12 @@ export async function LocationsMap({ heading }: { heading?: string }) {
   const [settings, locations] = await Promise.all([getSettings(), getLocations()])
 
   const src = mapEmbedSrc(settings.map.embedCode)
-  const stillImage = settings.map.stillImage.trim()
+  const stillImage = mapStillSrc(settings.map.stillImage)
 
-  // Both halves are required. A still with no embed is a picture that does
-  // nothing when clicked; an embed with no still would have to load Google
-  // before anybody asked, which is the one thing ADR 0025 forbids.
+  // Both halves are required, and both must be ones we trust. A still with no
+  // embed is a picture that does nothing when clicked; an embed with no still
+  // would have to load Google before anybody asked, which is the one thing
+  // ADR 0025 forbids. Either field rejected is the same as either field empty.
   if (!src || !stillImage) return null
 
   return (

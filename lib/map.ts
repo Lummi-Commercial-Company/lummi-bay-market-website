@@ -57,6 +57,38 @@ export function mapEmbedSrc(embedCode: string): string | null {
 }
 
 /**
+ * Validate the still image, which must be served from this origin.
+ *
+ * The whole point of the still is that the page shows a map without asking
+ * anybody for anything (ADR 0025). An external URL breaks that intent, and it
+ * breaks quietly: Next fetches it through `/_next/image`, whose host allowlist
+ * in `next.config.js` does not include it, so the optimizer answers 400 and the
+ * guest sees a blank frame with a working "Load map" button under it. The build
+ * does not fail, because nothing is fetched at build time.
+ *
+ * A path with no leading slash fails harder still — `next/image` throws rather
+ * than rendering — so it is rejected here too.
+ *
+ * Returns null for anything that is not a same-origin path. Null means the map
+ * section does not render at all, which is the same answer `mapEmbedSrc` gives
+ * for an embed it does not trust: no section beats a broken one.
+ */
+export function mapStillSrc(stillImage: string): string | null {
+  const trimmed = stillImage.trim()
+  if (!trimmed) return null
+
+  // `//host/path` is protocol-relative and goes off-origin, so one slash only.
+  if (!trimmed.startsWith('/') || trimmed.startsWith('//')) {
+    console.error(
+      `[map] the still image in Settings is "${trimmed}", which is not a file on this site. Upload the image instead of linking to it — an address starting with http, or with //, is fetched from somewhere else and will not render. The map section will not render.`
+    )
+    return null
+  }
+
+  return trimmed
+}
+
+/**
  * A Directions link for one address.
  *
  * This is an ordinary link, not an embed: nothing is requested from Google
