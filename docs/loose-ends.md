@@ -130,3 +130,63 @@ written correctly, then applied to a subset instead of universally. DEF shown fo
 does not sell it; the panel's "carries what is off screen" rule applied to Locations but not the
 Truck Stop; "refresh the price pages" when prices are on every page. When a rule is written, check
 every place it should apply, not the place that prompted it.
+
+## 9. Open after the first build session (Sep 2026)
+The scaffold now exists: Next.js 16 + React 19 + TinaCMS 3, the layout shell, the three Location
+pages, the Truck Stop, and the fuel price block. Lint, typecheck and build pass; the price
+pipeline was verified by changing one value and watching it appear on three pages that never
+name that Location. What follows was **found by building**, and none of it is guesswork.
+
+**The header does not fit at 320px.** Measured: 39px of horizontal overflow with the logo at its
+locked ~72px minimum width. 360px and 375px are clean at 0px. A wordmark, three nav items and the
+Rewards pill cannot share one 320px row, and every available pixel has already been taken — the
+gutter is down to 8px and the nav to 0.75rem. The remaining options all change the IA (a
+hamburger, a two-row header, or dropping the pill below phone width, which ADR 0006 forbids),
+so this belongs to **ux-navigation-architect**, not to CSS. 320px matters: the `cardLine` budget
+in `location-content-model` is measured there.
+
+**`tina-lock.json` cannot be generated without the TinaCloud Client ID.** Verified: `tinacms build`
+fails the cloud check without it, and `--local` produces the generated client but no lock file.
+So TinaCloud checklist step 2 is genuinely blocked on credentials, not on schema work.
+
+**A missing Tina env var fails the BUILD, not the editor.** `docs/backend-setup.md` step 9 says the
+opposite — that a missing one "fails at the editor, not at the build, so it looks fine until
+someone tries to edit." Observed behaviour is the reverse: `tinacms build` exits non-zero with
+`ERR_CLOUD_CHECK_FAILED`. That is better, not worse — the failure is loud — but the note should be
+corrected before it misleads someone debugging a red deploy.
+
+**The fuel price block does not condense on scroll yet.** The resting card, the popover, the one
+table, the derived grade columns and the /truck-stop row order are all built to ADR 0005. The
+`IntersectionObserver` condensing is not, because ADR 0005 requires asserting zero pixel movement
+and cross-browser checks in Safari and Firefox, and this container has only Chromium. Everything
+the condensing needs is in the ADR; it was deferred for lack of a way to verify it, not for lack
+of a spec.
+
+**The popover is unverified outside Chromium.** CSS anchor positioning is the project's one
+dependency on a newer feature (ADR 0005). A `@supports` fallback centres the panel under the
+header where anchoring is unavailable, but neither path has been opened in Safari or Firefox.
+
+**`fuel-price-update` contradicts itself on the opening mechanism.** It states emphatically that
+every block loads collapsed on every page including Home and `/fuel-prices`, and says not to
+reintroduce a "loads expanded" variant. A table further down still lists "loads expanded (Home,
+`/fuel-prices`)" as a case. The build follows the emphatic rule — collapsed everywhere — and the
+stale table row should be deleted.
+
+**`truckStop` was built as a record, not a boolean.** `location-content-model` flagged that three
+fields hanging off a boolean is the schema asking to be `truckStop: { phone, hours, amenities }`,
+and that until it changed the Truck Stop's own phone had nowhere to live. Building fresh, the
+record was the only shape that worked. **This needs sign-off**, since the skill still documents
+the boolean.
+
+**The two naming questions are still open and are now visible on the site.** "Minimart" vs "Mini
+Mart", and whether Fisherman's Cove takes "at". The build kept this document's existing values.
+Both appear as page titles, so both are wrong in public if the client's wording was the right one.
+
+**The waterline carries no motif at all.** `CLAUDE.md` asks for representative placeholder motifs;
+`HANDOFF.md` says not to generate formline even as a placeholder, and ADR 0012 rejected an
+illustrated layer. The stricter instruction won: the band is a plain geometric wave in the
+approved teal. The two documents should be reconciled so the next person does not re-litigate it.
+
+**A Location's `id` is now derived from its filename.** TinaCMS reserves `id` on documents, so the
+field could not stay in the schema. The filename is the slug, which is also how Tina models it.
+No content change, but `location-content-model` lists `id` as a stored field and no longer should.
