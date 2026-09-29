@@ -7,6 +7,10 @@
 
 .block {
   position: relative;
+  /* The cue's height, named because three rules depend on it agreeing: the
+     cue's own box, where the condensed bar is drawn, and the reserved height
+     the block keeps when it condenses. 44px is the touch target (ADR 0010). */
+  --cue-h: 44px;
   /* The block is above the waterline and below the nav. */
   z-index: var(--z-fuelblock);
   width: 100%;
@@ -44,13 +48,13 @@
   background: var(--lb-paper);
   border: 1px solid rgb(28 78 143 / 0.18);
   border-radius: var(--radius);
-  padding: 8px 10px 0;
+  padding: 0 10px 8px;
 }
 
 @media (min-width: 768px) {
   .reserve {
     min-height: 110px;
-    padding: 10px 12px 0;
+    padding: 0 12px 10px;
   }
 }
 
@@ -79,7 +83,8 @@
 
 .oneline {
   position: absolute;
-  top: 8px;
+  /* Below the cue, which keeps its box in every state. */
+  top: var(--cue-h);
   left: 10px;
   right: 10px;
   height: 39px;
@@ -91,7 +96,6 @@
 
 @media (min-width: 768px) {
   .oneline {
-    top: 10px;
     left: 12px;
     right: 12px;
   }
@@ -139,9 +143,11 @@
   text-align: left;
 }
 
+/* Navy, not ink: every row label is a link to that place's page, and the card
+   reads as one blue object with the cue above it. */
 .place {
   font: 600 0.8125rem/1.3 var(--ff-body);
-  color: var(--lb-ink);
+  color: var(--lb-navy);
   text-align: left;
   padding: 3px 0;
   white-space: nowrap;
@@ -187,15 +193,32 @@
   gap: 6px;
   width: calc(100% + 20px);
   margin: 0 -10px;
-  min-height: 44px;
+  min-height: var(--cue-h);
   padding: 0 10px;
   border: 0;
-  border-top: 1px solid rgb(28 78 143 / 0.12);
+  border-bottom: 1px solid rgb(28 78 143 / 0.12);
   background: none;
   color: var(--lb-navy);
   font: 600 0.75rem/1 var(--ff-body);
   cursor: pointer;
-  border-radius: 0 0 var(--radius) var(--radius);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* Down when shut, up when open. The rotation is the state, so it is suppressed
+   for anyone who has asked for less motion rather than removed. */
+.cueChevron {
+  flex: 0 0 auto;
+  transition: transform 0.15s ease;
+}
+
+.cue[aria-expanded='true'] .cueChevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cueChevron {
+    transition: none;
+  }
 }
 
 @media (min-width: 768px) {

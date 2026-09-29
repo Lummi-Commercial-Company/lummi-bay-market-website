@@ -112,10 +112,14 @@ export function allPriceRows(locations: LocationDoc[], prices: FuelPricesDoc): P
 /**
  * Prices are posted to the cent, and sometimes to the tenth of a cent. Keep
  * whatever precision was entered rather than rounding a posted price.
+ *
+ * No currency symbol: ADR 0005 draws the card and the full table as bare
+ * numbers, which is also how the number reads on the sign at the pump. The
+ * table's caption says what the numbers are — "Fuel prices per gallon" — so
+ * the unit is announced once rather than repeated in every cell.
  */
 const priceFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
+  style: 'decimal',
   minimumFractionDigits: 2,
   maximumFractionDigits: 3,
 })

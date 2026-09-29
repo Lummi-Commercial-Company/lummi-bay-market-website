@@ -88,6 +88,22 @@ export function FuelPriceCard({
       <div ref={sentinel} className={styles.sentinel} aria-hidden="true" />
 
       <div className={styles.reserve} data-open={open}>
+        {/* The cue sits ABOVE the table, with a chevron — ADR 0005 draws the
+            card that way. It is a real button: operated by keyboard,
+            announced, and its state is `aria-expanded`. It keeps its box in
+            every state, which is what lets the condensed bar be drawn over the
+            reserved space without the block changing height (rule 1 above). */}
+        <button
+          type="button"
+          className={styles.cue}
+          aria-expanded={open}
+          aria-controls={panelId}
+          onClick={() => setOpen((value) => !value)}
+        >
+          <Chevron />
+          {open ? 'Hide other prices' : 'View all prices'}
+        </button>
+
         {/* ---- Resting: the card ---- */}
         <div className={styles.stacked} aria-hidden={condensed}>
           <table className={styles.table}>
@@ -95,7 +111,7 @@ export function FuelPriceCard({
             <thead>
               <tr>
                 <th scope="col" className={styles.placeHead}>
-                  Place
+                  <span className="visually-hidden">Place</span>
                 </th>
                 {cardColumnLabels.map((label) => (
                   <th scope="col" key={label} className={styles.gradeHead}>
@@ -132,18 +148,6 @@ export function FuelPriceCard({
           </span>
         </div>
 
-        {/* The control is a real button: it is operated by keyboard, it is
-            announced, and its state is `aria-expanded`. */}
-        <button
-          type="button"
-          className={styles.cue}
-          aria-expanded={open}
-          aria-controls={panelId}
-          onClick={() => setOpen((value) => !value)}
-        >
-          {open ? 'Hide other prices' : 'View all prices'}
-        </button>
-
         {/* ---- Expanded: the panel ----
             Never `display: none` — it is hidden by the `data-open` state on the
             wrapper so that it stays openable in every state, condensed
@@ -155,7 +159,7 @@ export function FuelPriceCard({
             <thead className={condensed ? undefined : styles.panelHeadAtRest}>
               <tr>
                 <th scope="col" className={styles.placeHead}>
-                  Place
+                  <span className="visually-hidden">Place</span>
                 </th>
                 {liveColumns.map((label) => (
                   <th scope="col" key={label} className={styles.gradeHead}>
@@ -188,6 +192,27 @@ export function FuelPriceCard({
         </div>
       </div>
     </aside>
+  )
+}
+
+/** The disclosure chevron. Points down when shut, up when open. */
+function Chevron() {
+  return (
+    <svg
+      className={styles.cueChevron}
+      viewBox="0 0 10 6"
+      width="10"
+      height="6"
+      aria-hidden="true"
+      focusable="false"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M1 1.5 5 4.5 9 1.5" />
+    </svg>
   )
 }
 
