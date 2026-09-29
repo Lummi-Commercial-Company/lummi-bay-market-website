@@ -61,6 +61,14 @@ const nextConfig = {
         destination: '/locations/exit-260',
         permanent: true,
       },
+      // The first deploy (the scaffold on `main`, 29 Sep 2026) published the
+      // Minimart at /locations/mini-mart. The settled slug is `minimart`; a
+      // Location's address is exactly the kind of link that gets shared.
+      {
+        source: '/locations/mini-mart',
+        destination: '/locations/minimart',
+        permanent: true,
+      },
     ]
   },
 }

@@ -9,8 +9,8 @@
   "scripts": {
     "dev": "next dev",
     "dev:cms": "tinacms dev -c \"next dev\"",
-    "build": "next build",
-    "build:cms": "tinacms build && next build",
+    "build": "node scripts/tina-build.mjs && next build",
+    "build:next": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "node --test --experimental-strip-types \"lib/**/*.test.ts\"",
