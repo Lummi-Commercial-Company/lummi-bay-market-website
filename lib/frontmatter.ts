@@ -31,6 +31,12 @@ type Line = {
   indent: number
   text: string
   isItem: boolean
+  /**
+   * For a list item: the column its text starts at, after the dash. `- key: v`
+   * at indent 2 puts `key` at column 4, which is where the item's other keys
+   * sit. Needed to lay the item out as a map without flattening it.
+   */
+  textIndent?: number
   /** Set when the key's value was a `|`/`>` block, already folded. */
   blockValue?: string
 }
@@ -78,9 +84,12 @@ function tokenize(source: string): Line[] {
     const indent = rawLine.length - rawLine.replace(/^ +/, '').length
     let text = rawLine.trim()
     let isItem = false
+    let textIndent: number | undefined
     if (text === '-' || text.startsWith('- ')) {
       isItem = true
-      text = text.slice(1).trim()
+      const afterDash = text.slice(1)
+      textIndent = indent + 1 + (afterDash.length - afterDash.trimStart().length)
+      text = afterDash.trim()
     }
 
     const header = text.match(BLOCK_SCALAR_HEADER)
@@ -106,13 +115,14 @@ function tokenize(source: string): Line[] {
         indent,
         text: `${header[1]}:`,
         isItem,
+        textIndent,
         blockValue: foldBlockScalar(block, header[2] === '|', header[3] ?? ''),
       })
       i = j - 1
       continue
     }
 
-    lines.push({ indent, text, isItem })
+    lines.push({ indent, text, isItem, textIndent })
   }
 
   return lines
@@ -270,13 +280,19 @@ function parseSeq(lines: Line[], start: number, indent: number): [unknown[], num
     }
 
     // A map item: its first key sits inline after the dash, the rest follow
-    // indented. Re-present the inline key as a normal map line.
+    // indented. Re-present the inline key as a normal map line AT ITS REAL
+    // COLUMN, and leave every nested line at the indent it was written at.
+    //
+    // They were all flattened to one indent once. That is silent data loss: a
+    // sentence wrapped onto a deeper line landed level with the keys, was not
+    // read as a continuation, and vanished; and a list or map nested inside
+    // the item had its fields promoted up into the item itself.
     const itemLines: Line[] = []
     if (line.text !== '') {
-      itemLines.push({ ...line, indent: indent + 2, isItem: false })
+      itemLines.push({ ...line, indent: line.textIndent ?? indent + 2, isItem: false })
     }
     for (const child of nested) {
-      itemLines.push({ ...child, indent: indent + 2 })
+      itemLines.push(child)
     }
     const head = itemLines[0]
     out.push(head ? parseMap(itemLines, 0, head.indent)[0] : {})

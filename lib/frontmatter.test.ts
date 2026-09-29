@@ -131,6 +131,76 @@ test('a nested map reads as a map, and the key after it survives', () => {
   assert.equal(data.seoDescription, 'after the nest')
 })
 
+test('a wrapped line inside a list item stays part of its value', () => {
+  // The third bug, found on /contact: the "No contact form." note ended at
+  // "nothing to go". List items were re-indented flat, so the continuation
+  // line landed level with the keys, was not seen as a continuation, and was
+  // dropped without a word.
+  const data = parseYamlSubset(
+    [
+      'blocks:',
+      '  - _template: callout',
+      '    heading: No contact form.',
+      '    text: Nothing on this site collects messages, so there is nothing to go',
+      '      unanswered. Phone and address are the contact routes.',
+      '  - _template: locationsMap',
+    ].join('\n')
+  )
+
+  assert.deepEqual(data.blocks, [
+    {
+      _template: 'callout',
+      heading: 'No contact form.',
+      text: 'Nothing on this site collects messages, so there is nothing to go unanswered. Phone and address are the contact routes.',
+    },
+    { _template: 'locationsMap' },
+  ])
+})
+
+test('a list nested inside a list item keeps each entry whole', () => {
+  // The shape TinaCMS writes for a button row. Flattened, `href:` was read as
+  // a key of the block rather than of its button.
+  const data = parseYamlSubset(
+    [
+      'blocks:',
+      '  - _template: ctaRow',
+      '    buttons:',
+      '      - label: Call Exit 260',
+      '        href: tel:3607781894',
+      '      - label: Directions',
+      '        href: /contact',
+      '  - _template: callout',
+      '    heading: After the buttons',
+    ].join('\n')
+  )
+
+  assert.deepEqual(data.blocks, [
+    {
+      _template: 'ctaRow',
+      buttons: [
+        { label: 'Call Exit 260', href: 'tel:3607781894' },
+        { label: 'Directions', href: '/contact' },
+      ],
+    },
+    { _template: 'callout', heading: 'After the buttons' },
+  ])
+})
+
+test('a map nested inside a list item stays nested', () => {
+  const data = parseYamlSubset(
+    [
+      'items:',
+      '  - name: first',
+      '    detail:',
+      '      colour: navy',
+      '      size: 12',
+      '    after: kept',
+    ].join('\n')
+  )
+
+  assert.deepEqual(data.items, [{ name: 'first', detail: { colour: 'navy', size: 12 }, after: 'kept' }])
+})
+
 test('an emptied list is an array, not the string "[]"', () => {
   // hoursOverrides is exactly this case. Read as text it becomes "[]", which
   // every Array.isArray guard downstream rejects — the right outcome by luck,
