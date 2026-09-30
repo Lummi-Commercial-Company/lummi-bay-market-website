@@ -50,25 +50,34 @@
   object-position: center;
 }
 
-/* The text block sits on the bottom of the picture. The scrim is drawn
-   behind the text only, fading out above it, so the rest of the frame stays
-   clear. Its floor is 80% navy-deep where any text sits: over a white
-   photograph that is 5.6:1 for bone text, where the proof's left-to-right
-   scrim fell to 3.4:1 under the end of a long headline. Contrast, not
-   geometry — the ADR 0023 "busy image" note. */
+/* The text block sits at the bottom left of the picture, on a shade drawn
+   behind the words only: it fades out above them and to their right, so the
+   rest of the frame stays clear — on a full-width promo about three quarters
+   of the picture has no shade at all. Its floor is 80% navy-deep where any
+   text sits: over a white photograph that is 5.6:1 for bone text, where the
+   proof's left-to-right scrim fell to 3.4:1 under the end of a long headline.
+   Contrast, not geometry — the ADR 0023 "busy image" note. */
 .tx {
   position: absolute;
-  inset: auto 0 0 0;
+  left: 0;
+  bottom: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 28px 14px 13px;
+  /* 16px on top, not the proof's 13: the shade fades in over the top 10px,
+     and the eyebrow must already sit on the full 80%. The block is 92px —
+     the approved 89 plus that 3px. */
+  padding: 16px 48px 13px 14px;
   background: linear-gradient(
     to top,
     rgb(20 57 107 / 0.9) 0,
-    rgb(20 57 107 / 0.8) calc(100% - 26px),
+    rgb(20 57 107 / 0.8) calc(100% - 10px),
     rgb(20 57 107 / 0) 100%
   );
+  /* The right-hand fade. It lives in the 48px padding, so no text is in it. */
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
 }
 
 /* Bone, not the proof's teal: teal on the scrim measured 2.5:1 over a light
@@ -110,7 +119,9 @@
 @media (prefers-contrast: more) {
   .tx {
     background: rgb(20 57 107 / 0.96);
-    padding-top: 13px;
+    padding: 13px 14px;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 }
 

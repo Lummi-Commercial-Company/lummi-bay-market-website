@@ -257,7 +257,7 @@ footer{
   palette and type rules that govern them. Built so you can size, colour and export an asset
   correctly without reading the codebase.</p>
   <div class="meta">
-    <span><b>Version</b> 17 Sep 2026</span>
+    <span><b>Version</b> 30 Sep 2026 — promo and phone sizes measured on the built site</span>
     <span><b>Palette &amp; type</b> locked — approved 2026 refresh</span>
     <span><b>Content width</b> 1200px max</span>
     <span><b>Density</b> supply at 2× — one exception, §07</span>
@@ -456,12 +456,12 @@ footer{
       <thead><tr><th>Measure</th><th class="n">Value</th><th>Note</th></tr></thead>
       <tbody>
         <tr><td><b>Content column</b></td><td class="n">1200px max</td><td>Everything is centred in it. Full-bleed bands (waterline, footer) cross it; content does not.</td></tr>
-        <tr><td><b>Phone content column</b></td><td class="n">≈351px</td><td>On a 375px device — the widest common phone. Design to 351, check at 320.</td></tr>
+        <tr><td><b>Phone content column</b></td><td class="n">343px</td><td>On a 375px phone, with a 16px margin each side; 358 on a 390px phone. Design to 343, check at 288 (a 320px phone). Measured on the built site, 30 Sep 2026.</td></tr>
         <tr><td><b>Spacing scale</b></td><td class="n">4 · 8 · 12 · 16 · 24<br>32 · 48 · 64 · 96</td><td>Nine steps. A gap that is not on this list is a mistake, not a refinement.</td></tr>
         <tr><td><b>Type scale</b> (rem)</td><td class="n">3 · 2.25 · 1.75 · 1.375<br>1.125 · 1 · 0.875</td><td>At a 16px root: 48 · 36 · 28 · 22 · 18 · 16 · 14.</td></tr>
         <tr><td><b>Line height</b></td><td class="n">1.1 / 1.5</td><td>1.1 display, 1.5 body. Sentence case throughout.</td></tr>
         <tr><td><b>Corner radius</b></td><td class="n">8px / 12px</td><td>8 on controls, 12 on cards. Soft, no heavy shadows.</td></tr>
-        <tr><td><b>Waterline band</b></td><td class="n">full width × 18px</td><td>Vector. The recurring signature, teal into navy.</td></tr>
+        <tr><td><b>Waterline</b></td><td class="n">header 5px<br>Home band 10px</td><td>Both flat and drawn in code, nothing to supply: a solid 5px teal line under the navy header on every page, and on Home a 10px teal-into-navy band under the page top. The wavy 18px waterline is not used on the site at present.</td></tr>
         <tr><td><b>Sticky header, phone</b></td><td class="n">56px</td><td>About 7% of a 375×812 screen, held permanently. It grew 47 → 52 → 56 for measured reasons, never for taste.</td></tr>
         <tr><td><b>Logo in the header</b></td><td class="n">112 × 40 desktop<br>95 × 34 phone</td><td>Plus the lockup's own clear space: the paddle-handle height on all sides, minimum width ≈72px.</td></tr>
         <tr><td><b>Header art clearance</b></td><td class="n">20px</td><td>No header image comes within 20px of the navigation's right edge — a floor, not a target. Art starts at whichever lands further right, this or the lockup's clear space.</td></tr>
@@ -524,17 +524,18 @@ footer{
 <section>
   <h2><span class="num">06 / page imagery</span>Every image slot, at the size it renders</h2>
   <p class="sec-lede">CSS pixels are what the browser draws. <b>Supply at 2× those numbers</b> so the
-  art holds on a retina screen. The content column caps at 1200px wide; the phone column is about
-  351px at a 375px device.</p>
+  art holds on a retina screen. The page caps at 1200px wide, which leaves <b>1168px for content</b>
+  inside its 16px margins; the phone column is <b>343px</b> at a 375px device. Promo and info page
+  figures were measured on the built site on 30 Sep 2026.</p>
 
   <div class="tw">
     <table>
       <thead><tr><th>Slot</th><th class="n">Desktop (CSS px)</th><th class="n">Phone (CSS px)</th><th class="n">Supply at</th><th>Format</th></tr></thead>
       <tbody>
-        <tr><td><b>Promo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One master serves every slot — see section 08</span></td><td class="n">1200 × 240 &nbsp;(5:1)<br>down to 290 × 163</td><td class="n">351 × 197 &nbsp;(16:9)</td><td class="n">2400 × 1350<br>subject inside the<br>centre 2400 × 480</td><td>JPG</td></tr>
-        <tr><td><b>Info page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The page a promo links to</span></td><td class="n">1200 × 200 &nbsp;(6:1)</td><td class="n">351 × 140</td><td class="n">2400 × 400</td><td>JPG</td></tr>
-        <tr><td><b>Tenant page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Independent businesses on site</span></td><td class="n">1200 × 190</td><td class="n">351 × 132</td><td class="n">2400 × 380</td><td>JPG</td></tr>
-        <tr><td><b>Tenant card thumbnail</b><br><span style="color:var(--ink-soft);font-size:.8125rem">On the index, 3 across</span></td><td class="n">391 × 78 &nbsp;(5:1)</td><td class="n">351 × 78</td><td class="n">782 × 156</td><td>JPG</td></tr>
+        <tr><td><b>Promo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One master serves every slot — see section 08</span></td><td class="n">1168 × 234 &nbsp;(5:1)<br>down to 282 × 158</td><td class="n">343 × 193 &nbsp;(16:9)</td><td class="n">2400 × 1350<br>subject inside the<br>centre 2400 × 480</td><td>JPG</td></tr>
+        <tr><td><b>Info page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The page a promo links to. <b>No file of its own</b> — it shows the promo's master</span></td><td class="n">720 × 200</td><td class="n">343 × 140</td><td class="n">nothing extra —<br>the promo's<br>2400 × 1350</td><td>—</td></tr>
+        <tr><td><b>Tenant page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Independent businesses on site</span></td><td class="n">1200 × 190</td><td class="n">343 × 132</td><td class="n">2400 × 380</td><td>JPG</td></tr>
+        <tr><td><b>Tenant card thumbnail</b><br><span style="color:var(--ink-soft);font-size:.8125rem">On the index, 3 across</span></td><td class="n">391 × 78 &nbsp;(5:1)</td><td class="n">343 × 78</td><td class="n">782 × 156</td><td>JPG</td></tr>
         <tr><td><b>Rewards app screenshot</b></td><td class="n">8:5 box (1.6)</td><td class="n">8:5 box</td><td class="n">2× the rendered box</td><td>PNG</td></tr>
         <tr><td><b>Page backdrop — wide</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Cropped at the page edge, ~10% opacity</span></td><td class="n">866 × 2948<br>renders ≈186 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
         <tr><td><b>Page backdrop — narrow</b></td><td class="n">503 × 2948<br>renders ≈108 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
@@ -542,7 +543,7 @@ footer{
         <tr><td><b>Motif strip, four-up</b></td><td class="n">≈272 wide</td><td class="n">not used</td><td>vector</td><td>SVG mask</td></tr>
         <tr><td><b>Social share card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Not an on-page slot — see section 07</span></td><td class="n">1200 &times; 630</td><td class="n">same file</td><td class="n">1200 &times; 630<br><b>not 2&times;</b></td><td>JPG</td></tr>
         <tr><td><b>Social icon</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One per account, in the footer social row</span></td><td class="n">≈20 glyph<br>in a 44 × 44 target</td><td class="n">same</td><td>vector</td><td>inline SVG</td></tr>
-        <tr><td><b>Waterline band</b></td><td class="n">full width × 18</td><td class="n">full width × 18</td><td>vector</td><td>SVG</td></tr>
+        <tr><td><b>Waterline</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Drawn in code — see section 05</span></td><td class="n">5px line / 10px band</td><td class="n">same</td><td>nothing to supply</td><td>—</td></tr>
       </tbody>
     </table>
   </div>
@@ -551,7 +552,7 @@ footer{
   <code>--lb-bone</code> — never the platform's own colour, never its official badge or follow
   button, and never a file served from the platform's servers. The reason is not aesthetic. An
   official widget loads third-party code and sets a cookie before anyone clicks it, and the
-  footer's own base row states in plain words that this site sets no cookies. So the icon set is a
+  site's privacy policy states in plain words that this site sets no cookies. So the icon set is a
   drawing job: Facebook, Instagram and Yelp, in that order, Yelp last because customers speak
   there and the business does not.</p>
 
@@ -661,33 +662,43 @@ footer{
   <h2><span class="num">08 / promos</span>The width ladder, and why art must survive a re-crop</h2>
   <p class="sec-lede">The promo region is a stack of rows. Each row decides how many promos it
   holds — one, two, three or four across — drawn from a twelve-column grid with 14px gutters
-  inside the 1200px content width.</p>
+  across the <b>1168px</b> the page leaves for content. It runs the full width, under the page
+  title and the fuel price block. The sizes below were measured on the built site on
+  30 Sep 2026; the ratios are the ones signed off on 16 Sep.</p>
 
   <div class="tw">
     <table>
       <thead><tr><th>Row layout</th><th class="n">Columns</th><th class="n">Slot width</th><th class="n">Supply at 2×</th><th class="n">Crop <span class="pill locked">Approved</span></th></tr></thead>
       <tbody>
-        <tr><td>1 across — full width</td><td class="n">12</td><td class="n">1200 px</td><td class="n">2400 px</td><td class="n">5:1 → 1200 × 240</td></tr>
-        <tr><td>2 across — wide half</td><td class="n">8</td><td class="n">795 px</td><td class="n">1590 px</td><td class="n">3:1 → 795 × 265</td></tr>
-        <tr><td>2 across — halves</td><td class="n">6</td><td class="n">593 px</td><td class="n">1186 px</td><td class="n">3:1 → 593 × 198</td></tr>
-        <tr><td>3 across — thirds</td><td class="n">4</td><td class="n">391 px</td><td class="n">782 px</td><td class="n">2:1 → 391 × 196</td></tr>
-        <tr><td>4 across — quarters</td><td class="n">3</td><td class="n">290 px</td><td class="n">580 px</td><td class="n">16:9 → 290 × 163</td></tr>
+        <tr><td>1 across — full width</td><td class="n">12</td><td class="n">1168 px</td><td class="n">2336 px</td><td class="n">5:1 → 1168 × 234</td></tr>
+        <tr><td>2 across — wide half</td><td class="n">8</td><td class="n">774 px</td><td class="n">1548 px</td><td class="n">3:1 → 774 × 258</td></tr>
+        <tr><td>2 across — halves</td><td class="n">6</td><td class="n">577 px</td><td class="n">1154 px</td><td class="n">3:1 → 577 × 192</td></tr>
+        <tr><td>3 across — thirds</td><td class="n">4</td><td class="n">380 px</td><td class="n">760 px</td><td class="n">2:1 → 380 × 190</td></tr>
+        <tr><td>4 across — quarters</td><td class="n">3</td><td class="n">282 px</td><td class="n">564 px</td><td class="n">16:9 → 282 × 158</td></tr>
+        <tr><td>Tablet, 560–899px wide — any row</td><td class="n">one column</td><td class="n">up to 868 px</td><td class="n">from the master</td><td class="n">5:2 → e.g. 753 × 301</td></tr>
+        <tr><td>Phone — any row</td><td class="n">one column</td><td class="n">343 px</td><td class="n">686 px</td><td class="n">16:9 → 343 × 193</td></tr>
       </tbody>
     </table>
   </div>
   <p class="tnote"><b>All five crops were signed off on 16 September 2026</b> and recorded in
   ADR 0023 — build to them. What was already locked is the column ladder and a 150px minimum slot
   height; the crops clear that floor and hold every row height inside a consistent band
-  (163–265px). The working behind them, measured in a browser, is in
+  (158–258px on the built site). <b>Every size is covered by the one 2400 × 1350 master</b> — the
+  2× column is there to show it is, not as a list of files to make. The tablet crop (5:2) was added
+  when the site was built, so a tablet held upright does not get a 16:9 slot 480px tall; it sits
+  between the ladder's own ratios and cuts only top and bottom, like every other crop.
+  <b>In a mixed row</b> (wide + narrow, or lead + two) the slots keep their own ratios, as the
+  approved ladder draws them, so the wide one is taller than the narrow one beside it. The working behind them, measured in a browser, is in
   <code>docs/proofs/promo-crop-ladder.html</code>.</p>
 
   <div class="props">
-    <div class="prop"><div class="box" style="width:300px;aspect-ratio:5/1">5:1</div><div class="cap"><b>Full width</b>1200 × 240</div></div>
-    <div class="prop"><div class="box" style="width:265px;aspect-ratio:3/1">3:1</div><div class="cap"><b>Wide half</b>795 × 265</div></div>
-    <div class="prop"><div class="box" style="width:198px;aspect-ratio:3/1">3:1</div><div class="cap"><b>Half</b>593 × 198</div></div>
-    <div class="prop"><div class="box" style="width:130px;aspect-ratio:2/1">2:1</div><div class="cap"><b>Third</b>391 × 196</div></div>
-    <div class="prop"><div class="box" style="width:96px;aspect-ratio:16/9">16:9</div><div class="cap"><b>Quarter</b>290 × 163</div></div>
-    <div class="prop"><div class="box" style="width:96px;aspect-ratio:16/9">16:9</div><div class="cap"><b>Phone, any row</b>351 × 197</div></div>
+    <div class="prop"><div class="box" style="width:300px;aspect-ratio:5/1">5:1</div><div class="cap"><b>Full width</b>1168 × 234</div></div>
+    <div class="prop"><div class="box" style="width:265px;aspect-ratio:3/1">3:1</div><div class="cap"><b>Wide half</b>774 × 258</div></div>
+    <div class="prop"><div class="box" style="width:198px;aspect-ratio:3/1">3:1</div><div class="cap"><b>Half</b>577 × 192</div></div>
+    <div class="prop"><div class="box" style="width:130px;aspect-ratio:2/1">2:1</div><div class="cap"><b>Third</b>380 × 190</div></div>
+    <div class="prop"><div class="box" style="width:96px;aspect-ratio:16/9">16:9</div><div class="cap"><b>Quarter</b>282 × 158</div></div>
+    <div class="prop"><div class="box" style="width:150px;aspect-ratio:5/2">5:2</div><div class="cap"><b>Tablet, any row</b>up to 868 wide</div></div>
+    <div class="prop"><div class="box" style="width:96px;aspect-ratio:16/9">16:9</div><div class="cap"><b>Phone, any row</b>343 × 193</div></div>
   </div>
 
   <div class="note">
@@ -704,7 +715,8 @@ footer{
     <h3>Supply one master per promo — 2400 × 1350, subject inside the centre strip</h3>
     <p>16:9 is the tallest crop on the ladder and 5:1 the widest, so a 16:9 master is only ever cut
     from the top and bottom — never horizontally. <b>Supply 2400 × 1350 and keep the subject inside
-    the centre 2400 × 480 band</b>, and the same file serves all five desktop slots and the phone.
+    the centre 2400 × 480 band</b>, and the same file serves all five desktop slots, the tablet,
+    the phone, and the hero of the info page the promo links to.
     One file per promo — not two, and not one per ratio.</p>
     <p>That centre band is where the full-width 5:1 crop lands; everything above and below it is
     breathing room the narrower slots use. Anything that has to be seen — a face, a product, a logo
@@ -713,17 +725,29 @@ footer{
 
   <div class="note">
     <h3>Never bake copy into a promo image</h3>
-    <p>Eyebrow, headline, body and button are <b>live text fields</b> the store staff type, laid
+    <p>Eyebrow, headline and button are <b>live text fields</b> the store staff type, laid
     over your image. Text inside the artwork will be duplicated, will not translate, will not
     scale on a phone, and will not be readable by a screen reader. Supply imagery only — and
     leave the image dark enough, or quiet enough, in the area where that text sits.</p>
     <p><b>How much text, signed off 16 September 2026:</b> three fields — eyebrow, headline,
     button — on every slot and every device. There is no body field. The headline is capped at
-    <b>28 characters</b>, which is short enough that nothing wraps: the text block is <b>89px tall
-    in every slot on every device</b>. The button label is editable too, and defaults to
-    “See details”. In the tightest slot — the 290 × 163 quarter — that block covers 55% of the
-    frame, so <b>treat the bottom half as the clear picture area</b> and compose the subject
-    there.</p>
+    <b>28 characters</b>, which is short enough that nothing wraps. The button label is editable
+    too, and defaults to “See details”.</p>
+    <p><b>Where the text sits, as built (30 Sep 2026):</b> in the <b>bottom-left corner</b> of every
+    slot, on a navy shade drawn behind the words only. The shade is <b>92px tall</b> (90 on a phone)
+    and <b>about 230–300px wide</b> — as wide as the words, fading out above them and to their
+    right. Everything else in the frame is left unshaded. So:</p>
+    <ul>
+      <li><b>Keep faces, products and logos out of the bottom-left corner.</b> On a full-width
+      promo that corner is about a quarter of the width; the rest of the picture is clear.</li>
+      <li><b>In the narrowest slots the words span nearly the full width.</b> In the 282 × 158
+      quarter the shade covers the bottom 58% of the frame, and on a phone about half of it —
+      so the top of the frame is the part guaranteed clear. Compose the subject high in the
+      centre band, or accept that small slots show it partly behind the words.</li>
+      <li>The site sets the shade's darkness, not you — it is at least 80% navy where any word
+      sits, so the text stays readable over a white photograph. You do not need to darken the
+      image for it.</li>
+    </ul>
     <p>Tribal motifs are <b>not</b> permitted in the promo region. It already competes for
     attention; decorating it makes the page shout twice.</p>
   </div>
@@ -786,6 +810,7 @@ footer{
       <thead><tr><th>Item</th><th>Status</th><th>What is missing</th></tr></thead>
       <tbody>
         <tr><td><b>All tribal motifs</b></td><td><span class="pill open">Placeholder</span></td><td>Every motif on the site is an interim silhouette. Authentic, commissioned or tribe-approved art must replace them before launch.</td></tr>
+        <tr><td><b>Promo art with words in it</b></td><td><span class="pill proposed">Owner's call</span></td><td>The first promo image uploaded is a 1200 × 630 Facebook graphic with its own headline and price in the art. As a promo it fails twice: the site's live words land on top of the baked-in ones, and the wide crops cut through them. Until the owner decides whether the site should offer a <b>picture-only</b> promo (no live words, for finished graphics like this), promo art is a photograph or illustration with no copy, per section 08.</td></tr>
         <tr><td><b>Tenant artwork</b></td><td><span class="pill locked">Settled 17 Sep 2026</span></td><td>Ownership decided that tenants <b>are</b> advertised: a tenants page with a card each. So the card thumbnail and page hero above are live slots, not hypothetical ones. What is still missing is the artwork itself, and it is not ours to draw — each tenant supplies their own, and an external card may carry no art at all. Commission nothing; collect it.</td></tr>
         <tr><td><b>Map on the contact page</b></td><td><span class="pill proposed">Waiting on the map</span></td><td>The mechanism is settled — an embedded Google My Maps behind a click-to-load still image (ADR 0019, ADR 0025) — so there is no pin artwork to draw: My Maps supplies its own. What is outstanding is one asset, and it cannot be made until the map is: <b>a picture of the finished map</b>, which is what a visitor sees until they click to load the live one. Until then both map fields stay empty, and an empty map renders one section fewer, not a broken page.</td></tr>
         <tr><td><b>Social icons</b></td><td><span class="pill proposed">Accounts supplied</span></td><td>Three accounts are in hand and in render order. The three glyphs still have to be drawn as inline SVG — see section 06. Nothing renders while the list is empty, so a missing icon is a blank row, never a broken link.</td></tr>
@@ -801,7 +826,8 @@ footer{
       <h3>Do</h3>
       <ul>
         <li>Make navy dominant. Teal and cedar are accents, and the waterline is the recurring signature that ties pages together.</li>
-        <li>Supply one 2400 × 1350 master for every promo, with the subject inside the centre 2400 × 480 band. It serves all five desktop slots and the phone.</li>
+        <li>Supply one 2400 × 1350 master for every promo, with the subject inside the centre 2400 × 480 band. It serves all five desktop slots, the tablet, the phone and the promo's info page.</li>
+        <li>Keep faces, products and logos out of the bottom-left corner of promo art — the words sit there.</li>
         <li>Export at 2× the CSS size listed, in sRGB, with EXIF stripped.</li>
         <li>Keep the subject centred in promo art, so it survives a row re-dividing.</li>
         <li>Send motifs as white-on-transparent SVG masks.</li>
@@ -816,7 +842,8 @@ footer{
         <li>Touch the logo — no redraw, no recolour, no re-typeset, no extracting a piece of it.</li>
         <li>Sample a colour out of the logo art. <code>#000F9F</code> and <code>#1D3D7C</code> are not UI colours.</li>
         <li>Set body copy or small labels in teal or cedar. They fail AA on light grounds.</li>
-        <li>Bake headlines, prices or buttons into a promo image.</li>
+        <li>Bake headlines, prices or buttons into a promo image — a ready-made social graphic with its words in it is exactly this.</li>
+        <li>Supply a separate image for an info page. It uses the promo's.</li>
         <li>Use <code>--lb-navy-deep</code> for decoration. It belongs to fuel prices.</li>
         <li>Put artwork in the promo region, the fuel-price block, or behind body copy.</li>
         <li>Draw Coast Salish formline, or pass interim art off as final.</li>
@@ -831,7 +858,7 @@ footer{
   <p>Specifications are drawn from the project's locked brand system and its recorded architecture
   decisions. A figure derived rather than approved carries a <span class="pill proposed">Proposed</span>
   marker — treat those as a question to settle, not a number to build to; there are none left on
-  this sheet. Section 09 lists what is still open. Anything not covered here is a question worth
+  this sheet. Section 10 lists what is still open. Anything not covered here is a question worth
   asking before the artwork is made rather than after.</p>
 </footer>
 

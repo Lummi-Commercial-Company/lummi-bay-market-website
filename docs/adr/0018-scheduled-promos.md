@@ -274,9 +274,13 @@ overruled by a checkbox on a different screen. On a page carrying the Location c
 
 **The text sits on a bottom scrim, and the eyebrow is bone.** The crop-ladder proof's left-to-right
 scrim fell to about 3.4:1 under the end of a long headline over a light photograph, and its teal
-eyebrow to about 2.5:1. The scrim is now drawn behind the text only, at no less than 80% navy-deep
-where any text sits, which gives 5.6:1 for bone. The geometry is unchanged: the same three fields
-and the same metrics. This is the "busy image" note in ADR 0023, taken before real art arrived.
+eyebrow to about 2.5:1. The shade is now a box behind the words only, at the bottom left: at
+least 80% navy-deep where any text sits, which gives 5.6:1 for bone, fading out over 10px above
+the words and 40px to their right. The rest of the frame has no shade, so on a full-width promo
+about three quarters of the picture is untouched. The same three fields and metrics; the block
+is 92px rather than 89, the 3px being the top fade the eyebrow must clear. This is the "busy
+image" note in ADR 0023, taken before real art arrived. Measured sizes for designers are in
+`docs/design-spec-sheet.html` §06 and §08.
 The button is cedar with a bone ring, the recorded exception ADR 0014 already makes.
 
 **Offer pages have three states, not two.**
