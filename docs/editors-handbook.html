@@ -924,8 +924,8 @@ footer{
       <tbody>
         <tr><td><b>Use it when</b></td><td>Something is happening now that nobody planned — snow, a power cut, a road closure.</td><td>Hours are different on a known date — a holiday, a season.</td></tr>
         <tr><td><b>Scope</b></td><td>Sitewide. Every page, every Location.</td><td>One Location (or the Truck Stop) at a time.</td></tr>
-        <tr><td><b>Timing</b></td><td>Now. Live in under a second.</td><td>Scheduled, typed weeks ahead.</td></tr>
-        <tr><td><b>Turning it off</b></td><td>Somebody has to remember.</td><td>Automatic, on the end date.</td></tr>
+        <tr><td><b>Timing</b></td><td>Now, live in under a second — or scheduled ahead with a start and end.</td><td>Scheduled, typed weeks ahead.</td></tr>
+        <tr><td><b>Turning it off</b></td><td>Automatic if it has an end date; otherwise somebody has to remember.</td><td>Automatic, on the end date.</td></tr>
         <tr><td><b>Where it shows</b></td><td>A bar in the sticky header.</td><td>The hours line itself, everywhere hours appear.</td></tr>
       </tbody>
     </table>
@@ -936,13 +936,16 @@ footer{
 
   <h3>Publishing an emergency notice</h3>
   <ol class="steps">
-    <li>In the sidebar, open the <b>Site Alert</b> settings.</li>
-    <li>Fill in <b>headline</b>, <b>detail</b>, and a <b>link</b> if there is somewhere useful to
-    send people.</li>
+    <li>Open <b>Site Settings</b>, then <b>Notices</b>, and press <b>+</b> to add one (or open one
+    already there).</li>
+    <li>Fill in <b>The main message</b>, <b>Extra detail</b>, and a <b>link</b> if there is
+    somewhere useful to send people.</li>
     <li>Write it leading with what is <em>true and useful</em> before the caveat — "All three stores
     are open" first, then the exception. Name the Location and the road.</li>
-    <li>Set <b>active</b> to true.</li>
-    <li>Save.</li>
+    <li>For something happening now, leave <b>Starts</b> and <b>Ends</b> blank. To plan one ahead,
+    set them — type the date or use the <b>Calendar</b> button; add a time like 6:00 AM if it
+    matters. It goes up and comes down on its own.</li>
+    <li>Make sure <b>Show this notice</b> is <b>On</b>, and save.</li>
   </ol>
   <div class="note check">
     <h3>How you know it worked</h3>
@@ -951,9 +954,12 @@ footer{
   </div>
   <div class="note">
     <h3>Taking it down matters as much as putting it up</h3>
-    <p>Set <b>active</b> to false. A storm notice still up on a sunny Tuesday costs more credibility
+    <p>The list shows each notice's state — <b>Showing now</b>, <b>Scheduled</b>, <b>Ended</b> or
+    <b>Off</b>. The bar holds one notice: if two are showing at once, the one higher in the list wins,
+    so drag the urgent one to the top. Give a notice an end date whenever you know it, or switch it
+    <b>Off</b> when it stops being true. A storm notice still up on a sunny Tuesday costs more credibility
     than never having posted one. The notice carries its own <b>updated</b> stamp, which makes
-    staleness visible — but nothing takes it down for you.</p>
+    staleness visible — but without an end date, nothing takes it down for you.</p>
     <p>Two other things worth knowing before you need this at 5am. <b>There is no dismiss button</b>
     for visitors, on purpose: the point is that everybody sees it. And the notice is <b>never used for
     an offer</b> — the moment it becomes a marketing surface it stops being believed, and then it does

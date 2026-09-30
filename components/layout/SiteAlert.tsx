@@ -1,12 +1,38 @@
 import Link from 'next/link'
+import { connection } from 'next/server'
+import { Suspense } from 'react'
 import styles from './SiteHeader.module.css'
+import { liveNotice } from '@/lib/notices'
+import { pacificStamp } from '@/lib/pacific-time'
+import { getSettings } from '@/lib/settings'
 import type { SiteAlertDoc } from '@/lib/types'
+
+/**
+ * The notice slot in the header: which notice, if any, is decided on every
+ * visit, because notices can be scheduled (ADR 0017, amended 30 Sep 2026) —
+ * the same way promotions are (components/promos/PromoRegion.tsx). The rest
+ * of the header stays in the static shell; only this streams in.
+ */
+export function SiteAlertSlot() {
+  return (
+    <Suspense fallback={null}>
+      <LiveSiteAlert />
+    </Suspense>
+  )
+}
+
+async function LiveSiteAlert() {
+  await connection()
+  const settings = await getSettings()
+  const notice = liveNotice(settings.alerts, pacificStamp(new Date()))
+  return notice ? <SiteAlert alert={notice} /> : null
+}
 
 /**
  * The emergency notice (ADR 0017).
  *
- * Sitewide, instant and unplanned — a water main break, a road closure, a store
- * shut early. It rides inside the sticky header wrapper, under the waterline,
+ * Sitewide — a water main break, a road closure, a store shut early; or,
+ * scheduled ahead, a planned closure or an event weekend. It rides inside the sticky header wrapper, under the waterline,
  * so it travels with the header rather than scrolling away.
  *
  * When it is inactive it renders NOTHING: no empty bar, no reserved space, no

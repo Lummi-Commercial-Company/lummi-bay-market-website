@@ -80,14 +80,18 @@ cannot hold the lockup, three links and the pill below ~430px, which is every co
 - **Hours**: each Location's `hours` is one line, plus `hoursOverrides` — a temporary second line
   on a date window, live per visitor in Pacific time, so New Year's Eve hours are typed in November
   and revert on their own (ADR 0027). `endsAt` is required. It is not the alert bar: the alert is
-  sitewide, instant and unplanned; the override is per-Location, scheduled, and fixes the hours
+  sitewide and says something the hours cannot; the override is per-Location and fixes the hours
   themselves wherever they render.
-- **Emergency notice**: a `siteAlert` singleton rides inside the sticky header on every page,
-  published by on-demand revalidation in under a second rather than a rebuild — ADR 0017. It is
+- **Emergency notice**: a list of notices (`alerts` in Site settings) rides inside the sticky
+  header on every page, published by on-demand revalidation in under a second rather than a
+  rebuild — ADR 0017. Since 30 Sep 2026 each notice may carry its own start and end (MM/DD/YYYY,
+  optional time), evaluated per visitor in Pacific time; with no dates it is one switch, as
+  before. The bar shows one notice: the first live one in list order. Rules in `lib/notices.ts`,
+  with tests. It is
   one of **four** reasons the build must never be `output: 'export'`; the others are fuel prices,
   which render per request against the content API so a pushed price is live immediately (ADR 0024),
   the hours override, which is evaluated per request against the visitor's date (ADR 0027), and
-  promos, whose date window is too (ADR 0018). Static export would silently delete all four rather
+  promos, whose date window is too (ADR 0018) — as the notices' windows now are. Static export would silently delete all four rather
   than fail.
 - **Header motifs** are managed by staff (30 Sep 2026, ADR 0021 amended): motif files uploaded to
   their own folder through a box that checks each SVG before storing it, arranged in motif groups

@@ -1,6 +1,8 @@
 import { defineConfig } from 'tinacms'
 import type { Collection, Template, TinaField } from 'tinacms'
 import { MOTIF_LIMITS } from '../lib/motif-check'
+import { noticeState, toNotice } from '../lib/notices'
+import { pacificStamp } from '../lib/pacific-time'
 import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
 import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
 import { returnToListAfterSave } from './fields/after-save'
@@ -1108,18 +1110,32 @@ const settings: Collection = {
   ui: { allowedActions: { create: false, delete: false }, global: true },
   fields: [
     {
+      // A list since 30 Sep 2026 (ADR 0017, amended): notices can be scheduled,
+      // and several can wait their turn. It was one `siteAlert` object; the
+      // site still reads that (lib/notices.ts) so nothing saved is lost.
       type: 'object',
-      name: 'siteAlert',
-      label: 'Emergency notice',
+      name: 'alerts',
+      label: 'Notices (the bar across the top of every page)',
       description:
-        'A single line across the top of every page, for something urgent and unplanned — a closure, a road out, a power cut. It goes live within seconds. For planned holiday hours use "Temporary hours" on the location instead.',
+        'For something every visitor needs to see — a closure, a road out, a power cut, or an event weekend planned ahead. Add as many as you like. Each can start and end on its own; with no dates it shows as soon as it is switched on and stays until it is switched off. The bar holds one notice: if more than one is showing at the same time, the one highest in this list shows — drag them to change the order. For holiday hours use "Temporary hours" on the location instead.',
+      list: true,
+      ui: {
+        itemProps: (item) => {
+          const notice = toNotice(item)
+          if (!notice) return { label: 'New notice' }
+          const state = noticeState(notice, pacificStamp(new Date()))
+          const tag = { live: '● Showing now', scheduled: 'Scheduled', ended: 'Ended', off: 'Off' }[state]
+          return { label: `${tag} — ${notice.headline}` }
+        },
+        defaultItem: { active: true },
+      },
       fields: [
         {
           type: 'boolean',
           name: 'active',
-          ui: { component: onOffField({ on: 'showing on every page', off: 'not showing' }) },
-          label: 'Show the notice',
-          description: 'Turn this off and the bar disappears completely — it leaves no gap behind.',
+          ui: { component: onOffField({ on: 'showing within its dates', off: 'not showing' }) },
+          label: 'Show this notice',
+          description: 'Off takes it down straight away, whatever the dates say. When nothing is showing the bar disappears completely — it leaves no gap behind.',
         },
         {
           type: 'string',
@@ -1138,6 +1154,22 @@ const settings: Collection = {
           name: 'link',
           label: 'Link (optional)',
           description: 'A page on this site with more information.',
+        },
+        {
+          type: 'string',
+          name: 'startsAt',
+          label: 'Starts (MM/DD/YYYY)',
+          description:
+            'A date like 10/03/2026, or a date and time like 10/03/2026 6:00 AM. Pacific time. Leave blank to show it as soon as it is switched on.',
+          ui: { component: DateTimeField, validate: dateOrDateTime },
+        },
+        {
+          type: 'string',
+          name: 'endsAt',
+          label: 'Ends (MM/DD/YYYY)',
+          description:
+            'A date like 10/05/2026 runs to the end of that day; a date and time like 10/05/2026 9:00 PM comes down at that minute. Pacific time. Leave blank to show it until it is switched off.',
+          ui: { component: DateTimeField, validate: dateOrDateTime },
         },
         {
           type: 'string',

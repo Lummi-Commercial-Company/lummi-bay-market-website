@@ -99,6 +99,10 @@ export interface SiteAlertDoc {
   detail?: string
   link?: string
   updated?: string
+  /** MM/DD/YYYY, optional time. Blank: showing as soon as it is switched on. */
+  startsAt?: string
+  /** MM/DD/YYYY, optional time. Blank: showing until it is switched off. */
+  endsAt?: string
 }
 
 export interface PageBackdropSettings {
@@ -128,7 +132,8 @@ export interface SiteSettings {
   }
   social: SocialLink[]
   map: { embedCode: string; stillImage: string }
-  siteAlert: SiteAlertDoc
+  /** Every saved notice, in the order staff put them. The bar shows the first live one. */
+  alerts: SiteAlertDoc[]
   backdrop: PageBackdropSettings
   /** Which `mainPages` document is live (ADR 0018). */
   liveMainPage?: string

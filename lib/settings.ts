@@ -2,6 +2,7 @@ import { cacheLife, cacheTag } from 'next/cache'
 import { CACHE_TAGS } from './cache-tags'
 import { readContentJson } from './content'
 import { DEFAULT_FOOTER_LINKS, DEFAULT_PRIVACY_LINK, footerLinksFrom, privacyLinkFrom } from './footer-links'
+import { noticesFrom } from './notices'
 import { asRowLayouts } from './promo-rows'
 import { DEFAULT_PROMO_ROWS } from './promos'
 import type { SiteSettings, SocialLink } from './types'
@@ -17,8 +18,8 @@ import type { SiteSettings, SocialLink } from './types'
  * optional, every fallback is inert, and nothing here invents a URL.
  *
  * Two fields the sketch file does not carry yet are defaulted off:
- *   - `siteAlert` — defaults to inactive, so the header renders no bar and
- *     reserves no space (ADR 0017).
+ *   - `alerts` — defaults to none, so the header renders no bar and reserves
+ *     no space (ADR 0017). Read with the single `siteAlert` it replaced.
  *   - `backdrop` — defaults to disabled, so no watermark renders (ADR 0020).
  */
 
@@ -36,7 +37,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   },
   social: [],
   map: { embedCode: '', stillImage: '' },
-  siteAlert: { active: false, headline: '' },
+  alerts: [],
   backdrop: { enabled: false, opacity: 10, side: 'left', height: 100 },
   promoRows: DEFAULT_PROMO_ROWS,
   headerMotifs: { show: false, groups: [] },
@@ -74,7 +75,6 @@ export async function getSettings(): Promise<SiteSettings> {
   const rewards = (raw.rewards ?? {}) as Record<string, unknown>
   const footer = (raw.footer ?? {}) as Record<string, unknown>
   const map = (raw.map ?? {}) as Record<string, unknown>
-  const alert = (raw.siteAlert ?? {}) as Record<string, unknown>
   const backdrop = (raw.backdrop ?? {}) as Record<string, unknown>
 
   return {
@@ -94,13 +94,9 @@ export async function getSettings(): Promise<SiteSettings> {
       embedCode: String(map.embedCode ?? ''),
       stillImage: String(map.stillImage ?? ''),
     },
-    siteAlert: {
-      active: alert.active === true,
-      headline: String(alert.headline ?? ''),
-      detail: alert.detail ? String(alert.detail) : undefined,
-      link: alert.link ? String(alert.link) : undefined,
-      updated: alert.updated ? String(alert.updated) : undefined,
-    },
+    // The list, in the order staff put it; which one shows is decided per
+    // visit (components/layout/SiteAlert.tsx, lib/notices.ts).
+    alerts: noticesFrom(raw),
     backdrop: {
       image: backdrop.image ? String(backdrop.image) : undefined,
       enabled: backdrop.enabled === true,
