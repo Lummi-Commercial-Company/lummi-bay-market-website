@@ -14,3 +14,12 @@ test('Site Settings and Fuel Prices stay on their form', () => {
   assert.equal(listAddressFor('#/collections/edit/fuelPrices/fuel-prices'), null)
   assert.equal(listAddressFor('#/collections/promos/~'), null, 'not a form: nothing to do')
 })
+
+test('the CMS knows which build it is running, to warn when a newer one is up', async () => {
+  const { adminBundleFrom } = await import('../tina/fields/stale-cms.ts')
+  assert.equal(
+    adminBundleFrom('<script type="module" crossorigin src="/admin/assets/index-_zCwZZ2C.js"></script>'),
+    '/admin/assets/index-_zCwZZ2C.js'
+  )
+  assert.equal(adminBundleFrom('<script type="module" src="/@vite/client"></script>'), null, 'local dev: no check')
+})
