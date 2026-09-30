@@ -1,6 +1,6 @@
 import { cacheLife, cacheTag } from 'next/cache'
 import { CACHE_TAGS } from './cache-tags'
-import { listContentFiles, readContentFile } from './content'
+import { listContentFilesDeep, readContentFile } from './content'
 import { splitFrontmatter } from './frontmatter'
 import { getInfoPages } from './pages'
 import { toPromo, type PromoDoc } from './promos'
@@ -23,11 +23,13 @@ export async function getPromos(): Promise<PromoDoc[]> {
   cacheTag(CACHE_TAGS.pages)
   cacheLife('max')
 
-  const [files, infoPages] = await Promise.all([listContentFiles('promos'), getInfoPages()])
+  const [files, infoPages] = await Promise.all([listContentFilesDeep('promos'), getInfoPages()])
   const offerPages = new Set(infoPages.map((page) => page.slug))
   const promos: PromoDoc[] = []
 
   for (const file of files) {
+    // The path inside content/promos/, folder included: unique, and what
+    // the CMS uses to open the document.
     const id = file.replace(/\.mdx?$/, '')
     const raw = await readContentFile(`promos/${file}`)
     if (!raw) continue

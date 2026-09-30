@@ -48,3 +48,33 @@ export async function listContentFiles(
     return []
   }
 }
+
+/**
+ * Every content file under `dir`, folders included, as paths relative to it
+ * (`6th_Anniversary/win-fuel-cards.mdx`). The CMS lets staff group documents
+ * into folders ("Add Folder"), and a document in a folder must not silently
+ * vanish from the site. Hidden files — the `.gitkeep.mdx` the CMS writes to
+ * hold an empty folder open — are skipped.
+ */
+export async function listContentFilesDeep(
+  dir: string,
+  extensions: string[] = ['.md', '.mdx']
+): Promise<string[]> {
+  const out: string[] = []
+  const walk = async (relative: string) => {
+    let entries: import('node:fs').Dirent[]
+    try {
+      entries = await readdir(path.join(CONTENT_DIR, dir, relative), { withFileTypes: true })
+    } catch {
+      return
+    }
+    for (const entry of entries) {
+      if (entry.name.startsWith('.')) continue
+      const child = relative ? `${relative}/${entry.name}` : entry.name
+      if (entry.isDirectory()) await walk(child)
+      else if (extensions.some((ext) => entry.name.endsWith(ext))) out.push(child)
+    }
+  }
+  await walk('')
+  return out.sort()
+}
