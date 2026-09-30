@@ -294,9 +294,9 @@
 
 /* ===========================================================================
    The desktop rail.
-   A reserved 400px column that spans the first two page rows — `1 / span 2`,
-   never `1 / -1`, which would stretch the column to the end of the grid and
-   lose the condensed bar a screen later. The column is pointer-transparent so
+   A reserved 400px column that spans the page's three rows — title, promo
+   region, sections — as `1 / span 3`, never `1 / -1`, which would stretch the
+   column to the end of the grid and lose the condensed bar a screen later. The column is pointer-transparent so
    the empty space below the block does not eat clicks meant for the page.
    =========================================================================== */
 .rail {
@@ -307,11 +307,16 @@
   .rail {
     display: block;
     grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-row: 1 / span 3;
     width: var(--rail-w);
     pointer-events: none;
     align-self: start;
     position: sticky;
     top: calc(var(--hd-h) + var(--sp-4));
+    /* Sticky makes the rail its own stacking context, so the block's own
+       z-index only counts inside it. The rail carries it too, or the
+       full-width promo region — later in the source — paints over the block
+       as it scrolls past (ADR 0018). */
+    z-index: var(--z-fuelblock);
   }
 }

@@ -2,7 +2,8 @@ import { cacheLife, cacheTag } from 'next/cache'
 import { CACHE_TAGS } from './cache-tags'
 import { listContentFiles, readContentFile } from './content'
 import { splitFrontmatter } from './frontmatter'
-import type { MainPageDoc, PageBlock, PageCtaButton, PageDoc, PageFaqItem } from './types'
+import { asRowLayouts } from './promo-rows'
+import type { InfoPageDoc, MainPageDoc, PageBlock, PageCtaButton, PageDoc, PageFaqItem } from './types'
 
 /**
  * The `pages` collection (ADR 0015).
@@ -169,6 +170,7 @@ function toPage(slug: string, data: Record<string, unknown>, body: string): Page
     noindex: slug === PRIVACY_SLUG ? false : data.noindex === true,
     noBackdrop: data.noBackdrop === true,
     showPromos: data.showPromos === true,
+    promoRows: asRowLayouts(data.promoRows),
     body,
     blocks,
   }
@@ -223,6 +225,7 @@ function toMainPage(slug: string, data: Record<string, unknown>, body: string): 
     intro: asString(data.intro).trim() || undefined,
     seoDescription: asString(data.seoDescription) || undefined,
     noBackdrop: data.noBackdrop === true,
+    promoRows: asRowLayouts(data.promoRows),
     body,
     blocks: asBlocks(data.blocks),
   }
@@ -269,4 +272,45 @@ export async function getLiveMainPage(liveMainPage: string | undefined): Promise
     )
   }
   return live ?? versions[0]
+}
+
+/* ===========================================================================
+   Offer pages — the `infoPages` collection (ADR 0015, ADR 0018 §3)
+
+   What a promo links to, at `/info/{file name}`. Whether one is live is not a
+   field: it is worked out per visitor from the promos pointing at it
+   (`infoPageState` in lib/promos.ts). An offer page is never deleted by expiry
+   — shared links, printed QR codes and bookmarks would all break.
+   =========================================================================== */
+
+export async function getInfoPages(): Promise<InfoPageDoc[]> {
+  'use cache'
+  cacheTag(CACHE_TAGS.pages)
+  cacheLife('max')
+
+  const files = await listContentFiles('info-pages')
+  const docs: InfoPageDoc[] = []
+  for (const file of files) {
+    const slug = file.replace(/\.mdx?$/, '')
+    const raw = await readContentFile(`info-pages/${file}`)
+    if (!raw) continue
+    const { data, body } = splitFrontmatter(raw)
+    const title = asString(data.title).trim()
+    if (!title) {
+      console.error(`[info-pages] ${file} has no title; skipped`)
+      continue
+    }
+    docs.push({
+      slug,
+      title,
+      seoDescription: asString(data.seoDescription) || undefined,
+      body,
+      blocks: asBlocks(data.blocks),
+    })
+  }
+  return docs.sort((a, b) => a.slug.localeCompare(b.slug))
+}
+
+export async function getInfoPage(slug: string): Promise<InfoPageDoc | undefined> {
+  return (await getInfoPages()).find((page) => page.slug === slug)
 }

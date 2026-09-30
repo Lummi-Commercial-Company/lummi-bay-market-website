@@ -84,10 +84,18 @@ cannot hold the lockup, three links and the pill below ~430px, which is every co
   themselves wherever they render.
 - **Emergency notice**: a `siteAlert` singleton rides inside the sticky header on every page,
   published by on-demand revalidation in under a second rather than a rebuild — ADR 0017. It is
-  one of **three** reasons the build must never be `output: 'export'`; the others are fuel prices,
+  one of **four** reasons the build must never be `output: 'export'`; the others are fuel prices,
   which render per request against the content API so a pushed price is live immediately (ADR 0024),
-  and the hours override, which is evaluated per request against the visitor's date (ADR 0027).
-  Static export would silently delete all three rather than fail.
+  the hours override, which is evaluated per request against the visitor's date (ADR 0027), and
+  promos, whose date window is too (ADR 0018). Static export would silently delete all four rather
+  than fail.
+- **Header motifs** are managed by staff (30 Sep 2026, ADR 0021 amended): motif files uploaded to
+  their own folder through a box that checks each SVG before storing it, arranged in motif groups
+  with strength, scale, spacing and ink, and switched on in Site settings. The site checks every
+  file again before drawing it. Uploading art does not approve it — the cultural rule still holds.
+- **Dates are MM/DD/YYYY** everywhere staff type or read them (owner's direction, 30 Sep 2026) —
+  promotions, temporary hours, fuel price stamps — with an optional time such as `12:00 PM`. One
+  parser, `parseWhen` in `lib/pacific-time.ts`; older YYYY-MM-DD values still read.
 - Header is **sticky** on every page. The fuel-price rail is sticky **on desktop only**, and only
   because the condensed block's panel is positioned against the viewport there rather than
   anchored to the block — a sticky anchor plus an anchor-positioned panel is broken, measured
@@ -98,12 +106,14 @@ cannot hold the lockup, three links and the pill below ~430px, which is every co
 Footer: **four headed columns**, as the approved templates draw them (ADR 0029) — **About**
 (Our story → `/about`, a brand story grounded in the Lummi values + light community note, LCC
 corporate/enterprise content stays out; Contact), **Visit** (the three Locations and the Truck
-Stop, derived from the Location data), **Rewards** (Get the app → `/rewards`) and **Work with
+Stop; filled from the Location data whenever its rows are left empty), **Rewards** (Get the app → `/rewards`) and **Work with
 us** (Careers, an editable link). **No "Salish Village" link**, though the template draws one: it
-is an LCC development, so it falls under the hard rule on other Lummi companies. **Staff can add
-links** to any of the four columns in Site settings → Footer links → Extra footer links (added 30 Sep
-2026, ADR 0029); the site refuses to show one whose text names another Lummi business, or whose
-address could run code, so the hard rule holds even if one is saved. Below those
+is an LCC development, so it falls under the hard rule on other Lummi companies. **Every
+footer link is editable** in Site settings → Footer links (30 Sep 2026, ADR 0029): one ordered list
+for the four columns, plus the Privacy Policy link (editable, never removable) and the Lummi
+Commercial Companies address (its text is fixed). The site refuses a link whose text names
+another Lummi business, or whose address could run code, so the hard rule holds even if one is
+saved. Below those
 columns and above the base row sits a **social row** — one icon-and-link per account, from a settings list,
 rendering nothing while the list is empty. **Links only, never embeds**: a feed, a follow button or
 an official share widget loads third-party code and sets cookies before anyone clicks (ADR 0028).
@@ -139,6 +149,9 @@ the layout and cannot be lost or moved by a page.
   region is a list of rows and each row picks how many it holds (1–4 across); a row re-divides
   evenly when a promo in it expires, and rows are capped at six per page. Live is computed per visitor, so expiry is exact without a
   scheduler. `mainPages` is demoted to a redesign escape hatch and is never scheduled (ADR 0018).
+  **Built 30 Sep 2026:** rows come from Site settings unless a page sets its own; the region runs
+  full page width under the title and price block; an offer page lives at `/info/{file name}`.
+  Rules in `lib/promos.ts`, with tests — ADR 0018, Amendment.
 - `tenants` — independent businesses renting space on a Lummi Bay property. Known at Exit 260:
   Piroshky Piroshky (inside the store), Wendy's and Black Bear Diner (freestanding buildings;
   Black Bear not yet built), and Hi-Tide Coffee (a coffee truck). All rent from LCC; the site never says so. **Settled 17 Sep 2026: yes, they are advertised** — there

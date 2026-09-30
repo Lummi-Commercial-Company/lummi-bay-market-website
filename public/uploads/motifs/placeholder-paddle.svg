@@ -1,0 +1,14 @@
+<!--
+  PLACEHOLDER MOTIF — paddle, one of the four split from public/motifs/header-strip.svg.
+  TODO: replace with approved Lummi art.
+
+  Coast Salish design is specific to Lummi Nation. This is a deliberately
+  generic stand-in, not Coast Salish form-line, and must not ship as final art.
+  Used as a CSS mask: the shape matters, the colour does not (ADR 0021).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="66 0 24 24" width="24" height="24" role="presentation">
+  <g fill="#000">
+    <path d="M78 3c5 0 8 4 8 9s-3 8-8 8-8-3-8-8 3-9 8-9Z"/>
+    <rect x="76" y="14" width="4" height="8" rx="2"/>
+  </g>
+</svg>

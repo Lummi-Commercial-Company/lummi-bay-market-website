@@ -1,5 +1,23 @@
 import { defineConfig } from 'tinacms'
 import type { Collection, Template, TinaField } from 'tinacms'
+import { MOTIF_LIMITS } from '../lib/motif-check'
+import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
+import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
+import { HeadlineField, PromotionStatusScreen } from './fields/promo-status'
+
+/**
+ * Every date staff type is MM/DD/YYYY (owner's direction, 30 Sep 2026). The
+ * field says so, and says so again the moment something else is typed —
+ * rather than the site quietly ignoring a date it cannot read.
+ */
+const dateOnly = (value: unknown) =>
+  typeof value === 'string' && value.trim() && !parseWhen(value)?.day
+    ? 'Type the date as MM/DD/YYYY, for example 10/05/2026.'
+    : undefined
+const dateOrDateTime = (value: unknown) =>
+  typeof value === 'string' && value.trim() && !parseWhen(value)
+    ? 'Type the date as MM/DD/YYYY, and a time if you need one — for example 10/05/2026 or 10/05/2026 12:00 PM.'
+    : undefined
 
 /**
  * TinaCMS schema — Lummi Bay Market.
@@ -68,17 +86,19 @@ const hoursOverridesField: TinaField = {
     {
       type: 'string',
       name: 'startsAt',
-      label: 'First day (YYYY-MM-DD)',
-      description: 'The first whole day these hours apply, Pacific time.',
+      label: 'First day (MM/DD/YYYY)',
+      description: 'The first whole day these hours apply, Pacific time. For example 12/24/2026.',
       required: true,
+      ui: { validate: dateOnly },
     },
     {
       type: 'string',
       name: 'endsAt',
-      label: 'Last day (YYYY-MM-DD)',
+      label: 'Last day (MM/DD/YYYY)',
       description:
-        'The last whole day these hours apply, Pacific time. Required — without an end date the temporary hours would never go away on their own.',
+        'The last whole day these hours apply, Pacific time, for example 12/26/2026. Required — without an end date the temporary hours would never go away on their own.',
       required: true,
+      ui: { validate: dateOnly },
     },
   ],
 }
@@ -446,7 +466,12 @@ const fuelPrices: Collection = {
   match: { include: 'fuel-prices' },
   ui: {
     allowedActions: { create: false, delete: false },
-    router: () => '/fuel-prices',
+    // No `router` on purpose (30 Sep 2026). A router makes Tina open this
+    // collection as a live page preview whose fields only appear once the
+    // page is wired for click-to-edit (`useTina`). The site's pages are not
+    // wired yet, so the preview showed the page and an empty sidebar — no
+    // inputs at all. Without a router Tina opens its ordinary form. Add the
+    // router back only together with `useTina` on the page it points at.
   },
   fields: [
     {
@@ -525,8 +550,10 @@ function priceFields({ includeRegular = true } = {}): TinaField[] {
     {
       type: 'string',
       name: 'updated',
-      label: 'Last changed (YYYY-MM-DD)',
-      description: 'Shown to customers next to the prices. Update it whenever you change a price here.',
+      label: 'Last changed (MM/DD/YYYY)',
+      description:
+        'Shown to customers next to the prices, for example 09/29/2026. Update it whenever you change a price here.',
+      ui: { validate: dateOnly },
     }
   )
   return fields
@@ -538,7 +565,7 @@ function priceFields({ includeRegular = true } = {}): TinaField[] {
  *
  * THE WEB ADDRESS IS THE FILE NAME. There is deliberately no `slug` field.
  * One existed and it was a trap: routing has always been by file name
- * (`ui.router` below, and `generateStaticParams` over `content/pages/`), so a
+ * (`generateStaticParams` over `content/pages/`), so a
  * `slug` field labelled "the part after lummibay.com/" was a text box an editor
  * could change with no effect on the address — or, worse, could disagree with
  * the real address without anything saying so. `/privacy` is published inside
@@ -550,6 +577,52 @@ function priceFields({ includeRegular = true } = {}): TinaField[] {
  * footer of every page. Removing a page is rare enough to be an engineering
  * change; losing one by accident is not recoverable from the CMS.
  */
+/** The four footer columns, as the approved templates head them (ADR 0029). */
+const FOOTER_COLUMN_LABELS: Record<string, string> = {
+  about: 'About',
+  visit: 'Visit',
+  rewards: 'Rewards',
+  work: 'Work with us',
+}
+
+/**
+ * Promo rows (ADR 0018, Revision). The region on a page is a list of rows, and
+ * each row says how many promos sit across it. A row holding fewer live promos
+ * than it has room for re-divides evenly, so expiry never leaves a hole. The
+ * layouts are defined once, in lib/promos.ts.
+ */
+const promoRowsField = (label: string, description: string): TinaField => ({
+  type: 'object',
+  name: 'promoRows',
+  label,
+  description,
+  list: true,
+  ui: {
+    itemProps: (item) => ({
+      label:
+        ROW_LAYOUTS[item?.layout as keyof typeof ROW_LAYOUTS]?.label ?? 'Choose a layout',
+    }),
+    defaultItem: { layout: '2' },
+  },
+  fields: [
+    {
+      type: 'string',
+      name: 'layout',
+      label: 'Promotions across this row',
+      options: Object.entries(ROW_LAYOUTS).map(([value, layout]) => ({
+        value,
+        label: layout.label,
+      })),
+      required: true,
+    },
+  ],
+})
+
+const pageRowsField = promoRowsField(
+  'Promotion rows on this page',
+  `Leave empty to use the rows in Site settings. Up to ${MAX_PROMO_ROWS} rows; promotions fill them in order, and a row with nothing running does not show.`
+)
+
 const pages: Collection = {
   name: 'pages',
   label: 'Pages',
@@ -557,7 +630,12 @@ const pages: Collection = {
   format: 'mdx',
   ui: {
     allowedActions: { delete: false },
-    router: (props) => `/${props.document._sys.filename}`,
+    // No `router` on purpose (30 Sep 2026). A router makes Tina open this
+    // collection as a live page preview whose fields only appear once the
+    // page is wired for click-to-edit (`useTina`). The site's pages are not
+    // wired yet, so the preview showed the page and an empty sidebar — no
+    // inputs at all. Without a router Tina opens its ordinary form. Add the
+    // router back only together with `useTina` on the page it points at.
   },
   fields: [
     { type: 'string', name: 'title', label: 'Page title', required: true, isTitle: true },
@@ -570,7 +648,10 @@ const pages: Collection = {
       type: 'boolean',
       name: 'showPromos',
       label: 'Show the promotions band on this page',
+      description:
+        'Lets in promotions set to "Every page except home". A promotion that names this page in "Which pages" shows here either way.',
     },
+    pageRowsField,
     ...seoFields,
     pageBodyField,
     {
@@ -613,6 +694,7 @@ const mainPages: Collection = {
       description: 'One sentence under the headline. Leave blank to show the headline alone.',
       ui: { component: 'textarea' },
     },
+    pageRowsField,
     ...seoFields,
     pageBodyField,
     {
@@ -632,7 +714,12 @@ const infoPages: Collection = {
   format: 'mdx',
   ui: {
     allowedActions: { delete: false },
-    router: (props) => `/info/${props.document._sys.filename}`,
+    // No `router` on purpose (30 Sep 2026). A router makes Tina open this
+    // collection as a live page preview whose fields only appear once the
+    // page is wired for click-to-edit (`useTina`). The site's pages are not
+    // wired yet, so the preview showed the page and an empty sidebar — no
+    // inputs at all. Without a router Tina opens its ordinary form. Add the
+    // router back only together with `useTina` on the page it points at.
   },
   fields: [
     {
@@ -679,9 +766,12 @@ const promos: Collection = {
       type: 'string',
       name: 'headline',
       label: 'Headline',
-      description: 'Around 28 characters reads best. Longer still works, it just gets smaller.',
+      description:
+        '28 characters or fewer — short headlines read best at every size. This is also the name you will see in the list of promotions.',
       required: true,
       isTitle: true,
+      // The promotion's Live / Scheduled / Ended / Off tag sits above this box.
+      ui: { component: HeadlineField },
     },
     {
       type: 'string',
@@ -713,20 +803,25 @@ const promos: Collection = {
     {
       type: 'string',
       name: 'startsAt',
-      label: 'Starts (YYYY-MM-DD)',
-      description: 'Leave blank to start straight away. Pacific time.',
+      label: 'Starts (MM/DD/YYYY)',
+      description:
+        'A date like 10/03/2026, or a date and time like 10/03/2026 6:00 AM. Pacific time. Leave blank to start straight away.',
+      ui: { validate: dateOrDateTime },
     },
     {
       type: 'string',
       name: 'endsAt',
-      label: 'Ends (YYYY-MM-DD)',
-      description: 'Leave blank to run until you turn it off. Pacific time — it stops on its own at the end of this day.',
+      label: 'Ends (MM/DD/YYYY)',
+      description:
+        'A date like 10/05/2026 runs to the end of that day; a date and time like 10/05/2026 12:00 PM stops at that minute. Pacific time. It comes down on its own. Leave blank to run until you turn it off.',
+      ui: { validate: dateOrDateTime },
     },
     {
       type: 'boolean',
       name: 'active',
       label: 'Running',
-      description: 'Turn this off to pull the promotion immediately, whatever the dates say.',
+      description:
+        'On unless you turn it off. Off pulls the promotion immediately, whatever the dates say; turning it back on (and moving the end date if it has passed) brings it and its offer page back.',
     },
     {
       type: 'string',
@@ -746,7 +841,8 @@ const promos: Collection = {
       type: 'object',
       name: 'pages',
       label: 'Which pages',
-      description: 'Only used when "Specific pages only" is chosen above. Add one row per page.',
+      description:
+        'Only used when "Specific pages only" is chosen above. Add one row per page — a general page or another offer page. Locations go in "Which locations", below.',
       list: true,
       ui: { itemProps: (item) => ({ label: item?.page || 'Choose a page' }) },
       fields: [
@@ -760,10 +856,31 @@ const promos: Collection = {
       ],
     },
     {
+      // A separate list, not a third collection on the reference above: Tina
+      // builds one query for a multi-collection reference, and a Location's
+      // required "navLabel" collides with a page's optional one.
+      type: 'object',
+      name: 'locations',
+      label: 'Which locations',
+      description:
+        'Only used when "Specific pages only" is chosen above. Add one row per location page this promotion should appear on.',
+      list: true,
+      ui: { itemProps: (item) => ({ label: item?.location || 'Choose a location' }) },
+      fields: [
+        {
+          type: 'reference',
+          name: 'location',
+          label: 'Location',
+          collections: ['locations'],
+        },
+      ],
+    },
+    {
       type: 'number',
       name: 'priority',
       label: 'Order',
-      description: 'Lower numbers come first when several are running at once.',
+      description:
+        'Lower numbers take a place first when more are running than the page has room for. The rest wait and appear as others end.',
     },
   ],
 }
@@ -861,6 +978,109 @@ const tenants: Collection = {
   ],
 }
 
+/**
+ * Header motif groups (ADR 0021, amended 30 Sep 2026).
+ *
+ * A group is an ordered set of motif files and the way the band draws them.
+ * Site settings → Header motifs picks which group is live; any number can be
+ * kept, edited and deleted here. Files come only from the motif library
+ * (uploads/motifs), through a box that checks each one before it is stored —
+ * see tina/fields/motif-fields.tsx and lib/motif-check.ts.
+ *
+ * TODO: replace with approved Lummi art. Uploading a motif does not approve
+ * it: final art must be authentic or tribe-approved before launch.
+ */
+const [strengthMin, strengthMax, strengthDefault] = MOTIF_LIMITS.strength
+const [scaleMin, scaleMax, scaleDefault] = MOTIF_LIMITS.scale
+const [spacingMin, spacingMax, spacingDefault] = MOTIF_LIMITS.spacing
+
+const motifGroups: Collection = {
+  name: 'motifGroups',
+  label: 'Header motif groups',
+  path: 'content/motif-groups',
+  format: 'json',
+  defaultItem: () => ({
+    strength: strengthDefault,
+    scale: scaleDefault,
+    spacing: spacingDefault,
+    ink: 'bone',
+    repeat: true,
+  }),
+  fields: [
+    {
+      type: 'string',
+      name: 'name',
+      label: 'Group name',
+      description:
+        'So you can tell groups apart, for example "Winter — orca, salmon, eagle". Choose which group is live in Site settings → Header motifs. The preview updates as you change the settings below.',
+      required: true,
+      isTitle: true,
+      ui: { component: GroupNameField },
+    },
+    {
+      type: 'object',
+      name: 'motifs',
+      label: 'Motifs, in order',
+      description:
+        'Shown left to right. Add each motif as its own row — an owl, a whale, a fish — or one file that already holds several. Drag to reorder. Where the band is too narrow for all of them, the last ones are left off rather than cut in half.',
+      list: true,
+      ui: {
+        itemProps: (item) => ({
+          label: typeof item?.file === 'string' && item.file ? item.file.split('/').pop() : 'Choose a motif',
+        }),
+      },
+      fields: [
+        {
+          type: 'string',
+          name: 'file',
+          label: 'Motif file',
+          description:
+            'An SVG of plain shapes on a transparent background. Its colours are ignored — the band paints every motif in the ink chosen below. Each file is checked before it is uploaded.',
+          ui: { component: MotifFileField },
+        },
+      ],
+    },
+    {
+      type: 'number',
+      name: 'strength',
+      label: 'Strength',
+      description: `How strongly the motifs show against the navy header, ${strengthMin}–${strengthMax}%. The approved look is ${strengthDefault}%.`,
+      ui: { component: rangeField(strengthMin, strengthMax, strengthDefault, 1, '%') },
+    },
+    {
+      type: 'number',
+      name: 'scale',
+      label: 'Scale',
+      description: `Motif height, as a share of the header bar, ${scaleMin}–${scaleMax}%. Bigger motifs mean fewer fit.`,
+      ui: { component: rangeField(scaleMin, scaleMax, scaleDefault, 2, '%') },
+    },
+    {
+      type: 'number',
+      name: 'spacing',
+      label: 'Spacing',
+      description: `The gap between motifs, ${spacingMin}–${spacingMax} pixels.`,
+      ui: { component: rangeField(spacingMin, spacingMax, spacingDefault, 2, 'px') },
+    },
+    {
+      type: 'string',
+      name: 'ink',
+      label: 'Ink',
+      description: 'The one colour every motif is drawn in. Only brand colours are offered.',
+      options: [
+        { value: 'bone', label: 'Bone (cream)' },
+        { value: 'teal', label: 'Teal' },
+        { value: 'white', label: 'White' },
+      ],
+    },
+    {
+      type: 'boolean',
+      name: 'repeat',
+      label: 'Repeat the group to fill the band',
+      description: 'On: the motifs repeat in order across the band. Off: each is shown once.',
+    },
+  ],
+}
+
 const settings: Collection = {
   name: 'settings',
   label: 'Site settings',
@@ -902,8 +1122,9 @@ const settings: Collection = {
         {
           type: 'string',
           name: 'updated',
-          label: 'Last updated',
-          description: 'Shown at the end of the bar on larger screens.',
+          label: 'Last updated (MM/DD/YYYY)',
+          description: 'For example 10/05/2026.',
+          ui: { validate: dateOnly },
         },
       ],
     },
@@ -922,26 +1143,19 @@ const settings: Collection = {
       label: 'Footer links',
       fields: [
         {
-          type: 'string',
-          name: 'careersUrl',
-          label: 'Careers link',
-          description:
-            'Where the footer’s "Careers" link goes. The link text on the site is always the single word "Careers" — it never names the destination.',
-        },
-        {
-          type: 'string',
-          name: 'lummiCommercialCompaniesUrl',
-          label: 'Lummi Commercial Companies link',
-          description: 'The one place on this site that points to the wider group of companies.',
-        },
-        {
           type: 'object',
-          name: 'extraLinks',
-          label: 'Extra footer links',
+          name: 'links',
+          label: 'Links in the four columns',
           description:
-            'Add a link to one of the four footer columns. It appears under that column, after the links already there. Do not name Silver Reef, Loomis Trail, Salish Village or any other Lummi business in the link text: other Lummi companies appear on this site only as the one "Lummi Commercial Companies" link, and a link that names one will not be shown.',
+            'Every link in the About, Visit, Rewards and Work with us columns, in the order shown. Drag to reorder, delete a row to remove a link. A column with no links is not shown — except Visit, which then lists the locations automatically. Do not name Silver Reef, Loomis Trail, Salish Village or any other Lummi business in the link text: other Lummi companies appear on this site only as the one "Lummi Commercial Companies" link, and a link that names one will not be shown.',
           list: true,
-          ui: { itemProps: (item) => ({ label: item?.label || 'New link' }) },
+          ui: {
+            itemProps: (item) => ({
+              label: item?.label
+                ? `${item.label} — ${FOOTER_COLUMN_LABELS[item.column as string] ?? 'no column'}`
+                : 'New link',
+            }),
+          },
           fields: [
             {
               type: 'string',
@@ -955,22 +1169,38 @@ const settings: Collection = {
               name: 'url',
               label: 'Where it goes',
               description:
-                'A page on this site starting with / (for example /rewards), or a full address starting with https://. Outside addresses open in a new tab.',
+                'A page on this site starting with / (for example /rewards), or a full address starting with https://, mailto: or tel:. Outside addresses open in a new tab.',
               required: true,
             },
             {
               type: 'string',
               name: 'column',
               label: 'Which column',
-              options: [
-                { value: 'about', label: 'About' },
-                { value: 'visit', label: 'Visit' },
-                { value: 'rewards', label: 'Rewards' },
-                { value: 'work', label: 'Work with us' },
-              ],
+              options: Object.entries(FOOTER_COLUMN_LABELS).map(([value, label]) => ({ value, label })),
               required: true,
             },
           ],
+        },
+        {
+          type: 'string',
+          name: 'privacyLabel',
+          label: 'Privacy Policy link — text',
+          description:
+            'Leave blank for "Privacy Policy". This link is always in the bottom row and cannot be removed.',
+        },
+        {
+          type: 'string',
+          name: 'privacyUrl',
+          label: 'Privacy Policy link — where it goes',
+          description:
+            'Leave blank for /privacy. Changing this moves the link, not the policy page: the page stays at /privacy because both app stores link to it.',
+        },
+        {
+          type: 'string',
+          name: 'lummiCommercialCompaniesUrl',
+          label: 'Lummi Commercial Companies link — where it goes',
+          description:
+            'The bottom row link to the wider group of companies. Its text cannot be changed: it is the one place on this site that names them.',
         },
       ],
     },
@@ -1060,10 +1290,41 @@ const settings: Collection = {
       collections: ['mainPages'],
       description: 'Only the version chosen here is shown to visitors.',
     },
+    {
+      type: 'object',
+      name: 'headerMotifs',
+      label: 'Header motifs',
+      description:
+        'The row of motifs in the navy header, between the menu and the Get the App button. Build and adjust groups in "Header motif groups"; choose the live one here.',
+      fields: [
+        {
+          type: 'boolean',
+          name: 'show',
+          label: 'Show header motifs',
+        },
+        {
+          type: 'reference',
+          name: 'group',
+          label: 'Which motif group',
+          collections: ['motifGroups'],
+          description: 'The group shown on every page. Its strength, scale, spacing and ink come with it.',
+        },
+      ],
+    },
+    promoRowsField(
+      'Promotion rows',
+      `How promotions are laid out on every page that does not set its own rows. Each row holds one to four across; up to ${MAX_PROMO_ROWS} rows. Promotions fill the rows in order, a row with nothing running does not show, and a row that loses one re-divides so there is never a gap. Leave empty for one full-width row, then two halves.`
+    ),
   ],
 }
 
 export default defineConfig({
+  // "Promotion status" in the CMS menu: every promotion's Live / Scheduled /
+  // Ended / Off tag, which Tina's own list has no column for (ADR 0018 §4).
+  cmsCallback: (cms) => {
+    cms.plugins.add(PromotionStatusScreen)
+    return cms
+  },
   branch,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID ?? '',
   token: process.env.TINA_TOKEN ?? '',
@@ -1081,6 +1342,6 @@ export default defineConfig({
   },
 
   schema: {
-    collections: [locations, fuelPrices, promos, pages, mainPages, infoPages, tenants, settings],
+    collections: [locations, fuelPrices, promos, pages, mainPages, infoPages, tenants, motifGroups, settings],
   },
 })

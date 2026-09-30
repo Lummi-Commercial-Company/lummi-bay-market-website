@@ -8,6 +8,7 @@ import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
 import { AmenityBadges } from '@/components/locations/AmenityBadges'
 import { LiveHours } from '@/components/locations/LiveHours'
 import { LocationList } from '@/components/locations/LocationList'
+import { PromoSlot } from '@/components/promos/PromoRegion'
 import { getLocation, LOCATION_ORDER } from '@/lib/locations'
 import { JsonLd, locationJsonLd } from '@/lib/structured-data'
 import type { LocationSlug } from '@/lib/types'
@@ -115,6 +116,9 @@ export default async function LocationPage({
           <FuelPriceBlock subject={location.id} />
         </Suspense>
       </FuelPriceRail>
+
+      {/* A promo set to "Specific pages only" can name this Location. */}
+      <PromoSlot target={{ key: `locations/${location.id}` }} />
 
       <div className={styles.rest}>
         {/* The page's own card is dropped and the label reads "Our other

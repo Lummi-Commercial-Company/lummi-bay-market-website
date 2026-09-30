@@ -5,7 +5,18 @@
     "playStoreUrl": "https://play.google.com/store/apps/details?id=com.rovertown.lummi"
   },
   "footer": {
-    "careersUrl": "https://www.silverreefcasino.com/careers",
+    "links": [
+      { "label": "Our story",        "url": "/about",                    "column": "about" },
+      { "label": "Contact",          "url": "/contact",                  "column": "about" },
+      { "label": "Exit 260",         "url": "/locations/exit-260",       "column": "visit" },
+      { "label": "Minimart",         "url": "/locations/minimart",       "column": "visit" },
+      { "label": "Fisherman's Cove", "url": "/locations/fishermans-cove", "column": "visit" },
+      { "label": "Truck Stop",       "url": "/truck-stop",               "column": "visit" },
+      { "label": "Get the app",      "url": "/rewards",                  "column": "rewards" },
+      { "label": "Careers",          "url": "https://www.silverreefcasino.com/careers", "column": "work" }
+    ],
+    "privacyLabel": "Privacy Policy",
+    "privacyUrl": "/privacy",
     "lummiCommercialCompaniesUrl": "https://lcc-lummi.com"
   },
   "social": [
@@ -17,5 +28,9 @@
     "embedCode": "",
     "stillImage": ""
   },
-  "liveMainPage": "content/main-pages/home.mdx"
+  "liveMainPage": "content/main-pages/home.mdx",
+  "headerMotifs": {
+    "show": true,
+    "group": "content/motif-groups/placeholder.json"
+  }
 }

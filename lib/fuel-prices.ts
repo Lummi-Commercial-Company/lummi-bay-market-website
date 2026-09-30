@@ -1,6 +1,7 @@
 import { connection } from 'next/server'
 import { readContentJson } from './content'
 import { LOCATION_ORDER, shortLabelOf } from './locations'
+import { formatUsDay, toStoreDay } from './pacific-time'
 import type { FuelGrade, FuelPricesDoc, LocationDoc, PricedPlace } from './types'
 
 /**
@@ -131,21 +132,16 @@ export function formatPrice(value: number | undefined): string | null {
 
 /** The most recent `updated` stamp across the rows shown. */
 export function latestUpdated(rows: PriceRow[]): string | null {
+  // Compared as YYYY-MM-DD, whatever was typed: MM/DD/YYYY does not sort as
+  // text (12/01/2025 would beat 01/05/2026).
   const stamps = rows
-    .map((row) => row.prices.updated)
-    .filter((stamp): stamp is string => typeof stamp === 'string' && stamp !== '')
+    .map((row) => toStoreDay(row.prices.updated))
+    .filter((stamp): stamp is string => stamp !== null)
     .sort()
   return stamps.length > 0 ? (stamps[stamps.length - 1] ?? null) : null
 }
 
+/** The stamp as the house date format, MM/DD/YYYY (owner's direction, 30 Sep 2026). */
 export function formatUpdated(stamp: string | null): string | null {
-  if (!stamp) return null
-  const parsed = new Date(`${stamp}T12:00:00Z`)
-  if (Number.isNaN(parsed.getTime())) return null
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(parsed)
+  return formatUsDay(toStoreDay(stamp))
 }

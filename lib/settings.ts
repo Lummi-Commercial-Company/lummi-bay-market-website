@@ -1,7 +1,9 @@
 import { cacheLife, cacheTag } from 'next/cache'
 import { CACHE_TAGS } from './cache-tags'
 import { readContentJson } from './content'
-import { asFooterLinks } from './footer-links'
+import { DEFAULT_FOOTER_LINKS, DEFAULT_PRIVACY_LINK, footerLinksFrom, privacyLinkFrom } from './footer-links'
+import { asRowLayouts } from './promo-rows'
+import { DEFAULT_PROMO_ROWS } from './promos'
 import type { SiteSettings, SocialLink } from './types'
 
 /**
@@ -27,11 +29,17 @@ const SOCIAL_ORDER = ['facebook', 'instagram', 'yelp']
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   rewards: { appStoreUrl: '', playStoreUrl: '' },
-  footer: { careersUrl: '', lummiCommercialCompaniesUrl: '', extraLinks: [] },
+  footer: {
+    links: [...DEFAULT_FOOTER_LINKS],
+    privacy: { ...DEFAULT_PRIVACY_LINK },
+    lummiCommercialCompaniesUrl: '',
+  },
   social: [],
   map: { embedCode: '', stillImage: '' },
   siteAlert: { active: false, headline: '' },
   backdrop: { enabled: false, opacity: 10, side: 'left', height: 100 },
+  promoRows: DEFAULT_PROMO_ROWS,
+  headerMotifs: { show: false },
 }
 
 function asSocial(value: unknown): SocialLink[] {
@@ -75,11 +83,11 @@ export async function getSettings(): Promise<SiteSettings> {
       playStoreUrl: String(rewards.playStoreUrl ?? ''),
     },
     footer: {
-      careersUrl: String(footer.careersUrl ?? ''),
-      lummiCommercialCompaniesUrl: String(footer.lummiCommercialCompaniesUrl ?? ''),
       // Checked on the way in: a link naming another Lummi business, or with
       // an address that could run code, is dropped and logged (footer-links).
-      extraLinks: asFooterLinks(footer.extraLinks),
+      links: footerLinksFrom(footer),
+      privacy: privacyLinkFrom(footer),
+      lummiCommercialCompaniesUrl: String(footer.lummiCommercialCompaniesUrl ?? ''),
     },
     social: asSocial(raw.social),
     map: {
@@ -103,5 +111,15 @@ export async function getSettings(): Promise<SiteSettings> {
       crop: backdrop.crop === 'narrow' ? 'narrow' : 'full',
     },
     liveMainPage: raw.liveMainPage ? String(raw.liveMainPage) : undefined,
+    // Never empty: a site with no rows would hold live promos nobody can see.
+    promoRows: asRowLayouts(raw.promoRows).length
+      ? asRowLayouts(raw.promoRows)
+      : DEFAULT_PROMO_ROWS,
+    headerMotifs: {
+      // Off only when someone switches it off: a settings file that predates
+      // the switch keeps the band it had.
+      show: (raw.headerMotifs as Record<string, unknown> | undefined)?.show !== false,
+      group: String((raw.headerMotifs as Record<string, unknown> | undefined)?.group ?? '') || undefined,
+    },
   }
 }

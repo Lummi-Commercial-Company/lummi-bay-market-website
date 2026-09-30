@@ -93,3 +93,28 @@ address, because the rule governs mentions, not destinations (ADR 0001, amended 
 same reason "Careers" may point at silverreefcasino.com. Addresses are limited to a page on this
 site or an `https://`, `mailto:` or `tel:` link, so a pasted `javascript:` link cannot run. Both
 checks live in `lib/footer-links.ts`, with tests.
+
+## Amendment — every footer link is editable, 30 Sep 2026
+
+Asked what happens when the fixed links change, the owner chose to make **all** of them editable,
+listed in one place. **Site settings → Footer links** now has three parts:
+
+- **Links in the four columns.** One ordered list holding every link in About, Visit, Rewards and
+  Work with us, each row being text, address and column. It was pre-filled with the links the
+  footer already had, including the four Visit links and Careers. Rows can be reordered, edited
+  and deleted, and new ones added. This replaces the separate "Careers link" field and the
+  "Extra footer links" list above, which were a part of the same thing.
+- **The Privacy Policy link**, text and address. It is editable but not removable: a blank value
+  falls back to "Privacy Policy" → `/privacy`. Moving the link does not move the page, which stays
+  at `/privacy` for the app stores (ADR 0026).
+- **The Lummi Commercial Companies address.** Its text stays fixed, because it is the single
+  sanctioned mention of the wider group (ADR 0001).
+
+**Rules that did not change:**
+- The column headings are the template's.
+- A column with no links does not render. Visit is the exception: if its rows are removed, it
+  lists the Locations automatically, as it did before.
+- The two checks from the amendment above apply to every row, and to the privacy link: nothing
+  whose text names another Lummi business, and no address that could run code.
+- A settings file that predates the list still produces the old footer
+  (`footerLinksFrom` in `lib/footer-links.ts`, with tests).

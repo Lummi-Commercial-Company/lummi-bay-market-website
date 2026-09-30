@@ -4,6 +4,8 @@
  * change it there first and follow it here.
  */
 
+import type { RowLayout } from './promos.ts'
+
 export type LocationSlug = 'exit-260' | 'minimart' | 'fishermans-cove'
 
 /** The only three grades priced on this site (CONTEXT.md, ADR 0004). */
@@ -14,7 +16,7 @@ export interface HoursOverride {
   hours: string
   /** Two or three words. Detail page only — the card never shows it. */
   reason?: string
-  /** First day the override applies, inclusive, Pacific time. YYYY-MM-DD. */
+  /** First day the override applies, inclusive, Pacific time. MM/DD/YYYY (older files: YYYY-MM-DD). */
   startsAt: string
   /** Last day the override applies, inclusive, Pacific time. REQUIRED. */
   endsAt: string
@@ -69,7 +71,7 @@ export interface PricedPlace {
   regular?: number
   diesel?: number
   def?: number
-  /** Stamped on save, per place. YYYY-MM-DD. */
+  /** Stamped on save, per place. MM/DD/YYYY (older files: YYYY-MM-DD). */
   updated?: string
 }
 
@@ -113,10 +115,16 @@ export interface PageBackdropSettings {
 export interface SiteSettings {
   rewards: { appStoreUrl: string; playStoreUrl: string }
   footer: {
-    careersUrl: string
+    /**
+     * Every link in the four columns, in order, each placed under one column
+     * (ADR 0029, amended 30 Sep 2026). An empty Visit column fills itself from
+     * the Location documents.
+     */
+    links: FooterLink[]
+    /** The base row's policy link. Editable, never removable. */
+    privacy: { label: string; url: string }
+    /** The one sanctioned reference to the wider group; the text is fixed. */
     lummiCommercialCompaniesUrl: string
-    /** Links staff add themselves, each placed under one column (ADR 0029). */
-    extraLinks: FooterLink[]
   }
   social: SocialLink[]
   map: { embedCode: string; stillImage: string }
@@ -124,6 +132,13 @@ export interface SiteSettings {
   backdrop: PageBackdropSettings
   /** Which `mainPages` document is live (ADR 0018). */
   liveMainPage?: string
+  /**
+   * The promo rows every page uses unless it sets its own (ADR 0018). Never
+   * empty: `lib/settings.ts` falls back to DEFAULT_PROMO_ROWS.
+   */
+  promoRows: RowLayout[]
+  /** The header motif band: on or off, and which motif group (ADR 0021). */
+  headerMotifs: { show: boolean; group?: string }
 }
 
 /* ===========================================================================
@@ -188,6 +203,8 @@ export interface PageDoc {
   noindex: boolean
   noBackdrop: boolean
   showPromos: boolean
+  /** This page's own promo rows. Empty means "use Site settings". */
+  promoRows: RowLayout[]
   /** The Markdown body of the .mdx file — the page's own words. */
   body: string
   /** Extra sections, rendered after the body. */
@@ -207,6 +224,22 @@ export interface MainPageDoc {
   intro?: string
   seoDescription?: string
   noBackdrop: boolean
+  /** This version's own promo rows. Empty means "use Site settings". */
+  promoRows: RowLayout[]
+  body: string
+  blocks: PageBlock[]
+}
+
+/**
+ * An offer page — what a promo links to (ADR 0015, ADR 0018 §3). Whether it is
+ * live is not stored here: it is worked out per visitor from the promos that
+ * point at it, in `lib/promos.ts`.
+ */
+export interface InfoPageDoc {
+  /** The file name without its extension: `/info/{slug}`. */
+  slug: string
+  title: string
+  seoDescription?: string
   body: string
   blocks: PageBlock[]
 }

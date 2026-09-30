@@ -1,0 +1,14 @@
+<!--
+  PLACEHOLDER MOTIF — canoe, one of the four split from public/motifs/header-strip.svg.
+  TODO: replace with approved Lummi art.
+
+  Coast Salish design is specific to Lummi Nation. This is a deliberately
+  generic stand-in, not Coast Salish form-line, and must not ship as final art.
+  Used as a CSS mask: the shape matters, the colour does not (ADR 0021).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 24" width="56" height="24" role="presentation">
+  <g fill="#000">
+    <path d="M4 10c14 0 34 0 48 0-2 6-8 9-24 9S6 16 4 10Z"/>
+    <rect x="4" y="6" width="48" height="2" rx="1"/>
+  </g>
+</svg>

@@ -154,3 +154,63 @@ placeholders have a way of surviving to launch, and a header band is on every pa
   clear space holds the band there. If the phone header ever gains text navigation, this needs
   re-checking rather than assuming it carried over.
 - One more surface where a placeholder must not survive to launch, on every page.
+
+## Amendment — staff manage the motifs, 30 Sep 2026
+
+At the owner's direction, the band is no longer fixed in code. Staff upload motif files, arrange
+them into **motif groups**, and choose the live group, all in the CMS.
+
+**What staff control.**
+- **Site settings → Header motifs.** An on/off switch and the live group.
+- **Header motif groups**, a collection. Each group has an ordered list of motif files and the
+  controls the approved proof had as sliders: **strength** (0–40%, 14% approved) and **scale**
+  (40–100% of the bar, 86% approved). It adds **spacing** (0–64px) and **ink** (bone, teal or
+  white, tokens only), plus a switch to **repeat** the group across the band.
+- Groups can be created, edited and deleted. The group form draws a live preview of the band.
+
+A group can hold one motif per file (an owl, then a whale, then a fish) or one file holding
+several. The site treats each file as one unit either way.
+
+**The upload box sees one folder.** Motif files live in `uploads/motifs` and the motif field is a
+custom field (`tina/fields/motif-fields.tsx`) that can list, upload to and delete from that folder
+only. It never opens the general media library. For the same reason a promotion cannot use a
+motif file as its picture.
+
+**Every file is checked twice** by one function, `lib/motif-check.ts`, which reads the SVG's
+code without rendering it:
+1. **In the upload box, before the file is stored**, and again before an existing file is
+   chosen. A failing file is never uploaded or chosen, and the reasons are shown in plain words.
+2. **On the site, whenever the header is drawn.** A file that fails, is missing, or sits outside
+   the motif folder is left out and logged; the rest of the group still shows.
+
+The check refuses:
+- anything that runs code, loads from another file or site, or declares entities;
+- photos inside the SVG, live text, animation, and a file with no shapes;
+- a solid background, which as a mask is a block across the header;
+- a file with no size, or one more than 4× taller than wide or 14× wider than tall;
+- a file over 20 KB.
+
+It warns, without refusing, on files over 10 KB and on see-through parts. Opacity lives on the
+group's strength setting, not in the file. The file's colours are ignored, because the band
+paints every motif in the chosen ink.
+
+**The four rules above still hold for any group.**
+- **One row, and whole motifs only.** The band wraps, and every line after the first is clipped
+  away, so a motif that does not fit drops off the end. A single motif wider than the whole band
+  shrinks to fit rather than being cut.
+- **Right-aligned**, so slack stays on the nav side.
+- **20px clear of the nav**, as the band's margin. The built band measured 42px clear at 1280.
+- **Masked over a token ink.** The strength range is the proof's, so it stays a matter of taste
+  clear of the nav, as the measurement section says.
+
+**Uploaded SVGs are served so they cannot run code** even when opened directly: a
+`Content-Security-Policy` with `default-src 'none'; sandbox` and `nosniff` on `/uploads/*.svg`.
+This is the backstop for a file that reached the folder some other way; browsers never run SVG
+script used as a mask or an image. The motif folder ships with the server code
+(`outputFileTracingIncludes`), because the header is redrawn whenever settings revalidate.
+
+**The starter group** is the four placeholder shapes, split from `header-strip.svg` into one file
+each, at the approved 14% and 86%. It is marked `TODO: replace with approved Lummi art`.
+
+**The cultural rule is unchanged.** Uploading a motif does not approve it. Final art must still be
+authentic or tribe-approved before launch, and the CMS does not and cannot check that.

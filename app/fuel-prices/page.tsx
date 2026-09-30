@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import styles from '../page.module.css'
+import { PromoSlot } from '@/components/promos/PromoRegion'
 import { getLocations } from '@/lib/locations'
 import {
   allPriceRows,
@@ -37,6 +38,8 @@ export default function FuelPricesPage() {
           <PriceTable />
         </Suspense>
       </div>
+
+      <PromoSlot target={{}} />
     </div>
   )
 }

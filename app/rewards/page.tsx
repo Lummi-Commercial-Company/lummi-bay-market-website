@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import styles from '../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
+import { PromoSlot } from '@/components/promos/PromoRegion'
 import { getSettings } from '@/lib/settings'
 
 export const metadata: Metadata = {
@@ -66,6 +67,8 @@ export default async function RewardsPage() {
           <FuelPriceBlock />
         </Suspense>
       </FuelPriceRail>
+
+      <PromoSlot target={{}} />
     </div>
   )
 }
