@@ -1,0 +1,22 @@
+{
+  "name": "Placeholder motifs (TODO: replace with approved Lummi art)",
+  "motifs": [
+    {
+      "file": "/uploads/motifs/placeholder-canoe.svg"
+    },
+    {
+      "file": "/uploads/motifs/placeholder-paddle.svg"
+    },
+    {
+      "file": "/uploads/motifs/placeholder-salmon.svg"
+    },
+    {
+      "file": "/uploads/motifs/placeholder-wave.svg"
+    }
+  ],
+  "strength": 14,
+  "scale": 86,
+  "spacing": 24,
+  "ink": "bone",
+  "repeat": true
+}

@@ -79,6 +79,7 @@ test('toPromo: an unreadable date keeps the promo off rather than running foreve
   assert.ok('refused' in toPromo('a', { ...base, endsAt: 'next Friday' }))
   assert.ok('refused' in toPromo('a', { ...base, image: '' }))
   assert.ok('refused' in toPromo('a', { ...base, image: 'https://example.com/x.jpg' }))
+  assert.ok('refused' in toPromo('a', { ...base, image: '/uploads/motifs/orca.svg' }))
   assert.ok('refused' in toPromo('a', { ...base, link: 'content/pages/about.mdx' }))
   const ok = toPromo('a', {
     ...base,

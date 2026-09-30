@@ -1,0 +1,13 @@
+<!--
+  PLACEHOLDER MOTIF — wave, one of the four split from public/motifs/header-strip.svg.
+  TODO: replace with approved Lummi art.
+
+  Coast Salish design is specific to Lummi Nation. This is a deliberately
+  generic stand-in, not Coast Salish form-line, and must not ship as final art.
+  Used as a CSS mask: the shape matters, the colour does not (ADR 0021).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="186 0 80 24" width="80" height="24" role="presentation">
+  <g fill="#000">
+    <path d="M190 14c8-8 16 8 24 0s16 8 24 0 16 8 24 0v4c-8 8-16-8-24 0s-16-8-24 0-16-8-24 0z"/>
+  </g>
+</svg>

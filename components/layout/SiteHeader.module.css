@@ -252,17 +252,20 @@
   }
 }
 
-/* ---- The motif band — ADR 0021 ----------------------------------------- */
+/* ---- The motif band — ADR 0021, amended 30 Sep 2026 -------------------- */
 /* TODO: replace with approved Lummi art.
-   Masked, not painted: the shape comes from the SVG and the colour from a
-   locked token, so a motif can never introduce an off-brand colour.
-     - one row, ever (`space no-repeat`; a bare `space` tiles both axes and
-       grows a second row);
-     - right-aligned, so slack falls on the nav side and never between the nav
-       and the first motif;
+   Staff choose the motifs and their order in the CMS (a motif group); this is
+   what keeps any group inside the four rules:
+     - one row, ever, and whole motifs only. The band wraps, and every line
+       after the first is clipped away, so a motif that does not fit falls
+       off the end rather than being cut in half;
+     - right-aligned (`justify-content: flex-end`), so slack falls on the nav
+       side and never between the nav and the first motif;
      - at least 20px clear of the nav's right edge — a floor, not a target.
        The band is a flex sibling with that margin, so the clearance holds at
-       every width without measuring anything at runtime. */
+       every width without measuring anything at runtime;
+     - masked, not painted: the shape comes from the file, the colour from a
+       brand token, so an upload can never bring its own colour. */
 .motifs {
   flex: 1 1 auto;
   min-width: 0;
@@ -271,38 +274,45 @@
   position: relative;
   z-index: 1;
   pointer-events: none;
-  background: var(--lb-bone);
-  opacity: 0.14;
-  /* A phone tiles a single motif: the 272px four-up strip never fits the gap
-     a phone header leaves. */
-  -webkit-mask-image: url('/motifs/motif-single.svg');
-  mask-image: url('/motifs/motif-single.svg');
-  -webkit-mask-repeat: space no-repeat;
-  mask-repeat: space no-repeat;
-  -webkit-mask-position: right center;
-  mask-position: right center;
-  -webkit-mask-size: auto 86%;
-  mask-size: auto 86%;
 }
 
-@media (min-width: 768px) {
-  .motifs {
-    -webkit-mask-image: url('/motifs/header-strip.svg');
-    mask-image: url('/motifs/header-strip.svg');
-  }
+.motifsOn {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-content: flex-start;
+  column-gap: var(--motif-gap, 24px);
+  row-gap: 0;
+  overflow: hidden;
+  opacity: var(--motif-a, 0.14);
+}
+
+.motif {
+  flex: none;
+  height: 100%;
+  /* A single motif wider than the whole band shrinks to fit rather than
+     being cut: smaller, but whole. */
+  max-width: 100%;
+  background: var(--motif-ink, var(--lb-bone));
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: 100% auto;
+  mask-size: 100% auto;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 /* Without mask support every motif renders as a solid coloured rectangle
    across the header. Decoration degrades to nothing, never to debris. */
 @supports not ((-webkit-mask-image: none) or (mask-image: none)) {
-  .motifs {
-    display: none;
+  .motifsOn {
+    visibility: hidden;
   }
 }
 
 @media (prefers-contrast: more) {
-  .motifs {
-    opacity: 0;
+  .motifsOn {
+    visibility: hidden;
   }
 }
 

@@ -38,6 +38,10 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // `next dev` would otherwise append its own block to CLAUDE.md on every run.
+  // CLAUDE.md is this project's single source of truth, edited on purpose.
+  agentRules: false,
+
   /**
    * Cache Components (Next's partial prerendering).
    *
@@ -54,6 +58,40 @@ const nextConfig = {
   // image optimiser only ever serves files from this repo. No remotePatterns.
   images: {
     formats: ['image/avif', 'image/webp'],
+  },
+
+  /**
+   * The header motif band reads its SVG files from public/ when it is drawn
+   * (lib/motifs.ts) — at build, and again whenever settings revalidate, which
+   * happens on the server. Vercel does not ship public/ with the server code,
+   * so without this a revalidation (an emergency notice, say) would find no
+   * files and drop every motif until the next deploy.
+   */
+  outputFileTracingIncludes: {
+    '/**': ['./public/uploads/motifs/**/*.svg'],
+  },
+
+  /**
+   * Staff upload SVGs (header motifs), and an SVG is a program as well as a
+   * picture. The upload box and the site both refuse one containing code
+   * (lib/motif-check.ts); this is the backstop for a file that reached the
+   * folder some other way. Opened directly, an uploaded SVG runs no script,
+   * loads nothing and is never sniffed as HTML. Used as a mask or an <img>,
+   * none of this applies — browsers never run SVG script in those.
+   */
+  async headers() {
+    return [
+      {
+        source: '/uploads/:path*.svg',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'none'; style-src 'unsafe-inline'; img-src data:; sandbox",
+          },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
+    ]
   },
 
   async redirects() {

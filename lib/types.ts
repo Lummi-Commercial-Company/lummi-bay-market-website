@@ -16,7 +16,7 @@ export interface HoursOverride {
   hours: string
   /** Two or three words. Detail page only — the card never shows it. */
   reason?: string
-  /** First day the override applies, inclusive, Pacific time. YYYY-MM-DD. */
+  /** First day the override applies, inclusive, Pacific time. MM/DD/YYYY (older files: YYYY-MM-DD). */
   startsAt: string
   /** Last day the override applies, inclusive, Pacific time. REQUIRED. */
   endsAt: string
@@ -71,7 +71,7 @@ export interface PricedPlace {
   regular?: number
   diesel?: number
   def?: number
-  /** Stamped on save, per place. YYYY-MM-DD. */
+  /** Stamped on save, per place. MM/DD/YYYY (older files: YYYY-MM-DD). */
   updated?: string
 }
 
@@ -115,10 +115,16 @@ export interface PageBackdropSettings {
 export interface SiteSettings {
   rewards: { appStoreUrl: string; playStoreUrl: string }
   footer: {
-    careersUrl: string
+    /**
+     * Every link in the four columns, in order, each placed under one column
+     * (ADR 0029, amended 30 Sep 2026). An empty Visit column fills itself from
+     * the Location documents.
+     */
+    links: FooterLink[]
+    /** The base row's policy link. Editable, never removable. */
+    privacy: { label: string; url: string }
+    /** The one sanctioned reference to the wider group; the text is fixed. */
     lummiCommercialCompaniesUrl: string
-    /** Links staff add themselves, each placed under one column (ADR 0029). */
-    extraLinks: FooterLink[]
   }
   social: SocialLink[]
   map: { embedCode: string; stillImage: string }
@@ -131,6 +137,8 @@ export interface SiteSettings {
    * empty: `lib/settings.ts` falls back to DEFAULT_PROMO_ROWS.
    */
   promoRows: RowLayout[]
+  /** The header motif band: on or off, and which motif group (ADR 0021). */
+  headerMotifs: { show: boolean; group?: string }
 }
 
 /* ===========================================================================

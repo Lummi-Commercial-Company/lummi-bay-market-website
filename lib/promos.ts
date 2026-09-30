@@ -1,4 +1,6 @@
-import { STORE_TIME_ZONE } from './pacific-time.ts'
+import { pacificStamp, parseWhen } from './pacific-time.ts'
+
+export { pacificStamp, parseWhen }
 
 /**
  * Promotions — the rules, with no I/O (ADR 0007, ADR 0018, ADR 0023).
@@ -118,6 +120,11 @@ export function toPromo(
   if (!image.startsWith('/') || image.startsWith('//')) {
     return { refused: 'its picture is not a file uploaded to this site' }
   }
+  // The motif folder is the header band's own library (ADR 0021): a motif is
+  // a shape used as a mask, not a picture for an offer.
+  if (image.startsWith('/uploads/motifs/')) {
+    return { refused: 'its picture is a header motif, not a promotion picture' }
+  }
   if (!link) return { refused: 'it does not link to an offer page' }
 
   for (const field of ['startsAt', 'endsAt'] as const) {
@@ -162,69 +169,6 @@ export function toPromo(
 /* ===========================================================================
    Time — Pacific, to the minute
    =========================================================================== */
-
-const stampFormatter = new Intl.DateTimeFormat('en-CA', {
-  timeZone: STORE_TIME_ZONE,
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-  hourCycle: 'h23',
-})
-
-/** An instant as Pacific wall-clock time, `YYYY-MM-DD HH:mm` — sorts as a string. */
-export function pacificStamp(instant: Date): string {
-  const parts = Object.fromEntries(
-    stampFormatter.formatToParts(instant).map((part) => [part.type, part.value])
-  )
-  return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}`
-}
-
-const pad = (n: number) => String(n).padStart(2, '0')
-
-/**
- * What staff typed, as Pacific wall-clock time. A date alone has no time; the
- * caller decides whether that means the start or the end of the day.
- *
- * Accepted: `2026-10-03`, `2026-10-03 12:00`, `2026-10-03T12:00`, `10/3/2026`,
- * `10/3/2026 12:00`, and a full ISO instant with a zone (what a date picker
- * stores), which is converted to Pacific.
- */
-export function parseWhen(value: string): { day: string; time?: string } | null {
-  const v = value.trim()
-  if (!v) return null
-
-  // A full instant carries its own zone: convert it, never read it as local.
-  if (/[zZ]$|[+-]\d{2}:?\d{2}$/.test(v) && v.includes('T')) {
-    const instant = new Date(v)
-    if (Number.isNaN(instant.getTime())) return null
-    const stamp = pacificStamp(instant)
-    return { day: stamp.slice(0, 10), time: stamp.slice(11) }
-  }
-
-  let y: number, m: number, d: number
-  let rest: string
-  const iso = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(.*)$/)
-  const us = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(.*)$/)
-  if (iso) [y, m, d, rest] = [Number(iso[1]), Number(iso[2]), Number(iso[3]), iso[4] ?? '']
-  else if (us) [y, m, d, rest] = [Number(us[3]), Number(us[1]), Number(us[2]), us[4] ?? '']
-  else return null
-
-  const probe = new Date(Date.UTC(y, m - 1, d))
-  if (probe.getUTCFullYear() !== y || probe.getUTCMonth() !== m - 1 || probe.getUTCDate() !== d) {
-    return null // 2026-02-30
-  }
-  const day = `${y}-${pad(m)}-${pad(d)}`
-
-  rest = rest.trim().replace(/^T/i, '')
-  if (!rest) return { day }
-  const clock = rest.match(/^(\d{1,2}):(\d{2})(?::\d{2}(?:\.\d+)?)?$/)
-  const hour = Number(clock?.[1])
-  const minute = Number(clock?.[2])
-  if (!clock || hour > 23 || minute > 59) return null
-  return { day, time: `${pad(hour)}:${pad(minute)}` }
-}
 
 /* ===========================================================================
    State — derived, never stored (ADR 0018 §4)

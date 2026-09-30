@@ -23,23 +23,27 @@ as a store button it would have landed a customer on other companies' apps. A se
 a store link and behaves like a directory. **Whatever goes in this field is opened and checked, not
 pasted on trust.**
 
-**`footer.careersUrl`** — supplied, and **settled by the client 17 Sep 2026**: the footer link
-reads **"Careers"** and goes straight to this address. No `/careers` page is built on this site.
-Opens in a new tab, marked as leaving the site.
+**`footer.links`** — every link in the footer's four columns, in order (30 Sep 2026, ADR 0029
+amended). Each row is link text, an address, and one of the four columns (About, Visit, Rewards,
+Work with us). Pre-filled with the footer as approved. A column with no rows is not shown — except
+Visit, which then lists the Locations automatically. Two kinds of row are **not shown**, and the
+build log says why: text that names another Lummi business (Silver Reef, Loomis Trail, Salish
+Village, LCC — the hard rule allows only the single "Lummi Commercial Companies" link), and an
+address that is not a page here (starting `/`) or an `https://`, `mailto:` or `tel:` link. The rule
+reads the *text*, not the address. This replaces the old `careersUrl` and `extraLinks`; a file that
+still has those instead of `links` produces the same footer as before.
 
-That closes the ADR 0001 question raised at checklist A9 rather than leaving it hanging: ownership
-looked at it and the answer is that a label naming no company is a destination, not a mention of
-another Lummi company. The rule the build keeps from it: **the link text stays "Careers"** — no
-company name, no logo, no "at Silver Reef" — because that is the whole of what makes it a
-destination.
+**The Careers row** was **settled by the client 17 Sep 2026**: it reads **"Careers"** and goes
+straight to the careers page it points at; no `/careers` page is built on this site. A label naming
+no company is a destination, not a mention of another Lummi company (ADR 0001, amended) — so keep
+the text free of any company name, logo or "at Silver Reef".
 
-**`footer.extraLinks`** — links staff add to the footer themselves, added 30 Sep 2026 (ADR 0029).
-Each row is link text, an address, and one of the four columns (About, Visit, Rewards, Work with us);
-it appears after that column's own links. Two kinds of row are **not shown**, and the build log says
-why: text that names another Lummi business (Silver Reef, Loomis Trail, Salish Village, LCC — the
-hard rule allows only the single "Lummi Commercial Companies" link), and an address that is not a
-page here (starting `/`) or an `https://`, `mailto:` or `tel:` link. The rule reads the *text*, not
-the address: a link labelled "Jobs" may point anywhere, as "Careers" does. Empty by default.
+**`footer.privacyLabel`, `footer.privacyUrl`** — the Privacy Policy link in the bottom row. Blank
+means "Privacy Policy" → `/privacy`. It cannot be removed. Changing the address moves the link, not
+the page: `/privacy` itself never moves, because both app stores link to it (ADR 0026).
+
+**`footer.lummiCommercialCompaniesUrl`** — where the one sanctioned link to the wider group goes.
+Its text is fixed.
 
 **`social`** — the three accounts supplied, in render order. Facebook and Instagram are tended
 accounts; Yelp is a review listing and is ordered last for that reason (ADR 0028, amended). The
@@ -73,10 +77,19 @@ here on purpose:** with no rows set the site uses one full-width row, then two h
 promotion published before anyone thinks about rows still shows. A general page or a home page
 version can carry its own `promoRows` in its frontmatter, which wins over this one.
 
-**Promotion dates, if you edit a file by hand.** `startsAt` and `endsAt` must be quoted —
-`endsAt: '2026-10-05'` or `endsAt: '2026-10-05 12:00'`. Unquoted, YAML reads a date as a date
-rather than text, and the CMS build refuses the whole file. The CMS quotes them itself when staff
-save.
+**Dates, everywhere, are MM/DD/YYYY** (owner's direction, 30 Sep 2026) — promotions, temporary
+hours, fuel price stamps: `10/05/2026`, and where a time is allowed, `10/05/2026 12:00 PM`. The CMS
+checks each date field as it is typed. Dates saved earlier as `2026-10-05` still read the same,
+but write new ones as MM/DD/YYYY. **If you edit a file by hand, quote a date in the old form** —
+`endsAt: '2026-10-05'` — because unquoted YAML reads it as a date rather than text and the CMS
+build refuses the whole file; MM/DD/YYYY is plain text to YAML either way.
+
+**`headerMotifs`** — `show` switches the header motif band on or off; `group` points at a
+document in `content/motif-groups/`, which holds the motifs in order and their strength, scale,
+spacing and ink (ADR 0021, amended 30 Sep 2026). Motif files live in `public/uploads/motifs/` and
+are uploaded through the motif box in the CMS, which checks each one first. A settings file with
+no `headerMotifs` keeps the band on, but with no group chosen nothing is drawn and the build log
+says so.
 
 ## What is deliberately not here
 Fuel prices (`content/fuel-prices.json`, ADR 0004), Locations, promos, tenants and pages are their

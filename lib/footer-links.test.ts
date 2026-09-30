@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { asFooterLinks, checkFooterLink, isExternalUrl } from './footer-links.ts'
+import {
+  asFooterLinks,
+  checkFooterLink,
+  DEFAULT_FOOTER_LINKS,
+  footerLinksFrom,
+  isExternalUrl,
+  privacyLinkFrom,
+} from './footer-links.ts'
 
 /**
  * The extra footer links are the one place staff can put arbitrary text in
@@ -92,4 +99,32 @@ test('only http(s) addresses count as leaving the site', () => {
   assert.equal(isExternalUrl('https://example.com'), true)
   assert.equal(isExternalUrl('/rewards'), false)
   assert.equal(isExternalUrl('tel:+13607781894'), false)
+})
+
+test('a saved list is used exactly as saved — deleted defaults stay deleted', () => {
+  const links = footerLinksFrom({
+    links: [{ label: 'Jobs', url: 'https://example.com/jobs', column: 'work' }],
+    careersUrl: 'https://ignored.example.com',
+  })
+  assert.deepEqual(links, [{ label: 'Jobs', url: 'https://example.com/jobs', column: 'work' }])
+  assert.deepEqual(footerLinksFrom({ links: [] }), [], 'an empty list is a choice, not a missing setting')
+})
+
+test('an older settings file keeps the footer it had', () => {
+  const links = footerLinksFrom({
+    careersUrl: 'https://example.com/careers',
+    extraLinks: [{ label: 'Gift cards', url: '/gift-cards', column: 'rewards' }],
+  })
+  assert.deepEqual(links, [
+    ...DEFAULT_FOOTER_LINKS,
+    { label: 'Careers', url: 'https://example.com/careers', column: 'work' },
+    { label: 'Gift cards', url: '/gift-cards', column: 'rewards' },
+  ])
+})
+
+test('the privacy link can be reworded but never removed or pointed at code', () => {
+  assert.deepEqual(privacyLinkFrom({}), { label: 'Privacy Policy', url: '/privacy' })
+  assert.deepEqual(privacyLinkFrom({ privacyLabel: 'Privacy', privacyUrl: '' }), { label: 'Privacy', url: '/privacy' })
+  assert.deepEqual(privacyLinkFrom({ privacyUrl: 'javascript:alert(1)' }), { label: 'Privacy Policy', url: '/privacy' })
+  assert.deepEqual(privacyLinkFrom({ privacyLabel: 'Silver Reef privacy' }), { label: 'Privacy Policy', url: '/privacy' })
 })

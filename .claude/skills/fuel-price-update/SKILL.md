@@ -20,11 +20,11 @@ Truck Stop. Midgrade, premium and ethanol-free are NOT priced on this site.
 {
   "linkLocations": true,
   "locations": {
-    "exit-260":        { "regular": 3.79, "diesel": 4.29, "updated": "2026-08-21" },
-    "minimart":       { "regular": 3.79, "diesel": 4.29, "updated": "2026-08-21" },
-    "fishermans-cove": { "regular": 3.79, "diesel": 4.29, "updated": "2026-08-21" }
+    "exit-260":        { "regular": 3.79, "diesel": 4.29, "updated": "08/21/2026" },
+    "minimart":       { "regular": 3.79, "diesel": 4.29, "updated": "08/21/2026" },
+    "fishermans-cove": { "regular": 3.79, "diesel": 4.29, "updated": "08/21/2026" }
   },
-  "truckStop":         { "diesel": 4.55, "def": 3.29, "updated": "2026-08-21" }
+  "truckStop":         { "diesel": 4.55, "def": 3.29, "updated": "08/21/2026" }
 }
 ```
 
@@ -100,7 +100,8 @@ is the way to learn what the site needs to support without telling anyone how to
 - Edit `content/fuel-prices.json` only. Never hard-code a price in a page.
 - Validate: numbers only, two decimals, >= 0. Never remove a grade a place sells.
 - A direct file edit bypasses any editor hook, so **set `updated` by hand** for every place
-  you changed. The stamp is **stored on save**, not derived from the commit — settled by ADR 0024,
+  you changed, as **MM/DD/YYYY** (e.g. `"updated": "09/29/2026"`) — the house date format since
+  30 Sep 2026. Older YYYY-MM-DD stamps still read correctly; write new ones as MM/DD/YYYY. The stamp is **stored on save**, not derived from the commit — settled by ADR 0024,
   because a derived stamp would need git history read at request time. It also carries more weight
   than it used to: with publish latency at zero it is the only thing telling a guest how fresh the
   number is, so a wrong stamp is now the only staleness a guest can see.

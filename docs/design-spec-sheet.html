@@ -542,8 +542,7 @@ footer{
         <tr><td><b>Rewards app screenshot</b></td><td class="n">8:5 box (1.6)</td><td class="n">8:5 box</td><td class="n">2× the rendered box</td><td>PNG</td></tr>
         <tr><td><b>Page backdrop — wide</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Cropped at the page edge, ~10% opacity</span></td><td class="n">866 × 2948<br>renders ≈186 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
         <tr><td><b>Page backdrop — narrow</b></td><td class="n">503 × 2948<br>renders ≈108 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
-        <tr><td><b>Motif tile, single</b></td><td class="n">≈68 wide</td><td class="n">≈68 wide</td><td>vector</td><td>SVG mask</td></tr>
-        <tr><td><b>Motif strip, four-up</b></td><td class="n">≈272 wide</td><td class="n">not used</td><td>vector</td><td>SVG mask</td></tr>
+        <tr><td><b>Header motif</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One file per motif, or one holding several — see below</span></td><td class="n">≈50 tall at the approved 86% scale<br>(40–100% of a 58px bar)</td><td class="n">same height;<br>fewer fit</td><td>vector</td><td>SVG mask, ≤ 20 KB</td></tr>
         <tr><td><b>Social share card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Not an on-page slot — see section 07</span></td><td class="n">1200 &times; 630</td><td class="n">same file</td><td class="n">1200 &times; 630<br><b>not 2&times;</b></td><td>JPG</td></tr>
         <tr><td><b>Social icon</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One per account, in the footer social row</span></td><td class="n">≈20 glyph<br>in a 44 × 44 target</td><td class="n">same</td><td>vector</td><td>inline SVG</td></tr>
         <tr><td><b>Waterline</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Drawn in code — see section 05</span></td><td class="n">5px line / 10px band</td><td class="n">same</td><td>nothing to supply</td><td>—</td></tr>
@@ -564,11 +563,36 @@ footer{
   the site and it is a table.</p>
 
   <h3>Motifs ship as masks, not as coloured artwork</h3>
-  <p>Supply decorative motifs as <b>white-on-transparent SVG</b>. The site uses them as a
-  <code>mask-image</code> over a brand colour, so the shape comes from your file and the colour
-  comes from the token layer. That is deliberate: a motif then cannot introduce an off-brand
-  colour, and re-tinting every motif on the site is one value. A motif supplied as flat coloured
-  art cannot be used this way.</p>
+  <p>Supply decorative motifs as <b>solid shapes on a transparent background, in SVG</b>. The site
+  uses them as a <code>mask-image</code> over a brand colour, so the shape comes from your file and
+  the colour comes from the token layer — your file's colours are ignored. That is deliberate: a
+  motif then cannot introduce an off-brand colour, and re-tinting every motif on the site is one
+  value.</p>
+
+  <h3>Header motifs: what the upload box accepts (30 Sep 2026)</h3>
+  <p>Staff upload header motifs themselves, into a motif library of their own, and arrange them
+  into groups — an owl, a whale and a fish as three files in order, or one file holding all
+  three. The band draws them in one row at the group's scale, drops whole motifs that do not fit,
+  and never cuts one in half. Every file is checked before it is uploaded, and the box says in
+  plain words why one is refused:</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Refused</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>A solid background (a rectangle the size of the drawing)</td><td>As a mask it becomes a filled block across the header</td></tr>
+        <tr><td>A photo or bitmap inside the SVG</td><td>Only shapes work as a mask — trace or vectorise it</td></tr>
+        <tr><td>Live text</td><td>Convert text to outlines before export</td></tr>
+        <tr><td>Scripts, links, embedded content, animation</td><td>The file is served with the site's own images; motifs stay still</td></tr>
+        <tr><td>No viewBox, width or height</td><td>The band needs the shape's proportions</td></tr>
+        <tr><td>More than 4× taller than wide, or 14× wider than tall</td><td>It cannot sit in a one-row band — split a long strip into separate motifs</td></tr>
+        <tr><td>Over 20 KB (a warning over 10 KB)</td><td>Simplify the paths or export with fewer decimals</td></tr>
+        <tr><td>A file name with <code>ad</code>, <code>banner</code>, <code>advert</code> or <code>sponsored</code></td><td>Ad blockers hide it — name files for what they show</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tnote">See-through parts are allowed but show fainter than the rest; the band's
+  overall strength (0–40%, 14% approved) is set per group in the CMS, not in the file. Uploading a
+  motif does not approve it: Coast Salish art must be authentic or tribe-approved before launch.</p>
 </section>
 
 <section>

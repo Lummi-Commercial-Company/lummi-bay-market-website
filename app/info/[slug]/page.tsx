@@ -14,6 +14,7 @@ import { PromoSlot } from '@/components/promos/PromoRegion'
 import { excerptFromMarkdown, Markdown } from '@/lib/markdown'
 import { getInfoPage, getInfoPages } from '@/lib/pages'
 import { getPromos } from '@/lib/promo-data'
+import { formatUsDay } from '@/lib/pacific-time'
 import { infoPageState, pacificStamp } from '@/lib/promos'
 
 /**
@@ -95,13 +96,6 @@ export default async function InfoPage({ params }: { params: Params }) {
   )
 }
 
-const longDate = new Intl.DateTimeFormat('en-US', {
-  weekday: 'long',
-  month: 'long',
-  day: 'numeric',
-  timeZone: 'UTC',
-})
-
 async function InfoPageBody({ params }: { params: Params }) {
   const found = await resolve(params)
   if (!found) notFound()
@@ -116,7 +110,7 @@ async function InfoPageBody({ params }: { params: Params }) {
             <div className={infoStyles.note}>
               <b>This offer hasn&rsquo;t started yet.</b>
               <span>
-                It starts on {longDate.format(new Date(`${info.startsOn}T12:00:00Z`))}. Current
+                It starts on {formatUsDay(info.startsOn)}. Current
                 prices are at the top of every page.
               </span>
             </div>
