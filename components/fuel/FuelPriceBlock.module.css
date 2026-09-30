@@ -293,8 +293,8 @@
 }
 
 /* ===========================================================================
-   The desktop rail.
-   A reserved 400px column that spans the page's three rows — title, promo
+   The rail, wherever the page has two columns (from 720px; it was 900px until
+   30 Sep 2026). A reserved column — 345px, then 400px from 900px — that spans the page's three rows — title, promo
    region, sections — as `1 / span 3`, never `1 / -1`, which would stretch the
    column to the end of the grid and lose the condensed bar a screen later. The column is pointer-transparent so
    the empty space below the block does not eat clicks meant for the page.
@@ -303,7 +303,9 @@
   display: contents;
 }
 
-@media (min-width: 900px) {
+/* From 720px, with the page grid (app/page.module.css) — the two must agree,
+   or the rail would claim a column the grid does not have. */
+@media (min-width: 720px) {
   .rail {
     display: block;
     grid-column: 2;

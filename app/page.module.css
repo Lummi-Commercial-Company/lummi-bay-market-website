@@ -7,14 +7,17 @@
   margin-inline: auto;
 }
 
-@media (min-width: 900px) {
+/* Two columns from 720px, not only on desktop (owner, 30 Sep 2026): the title
+   column narrows beside the price block until it would fall under ~300px, and
+   only then does the page stack. --rail-w and --rail-gap step up at 900px. */
+@media (min-width: 720px) {
   .pagegrid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--rail-w);
     /* Title | promo region (full width, empty unless a promo is live) |
        the page's sections. ADR 0018. */
     grid-template-rows: auto auto 1fr;
-    column-gap: var(--sp-7);
+    column-gap: var(--rail-gap);
     /* The rail is sticky against the header, so the content column carries the
        top padding rather than the grid. */
     padding-top: var(--sp-6);
@@ -33,11 +36,21 @@
   min-width: 0;
 }
 
+/* A page with no price block (/fuel-prices) keeps the full width where the
+   two columns are new, 720–899px, rather than sitting in half the page beside
+   an empty column. From 900px it keeps the layout it has always had. */
+@media (min-width: 720px) and (max-width: 899.98px) {
+  .pagegrid:not(:has(> [data-rail])) > .maincol,
+  .pagegrid:not(:has(> [data-rail])) > .rest {
+    grid-column: 1 / -1;
+  }
+}
+
 /* With a promo region under it, the title column is at least as tall as the
    price block beside it, so the full-width region starts below the block
    rather than running under it. `--rail-h` is measured (RailMetrics); 121px
    is its measured value, for the first paint. */
-@media (min-width: 900px) {
+@media (min-width: 720px) {
   .pagegrid:has(> [data-promos='top']) > .maincol {
     min-height: var(--rail-h, 121px);
   }

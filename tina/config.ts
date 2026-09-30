@@ -4,6 +4,7 @@ import { MOTIF_LIMITS } from '../lib/motif-check'
 import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
 import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
 import { DateField, DateTimeField } from './fields/date-field'
+import { onOffField } from './fields/on-off-field'
 import { HeadlineField } from './fields/promo-status'
 import { RichTextWithLinksField } from './fields/rich-text-links'
 import { arrangeSiteMenu } from './fields/site-menu'
@@ -156,6 +157,7 @@ const pageBlocks: Template[] = [
       {
         type: 'boolean',
         name: 'includeTruckStop',
+        ui: { component: onOffField() },
         label: 'Include the Truck Stop',
         description: 'The Truck Stop keeps its own hours, separate from the Exit 260 store.',
       },
@@ -302,6 +304,7 @@ const seoFields: TinaField[] = [
   {
     type: 'boolean',
     name: 'noindex',
+    ui: { component: onOffField({ on: 'On — hidden from Google', off: 'Off — Google can list it' }) },
     label: 'Hide from Google',
     description:
       'Keeps the page reachable by its link but out of search results. Leave off unless you know you want this.',
@@ -309,6 +312,7 @@ const seoFields: TinaField[] = [
   {
     type: 'boolean',
     name: 'noBackdrop',
+    ui: { component: onOffField() },
     label: 'Turn off the background watermark on this page',
   },
 ]
@@ -490,6 +494,7 @@ const fuelPrices: Collection = {
     {
       type: 'boolean',
       name: 'linkLocations',
+      ui: { component: onOffField() },
       label: 'The three stores usually share a price',
       description:
         'A reminder for you, nothing more. It does not change the website: every store always shows the price typed against its own name below. The Truck Stop is never affected by it.',
@@ -660,6 +665,7 @@ const pages: Collection = {
     {
       type: 'boolean',
       name: 'showPromos',
+      ui: { component: onOffField() },
       label: 'Show the promotions band on this page',
       description:
         'Lets in promotions set to "Every page except home". A promotion that names this page in "Which pages" shows here either way.',
@@ -832,6 +838,7 @@ const promos: Collection = {
     {
       type: 'boolean',
       name: 'active',
+      ui: { component: onOffField({ on: 'On — running', off: 'Off — not showing', unsetIs: true }) },
       label: 'Running',
       description:
         'On unless you turn it off. Off pulls the promotion immediately, whatever the dates say; turning it back on (and moving the end date if it has passed) brings it and its offer page back.',
@@ -953,6 +960,7 @@ const tenants: Collection = {
     {
       type: 'boolean',
       name: 'hoursConfirmed',
+      ui: { component: onOffField() },
       label: 'Hours confirmed with the business',
       description: 'Hours are only shown once this is ticked. Posting a guess sends people to a closed door.',
     },
@@ -977,6 +985,7 @@ const tenants: Collection = {
     {
       type: 'boolean',
       name: 'markApproved',
+      ui: { component: onOffField() },
       label: 'We have permission to use their logo and photo',
       description: 'The logo and photo stay hidden until this is ticked. Somebody else’s trademark is not ours to publish.',
     },
@@ -1077,12 +1086,14 @@ const motifGroupFields: TinaField[] = [
     {
       type: 'boolean',
       name: 'repeat',
+      ui: { component: onOffField({ unsetIs: true }) },
       label: 'Repeat the group to fill the band',
       description: 'On: the motifs repeat in order across the band. Off: each is shown once.',
     },
   {
     type: 'boolean',
     name: 'live',
+    ui: { component: onOffField({ on: 'On — this group is in the header', off: 'Off' }) },
     label: 'Use this group in the header',
     description: 'Turn on for the group you want shown. If more than one is on, the first in the list is used.',
   },
@@ -1105,6 +1116,7 @@ const settings: Collection = {
         {
           type: 'boolean',
           name: 'active',
+          ui: { component: onOffField({ on: 'On — showing on every page', off: 'Off' }) },
           label: 'Show the notice',
           description: 'Turn this off and the bar disappears completely — it leaves no gap behind.',
         },
@@ -1266,7 +1278,7 @@ const settings: Collection = {
       label: 'Background watermark',
       description: 'A large faint image down one side of the page on desktop. Never shown on phones.',
       fields: [
-        { type: 'boolean', name: 'enabled', label: 'Show the watermark' },
+        { type: 'boolean', name: 'enabled', label: 'Show the watermark', ui: { component: onOffField() } },
         { type: 'image', name: 'image', label: 'Image' },
         {
           type: 'number',
@@ -1300,6 +1312,7 @@ const settings: Collection = {
         {
           type: 'boolean',
           name: 'show',
+          ui: { component: onOffField({ unsetIs: true }) },
           label: 'Show header motifs',
         },
         {

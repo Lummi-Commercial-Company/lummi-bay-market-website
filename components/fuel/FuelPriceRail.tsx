@@ -10,7 +10,7 @@ import { RailMetrics } from './RailMetrics'
  */
 export function FuelPriceRail({ children }: { children: React.ReactNode }) {
   return (
-    <div className={styles.rail}>
+    <div className={styles.rail} data-rail="">
       {children}
       <RailMetrics />
     </div>
