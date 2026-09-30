@@ -344,3 +344,25 @@ correctly and then measured against the wrong frame of reference.
 **The phone is unchanged.** Its placement was reviewed and accepted as it stands. The
 `rootMargin` applies at both widths because it is a correctness fix rather than a layout
 choice; it only makes the phone condense marginally earlier.
+
+## Amendment — 30 Sep 2026: the block condenses again, and as drawn
+
+The owner reported that the block never condensed. They were right, on every page where the rail
+is sticky. The trigger watched a sentinel inside the block, and once the rail became sticky
+(ADR 0006) the sentinel travelled with the block, so it never left the screen. That has probably
+been true since the rail became sticky. On phones it still worked, because nothing there sticks.
+- **Trigger.** `FuelPriceRail` now leaves a mark in the page grid, in the rail's column at the
+  card's own slot and the sentinel's 55px height. The card watches that mark wherever the rail
+  is a column (from 720px) and its own sentinel below that. The mark stays where the block
+  rests, so "scrolled past half the card" means what it says again.
+- **Shape.** Condensing had only ever been checked in the proof, and in the build the one-line
+  face was drawn *under* the cue, inside the full-height card. It is now the proof's bar
+  (`docs/proofs/fuel-strip-proof.html`, `.fuelblock.cond`):
+  - the card's frame goes transparent and its box keeps the resting height (rule 1; measured
+    0px movement at 1280, 800 and 390);
+  - a 39px bar is drawn over the top, with a teal floor;
+  - it reads "Exit 260 │ REG 4.89 DIESEL 6.99": the page's own place and only the grades it
+    sells, with "Regular" shortened to "Reg";
+  - the cue's words, "⌄ All prices", sit at the bar's right-hand end. Below 900px only "All"
+    shows, but screen readers still hear "All prices";
+  - the panel hangs from the bar at 38px.
