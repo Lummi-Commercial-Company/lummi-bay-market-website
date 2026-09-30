@@ -25,7 +25,9 @@ import type { SerialisedRow } from './FuelPriceBlock'
  *
  * The trigger is a sentinel, not a scroll handler: an IntersectionObserver
  * whose root margin pulls the root's top edge down to the underside of the
- * sticky header, so "scrolled past the card" means what it says.
+ * sticky header, so "scrolled past the card" means what it says. Where the
+ * rail is sticky (from 720px) the sentinel watched is the rail's mark, which
+ * stays where the block rests — the block's own would travel with it.
  */
 export function FuelPriceCard({
   subjectKey,
@@ -52,25 +54,38 @@ export function FuelPriceCard({
   const panelId = useId()
 
   useEffect(() => {
-    const node = sentinel.current
-    if (!node) return
+    const own = sentinel.current
+    if (!own) return
+    const before = own.closest('[data-rail]')?.previousElementSibling
+    const mark = before instanceof HTMLElement && before.hasAttribute('data-rail-mark') ? before : null
+    const sticky = window.matchMedia('(min-width: 720px)')
+    let observer: IntersectionObserver | null = null
 
-    const headerHeight =
-      parseInt(
-        getComputedStyle(document.documentElement).getPropertyValue('--hd-h'),
-        10
-      ) || 76
+    const watch = () => {
+      observer?.disconnect()
+      // Read each time: the emergency notice changes the header's height.
+      const headerHeight =
+        parseInt(
+          getComputedStyle(document.documentElement).getPropertyValue('--hd-h'),
+          10
+        ) || 76
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry) return
+          setCondensed(!entry.isIntersecting)
+        },
+        // Pull the root's top edge to the underside of the sticky header.
+        { rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 0 }
+      )
+      observer.observe(sticky.matches && mark ? mark : own)
+    }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry) return
-        setCondensed(!entry.isIntersecting)
-      },
-      // Pull the root's top edge to the underside of the sticky header.
-      { rootMargin: `-${headerHeight}px 0px 0px 0px`, threshold: 0 }
-    )
-    observer.observe(node)
-    return () => observer.disconnect()
+    watch()
+    sticky.addEventListener('change', watch)
+    return () => {
+      sticky.removeEventListener('change', watch)
+      observer?.disconnect()
+    }
   }, [])
 
   // Condensing closes the panel. It does not stop it being reopened.
@@ -101,7 +116,16 @@ export function FuelPriceCard({
           onClick={() => setOpen((value) => !value)}
         >
           <Chevron />
-          {open ? 'Hide other prices' : 'View all prices'}
+          {condensed ? (
+            // The bar's own control, at its right-hand end (ADR 0005).
+            <span>
+              All<span className={styles.cueWord}> prices</span>
+            </span>
+          ) : open ? (
+            'Hide other prices'
+          ) : (
+            'View all prices'
+          )}
         </button>
 
         {/* ---- Resting: the card ---- */}
@@ -136,15 +160,21 @@ export function FuelPriceCard({
         </div>
 
         {/* ---- Condensed: the one-line bar, pinned to the card's width ---- */}
+        {/* "Exit 260 │ REG 4.89  DIESEL 6.99" — the page's own place and only
+            what it sells; a not-sold grade is the panel's business, not the
+            bar's (ADR 0005 draws it this way). */}
         <div className={styles.oneline} aria-hidden={!condensed}>
-          <span className={styles.place}>{subjectRow?.label}</span>
+          <span className={styles.onelinePlace}>{subjectRow?.label}</span>
+          <span className={styles.onelineSep} aria-hidden="true" />
           <span className={styles.onelinePrices}>
-            {subjectRow?.cells.map((cell, index) => (
-              <span key={cardColumnLabels[index] ?? index} className={styles.onelineCell}>
-                <span className={styles.onelineGrade}>{cardColumnLabels[index]}</span>
-                {cell ?? <NotSold />}
-              </span>
-            ))}
+            {subjectRow?.cells.map((cell, index) =>
+              cell ? (
+                <span key={cardColumnLabels[index] ?? index} className={styles.onelineCell}>
+                  <span className={styles.onelineGrade}>{shortGrade(cardColumnLabels[index])}</span>
+                  <span className={styles.onelineValue}>{cell}</span>
+                </span>
+              ) : null
+            )}
           </span>
         </div>
 
@@ -193,6 +223,11 @@ export function FuelPriceCard({
       </div>
     </aside>
   )
+}
+
+/** The bar is one line: "Regular" is "Reg" there, as ADR 0005 draws it. */
+function shortGrade(label: string | undefined): string {
+  return label === 'Regular' ? 'Reg' : (label ?? '')
 }
 
 /** The disclosure chevron. Points down when shut, up when open. */

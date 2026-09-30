@@ -63,3 +63,30 @@ time on it is worthless by the second hour and actively misleading by the next m
   point is that everyone sees it. Revisit if a long-running notice ever needs one.
 - Scheduling is out of scope. An emergency is not known in advance; `active` is a switch a
   person throws.
+
+## Amendment — 30 Sep 2026: notices can be scheduled, and there can be several
+
+At the owner's direction, notices can be scheduled, and more than one can be kept, each with its
+own days and times. "Scheduling is out of scope" is withdrawn. The emergency path is unchanged,
+and still one switch.
+
+- **A list, not a singleton.** `alerts` in Site Settings replaces `siteAlert`. Each notice has
+  the old fields plus an optional **Starts** and **Ends**: MM/DD/YYYY with an optional time, in
+  Pacific time, entered with the calendar field. The single `siteAlert` saved before still reads,
+  and it was moved into the list as its first entry.
+- **Live is decided per visit**, with the promotions' rule (`promoState`). With no dates, a notice
+  shows from the moment it is switched on until it is switched off, which is exactly the old
+  behaviour. An unreadable date keeps a notice off, because a typo in an end date must never
+  mean "forever".
+- **One bar.** When several are live at once, the first live one in list order shows, and staff
+  drag to reorder. Each list entry's label carries its state: Showing now, Scheduled, Ended or Off.
+- **Mechanism.** The header stays in the static shell. Only the notice slot streams, behind a
+  `Suspense` boundary that calls `connection()`, as the promo region does. Publishing is still
+  settings-cache revalidation, in under a second. A scheduled notice needs no publish at its
+  start or end: the next visit after that minute gets it.
+- Rules in `lib/notices.ts`, with tests.
+
+**Still true, and worth saying because scheduling invites it:** the bar is for things every
+visitor needs to know. The owner's first notice announces the anniversary celebration. That is an
+event rather than an offer, and it is the owner's call, but the "never used for an offer" rule in
+Consequences stands: a bar that sells is a bar nobody believes on the day it says the road is shut.

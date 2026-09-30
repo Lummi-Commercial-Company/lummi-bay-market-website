@@ -68,20 +68,29 @@ async function PromoRegion({ target, rows, position = 'top' }: PromoRegionProps)
       data-promos={position}
       aria-label="Current offers"
     >
-      {filled.map((row, rowIndex) => (
+      {filled.map((row, rowIndex) => {
+        // In a mixed row (lead + two, wide + narrow) the widest slot sets the
+        // row's height and the others fill it, so the row is one even band
+        // (owner, 30 Sep 2026). A row of equal slots is untouched.
+        const widest = Math.max(...row.spans)
+        const mixed = row.spans.some((span) => span !== widest)
+        const lead = row.spans.indexOf(widest)
+        return (
         <div className={styles.row} key={row.promos.map((promo) => promo.id).join('|')}>
           {row.promos.map((promo, index) => (
             <PromoCard
               key={promo.id}
               promo={promo}
               span={row.spans[index] ?? 12}
+              fill={mixed && index !== lead}
               // The first promo is almost certainly the page's largest
               // contentful paint (ADR 0007): fetch it first.
               eager={position === 'top' && rowIndex === 0 && index === 0}
             />
           ))}
         </div>
-      ))}
+        )
+      })}
     </section>
   )
 }
@@ -89,11 +98,21 @@ async function PromoRegion({ target, rows, position = 'top' }: PromoRegionProps)
 /** Width of the region on desktop: the content width less the page gutters. */
 const REGION_MAX_PX = 1168
 
-function PromoCard({ promo, span, eager }: { promo: PromoDoc; span: number; eager: boolean }) {
+function PromoCard({
+  promo,
+  span,
+  eager,
+  fill,
+}: {
+  promo: PromoDoc
+  span: number
+  eager: boolean
+  fill: boolean
+}) {
   return (
     <Link
       href={`/info/${promo.link}`}
-      className={`${styles.promo} ${styles[`s${span}`] ?? ''}`}
+      className={`${styles.promo} ${styles[`s${span}`] ?? ''} ${fill ? styles.fill : ''}`}
       style={{ '--span': span } as React.CSSProperties}
     >
       {/* One 2400 × 1350 master, cropped top and bottom by every slot; the

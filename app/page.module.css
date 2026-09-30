@@ -36,6 +36,22 @@
   min-width: 0;
 }
 
+/* Home's lower half — the band, the Truck Stop callout and the three Location
+   cards — runs the full page width under the promotions, not in the title
+   column beside an empty rail (owner, 30 Sep 2026). The title column is held
+   at least as tall as the resting price block, so this always starts below
+   it; the condensed bar may float over it on scroll, as it does over the
+   full-width promotions. */
+@media (min-width: 720px) {
+  .restFull {
+    grid-column: 1 / -1;
+  }
+
+  .pagegrid:has(> .restFull) > .maincol {
+    min-height: var(--rail-h, 121px);
+  }
+}
+
 /* A page with no price block (/fuel-prices) keeps the full width where the
    two columns are new, 720–899px, rather than sitting in half the page beside
    an empty column. From 900px it keeps the layout it has always had. */

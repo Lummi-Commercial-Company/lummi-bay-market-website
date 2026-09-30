@@ -4,7 +4,7 @@ import styles from './SiteHeader.module.css'
 import { HeaderMetrics } from './HeaderMetrics'
 import { HeaderMotifs } from './HeaderMotifs'
 import { MobileMenu } from './MobileMenu'
-import { SiteAlert } from './SiteAlert'
+import { SiteAlertSlot } from './SiteAlert'
 import { SiteNav } from './SiteNav'
 import { getSettings } from '@/lib/settings'
 
@@ -65,7 +65,7 @@ export async function SiteHeader() {
           components/layout/Waterline.tsx. */}
       <div className={styles.waterline} />
 
-      <SiteAlert alert={settings.siteAlert} />
+      <SiteAlertSlot />
 
       <HeaderMetrics targetId={HEADER_ID} />
     </div>

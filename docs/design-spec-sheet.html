@@ -720,8 +720,13 @@ footer{
   to make. The tablet crop (5:2) was added
   when the site was built, so a tablet held upright does not get a 16:9 slot 480px tall; it sits
   between the ladder's own ratios and cuts only top and bottom, like every other crop.
-  <b>In a mixed row</b> (wide + narrow, or lead + two) the slots keep their own ratios, as the
-  approved ladder draws them, so the wide one is taller than the narrow one beside it. The working behind them, measured in a browser, is in
+  <b>In a mixed row</b> (wide + narrow, narrow + wide, or lead + two) every slot is the height of
+  the widest one (owner's direction, 30 Sep 2026), so the row reads as one even band. That makes
+  the smaller slots about <b>3:2</b> — a quarter beside a lead half is <b>282 × 192</b>, a narrow
+  third beside a wide one <b>380 × 258</b> — which is narrower than the file. Those two slots alone
+  trim the sides as well as the top and bottom: about <b>210px off each side</b> of the 2400-wide
+  master (they keep the middle ≈1980 × 1350). Keep anything that must be seen at least 210px in
+  from the left and right edges. The working behind the ladder, measured in a browser, is in
   <code>docs/proofs/promo-crop-ladder.html</code>.</p>
 
   <div class="props">
