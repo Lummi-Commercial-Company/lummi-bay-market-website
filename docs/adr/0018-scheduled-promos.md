@@ -335,3 +335,16 @@ Nothing in the rules changed. The CMS now says what it does:
 
 At the owner's direction, Home is set to one full-width row and then two halves, with three
 promotions running.
+
+**Mixed rows are one height (30 Sep 2026, at the owner's direction).** In a row whose slots
+differ in width — lead + two, wide + narrow, narrow + wide — the widest slot keeps its ladder
+ratio and sets the row's height, and the others stretch to it. Rows of equal slots are unchanged.
+The measured sizes at 1280px:
+- lead + two: 577 × 192 · 282 × 192 · 282 × 192. Before, the quarters were 282 × 158;
+- wide + narrow: 774 × 258 · 380 × 258. Before, the narrow slot was 380 × 190.
+
+The cost is that those smaller slots are about 3:2, narrower than the 16:9 master, so they alone
+trim roughly 210px off each side of the file. ADR 0023's "every crop cuts only top and bottom"
+no longer holds for them. The designer spec says so, and asks for anything that must be seen to
+sit at least 210px in from the left and right edges. Phones and tablets stack every row, so
+they are unaffected. (`components/promos/PromoRegion.tsx`, `.fill`.)

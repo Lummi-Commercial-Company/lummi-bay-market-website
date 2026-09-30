@@ -160,6 +160,16 @@
   .s4  { aspect-ratio: 2 / 1; }
   .s3  { aspect-ratio: 16 / 9; }
 
+  /* The smaller slots of a mixed row take the lead's height instead of their
+     own ratio (owner, 30 Sep 2026): no ratio, so the grid stretches them to
+     the row the lead sets. A quarter beside a lead half is 282 × 192, a
+     narrow third beside a wide one 380 × 258 — both about 3:2, narrower than
+     the file, so these two slots alone trim a little off each side. */
+  .fill {
+    aspect-ratio: auto;
+    align-self: stretch;
+  }
+
   .hd {
     font-size: 1.0625rem;
   }

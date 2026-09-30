@@ -3,6 +3,7 @@ import type { Collection, Template, TinaField } from 'tinacms'
 import { MOTIF_LIMITS } from '../lib/motif-check'
 import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
 import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
+import { returnToListAfterSave } from './fields/after-save'
 import { DateField, DateTimeField } from './fields/date-field'
 import { onOffField } from './fields/on-off-field'
 import { HeadlineField } from './fields/promo-status'
@@ -1358,7 +1359,7 @@ export default defineConfig({
   // Ended / Off tag, which Tina's own list has no column for (ADR 0018 §4).
   // The SITE menu: Promotion Status, Media Manager, Header Motif Groups, in
   // that order after Site Settings (tina/fields/site-menu.tsx).
-  cmsCallback: (cms) => arrangeSiteMenu(cms),
+  cmsCallback: (cms) => returnToListAfterSave(arrangeSiteMenu(cms)),
   branch,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID ?? '',
   token: process.env.TINA_TOKEN ?? '',
