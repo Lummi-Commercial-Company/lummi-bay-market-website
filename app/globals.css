@@ -56,7 +56,12 @@
   /* ---- Shell measurements ------------------------------------------------ */
   --hd-h-base: 56px;        /* phone header row                               */
   --waterline-h: 5px;       /* flat teal rule under the nav — not the wave    */
-  --rail-w: 400px;          /* reserved fuel-price rail column (ADR 0005)     */
+  /* The reserved fuel-price rail column (ADR 0005). 345px — the block's own
+     phone width — from 720px, where the page first goes two columns; 400px
+     from 900px. Two columns stop where the title column would drop below
+     ~300px, not at a fixed "desktop" line (owner, 30 Sep 2026). */
+  --rail-w: 345px;
+  --rail-gap: var(--sp-5);
 
   /* The live header height, alert bar included. Published at runtime by
      <HeaderMetrics> because the emergency notice changes it (ADR 0017). The
@@ -81,6 +86,13 @@
   :root {
     --hd-h-base: 58px;
     --hd-h: 63px;
+  }
+}
+
+@media (min-width: 900px) {
+  :root {
+    --rail-w: 400px;
+    --rail-gap: var(--sp-7);
   }
 }
 

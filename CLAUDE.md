@@ -98,10 +98,11 @@ cannot hold the lockup, three links and the pill below ~430px, which is every co
   promotions, temporary hours, fuel price stamps — with an optional time such as `12:00 PM`, typed or
   picked from the Calendar button beside every date box (`tina/fields/date-field.tsx`). One
   parser, `parseWhen` in `lib/pacific-time.ts`; older YYYY-MM-DD values still read.
-- Header is **sticky** on every page. The fuel-price rail is sticky **on desktop only**, and only
-  because the condensed block's panel is positioned against the viewport there rather than
+- Header is **sticky** on every page. The fuel-price rail is sticky **wherever the page has two
+  columns** — from 720px, the title column beside the block, stacking only below that (30 Sep
+  2026, ADR 0006 amended) — and only because the condensed block's panel is positioned against the viewport there rather than
   anchored to the block — a sticky anchor plus an anchor-positioned panel is broken, measured
-  (ADR 0006). On phones the rail sits at the top of the page and scrolls away. **The rule is
+  (ADR 0006). Below 720px the rail sits at the top of the page and scrolls away. **The rule is
   conditional on that mechanism:** if the panel is ever anchored to the block again, the rail
   must stop being sticky. Logo (Market lockup) top-left → Home. The top-right utility slot
   carries the Rewards "Get the App" pill on every page.

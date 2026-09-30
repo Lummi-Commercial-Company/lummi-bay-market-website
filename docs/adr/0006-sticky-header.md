@@ -153,3 +153,19 @@ white on a navy disc — and ownership approved the paddle as the icon mark. The
 hand-tuned: a straight downscale leaves the paddle at 8.5% of the disc and it reads as a dot.
 The approval covers the icon only. The header lockup this ADR decides is untouched, and a bare
 paddle never stands in for it.
+
+## Amendment — 30 Sep 2026: two columns from 720px
+
+At the owner's request, the title column and the price block now sit side by side from **720px**
+wide, not 900px. Between those widths the title column narrows while the block keeps its place.
+The page stacks only below 720px, where the title column would drop under about 300px. Between
+720 and 900px:
+- the rail is **345px**, the block's own phone width, measured in ADR 0005;
+- the gap between the columns is 24px.
+
+From 900px they are 400px and 48px, as before (`--rail-w`, `--rail-gap` in `app/globals.css`).
+
+The rail is sticky wherever it is a column, so from 720px. The reasoning above holds unchanged,
+because it never depended on width: the panel hangs off the block with plain absolute positioning
+and has no `position-anchor`. The "conditional on the mechanism" rule still applies at every
+width.
