@@ -104,7 +104,8 @@ card is geometrically identical at every slot width, so there is no spill condit
 design for.
 
 ### The button label is editable
-It is a field, defaulting to “See details”, not a hardcoded string.
+It is a field, defaulting to “See details”, not a hardcoded string. *(The default became
+“Learn more” at the owner's direction, 30 Sep 2026; still only a default.)*
 
 ## Consequences
 - **`docs/proofs/promo-system.html` now matches this decision exactly.** It had the CTA

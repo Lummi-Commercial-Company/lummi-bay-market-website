@@ -166,7 +166,7 @@ function PromotionStatus() {
 
   return (
     <div style={{ padding: '28px 32px', maxWidth: 1000, fontFamily: 'inherit' }}>
-      <h2 style={{ fontSize: 24, margin: '0 0 6px', color: '#b45309' }}>Promotion status</h2>
+      <h2 style={{ fontSize: 24, margin: '0 0 6px', color: '#b45309' }}>Promotion Status</h2>
       <p style={{ margin: '0 0 18px', color: '#4b5563', fontSize: 14, lineHeight: 1.5, maxWidth: '70ch' }}>
         Every promotion and whether visitors can see it right now, in Pacific time. Worked out from the
         dates each time this page loads — nothing here is stored.{' '}
@@ -181,7 +181,7 @@ function PromotionStatus() {
       </p>
       {error ? <p style={{ color: '#b42318' }}>{error}</p> : null}
       {rows === null && !error ? <p>Loading…</p> : null}
-      {rows?.length === 0 ? <p>No promotions yet. Add one under Promotions.</p> : null}
+      {rows?.length === 0 ? <p>No promotions yet. Add one under Promo Pages.</p> : null}
       {rows?.length ? (
         <div style={{ border: '1px solid #e5e7eb', borderRadius: 10, overflow: 'hidden', background: '#fff' }}>
           {rows.map((row, index) => (
@@ -228,7 +228,7 @@ function StatusIcon(props: React.SVGProps<SVGSVGElement>) {
 // Tina 3 no longer exports `createScreen`; a screen is this plain object.
 export const PromotionStatusScreen: ScreenPlugin = {
   __type: 'screen',
-  name: 'Promotion status',
+  name: 'Promotion Status',
   Component: () => <PromotionStatus />,
   Icon: StatusIcon,
   layout: 'fullscreen',

@@ -84,11 +84,12 @@ but write new ones as MM/DD/YYYY. **If you edit a file by hand, quote a date in 
 `endsAt: '2026-10-05'` — because unquoted YAML reads it as a date rather than text and the CMS
 build refuses the whole file; MM/DD/YYYY is plain text to YAML either way.
 
-**`headerMotifs`** — `show` switches the header motif band on or off; `group` points at a
-document in `content/motif-groups/`, which holds the motifs in order and their strength, scale,
-spacing and ink (ADR 0021, amended 30 Sep 2026). Motif files live in `public/uploads/motifs/` and
+**`headerMotifs`** — `show` switches the header motif band on or off; `groups` is the list of
+motif groups, each holding its motifs in order and its strength, scale, spacing and ink, with
+`live: true` on the one in use (the first, if several). ADR 0021, amended 30 Sep 2026. An older
+file with `group` pointing into `content/motif-groups/` is still read. Motif files live in `public/uploads/motifs/` and
 are uploaded through the motif box in the CMS, which checks each one first. A settings file with
-no `headerMotifs` keeps the band on, but with no group chosen nothing is drawn and the build log
+no `headerMotifs` keeps the band on, but with no group in use nothing is drawn and the build log
 says so.
 
 ## What is deliberately not here

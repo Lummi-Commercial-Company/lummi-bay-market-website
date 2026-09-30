@@ -421,8 +421,15 @@ function PreviewMotif({ path, scale }: { path: string; scale: number }) {
  */
 function GroupNameWithPreview(props: FieldProps) {
   const { input, form } = props
-  const [values, setValues] = useState<Record<string, unknown>>({})
-  useEffect(() => form?.subscribe?.((state) => setValues(state.values ?? {}), { values: true }), [form])
+  const [all, setAll] = useState<Record<string, unknown>>({})
+  useEffect(() => form?.subscribe?.((state) => setAll(state.values ?? {}), { values: true }), [form])
+  // This field is a group's name. In Site settings the group is one row of a
+  // list (`headerMotifs.groups.2.name`), so its sliders and motifs are the
+  // values beside it, not the whole form's.
+  const values = String(input.name)
+    .split('.')
+    .slice(0, -1)
+    .reduce<Record<string, unknown>>((node, key) => ((node?.[key] as Record<string, unknown>) ?? {}), all)
 
   const scale = typeof values.scale === 'number' ? values.scale : 86
   const strength = typeof values.strength === 'number' ? values.strength : 14

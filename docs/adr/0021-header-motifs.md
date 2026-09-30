@@ -214,3 +214,11 @@ each, at the approved 14% and 86%. It is marked `TODO: replace with approved Lum
 
 **The cultural rule is unchanged.** Uploading a motif does not approve it. Final art must still be
 authentic or tribe-approved before launch, and the CMS does not and cannot check that.
+
+**Moved into Site Settings, same day.** At the owner's ask, the groups are no longer a collection
+of their own. They live in **Site Settings → Header motifs**, directly below Background
+watermark, as a list: add, edit and delete groups there, and switch on "Use this group in the
+header" for the live one. If more than one is on, the first is used. The fields, the preview,
+the motif library and both checks are unchanged. A settings file that still points at a file in
+`content/motif-groups/` is read as before. The SITE menu keeps a **Header Motif Groups** entry,
+which opens Site Settings.

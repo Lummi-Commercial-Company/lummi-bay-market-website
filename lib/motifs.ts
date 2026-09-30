@@ -11,8 +11,9 @@ import { getSettings } from './settings'
 /**
  * The header motif band's data (ADR 0021, amended 30 Sep 2026).
  *
- * Site settings → Header motifs says whether the band shows and which motif
- * group it uses. A group (content/motif-groups/) is an ordered list of motif
+ * Site settings → Header motifs says whether the band shows, and holds the
+ * motif groups; the live one is marked "Use this group in the header". A group
+ * is an ordered list of motif
  * files plus its own strength, scale, spacing and ink. Every file is checked
  * (lib/motif-check) before it is drawn; one that fails is left out and the
  * build log says why, so a bad upload costs one motif, never the header.
@@ -66,13 +67,19 @@ export async function getHeaderMotifs(): Promise<HeaderMotifBand | null> {
   const { headerMotifs } = await getSettings()
   if (!headerMotifs.show) return null
 
-  const file = groupFile(headerMotifs.group)
-  const group = file ? await readContentJson<Record<string, unknown>>(`motif-groups/${file}`) : null
+  // The group in use: the first in Site settings with "Use this group" on.
+  // A settings file from before the groups moved there points at a file in
+  // content/motif-groups/ instead, and that is still honoured.
+  let group: Record<string, unknown> | null = headerMotifs.groups.find((g) => g.live === true) ?? null
+  if (!group && headerMotifs.group) {
+    const file = groupFile(headerMotifs.group)
+    group = file ? await readContentJson<Record<string, unknown>>(`motif-groups/${file}`) : null
+  }
   if (!group) {
     console.error(
-      file
-        ? `[motifs] Site settings points at the motif group "${file}", which does not exist. No header motifs are shown.`
-        : '[motifs] Header motifs are switched on, but no motif group is chosen. No header motifs are shown.'
+      headerMotifs.groups.length
+        ? '[motifs] Header motifs are switched on, but no group has "Use this group in the header" on. No header motifs are shown.'
+        : '[motifs] Header motifs are switched on, but there are no motif groups. No header motifs are shown.'
     )
     return null
   }

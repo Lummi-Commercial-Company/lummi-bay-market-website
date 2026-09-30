@@ -48,7 +48,7 @@ repeating it.
 |---|---|
 | `eyebrow` | The small label above the headline. First of the three text fields |
 | `headline` | The offer itself, in **28 characters or fewer** — a character counter in the CMS, advisory to the editor and not enforced at render (ADR 0023). It is also the document's name in the Tina list, so a promo is findable by what it says |
-| `cta` | The button label. **Editable per promo**, defaulting to "See details" — never hardcoded. Third text field |
+| `cta` | The button label. **Editable per promo**, defaulting to "Learn more" (it was "See details" until 30 Sep 2026) — never hardcoded. Third text field |
 | `image` + `alt` | **One master, 2400 × 1350**, subject inside the centre 2400 × 480 strip. Not two crops: the phone slot is 16:9, so the master already is the phone crop (ADR 0023). Alt text describes the offer, not the artwork, because the image is the link |
 | `link` | A reference to an `infoPages` document. Both the image and the button go there |
 | `startsAt`, `endsAt` | The window. Both optional — no `startsAt` means "already running", no `endsAt` means "until turned off" |

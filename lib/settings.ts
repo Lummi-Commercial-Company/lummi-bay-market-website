@@ -39,7 +39,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   siteAlert: { active: false, headline: '' },
   backdrop: { enabled: false, opacity: 10, side: 'left', height: 100 },
   promoRows: DEFAULT_PROMO_ROWS,
-  headerMotifs: { show: false },
+  headerMotifs: { show: false, groups: [] },
 }
 
 function asSocial(value: unknown): SocialLink[] {
@@ -119,6 +119,11 @@ export async function getSettings(): Promise<SiteSettings> {
       // Off only when someone switches it off: a settings file that predates
       // the switch keeps the band it had.
       show: (raw.headerMotifs as Record<string, unknown> | undefined)?.show !== false,
+      groups: Array.isArray((raw.headerMotifs as Record<string, unknown> | undefined)?.groups)
+        ? ((raw.headerMotifs as Record<string, unknown>).groups as unknown[]).filter(
+            (g): g is Record<string, unknown> => Boolean(g) && typeof g === 'object'
+          )
+        : [],
       group: String((raw.headerMotifs as Record<string, unknown> | undefined)?.group ?? '') || undefined,
     },
   }

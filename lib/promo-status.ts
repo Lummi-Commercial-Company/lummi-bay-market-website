@@ -62,6 +62,24 @@ export function rowsFrom(value: unknown, fallback: RowLayout[] = DEFAULT_PROMO_R
 }
 
 /**
+ * TinaCloud's content API — which the CMS screens read — rewrites every
+ * picture to a full address on its asset host:
+ *   /uploads/6yr-drink.jpg  →  https://assets.tina.io/<client id>/6yr-drink.jpg
+ * (with `/__staging/<branch>/__file` after the id on an unmerged branch).
+ * The file itself, and so the site, keeps `/uploads/…`. Read that way, a
+ * picture on this site looked like an outside one, and a promotion visibly on
+ * Home was tagged "Not showing" (reported 30 Sep 2026). Turned back into the
+ * site path before the rules run. Anything else is left exactly as it is.
+ */
+export function cloudMediaToSitePath(value: unknown, mediaRoot = 'uploads'): unknown {
+  if (typeof value !== 'string') return value
+  const match = value.match(/^https:\/\/assets\.tina\.io\/[^/]+(\/.*)$/i)
+  if (!match?.[1]) return value
+  const rest = match[1].replace(/^\/__staging\/.+?\/__file(?=\/)/, '')
+  return `/${mediaRoot}${rest}`
+}
+
+/**
  * One promotion's status on its own — for the banner in its form, where the
  * other promotions are not in view.
  *
@@ -74,7 +92,7 @@ export function describePromo(
   now: string,
   offerPageExists?: boolean
 ): PromoStatus & { promo?: PromoDoc } {
-  const parsed = toPromo(id, data)
+  const parsed = toPromo(id, { ...data, image: cloudMediaToSitePath(data.image) })
   if ('refused' in parsed) {
     return { tag: 'problem', label: 'Not showing', detail: `Not showing: ${parsed.refused}.` }
   }

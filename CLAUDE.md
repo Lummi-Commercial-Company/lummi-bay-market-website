@@ -91,7 +91,8 @@ cannot hold the lockup, three links and the pill below ~430px, which is every co
   than fail.
 - **Header motifs** are managed by staff (30 Sep 2026, ADR 0021 amended): motif files uploaded to
   their own folder through a box that checks each SVG before storing it, arranged in motif groups
-  with strength, scale, spacing and ink, and switched on in Site settings. The site checks every
+  with strength, scale, spacing and ink — all in Site Settings → Header motifs, below the
+  background watermark. The site checks every
   file again before drawing it. Uploading art does not approve it — the cultural rule still holds.
 - **Dates are MM/DD/YYYY** everywhere staff type or read them (owner's direction, 30 Sep 2026) —
   promotions, temporary hours, fuel price stamps — with an optional time such as `12:00 PM`. One

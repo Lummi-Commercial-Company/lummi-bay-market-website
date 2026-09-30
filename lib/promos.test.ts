@@ -89,7 +89,7 @@ test('toPromo: an unreadable date keeps the promo off rather than running foreve
   assert.ok('promo' in ok)
   if ('promo' in ok) {
     assert.equal(ok.promo.link, 'a')
-    assert.equal(ok.promo.cta, 'See details', 'a blank button label falls back')
+    assert.equal(ok.promo.cta, 'Learn more', 'a blank button label falls back')
     assert.equal(ok.promo.active, true, '"Running" left untouched is running')
     assert.equal(ok.promo.placement, 'all-interior')
     assert.deepEqual(ok.promo.pages, ['pages/about', 'locations/exit-260'])
