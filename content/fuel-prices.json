@@ -1,9 +1,25 @@
 {
   "linkLocations": true,
   "locations": {
-    "exit-260": { "regular": 4.79, "diesel": 6.99, "updated": "09/29/2026" },
-    "minimart": { "regular": 3.79, "diesel": 4.29, "updated": "09/29/2026" },
-    "fishermans-cove": { "regular": 3.85, "diesel": 4.29, "updated": "09/29/2026" }
+    "exit-260": {
+      "regular": 4.89,
+      "diesel": 6.99,
+      "updated": "09/29/2026"
+    },
+    "minimart": {
+      "regular": 3.79,
+      "diesel": 4.29,
+      "updated": "09/29/2026"
+    },
+    "fishermans-cove": {
+      "regular": 3.85,
+      "diesel": 4.29,
+      "updated": "09/29/2026"
+    }
   },
-  "truckStop": { "diesel": 4.55, "def": 3.29, "updated": "09/29/2026" }
+  "truckStop": {
+    "diesel": 4.55,
+    "def": 3.29,
+    "updated": "09/29/2026"
+  }
 }
