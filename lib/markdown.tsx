@@ -193,12 +193,13 @@ function renderInline(source: string, keyPrefix: string): ReactNode[] {
     if (at > cursor) out.push(...plainText(text.slice(cursor, at), `${key}t`))
     cursor = at + token.length
 
+    // Bold and italic can hold a link — the editor writes `**Play the [Game](/x):**`.
     if (token.startsWith('**') || token.startsWith('__')) {
-      out.push(<strong key={key}>{plainText(token.slice(2, -2), key)}</strong>)
+      out.push(<strong key={key}>{renderInline(token.slice(2, -2), key)}</strong>)
     } else if (token.startsWith('`')) {
       out.push(<code key={key}>{restoreEscapes(token.slice(1, -1))}</code>)
     } else if (token.startsWith('*')) {
-      out.push(<em key={key}>{plainText(token.slice(1, -1), key)}</em>)
+      out.push(<em key={key}>{renderInline(token.slice(1, -1), key)}</em>)
     } else {
       const split = token.indexOf('](')
       const label = token.slice(1, split)

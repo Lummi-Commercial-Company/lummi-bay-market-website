@@ -4,6 +4,7 @@ import { MOTIF_LIMITS } from '../lib/motif-check'
 import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
 import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
 import { HeadlineField, PromotionStatusScreen } from './fields/promo-status'
+import { RichTextWithLinksField } from './fields/rich-text-links'
 
 /**
  * Every date staff type is MM/DD/YYYY (owner's direction, 30 Sep 2026). The
@@ -120,6 +121,7 @@ const pageBlocks: Template[] = [
         label: 'Text',
         description: 'Headings, paragraphs, lists and links.',
         isBody: false,
+        ui: { component: RichTextWithLinksField },
       },
     ],
   },
@@ -246,7 +248,13 @@ const pageBlocks: Template[] = [
         ui: { itemProps: (item) => ({ label: item?.question ?? 'New question' }) },
         fields: [
           { type: 'string', name: 'question', label: 'Question', required: true },
-          { type: 'rich-text', name: 'answer', label: 'Answer', required: true },
+          {
+            type: 'rich-text',
+            name: 'answer',
+            label: 'Answer',
+            required: true,
+            ui: { component: RichTextWithLinksField },
+          },
         ],
       },
     ],
@@ -275,6 +283,9 @@ const pageBodyField: TinaField = {
   description:
     'The main text of this page — headings, paragraphs, lists and links. It renders directly under the page title, above any extra sections below.',
   isBody: true,
+  // Tina's editor plus a Links panel: Tina 3.14 cannot edit or remove an
+  // existing link itself (tina/fields/rich-text-links.tsx).
+  ui: { component: RichTextWithLinksField },
 }
 
 const seoFields: TinaField[] = [
