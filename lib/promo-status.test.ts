@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { describeAll, describePromo } from './promo-status.ts'
+import { cloudMediaToSitePath, describeAll, describePromo } from './promo-status.ts'
 
 /** The tags staff read in the CMS must match what visitors are shown. */
 
@@ -49,4 +49,17 @@ test('more live than the rows hold: the extra ones are waiting, in the site\'s o
     all.map((row) => `${row.headline}:${row.status.tag}`),
     ['A:live', 'B:live', 'C:live', 'D:waiting']
   )
+})
+
+test('a picture read through TinaCloud is still a picture on this site', () => {
+  const cloud = 'https://assets.tina.io/9ae30583-56b8-4a9b-ab3a-532621d296f3/6yr-Drink-special-Facebook-1200x630.jpg'
+  assert.equal(cloudMediaToSitePath(cloud), '/uploads/6yr-Drink-special-Facebook-1200x630.jpg')
+  assert.equal(
+    cloudMediaToSitePath('https://assets.tina.io/abc/__staging/feature/__file/promos/x.jpg'),
+    '/uploads/promos/x.jpg'
+  )
+  assert.equal(cloudMediaToSitePath('https://example.com/x.jpg'), 'https://example.com/x.jpg', 'outside stays outside')
+  // The owner's promotion, as the live CMS reads it: Live, not "Not showing".
+  const status = describePromo('a', { ...anniversary, image: cloud }, '2026-09-30 11:02', true)
+  assert.equal(status.tag, 'live')
 })

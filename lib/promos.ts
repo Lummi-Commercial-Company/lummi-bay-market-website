@@ -60,7 +60,7 @@ export interface PromoDoc {
   id: string
   eyebrow?: string
   headline: string
-  /** The button label. Already defaulted to "See details" when left blank. */
+  /** The button label. Already defaulted to "Learn more" when left blank. */
   cta: string
   image: string
   alt: string
@@ -76,7 +76,8 @@ export interface PromoDoc {
   priority?: number
 }
 
-export const DEFAULT_CTA = 'See details'
+/** The owner's choice, 30 Sep 2026; it was "See details" (ADR 0023). */
+export const DEFAULT_CTA = 'Learn more'
 
 /**
  * A Tina reference is stored as a path — `content/pages/about.mdx`. Reduced to

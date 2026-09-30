@@ -138,7 +138,13 @@ export interface SiteSettings {
    */
   promoRows: RowLayout[]
   /** The header motif band: on or off, and which motif group (ADR 0021). */
-  headerMotifs: { show: boolean; group?: string }
+  /**
+   * The header motif band (ADR 0021): on or off, and the motif groups kept in
+   * Site settings. The live one is the first with `live` on. `group` is the
+   * older pointer to a file in content/motif-groups/, read only when no group
+   * in the list is live.
+   */
+  headerMotifs: { show: boolean; groups: Record<string, unknown>[]; group?: string }
 }
 
 /* ===========================================================================

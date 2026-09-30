@@ -3,8 +3,9 @@ import type { Collection, Template, TinaField } from 'tinacms'
 import { MOTIF_LIMITS } from '../lib/motif-check'
 import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
 import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
-import { HeadlineField, PromotionStatusScreen } from './fields/promo-status'
+import { HeadlineField } from './fields/promo-status'
 import { RichTextWithLinksField } from './fields/rich-text-links'
+import { arrangeSiteMenu } from './fields/site-menu'
 
 /**
  * Every date staff type is MM/DD/YYYY (owner's direction, 30 Sep 2026). The
@@ -317,7 +318,7 @@ const seoFields: TinaField[] = [
 
 const locations: Collection = {
   name: 'locations',
-  label: 'Locations',
+  label: 'Location Details',
   path: 'content/locations',
   format: 'mdx',
   // There are exactly three Locations and there are no others in scope. A
@@ -471,7 +472,7 @@ const locations: Collection = {
  */
 const fuelPrices: Collection = {
   name: 'fuelPrices',
-  label: 'Fuel prices',
+  label: 'Fuel Prices',
   path: 'content',
   format: 'json',
   match: { include: 'fuel-prices' },
@@ -677,7 +678,7 @@ const pages: Collection = {
 
 const mainPages: Collection = {
   name: 'mainPages',
-  label: 'Home page versions',
+  label: 'Home Page(s)',
   path: 'content/main-pages',
   format: 'mdx',
   fields: [
@@ -720,7 +721,7 @@ const mainPages: Collection = {
 
 const infoPages: Collection = {
   name: 'infoPages',
-  label: 'Offer detail pages',
+  label: 'Linked Promo Details Pages',
   path: 'content/info-pages',
   format: 'mdx',
   ui: {
@@ -763,7 +764,7 @@ const infoPages: Collection = {
  */
 const promos: Collection = {
   name: 'promos',
-  label: 'Promotions',
+  label: 'Promo Pages',
   path: 'content/promos',
   format: 'mdx',
   fields: [
@@ -788,7 +789,7 @@ const promos: Collection = {
       type: 'string',
       name: 'cta',
       label: 'Button text',
-      description: 'Leave blank for "See details".',
+      description: 'Leave blank for "Learn more". It shows in capitals on the button.',
     },
     {
       type: 'image',
@@ -904,7 +905,7 @@ const promos: Collection = {
  */
 const tenants: Collection = {
   name: 'tenants',
-  label: 'Other businesses on our properties',
+  label: 'Other Businesses',
   path: 'content/tenants',
   format: 'mdx',
   fields: [
@@ -990,10 +991,12 @@ const tenants: Collection = {
 }
 
 /**
- * Header motif groups (ADR 0021, amended 30 Sep 2026).
+ * Header motif groups (ADR 0021, amended 30 Sep 2026). Kept in Site settings →
+ * Header motifs, beside the background watermark, at the owner's ask; they
+ * began as their own collection.
  *
  * A group is an ordered set of motif files and the way the band draws them.
- * Site settings → Header motifs picks which group is live; any number can be
+ * The group with "Use this group in the header" on is live; any number can be
  * kept, edited and deleted here. Files come only from the motif library
  * (uploads/motifs), through a box that checks each one before it is stored —
  * see tina/fields/motif-fields.tsx and lib/motif-check.ts.
@@ -1005,27 +1008,14 @@ const [strengthMin, strengthMax, strengthDefault] = MOTIF_LIMITS.strength
 const [scaleMin, scaleMax, scaleDefault] = MOTIF_LIMITS.scale
 const [spacingMin, spacingMax, spacingDefault] = MOTIF_LIMITS.spacing
 
-const motifGroups: Collection = {
-  name: 'motifGroups',
-  label: 'Header motif groups',
-  path: 'content/motif-groups',
-  format: 'json',
-  defaultItem: () => ({
-    strength: strengthDefault,
-    scale: scaleDefault,
-    spacing: spacingDefault,
-    ink: 'bone',
-    repeat: true,
-  }),
-  fields: [
+const motifGroupFields: TinaField[] = [
     {
       type: 'string',
       name: 'name',
       label: 'Group name',
       description:
-        'So you can tell groups apart, for example "Winter — orca, salmon, eagle". Choose which group is live in Site settings → Header motifs. The preview updates as you change the settings below.',
+        'So you can tell groups apart, for example "Winter — orca, salmon, eagle". The preview updates as you change the settings below; turn on "Use this group in the header" at the bottom to show it.',
       required: true,
-      isTitle: true,
       ui: { component: GroupNameField },
     },
     {
@@ -1089,12 +1079,17 @@ const motifGroups: Collection = {
       label: 'Repeat the group to fill the band',
       description: 'On: the motifs repeat in order across the band. Off: each is shown once.',
     },
-  ],
-}
+  {
+    type: 'boolean',
+    name: 'live',
+    label: 'Use this group in the header',
+    description: 'Turn on for the group you want shown. If more than one is on, the first in the list is used.',
+  },
+]
 
 const settings: Collection = {
   name: 'settings',
-  label: 'Site settings',
+  label: 'Site Settings',
   path: 'content/settings',
   format: 'json',
   ui: { allowedActions: { create: false, delete: false }, global: true },
@@ -1295,18 +1290,11 @@ const settings: Collection = {
       ],
     },
     {
-      type: 'reference',
-      name: 'liveMainPage',
-      label: 'Which home page is live',
-      collections: ['mainPages'],
-      description: 'Only the version chosen here is shown to visitors.',
-    },
-    {
       type: 'object',
       name: 'headerMotifs',
       label: 'Header motifs',
       description:
-        'The row of motifs in the navy header, between the menu and the Get the App button. Build and adjust groups in "Header motif groups"; choose the live one here.',
+        'The row of motifs in the navy header, between the menu and the Get the App button. Keep as many groups as you like; switch on "Use this group in the header" for the one to show.',
       fields: [
         {
           type: 'boolean',
@@ -1314,13 +1302,35 @@ const settings: Collection = {
           label: 'Show header motifs',
         },
         {
-          type: 'reference',
-          name: 'group',
-          label: 'Which motif group',
-          collections: ['motifGroups'],
-          description: 'The group shown on every page. Its strength, scale, spacing and ink come with it.',
+          type: 'object',
+          name: 'groups',
+          label: 'Motif groups',
+          description:
+            'Each group is a set of motifs in order, with its own strength, scale, spacing and ink. Add a group with +, open one to edit it (the preview updates as you go), delete one with the bin.',
+          list: true,
+          ui: {
+            itemProps: (item) => ({
+              label: `${item?.name || 'New group'}${item?.live ? ' — in use' : ''}`,
+            }),
+            defaultItem: {
+              strength: strengthDefault,
+              scale: scaleDefault,
+              spacing: spacingDefault,
+              ink: 'bone',
+              repeat: true,
+              live: false,
+            },
+          },
+          fields: motifGroupFields,
         },
       ],
+    },
+    {
+      type: 'reference',
+      name: 'liveMainPage',
+      label: 'Which home page is live',
+      collections: ['mainPages'],
+      description: 'Only the version chosen here is shown to visitors.',
     },
     promoRowsField(
       'Promotion rows',
@@ -1332,10 +1342,9 @@ const settings: Collection = {
 export default defineConfig({
   // "Promotion status" in the CMS menu: every promotion's Live / Scheduled /
   // Ended / Off tag, which Tina's own list has no column for (ADR 0018 §4).
-  cmsCallback: (cms) => {
-    cms.plugins.add(PromotionStatusScreen)
-    return cms
-  },
+  // The SITE menu: Promotion Status, Media Manager, Header Motif Groups, in
+  // that order after Site Settings (tina/fields/site-menu.tsx).
+  cmsCallback: (cms) => arrangeSiteMenu(cms),
   branch,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID ?? '',
   token: process.env.TINA_TOKEN ?? '',
@@ -1353,6 +1362,8 @@ export default defineConfig({
   },
 
   schema: {
-    collections: [locations, fuelPrices, promos, pages, mainPages, infoPages, tenants, motifGroups, settings],
+    // The order of the CMS menu (owner's order, 30 Sep 2026). Site settings is
+    // global, so Tina always lists it under SITE rather than here.
+    collections: [mainPages, fuelPrices, promos, infoPages, locations, tenants, pages, settings],
   },
 })
