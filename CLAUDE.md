@@ -95,7 +95,8 @@ cannot hold the lockup, three links and the pill below ~430px, which is every co
   background watermark. The site checks every
   file again before drawing it. Uploading art does not approve it — the cultural rule still holds.
 - **Dates are MM/DD/YYYY** everywhere staff type or read them (owner's direction, 30 Sep 2026) —
-  promotions, temporary hours, fuel price stamps — with an optional time such as `12:00 PM`. One
+  promotions, temporary hours, fuel price stamps — with an optional time such as `12:00 PM`, typed or
+  picked from the Calendar button beside every date box (`tina/fields/date-field.tsx`). One
   parser, `parseWhen` in `lib/pacific-time.ts`; older YYYY-MM-DD values still read.
 - Header is **sticky** on every page. The fuel-price rail is sticky **on desktop only**, and only
   because the condensed block's panel is positioned against the viewport there rather than

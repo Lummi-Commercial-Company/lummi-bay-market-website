@@ -82,7 +82,7 @@ hours, fuel price stamps: `10/05/2026`, and where a time is allowed, `10/05/2026
 checks each date field as it is typed. Dates saved earlier as `2026-10-05` still read the same,
 but write new ones as MM/DD/YYYY. **If you edit a file by hand, quote a date in the old form** —
 `endsAt: '2026-10-05'` — because unquoted YAML reads it as a date rather than text and the CMS
-build refuses the whole file; MM/DD/YYYY is plain text to YAML either way.
+build refuses the whole file; MM/DD/YYYY is plain text to YAML either way. Every date box in the CMS has a **Calendar** button beside it: pick the day there, or keep typing. The calendar fills the box in the same MM/DD/YYYY form and keeps a time already typed after it.
 
 **`headerMotifs`** — `show` switches the header motif band on or off; `groups` is the list of
 motif groups, each holding its motifs in order and its strength, scale, spacing and ink, with

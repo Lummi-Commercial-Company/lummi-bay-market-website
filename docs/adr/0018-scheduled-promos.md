@@ -316,3 +316,22 @@ refuses it anyway.
   1200 × 630 Facebook graphic of this kind. The system is built for a 2400 × 1350 photograph with
   its subject in the centre strip (ADR 0023). Whether to allow a picture-only promo is the owner's
   call.
+
+**Where each promotion sits, shown (30 Sep 2026, at the owner's ask).** The owner reported that the
+ordering was "confusing or not working". The rules were being followed. Three settings together
+made the result hard to predict:
+- the Home page's own rows had been set to a single "2 across" row. A page's rows *replace* the
+  Site Settings rows rather than adding to them;
+- one of the three promotions was switched off;
+- a blank **Order** goes after every numbered one, so the one real promotion took the last place.
+
+Nothing in the rules changed. The CMS now says what it does:
+- **Promotion Status** draws the region as visitors see it right now, row by row, with the
+  headline in each place, for Home and for the other pages (`previewRows`);
+- each live promotion's line names its place, for example "row 2, left half" (`slotNames`, with
+  tests), and the list reads in the order the places fill;
+- **Order** is now labelled "Order (1 = first place)" and explains top to bottom, left to right.
+  The rows field says to list every row and that it replaces Site Settings.
+
+At the owner's direction, Home is set to one full-width row and then two halves, with three
+promotions running.
