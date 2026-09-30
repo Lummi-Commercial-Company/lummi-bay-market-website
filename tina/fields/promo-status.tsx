@@ -1,7 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useCMS, wrapFieldsWithMeta, type ScreenPlugin } from 'tinacms'
 import { pacificStamp } from '../../lib/pacific-time'
-import { describeAll, describePromo, rowsFrom, type PromoStatus, type StatusTag } from '../../lib/promo-status'
+import {
+  describeAll,
+  describePromo,
+  previewRows,
+  rowsFrom,
+  type PreviewRow,
+  type PromoStatus,
+  type StatusTag,
+} from '../../lib/promo-status'
 
 /**
  * Promotion status in the CMS (ADR 0018 §4): Live, Scheduled, Ended or Off,
@@ -119,9 +127,58 @@ interface QueryResult {
 
 type Row = ReturnType<typeof describeAll>[number]
 
+/**
+ * The promotion region drawn small: each row as visitors see it now, with the
+ * headline in each place. Answers "what goes where" without opening the site.
+ */
+function LayoutPreview({ title, note, rows }: { title: string; note: string; rows: PreviewRow[] }) {
+  return (
+    <section style={{ margin: '0 0 22px' }}>
+      <h3 style={{ fontSize: 16, margin: '0 0 2px', color: '#1f2937' }}>{title}</h3>
+      <p style={{ margin: '0 0 8px', fontSize: 13, color: '#4b5563' }}>{note}</p>
+      {rows.length === 0 ? (
+        <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>Nothing is showing here right now.</p>
+      ) : (
+        <div style={{ display: 'grid', gap: 6, maxWidth: 640 }}>
+          {rows.map((row, r) => (
+            <div key={r} style={{ display: 'grid', gridTemplateColumns: '64px repeat(12, 1fr)', gap: 6, alignItems: 'stretch' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#4b5563', alignSelf: 'center' }}>Row {r + 1}</div>
+              {row.items.map((item, i) => (
+                <a
+                  key={item.id}
+                  href={`#/collections/edit/promos/${item.id.replace(/\.mdx?$/, '').split('/').map(encodeURIComponent).join('/')}`}
+                  style={{
+                    gridColumn: `span ${row.spans[i]}`,
+                    background: '#e8eef7',
+                    border: '1px solid #b9c8de',
+                    borderRadius: 6,
+                    padding: '10px 8px',
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: '#1C4E8F',
+                    textAlign: 'center',
+                    minHeight: 44,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflowWrap: 'anywhere',
+                  }}
+                >
+                  {item.headline}
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  )
+}
+
 function PromotionStatus() {
   const cms = useCMS()
   const [rows, setRows] = useState<Row[] | null>(null)
+  const [preview, setPreview] = useState<{ home: PreviewRow[]; pages: PreviewRow[] } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [checkedAt, setCheckedAt] = useState('')
 
@@ -136,22 +193,19 @@ function PromotionStatus() {
       const home = data.mainPagesConnection.edges.find((e) => e.node._sys.filename === liveMain)?.node._values
       const pageRows = rowsFrom(settings.promoRows)
       const now = pacificStamp(new Date())
-      setRows(
-        describeAll(
-          // The path inside Promotions, folder and all, so a promotion kept in a
-          // folder opens from here too. The CMS's own folder placeholder
-          // (.gitkeep) is not a promotion.
-          data.promosConnection.edges
-            .filter((e) => !e.node._sys.filename.startsWith('.'))
-            .map((e) => ({ id: e.node._sys.relativePath, data: e.node._values })),
-          now,
-          {
-            offerPages: new Set(data.infoPagesConnection.edges.map((e) => e.node._sys.filename)),
-            homeRows: rowsFrom(home?.promoRows, pageRows),
-            pageRows,
-          }
-        )
-      )
+      // The path inside Promotions, folder and all, so a promotion kept in a
+      // folder opens from here too. The CMS's own folder placeholder
+      // (.gitkeep) is not a promotion.
+      const docs = data.promosConnection.edges
+        .filter((e) => !e.node._sys.filename.startsWith('.'))
+        .map((e) => ({ id: e.node._sys.relativePath, data: e.node._values }))
+      const offerPages = new Set(data.infoPagesConnection.edges.map((e) => e.node._sys.filename))
+      const homeRows = rowsFrom(home?.promoRows, pageRows)
+      setRows(describeAll(docs, now, { offerPages, homeRows, pageRows }))
+      setPreview({
+        home: previewRows(docs, now, homeRows, 'home', offerPages),
+        pages: previewRows(docs, now, pageRows, 'all-interior', offerPages),
+      })
       setCheckedAt(new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }))
     } catch {
       setError('The promotions could not be loaded just now. Try again in a moment.')
@@ -180,6 +234,20 @@ function PromotionStatus() {
         </button>
       </p>
       {error ? <p style={{ color: '#b42318' }}>{error}</p> : null}
+      {preview ? (
+        <>
+          <LayoutPreview
+            title="Home page, right now"
+            note='Rows come from the Home page (Home Page(s) → "Promotion rows on this page"), or from Site Settings if it has none. Places fill top to bottom, left to right, by "Order": 1 first. Promotions with no Order number go after the numbered ones.'
+            rows={preview.home}
+          />
+          <LayoutPreview
+            title="Every page except Home, right now"
+            note="Rows come from Site Settings → Promotion rows. A page with its own rows, or promotions chosen for it, can differ."
+            rows={preview.pages}
+          />
+        </>
+      ) : null}
       {rows === null && !error ? <p>Loading…</p> : null}
       {rows?.length === 0 ? <p>No promotions yet. Add one under Promo Pages.</p> : null}
       {rows?.length ? (

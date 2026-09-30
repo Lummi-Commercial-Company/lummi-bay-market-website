@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { formatUsDay, isWithinWindow, parseWhen, toStoreDay } from './pacific-time.ts'
+import {
+  calendarDay,
+  formatUsDay,
+  formatUsTime,
+  isWithinWindow,
+  parseWhen,
+  toStoreDay,
+  withCalendarDay,
+} from './pacific-time.ts'
 
 /**
  * Staff type dates as MM/DD/YYYY (owner's direction, 30 Sep 2026). Every date
@@ -42,4 +50,22 @@ test('a temporary-hours window typed as MM/DD/YYYY is inclusive at both ends', (
 test('formatUsDay shows the house format', () => {
   assert.equal(formatUsDay('2026-10-05'), '10/05/2026')
   assert.equal(formatUsDay('10/05/2026'), null, 'it formats the internal form only')
+})
+
+test('the CMS calendar and the typed box agree', () => {
+  assert.equal(calendarDay('10/05/2026'), '2026-10-05')
+  assert.equal(calendarDay('10/05/2026 12:00 PM'), '2026-10-05')
+  assert.equal(calendarDay('2026-10-05'), '2026-10-05', 'an older saved date still opens the calendar on it')
+  assert.equal(calendarDay('not a date'), '')
+  assert.equal(calendarDay(undefined), '')
+
+  assert.equal(withCalendarDay('', '2026-12-24'), '12/24/2026')
+  assert.equal(withCalendarDay('10/05/2026 12:00 PM', '2026-10-31'), '10/31/2026 12:00 PM', 'a typed time is kept')
+  assert.equal(withCalendarDay('10/05/2026 5pm', '2026-10-31'), '10/31/2026 5:00 PM')
+  assert.equal(withCalendarDay('10/05/2026 12:00 PM', '2026-10-31', false), '10/31/2026', 'date-only fields drop it')
+  assert.equal(withCalendarDay('10/05/2026', ''), '10/05/2026', 'clearing the calendar leaves the box alone')
+
+  assert.equal(formatUsTime('00:00'), '12:00 AM')
+  assert.equal(formatUsTime('13:05'), '1:05 PM')
+  assert.equal(formatUsTime('24:00'), null)
 })

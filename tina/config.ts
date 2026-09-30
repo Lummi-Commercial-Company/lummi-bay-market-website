@@ -3,6 +3,7 @@ import type { Collection, Template, TinaField } from 'tinacms'
 import { MOTIF_LIMITS } from '../lib/motif-check'
 import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
 import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
+import { DateField, DateTimeField } from './fields/date-field'
 import { HeadlineField } from './fields/promo-status'
 import { RichTextWithLinksField } from './fields/rich-text-links'
 import { arrangeSiteMenu } from './fields/site-menu'
@@ -91,7 +92,7 @@ const hoursOverridesField: TinaField = {
       label: 'First day (MM/DD/YYYY)',
       description: 'The first whole day these hours apply, Pacific time. For example 12/24/2026.',
       required: true,
-      ui: { validate: dateOnly },
+      ui: { component: DateField, validate: dateOnly },
     },
     {
       type: 'string',
@@ -100,7 +101,7 @@ const hoursOverridesField: TinaField = {
       description:
         'The last whole day these hours apply, Pacific time, for example 12/26/2026. Required — without an end date the temporary hours would never go away on their own.',
       required: true,
-      ui: { validate: dateOnly },
+      ui: { component: DateField, validate: dateOnly },
     },
   ],
 }
@@ -565,7 +566,7 @@ function priceFields({ includeRegular = true } = {}): TinaField[] {
       label: 'Last changed (MM/DD/YYYY)',
       description:
         'Shown to customers next to the prices, for example 09/29/2026. Update it whenever you change a price here.',
-      ui: { validate: dateOnly },
+      ui: { component: DateField, validate: dateOnly },
     }
   )
   return fields
@@ -632,7 +633,7 @@ const promoRowsField = (label: string, description: string): TinaField => ({
 
 const pageRowsField = promoRowsField(
   'Promotion rows on this page',
-  `Leave empty to use the rows in Site settings. Up to ${MAX_PROMO_ROWS} rows; promotions fill them in order, and a row with nothing running does not show.`
+  `List every row, top to bottom — for one full-width row then two halves, add two rows: "1 across — full width", then "2 across — halves". These replace the rows in Site Settings for this page; leave empty to use those instead. Up to ${MAX_PROMO_ROWS} rows. Promotions fill them by "Order", and a row with nothing running does not show.`
 )
 
 const pages: Collection = {
@@ -818,7 +819,7 @@ const promos: Collection = {
       label: 'Starts (MM/DD/YYYY)',
       description:
         'A date like 10/03/2026, or a date and time like 10/03/2026 6:00 AM. Pacific time. Leave blank to start straight away.',
-      ui: { validate: dateOrDateTime },
+      ui: { component: DateTimeField, validate: dateOrDateTime },
     },
     {
       type: 'string',
@@ -826,7 +827,7 @@ const promos: Collection = {
       label: 'Ends (MM/DD/YYYY)',
       description:
         'A date like 10/05/2026 runs to the end of that day; a date and time like 10/05/2026 12:00 PM stops at that minute. Pacific time. It comes down on its own. Leave blank to run until you turn it off.',
-      ui: { validate: dateOrDateTime },
+      ui: { component: DateTimeField, validate: dateOrDateTime },
     },
     {
       type: 'boolean',
@@ -890,9 +891,9 @@ const promos: Collection = {
     {
       type: 'number',
       name: 'priority',
-      label: 'Order',
+      label: 'Order (1 = first place)',
       description:
-        'Lower numbers take a place first when more are running than the page has room for. The rest wait and appear as others end.',
+        'Which place it takes. Places fill top to bottom, left to right: with one full-width row and then two halves, 1 is the full-width row, 2 is the left half, 3 the right half. Leave blank to go after every numbered one. If more are running than there are places, the highest numbers wait and appear as others end. Promotion Status shows where each one is.',
     },
   ],
 }
@@ -1130,7 +1131,7 @@ const settings: Collection = {
           name: 'updated',
           label: 'Last updated (MM/DD/YYYY)',
           description: 'For example 10/05/2026.',
-          ui: { validate: dateOnly },
+          ui: { component: DateField, validate: dateOnly },
         },
       ],
     },

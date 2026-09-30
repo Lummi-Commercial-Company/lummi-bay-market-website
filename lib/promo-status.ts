@@ -1,7 +1,8 @@
-import { formatUsDay, parseWhen } from './pacific-time.ts'
+import { formatUsDay, formatUsTime, parseWhen } from './pacific-time.ts'
 import {
   comparePromos,
   DEFAULT_PROMO_ROWS,
+  fillRows,
   isRowLayout,
   MAX_PROMO_ROWS,
   promoState,
@@ -41,11 +42,8 @@ function whenText(value: string | undefined): string {
   const when = value ? parseWhen(value) : null
   if (!when) return ''
   const day = formatUsDay(when.day) ?? when.day
-  if (!when.time) return day
-  const [h, m] = when.time.split(':').map(Number)
-  const hour = h ?? 0
-  const suffix = hour < 12 ? 'AM' : 'PM'
-  return `${day} ${hour % 12 === 0 ? 12 : hour % 12}:${String(m ?? 0).padStart(2, '0')} ${suffix}`
+  const time = formatUsTime(when.time)
+  return time ? `${day} ${time}` : day
 }
 
 /** The slots a set of rows holds. */
@@ -157,26 +155,92 @@ export function describeAll(
   const described = docs.map(({ id, data }) => {
     const link = typeof data.link === 'string' ? data.link.split('/').pop()?.replace(/\.mdx?$/, '') : undefined
     const exists = options.offerPages && link ? options.offerPages.has(link) : undefined
-    return { id, headline: String(data.headline ?? id), ...describePromo(id, data, now, exists) }
+    return { id, headline: String(data.headline ?? id), place: Number.POSITIVE_INFINITY, ...describePromo(id, data, now, exists) }
   })
 
-  const capacity = {
-    home: capacityOf(options.homeRows ?? DEFAULT_PROMO_ROWS),
-    'all-interior': capacityOf(options.pageRows ?? DEFAULT_PROMO_ROWS),
+  const layouts = {
+    home: options.homeRows ?? DEFAULT_PROMO_ROWS,
+    'all-interior': options.pageRows ?? DEFAULT_PROMO_ROWS,
   }
   for (const placement of ['home', 'all-interior'] as const) {
     const live = described
       .filter((d) => d.tag === 'live' && d.promo?.placement === placement)
       .sort((a, b) => comparePromos(a.promo as PromoDoc, b.promo as PromoDoc))
-    live.slice(capacity[placement]).forEach((d) => {
+    const places = slotNames(layouts[placement], live.length)
+    live.forEach((d, index) => {
+      // Home first, then the other pages; within each, the order places fill.
+      d.place = (placement === 'home' ? 0 : 1000) + index
+      const place = places[index]
+      if (place) {
+        // Where exactly: the question staff actually ask (30 Sep 2026).
+        d.detail = d.detail.replace(/\.$/, ` — ${place}.`)
+        return
+      }
+      const room = capacityOf(layouts[placement])
       d.tag = 'waiting'
       d.label = 'Live — waiting'
-      d.detail = `Live, but ${WHERE[placement]} has room for ${capacity[placement]} and more are running. It appears when one ends, or give it a lower "Order" number, or add a row.`
+      d.detail = `Live, but ${WHERE[placement]} has room for ${room} and more are running. It appears when one ends, or give it a lower "Order" number, or add a row.`
     })
   }
 
   const rank: Record<StatusTag, number> = { live: 0, waiting: 1, scheduled: 2, problem: 3, off: 4, ended: 5 }
   return described
-    .sort((a, b) => rank[a.tag] - rank[b.tag] || a.headline.localeCompare(b.headline))
+    .sort((a, b) => rank[a.tag] - rank[b.tag] || a.place - b.place || a.headline.localeCompare(b.headline))
     .map(({ id, headline, tag, label, detail }) => ({ id, headline, status: { tag, label, detail } }))
+}
+
+const ACROSS: Record<number, string[]> = {
+  1: ['full width'],
+  2: ['left', 'right'],
+  3: ['left', 'middle', 'right'],
+  4: ['1st from left', '2nd from left', '3rd from left', '4th from left'],
+}
+const WIDTH: Record<number, string> = { 12: 'full width', 8: 'wide', 6: 'half', 4: 'third', 3: 'quarter' }
+
+/**
+ * Where each of `count` live promotions lands, in order: "row 1, full width",
+ * "row 2, left half". The same pouring the page does (fillRows), so a row
+ * holding fewer than it has room for re-divides here as it does there.
+ * Shorter than `count` when some are waiting for a place.
+ */
+export function slotNames(rows: RowLayout[], count: number): string[] {
+  const filled = fillRows(rows, Array.from({ length: count }, () => ({}) as PromoDoc))
+  return filled.flatMap((row, r) =>
+    row.spans.map((span, i) => {
+      const across = row.spans.length
+      if (across === 1) return `row ${r + 1}, full width`
+      const side = ACROSS[across]?.[i] ?? `${i + 1}`
+      return `row ${r + 1}, ${side} ${WIDTH[span] ?? ''}`.trim()
+    })
+  )
+}
+
+export interface PreviewRow {
+  spans: number[]
+  items: { id: string; headline: string }[]
+}
+
+/**
+ * A picture of the promotion region as visitors see it right now, row by row,
+ * for the Promotion Status screen. `placement` picks the Home page or "every
+ * page except home" (a page with no promotions of its own chosen for it).
+ */
+export function previewRows(
+  docs: { id: string; data: Record<string, unknown> }[],
+  now: string,
+  rows: RowLayout[],
+  placement: 'home' | 'all-interior',
+  offerPages?: Set<string>
+): PreviewRow[] {
+  const live = docs
+    .map(({ id, data }) => describePromo(id, data, now).promo)
+    .filter((promo): promo is PromoDoc => Boolean(promo) && promo?.placement === placement)
+    // A promotion whose offer page is gone does not show (describePromo).
+    .filter((promo) => !offerPages || offerPages.has(promo.link))
+    .filter((promo) => promoState(promo, now) === 'live')
+    .sort(comparePromos)
+  return fillRows(rows, live).map((row) => ({
+    spans: row.spans,
+    items: row.promos.map((promo) => ({ id: promo.id, headline: promo.headline })),
+  }))
 }

@@ -119,6 +119,35 @@ export function parseWhen(value: string): { day: string; time?: string } | null 
   return { day, time: `${pad(hour)}:${pad(minute)}` }
 }
 
+/** 24-hour `HH:mm` → `h:mm AM` / `h:mm PM`, the way staff type it. */
+export function formatUsTime(time: string | null | undefined): string | null {
+  const match = time?.match(/^(\d{1,2}):(\d{2})$/)
+  if (!match) return null
+  const hour = Number(match[1])
+  if (hour > 23) return null
+  return `${hour % 12 === 0 ? 12 : hour % 12}:${match[2]} ${hour < 12 ? 'AM' : 'PM'}`
+}
+
+/**
+ * The CMS calendar button (tina/fields/date-field.tsx). The browser's own
+ * calendar speaks `YYYY-MM-DD`; staff read and type MM/DD/YYYY. These two
+ * translate, so the calendar and the typed box are the same field.
+ *
+ * `calendarDay`: what the calendar should open on — the typed date, or blank.
+ * `withCalendarDay`: the typed box after a day is picked. A time already
+ * typed after the date (`12:00 PM`) is kept when the field allows one.
+ */
+export function calendarDay(typed: unknown): string {
+  return typeof typed === 'string' ? (parseWhen(typed)?.day ?? '') : ''
+}
+
+export function withCalendarDay(typed: unknown, pickedDay: string, keepTime = true): string {
+  const day = formatUsDay(pickedDay)
+  if (!day) return typeof typed === 'string' ? typed : ''
+  const time = keepTime && typeof typed === 'string' ? formatUsTime(parseWhen(typed)?.time) : null
+  return time ? `${day} ${time}` : day
+}
+
 /**
  * Is `day` inside [startsAt, endsAt]? Both ends inclusive; either end may be
  * omitted, which means "open on that side".
