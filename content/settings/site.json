@@ -1,12 +1,5 @@
 {
   "$comment": "Seed values supplied by the client 17 Sep 2026; the Play Store URL confirmed by the client 17 Sep 2026. See content/settings/README.md before editing or before wiring this into the TinaCMS schema.",
-  "alerts": [
-    {
-      "active": true,
-      "headline": "Our 6th Annivesary Celebration Starts Oct. 1",
-      "detail": "Play the game. Win prizes. Come in for special deals."
-    }
-  ],
   "rewards": {
     "appStoreUrl": "https://apps.apple.com/us/app/lummi-bay-market/id6744988483",
     "playStoreUrl": "https://play.google.com/store/apps/details?id=com.rovertown.lummi"
@@ -79,7 +72,6 @@
     "embedCode": "",
     "stillImage": ""
   },
-  "liveMainPage": "content/main-pages/home.mdx",
   "headerMotifs": {
     "show": true,
     "groups": [
@@ -99,13 +91,14 @@
             "file": "/uploads/motifs/placeholder-wave.svg"
           }
         ],
-        "strength": 14,
-        "scale": 86,
-        "spacing": 24,
-        "ink": "bone",
-        "repeat": true,
+        "strength": 12,
+        "scale": 50,
+        "spacing": 10,
+        "ink": "white",
+        "repeat": false,
         "live": true
       }
     ]
-  }
+  },
+  "liveMainPage": "content/main-pages/home.mdx"
 }
