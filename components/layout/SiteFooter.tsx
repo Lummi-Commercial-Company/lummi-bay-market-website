@@ -2,8 +2,10 @@ import { cacheLife } from 'next/cache'
 import Link from 'next/link'
 import styles from './SiteFooter.module.css'
 import { SocialRow } from './SocialRow'
+import { isExternalUrl } from '@/lib/footer-links'
 import { getLocations } from '@/lib/locations'
 import { getSettings } from '@/lib/settings'
+import type { FooterColumn, FooterLink } from '@/lib/types'
 
 /**
  * The site footer — the four headed columns of the approved page templates
@@ -54,6 +56,40 @@ function ExternalGlyph() {
 }
 
 /**
+ * The links staff added to one column in Site settings, after the column's own
+ * links. They have already been checked (lib/footer-links): nothing that names
+ * another Lummi business, and no address that could run code, reaches here.
+ */
+function ExtraLinks({ links, column }: { links: FooterLink[]; column: FooterColumn }) {
+  return links
+    .filter((link) => link.column === column)
+    .map((link) =>
+      isExternalUrl(link.url) ? (
+        <a
+          key={`${link.label}|${link.url}`}
+          className={styles.link}
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {link.label}
+          <ExternalGlyph />
+          <span className="visually-hidden">(opens in a new tab)</span>
+        </a>
+      ) : link.url.startsWith('/') ? (
+        <Link key={`${link.label}|${link.url}`} className={styles.link} href={link.url}>
+          {link.label}
+        </Link>
+      ) : (
+        // tel: and mailto: — ordinary links, no new tab.
+        <a key={`${link.label}|${link.url}`} className={styles.link} href={link.url}>
+          {link.label}
+        </a>
+      )
+    )
+}
+
+/**
  * The year for the © line. Cached, because reading the clock in a prerendered
  * shell is exactly what partial prerendering forbids; the site rebuilds on
  * every content push, so the value is never more than one deploy old.
@@ -70,7 +106,8 @@ export async function SiteFooter() {
     getLocations(),
     copyrightYear(),
   ])
-  const { careersUrl, lummiCommercialCompaniesUrl } = settings.footer
+  const { careersUrl, lummiCommercialCompaniesUrl, extraLinks } = settings.footer
+  const hasWork = Boolean(careersUrl) || extraLinks.some((link) => link.column === 'work')
 
   // "Visit" is derived, never typed: the Locations in site order, then the
   // Truck Stop — the same places the Locations index lists (ADR 0009).
@@ -96,6 +133,7 @@ export async function SiteFooter() {
             <Link className={styles.link} href="/contact">
               Contact
             </Link>
+            <ExtraLinks links={extraLinks} column="about" />
           </div>
 
           <div className={styles.group}>
@@ -105,6 +143,7 @@ export async function SiteFooter() {
                 {item.label}
               </Link>
             ))}
+            <ExtraLinks links={extraLinks} column="visit" />
           </div>
 
           <div className={styles.group}>
@@ -112,6 +151,7 @@ export async function SiteFooter() {
             <Link className={styles.link} href="/rewards">
               Get the app
             </Link>
+            <ExtraLinks links={extraLinks} column="rewards" />
           </div>
 
           {/*
@@ -119,22 +159,25 @@ export async function SiteFooter() {
             No company name, no logo, no tooltip naming the destination — the
             destination is editable in the CMS and the label must not describe
             it (ADR 0001, amended 17 Sep 2026). The arrow says "you are leaving
-            this site"; it does not say where to. No URL, no column: a heading
-            over nothing reads as a failed load.
+            this site"; it does not say where to. No links at all, no column: a
+            heading over nothing reads as a failed load.
           */}
-          {careersUrl ? (
+          {hasWork ? (
             <div className={styles.group}>
               <h2 className={styles.head}>Work with us</h2>
-              <a
-                className={styles.link}
-                href={careersUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Careers
-                <ExternalGlyph />
-                <span className="visually-hidden">(opens in a new tab)</span>
-              </a>
+              {careersUrl ? (
+                <a
+                  className={styles.link}
+                  href={careersUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Careers
+                  <ExternalGlyph />
+                  <span className="visually-hidden">(opens in a new tab)</span>
+                </a>
+              ) : null}
+              <ExtraLinks links={extraLinks} column="work" />
             </div>
           ) : null}
         </nav>

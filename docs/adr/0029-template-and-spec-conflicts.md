@@ -77,3 +77,19 @@ links touching one another; that is a drawing shortcut, not a spec, and the rows
   product control in the header.
 - **The template's smaller logo as the fix.** It frees about 17px, which fixes 414px and up
   and none of the common phones below it.
+
+## Amendment — staff can add footer links, 30 Sep 2026
+
+Asked how footer links are added later, the owner chose an editable list over routing every new
+link through an engineer. **Site settings → Footer links → Extra footer links**: each row is link
+text, an address and a column, and appears after that column's own links. The four columns and
+their fixed links are unchanged.
+
+An open list is the one place staff can put arbitrary text in the footer, which puts the hard rule
+on other Lummi companies within an editor's reach. So the site enforces it rather than the form
+merely warning: a row whose **text** names another Lummi business (Silver Reef, Loomis Trail,
+Salish Village, LCC) is not shown, and the build log says why. It reads the text, never the
+address, because the rule governs mentions, not destinations (ADR 0001, amended 17 Sep 2026) — the
+same reason "Careers" may point at silverreefcasino.com. Addresses are limited to a page on this
+site or an `https://`, `mailto:` or `tel:` link, so a pasted `javascript:` link cannot run. Both
+checks live in `lib/footer-links.ts`, with tests.

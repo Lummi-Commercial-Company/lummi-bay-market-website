@@ -112,7 +112,12 @@ export interface PageBackdropSettings {
 
 export interface SiteSettings {
   rewards: { appStoreUrl: string; playStoreUrl: string }
-  footer: { careersUrl: string; lummiCommercialCompaniesUrl: string }
+  footer: {
+    careersUrl: string
+    lummiCommercialCompaniesUrl: string
+    /** Links staff add themselves, each placed under one column (ADR 0029). */
+    extraLinks: FooterLink[]
+  }
   social: SocialLink[]
   map: { embedCode: string; stillImage: string }
   siteAlert: SiteAlertDoc
@@ -163,6 +168,16 @@ export type PageBlock =
   | { _template: 'callout'; heading?: string; text?: string }
   | { _template: 'ctaRow'; buttons: PageCtaButton[] }
   | { _template: 'faq'; heading?: string; items: PageFaqItem[] }
+
+/** The four footer columns, by key (ADR 0029). */
+export type FooterColumn = 'about' | 'visit' | 'rewards' | 'work'
+
+/** A footer link an editor added in Site settings. */
+export interface FooterLink {
+  label: string
+  url: string
+  column: FooterColumn
+}
 
 export interface PageDoc {
   /** The file name without its extension. This IS the web address. */

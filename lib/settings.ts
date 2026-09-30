@@ -1,6 +1,7 @@
 import { cacheLife, cacheTag } from 'next/cache'
 import { CACHE_TAGS } from './cache-tags'
 import { readContentJson } from './content'
+import { asFooterLinks } from './footer-links'
 import type { SiteSettings, SocialLink } from './types'
 
 /**
@@ -26,7 +27,7 @@ const SOCIAL_ORDER = ['facebook', 'instagram', 'yelp']
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   rewards: { appStoreUrl: '', playStoreUrl: '' },
-  footer: { careersUrl: '', lummiCommercialCompaniesUrl: '' },
+  footer: { careersUrl: '', lummiCommercialCompaniesUrl: '', extraLinks: [] },
   social: [],
   map: { embedCode: '', stillImage: '' },
   siteAlert: { active: false, headline: '' },
@@ -76,6 +77,9 @@ export async function getSettings(): Promise<SiteSettings> {
     footer: {
       careersUrl: String(footer.careersUrl ?? ''),
       lummiCommercialCompaniesUrl: String(footer.lummiCommercialCompaniesUrl ?? ''),
+      // Checked on the way in: a link naming another Lummi business, or with
+      // an address that could run code, is dropped and logged (footer-links).
+      extraLinks: asFooterLinks(footer.extraLinks),
     },
     social: asSocial(raw.social),
     map: {
