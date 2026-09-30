@@ -100,7 +100,10 @@ Footer: **four headed columns**, as the approved templates draw them (ADR 0029) 
 corporate/enterprise content stays out; Contact), **Visit** (the three Locations and the Truck
 Stop, derived from the Location data), **Rewards** (Get the app → `/rewards`) and **Work with
 us** (Careers, an editable link). **No "Salish Village" link**, though the template draws one: it
-is an LCC development, so it falls under the hard rule on other Lummi companies. Below those
+is an LCC development, so it falls under the hard rule on other Lummi companies. **Staff can add
+links** to any of the four columns in Site settings → Footer links → Extra footer links (added 30 Sep
+2026, ADR 0029); the site refuses to show one whose text names another Lummi business, or whose
+address could run code, so the hard rule holds even if one is saved. Below those
 columns and above the base row sits a **social row** — one icon-and-link per account, from a settings list,
 rendering nothing while the list is empty. **Links only, never embeds**: a feed, a follow button or
 an official share widget loads third-party code and sets cookies before anyone clicks (ADR 0028).

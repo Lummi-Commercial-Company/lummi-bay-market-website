@@ -33,6 +33,14 @@ another Lummi company. The rule the build keeps from it: **the link text stays "
 company name, no logo, no "at Silver Reef" — because that is the whole of what makes it a
 destination.
 
+**`footer.extraLinks`** — links staff add to the footer themselves, added 30 Sep 2026 (ADR 0029).
+Each row is link text, an address, and one of the four columns (About, Visit, Rewards, Work with us);
+it appears after that column's own links. Two kinds of row are **not shown**, and the build log says
+why: text that names another Lummi business (Silver Reef, Loomis Trail, Salish Village, LCC — the
+hard rule allows only the single "Lummi Commercial Companies" link), and an address that is not a
+page here (starting `/`) or an `https://`, `mailto:` or `tel:` link. The rule reads the *text*, not
+the address: a link labelled "Jobs" may point anywhere, as "Careers" does. Empty by default.
+
 **`social`** — the three accounts supplied, in render order. Facebook and Instagram are tended
 accounts; Yelp is a review listing and is ordered last for that reason (ADR 0028, amended). The
 empty list renders nothing, which is the behaviour to keep: never a placeholder icon pointing at

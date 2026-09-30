@@ -934,6 +934,44 @@ const settings: Collection = {
           label: 'Lummi Commercial Companies link',
           description: 'The one place on this site that points to the wider group of companies.',
         },
+        {
+          type: 'object',
+          name: 'extraLinks',
+          label: 'Extra footer links',
+          description:
+            'Add a link to one of the four footer columns. It appears under that column, after the links already there. Do not name Silver Reef, Loomis Trail, Salish Village or any other Lummi business in the link text: other Lummi companies appear on this site only as the one "Lummi Commercial Companies" link, and a link that names one will not be shown.',
+          list: true,
+          ui: { itemProps: (item) => ({ label: item?.label || 'New link' }) },
+          fields: [
+            {
+              type: 'string',
+              name: 'label',
+              label: 'Link text',
+              description: 'What visitors read, for example: Gift cards.',
+              required: true,
+            },
+            {
+              type: 'string',
+              name: 'url',
+              label: 'Where it goes',
+              description:
+                'A page on this site starting with / (for example /rewards), or a full address starting with https://. Outside addresses open in a new tab.',
+              required: true,
+            },
+            {
+              type: 'string',
+              name: 'column',
+              label: 'Which column',
+              options: [
+                { value: 'about', label: 'About' },
+                { value: 'visit', label: 'Visit' },
+                { value: 'rewards', label: 'Rewards' },
+                { value: 'work', label: 'Work with us' },
+              ],
+              required: true,
+            },
+          ],
+        },
       ],
     },
     {
@@ -941,7 +979,7 @@ const settings: Collection = {
       name: 'social',
       label: 'Social accounts',
       description:
-        'Links only — a link, never an embedded feed or follow button. Embedded widgets load code from the social network and set cookies before anyone clicks, which would make the "No cookies" line in the footer untrue. Leave the list empty and the row does not appear at all.',
+        'Links only — a link, never an embedded feed or follow button. Embedded widgets load code from the social network and set cookies before anyone clicks, which would make the privacy policy’s "this site sets no cookies" untrue. Leave the list empty and the row does not appear at all.',
       list: true,
       ui: { itemProps: (item) => ({ label: item?.label ?? 'New account' }) },
       fields: [
