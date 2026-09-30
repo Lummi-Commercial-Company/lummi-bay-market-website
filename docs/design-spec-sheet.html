@@ -124,6 +124,9 @@ td b{font-weight:600}
 }
 
 /* ---------- proportion previews ---------- */
+.guide{margin:24px 0 0}
+.guide img{display:block; width:100%; height:auto; border-radius:8px; border:1px solid var(--line, rgba(0,0,0,.15))}
+.guide figcaption{font-size:.875rem; color:var(--ink-soft); margin-top:8px; max-width:70ch}
 .props{display:flex; flex-wrap:wrap; gap:18px; margin:22px 0 0; align-items:flex-end}
 .prop{flex:0 0 auto; max-width:100%}
 .prop .box{
@@ -683,8 +686,14 @@ footer{
   <p class="tnote"><b>All five crops were signed off on 16 September 2026</b> and recorded in
   ADR 0023 — build to them. What was already locked is the column ladder and a 150px minimum slot
   height; the crops clear that floor and hold every row height inside a consistent band
-  (158–258px on the built site). <b>Every size is covered by the one 2400 × 1350 master</b> — the
-  2× column is there to show it is, not as a list of files to make. The tablet crop (5:2) was added
+  (158–258px on the built site). <b>The slot widths are on-screen sizes, not file sizes.</b> A
+  sharp (retina) screen draws two real pixels for every on-screen one, so the 1168 × 234
+  full-width slot needs 2336 × 468 real pixels — which is why the file is 2400 wide. And because
+  every slot is a horizontal strip across the <em>whole</em> width of the file, differing only in
+  how many rows it keeps, the file has to be as tall as the tallest strip: the 16:9 quarter and
+  phone slots keep all 1350 rows, while the full-width slot keeps only the middle 480. So one
+  2400 × 1350 file holds every slot at 2× — the 2× column shows that, it is not a list of files
+  to make. The tablet crop (5:2) was added
   when the site was built, so a tablet held upright does not get a 16:9 slot 480px tall; it sits
   between the ladder's own ratios and cuts only top and bottom, like every other crop.
   <b>In a mixed row</b> (wide + narrow, or lead + two) the slots keep their own ratios, as the
@@ -700,6 +709,16 @@ footer{
     <div class="prop"><div class="box" style="width:150px;aspect-ratio:5/2">5:2</div><div class="cap"><b>Tablet, any row</b>up to 868 wide</div></div>
     <div class="prop"><div class="box" style="width:96px;aspect-ratio:16/9">16:9</div><div class="cap"><b>Phone, any row</b>343 × 193</div></div>
   </div>
+
+  <figure class="guide">
+    <img src="design/promo-crop-guide.png" width="2400" height="1350"
+      alt="The 2400 by 1350 promo file with each slot's crop drawn over it as coloured lines: 16:9 uses the whole file, 2:1 rows 75 to 1275, 5:2 rows 195 to 1155, 3:1 rows 275 to 1075, 3.6:1 rows 342 to 1008, and 5:1, the must-see band, rows 435 to 915. Hatched areas mark where the words sit.">
+    <figcaption><b>The crop guide, at the file's own size.</b> Every slot is a strip across the full
+    width of one 2400 × 1350 file; each colour marks the rows that slot keeps, with its on-screen
+    size. Hatching marks where the words sit. To use it as a guide layer, place
+    <code>docs/design/promo-crop-guide-overlay.png</code> (transparent) over your artwork, or open
+    <code>promo-crop-guide.svg</code> and delete its background group.</figcaption>
+  </figure>
 
   <div class="note">
     <h3>A row re-divides when a promo expires, so the art gets re-cropped</h3>
