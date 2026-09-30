@@ -101,7 +101,7 @@ export const HeadlineField = wrapFieldsWithMeta(Headline as never) as never
 /* ---------- the status screen ------------------------------------------- */
 
 const QUERY = `query PromotionStatus {
-  promosConnection(first: 200) { edges { node { ... on Promos { _sys { filename } _values } } } }
+  promosConnection(first: 200) { edges { node { ... on Promos { _sys { filename relativePath } _values } } } }
   infoPagesConnection(first: 500) { edges { node { ... on InfoPages { _sys { filename } } } } }
   mainPagesConnection(first: 50) { edges { node { ... on MainPages { _sys { filename } _values } } } }
   settings(relativePath: "site.json") { ... on Settings { _values } }
@@ -111,7 +111,7 @@ interface Edge<T> {
   node: T
 }
 interface QueryResult {
-  promosConnection: { edges: Edge<{ _sys: { filename: string }; _values: Record<string, unknown> }>[] }
+  promosConnection: { edges: Edge<{ _sys: { filename: string; relativePath: string }; _values: Record<string, unknown> }>[] }
   infoPagesConnection: { edges: Edge<{ _sys: { filename: string } }>[] }
   mainPagesConnection: { edges: Edge<{ _sys: { filename: string }; _values: Record<string, unknown> }>[] }
   settings: { _values: Record<string, unknown> }
@@ -138,7 +138,12 @@ function PromotionStatus() {
       const now = pacificStamp(new Date())
       setRows(
         describeAll(
-          data.promosConnection.edges.map((e) => ({ id: e.node._sys.filename, data: e.node._values })),
+          // The path inside Promotions, folder and all, so a promotion kept in a
+          // folder opens from here too. The CMS's own folder placeholder
+          // (.gitkeep) is not a promotion.
+          data.promosConnection.edges
+            .filter((e) => !e.node._sys.filename.startsWith('.'))
+            .map((e) => ({ id: e.node._sys.relativePath, data: e.node._values })),
           now,
           {
             offerPages: new Set(data.infoPagesConnection.edges.map((e) => e.node._sys.filename)),
@@ -196,7 +201,7 @@ function PromotionStatus() {
               </div>
               <div>
                 <a
-                  href={`#/collections/edit/promos/${encodeURIComponent(row.id.replace(/\.mdx?$/, ''))}`}
+                  href={`#/collections/edit/promos/${row.id.replace(/\.mdx?$/, '').split('/').map(encodeURIComponent).join('/')}`}
                   style={{ fontSize: 15, fontWeight: 600, color: '#1C4E8F' }}
                 >
                   {row.headline}
