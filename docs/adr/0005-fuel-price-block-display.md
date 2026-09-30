@@ -106,7 +106,9 @@ itself re-enabled, so the full-width sections beneath stay clickable through it.
 1 / -1` does not do this: with no explicit `grid-template-rows`, `-1` resolves to the end of
 the *explicit* grid — line 1 — and the page silently loses half its height. `1 / span 2`.)
 The block does not float over content — the promo is left-aligned in the content column and its right edge lands
-exactly **14px** from the block, so the two cannot collide at any width. On a phone the block is
+exactly **14px** from the block, so the two cannot collide at any width. *(Superseded for the promo region by ADR
+0018's revision and its 30 Sep 2026 amendment: the region runs full width under the two-column top,
+starts below the block, and the sticky block rides over it on scroll, as the approved proof draws it.)* On a phone the block is
 in flow, full width, above the promo.
 
 **Condensing must not move the page — at any width.** A block that shrinks drags whatever

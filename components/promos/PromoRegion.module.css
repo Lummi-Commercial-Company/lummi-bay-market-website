@@ -1,0 +1,155 @@
+/* ===========================================================================
+   The promo region — ADR 0007, ADR 0018, ADR 0023.
+   Card metrics are the approved ones (docs/proofs/promo-system.html and
+   promo-crop-ladder.html): padding 13/14, eyebrow 8.5px, headline 17px with a
+   4px lead, button 9px in a 6/11 pill with a 9px lead — an 89px text block
+   in every slot. Class names never say ad / advert / banner / sponsored.
+   =========================================================================== */
+
+.region {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* A direct child of the page grid, across both columns: under the title and
+   the price block, never inside the narrow column (ADR 0018, Revision). */
+.atTop {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin-top: var(--sp-5);
+}
+
+.atEnd {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  margin-top: var(--sp-6);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.promo {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--lb-navy-deep);
+  text-decoration: none;
+  color: var(--lb-bone);
+  /* A phone: every row is one column, every slot 16:9 — the master uncropped. */
+  aspect-ratio: 16 / 9;
+}
+
+.img {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* The text block sits on the bottom of the picture. The scrim is drawn
+   behind the text only, fading out above it, so the rest of the frame stays
+   clear. Its floor is 80% navy-deep where any text sits: over a white
+   photograph that is 5.6:1 for bone text, where the proof's left-to-right
+   scrim fell to 3.4:1 under the end of a long headline. Contrast, not
+   geometry — the ADR 0023 "busy image" note. */
+.tx {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px 14px 13px;
+  background: linear-gradient(
+    to top,
+    rgb(20 57 107 / 0.9) 0,
+    rgb(20 57 107 / 0.8) calc(100% - 26px),
+    rgb(20 57 107 / 0) 100%
+  );
+}
+
+/* Bone, not the proof's teal: teal on the scrim measured 2.5:1 over a light
+   photograph, at 8.5px. */
+.pe {
+  font: 600 8.5px/1 var(--ff-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lb-bone);
+  margin-bottom: 4px;
+}
+
+.hd {
+  font: 700 0.9375rem/1.2 var(--ff-display);
+  letter-spacing: -0.01em;
+  color: var(--lb-bone);
+}
+
+/* Cedar with a bone ring — the recorded exception the Rewards pill and the
+   Truck Stop button already use (ADR 0014): cedar against navy is 2.43:1, so
+   the ring carries the control's boundary. */
+.cta {
+  margin-top: 9px;
+  padding: 6px 11px;
+  border-radius: 99px;
+  background: var(--lb-cedar);
+  color: #fff;
+  box-shadow: 0 0 0 1.5px var(--lb-bone);
+  font: 600 9px/1 var(--ff-body);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.promo:hover .hd,
+.promo:focus-visible .hd {
+  text-decoration: underline;
+}
+
+@media (prefers-contrast: more) {
+  .tx {
+    background: rgb(20 57 107 / 0.96);
+    padding-top: 13px;
+  }
+}
+
+/* A tablet held upright: still one column, but a 16:9 slot 800px wide is a
+   wall. 5:2 sits inside the ladder's range and is a clean crop of the master. */
+@media (min-width: 560px) {
+  .promo {
+    aspect-ratio: 5 / 2;
+  }
+}
+
+/* ---- Desktop: the 12-column ladder, one ratio per rung (ADR 0023) ------- */
+@media (min-width: 900px) {
+  .region,
+  .row {
+    gap: 14px;
+  }
+
+  .atTop {
+    margin-top: var(--sp-6);
+  }
+
+  .row {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .promo {
+    grid-column: span var(--span, 12);
+    /* The locked floor. A quarter is the slot it binds. */
+    min-height: 150px;
+  }
+
+  .s12 { aspect-ratio: 5 / 1; }
+  .s8  { aspect-ratio: 3 / 1; }
+  .s6  { aspect-ratio: 3 / 1; }
+  .s4  { aspect-ratio: 2 / 1; }
+  .s3  { aspect-ratio: 16 / 9; }
+
+  .hd {
+    font-size: 1.0625rem;
+  }
+}

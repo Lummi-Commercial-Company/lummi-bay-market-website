@@ -2,6 +2,8 @@ import { cacheLife, cacheTag } from 'next/cache'
 import { CACHE_TAGS } from './cache-tags'
 import { readContentJson } from './content'
 import { asFooterLinks } from './footer-links'
+import { asRowLayouts } from './promo-rows'
+import { DEFAULT_PROMO_ROWS } from './promos'
 import type { SiteSettings, SocialLink } from './types'
 
 /**
@@ -32,6 +34,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   map: { embedCode: '', stillImage: '' },
   siteAlert: { active: false, headline: '' },
   backdrop: { enabled: false, opacity: 10, side: 'left', height: 100 },
+  promoRows: DEFAULT_PROMO_ROWS,
 }
 
 function asSocial(value: unknown): SocialLink[] {
@@ -103,5 +106,9 @@ export async function getSettings(): Promise<SiteSettings> {
       crop: backdrop.crop === 'narrow' ? 'narrow' : 'full',
     },
     liveMainPage: raw.liveMainPage ? String(raw.liveMainPage) : undefined,
+    // Never empty: a site with no rows would hold live promos nobody can see.
+    promoRows: asRowLayouts(raw.promoRows).length
+      ? asRowLayouts(raw.promoRows)
+      : DEFAULT_PROMO_ROWS,
   }
 }

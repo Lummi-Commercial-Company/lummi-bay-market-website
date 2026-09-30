@@ -5,7 +5,7 @@
  * DO NOT ADD `output: 'export'`.
  * ---------------------------------------------------------------------------
  * Static export looks harmless here: almost every page is prerendered and the
- * site is meant to be fully static-cacheable. It is not harmless. Three shipped
+ * site is meant to be fully static-cacheable. It is not harmless. Four shipped
  * features need a server at request time, and a static export does not fail the
  * build when you remove it — the features simply never fire again, silently,
  * and nobody finds out until the day one of them matters:
@@ -24,6 +24,11 @@
  *      to the build date, which means wrong opening hours that still look like
  *      opening hours.
  *
+ *   4. Promotions are live per visitor against their date window, so an offer
+ *      that ends at noon is gone at noon with nothing scheduled. ADR 0018.
+ *      Export would show whatever was live at build time, for ever — expired
+ *      offers included, and offer pages indexed after they end.
+ *
  * Everything else stays prerendered. Keep it that way: add per-route caching,
  * not a global export.
  * ---------------------------------------------------------------------------
@@ -38,9 +43,9 @@ const nextConfig = {
    *
    * This is how the site is BOTH static and live. Every page shell — header,
    * footer, waterline, copy — is prerendered and served from the CDN, while the
-   * three things that must be current stream in per request inside their own
-   * <Suspense> boundaries: the fuel prices, the emergency notice and the hours
-   * override. Without it, one dynamic read makes the whole route dynamic and
+   * things that must be current stream in per request inside their own
+   * <Suspense> boundaries: the fuel prices, the emergency notice, the hours
+   * override and the promotions. Without it, one dynamic read makes the whole route dynamic and
    * the site stops being static-cacheable.
    */
   cacheComponents: true,

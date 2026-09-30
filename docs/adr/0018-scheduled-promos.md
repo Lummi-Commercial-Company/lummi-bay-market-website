@@ -223,3 +223,86 @@ re-divide on expiry, so there is no orphan gap to close.)* Widths came from the 
 live set is composed at request time and would not always sum to twelve. The rule made the final
 promo stretch to close the row. It worked, and it was a patch over the real problem: the width
 was on the wrong object.
+
+## Amendment — built, 30 Sep 2026
+
+The promo system is built. The rules are in `lib/promos.ts`, with tests; the region is
+`components/promos/PromoRegion.tsx`; offer pages are `app/info/[slug]/page.tsx`. The decisions
+below were taken while building it. None of them changes the model above.
+
+**Where the rows are set.** Site settings → **Promotion rows** is the default for every page. A
+general page or a home page version can set its own, which wins. With nothing set anywhere, the
+site uses one full-width row, then two halves, rather than no rows. "No rows" would mean a promo
+that is live and invisible, and nobody would know why. The proof drew the six-row cap as an
+editable setting. It is a constant here, because CLAUDE.md fixes it at six and a smaller number is
+simply a shorter list of rows.
+
+**Full width, measured.** The region is a direct child of the page grid, in its own row under the
+title and the price block, spanning both columns. Its right edge and the price block's are the
+same pixel (1217 at 1280). The grid gained a row for it (title · promos · sections), and the rail
+now spans `1 / span 3` so its sticky range is unchanged. Two consequences:
+
+- **Where a title column is shorter than the price block**, the region would start beside the
+  block and run under it. `/locations` does this: its title ends at 192px and the block at 216px.
+  When a region is present, the title column is given the block's height as a floor. That height
+  is measured (`RailMetrics` publishes `--rail-h`), not typed, because it follows the block's
+  content.
+- **On desktop the sticky block rides over the region's right-hand end while scrolling past it**,
+  as the approved proof draws it. The rail had to carry the block's z-index: sticky makes the
+  rail its own stacking context, and without it the region, which comes later in the source,
+  painted over the block.
+
+ADR 0005's sentence that "the promo is left-aligned in the content column", with its right edge
+14px from the block, predates this revision and is superseded by it.
+
+**Times, not just days.** `startsAt` and `endsAt` take a date (`2026-10-05`) or a date and time
+(`2026-10-05 12:00`), in Pacific time. A date alone starts at the beginning of the day and ends at
+the end of it, so "ends Sunday" still runs on Sunday. With a time, the promo ends at that minute.
+That is what the owner's "expires at noon" needs. A date the site cannot read keeps the promo
+**off** and logs why. Reading it as "no end date" would run the offer forever. **Running** left
+untouched counts as on; only turning it off pulls a promo.
+
+**Specific pages include Locations.** "Which locations" is its own list beside "Which pages".
+Tina builds one query for a reference that spans collections, and a Location's required
+`navLabel` collides with a page's optional one. The fixed routes (the Locations index, Truck Stop,
+Rewards, Fuel prices) take "Every page except home" and cannot be named individually.
+
+**"Show the promotions band"** on a general page lets in promos set to "Every page except home".
+A promo that names the page shows either way, so an editor who picks a page is never silently
+overruled by a checkbox on a different screen. On a page carrying the Location contact blocks
+(`/contact`) the region goes after the page's sections, as the Addendum above requires.
+
+**The text sits on a bottom scrim, and the eyebrow is bone.** The crop-ladder proof's left-to-right
+scrim fell to about 3.4:1 under the end of a long headline over a light photograph, and its teal
+eyebrow to about 2.5:1. The scrim is now drawn behind the text only, at no less than 80% navy-deep
+where any text sits, which gives 5.6:1 for bone. The geometry is unchanged: the same three fields
+and the same metrics. This is the "busy image" note in ADR 0023, taken before real art arrived.
+The button is cedar with a bone ring, the recorded exception ADR 0014 already makes.
+
+**Offer pages have three states, not two.**
+
+- **Live**: a promo pointing at the page is running.
+- **Not started**: a promo pointing at it is scheduled. The page says "Coming soon" and the start
+  date, and shows nothing of the offer, not even its title. It is `noindex`.
+- **Ended**: everything else, including an offer page no promo has ever pointed at. The page
+  keeps its address, says "This offer has ended", fades the picture, drops its buttons and
+  sections, leaves the sitemap and is `noindex`.
+
+The sitemap is rendered per request for this reason. An unknown `/info/` address is a real 404,
+decided before the page streams, not a 200 with "not found" written in it. The eyebrow and picture
+at the top of an offer page come from the promo that points at it, so they are not typed twice.
+
+**Pictures must be uploaded to this site.** A promo whose picture is an outside address is not
+shown. It would load a third party's file on every page view (ADR 0025), and the image optimiser
+refuses it anyway.
+
+**Still open:**
+
+- **The derived state is not shown in the CMS list** (ADR 0018 §4). Tina's collection list has no
+  per-document computed label. Staff read the dates for now.
+- **The headline counter is advisory text in the field's help**, not a live counter. Tina has no
+  built-in counter, and a validation rule would block saving, which ADR 0023 rejects.
+- **Artwork with words baked into it** fights the live text. The first image uploaded is a
+  1200 × 630 Facebook graphic of this kind. The system is built for a 2400 × 1350 photograph with
+  its subject in the centre strip (ADR 0023). Whether to allow a picture-only promo is the owner's
+  call.

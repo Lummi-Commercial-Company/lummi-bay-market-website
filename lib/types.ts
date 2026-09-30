@@ -4,6 +4,8 @@
  * change it there first and follow it here.
  */
 
+import type { RowLayout } from './promos.ts'
+
 export type LocationSlug = 'exit-260' | 'minimart' | 'fishermans-cove'
 
 /** The only three grades priced on this site (CONTEXT.md, ADR 0004). */
@@ -124,6 +126,11 @@ export interface SiteSettings {
   backdrop: PageBackdropSettings
   /** Which `mainPages` document is live (ADR 0018). */
   liveMainPage?: string
+  /**
+   * The promo rows every page uses unless it sets its own (ADR 0018). Never
+   * empty: `lib/settings.ts` falls back to DEFAULT_PROMO_ROWS.
+   */
+  promoRows: RowLayout[]
 }
 
 /* ===========================================================================
@@ -188,6 +195,8 @@ export interface PageDoc {
   noindex: boolean
   noBackdrop: boolean
   showPromos: boolean
+  /** This page's own promo rows. Empty means "use Site settings". */
+  promoRows: RowLayout[]
   /** The Markdown body of the .mdx file — the page's own words. */
   body: string
   /** Extra sections, rendered after the body. */
@@ -207,6 +216,22 @@ export interface MainPageDoc {
   intro?: string
   seoDescription?: string
   noBackdrop: boolean
+  /** This version's own promo rows. Empty means "use Site settings". */
+  promoRows: RowLayout[]
+  body: string
+  blocks: PageBlock[]
+}
+
+/**
+ * An offer page — what a promo links to (ADR 0015, ADR 0018 §3). Whether it is
+ * live is not stored here: it is worked out per visitor from the promos that
+ * point at it, in `lib/promos.ts`.
+ */
+export interface InfoPageDoc {
+  /** The file name without its extension: `/info/{slug}`. */
+  slug: string
+  title: string
+  seoDescription?: string
   body: string
   blocks: PageBlock[]
 }

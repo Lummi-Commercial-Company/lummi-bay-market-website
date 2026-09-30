@@ -84,10 +84,11 @@ cannot hold the lockup, three links and the pill below ~430px, which is every co
   themselves wherever they render.
 - **Emergency notice**: a `siteAlert` singleton rides inside the sticky header on every page,
   published by on-demand revalidation in under a second rather than a rebuild — ADR 0017. It is
-  one of **three** reasons the build must never be `output: 'export'`; the others are fuel prices,
+  one of **four** reasons the build must never be `output: 'export'`; the others are fuel prices,
   which render per request against the content API so a pushed price is live immediately (ADR 0024),
-  and the hours override, which is evaluated per request against the visitor's date (ADR 0027).
-  Static export would silently delete all three rather than fail.
+  the hours override, which is evaluated per request against the visitor's date (ADR 0027), and
+  promos, whose date window is too (ADR 0018). Static export would silently delete all four rather
+  than fail.
 - Header is **sticky** on every page. The fuel-price rail is sticky **on desktop only**, and only
   because the condensed block's panel is positioned against the viewport there rather than
   anchored to the block — a sticky anchor plus an anchor-positioned panel is broken, measured
@@ -139,6 +140,9 @@ the layout and cannot be lost or moved by a page.
   region is a list of rows and each row picks how many it holds (1–4 across); a row re-divides
   evenly when a promo in it expires, and rows are capped at six per page. Live is computed per visitor, so expiry is exact without a
   scheduler. `mainPages` is demoted to a redesign escape hatch and is never scheduled (ADR 0018).
+  **Built 30 Sep 2026:** rows come from Site settings unless a page sets its own; the region runs
+  full page width under the title and price block; an offer page lives at `/info/{file name}`.
+  Rules in `lib/promos.ts`, with tests — ADR 0018, Amendment.
 - `tenants` — independent businesses renting space on a Lummi Bay property. Known at Exit 260:
   Piroshky Piroshky (inside the store), Wendy's and Black Bear Diner (freestanding buildings;
   Black Bear not yet built), and Hi-Tide Coffee (a coffee truck). All rent from LCC; the site never says so. **Settled 17 Sep 2026: yes, they are advertised** — there

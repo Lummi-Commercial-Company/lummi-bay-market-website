@@ -1,4 +1,5 @@
 import styles from './FuelPriceBlock.module.css'
+import { RailMetrics } from './RailMetrics'
 
 /**
  * The rail the fuel price block sits in on desktop (ADR 0005).
@@ -8,5 +9,10 @@ import styles from './FuelPriceBlock.module.css'
  * at that size.
  */
 export function FuelPriceRail({ children }: { children: React.ReactNode }) {
-  return <div className={styles.rail}>{children}</div>
+  return (
+    <div className={styles.rail}>
+      {children}
+      <RailMetrics />
+    </div>
+  )
 }

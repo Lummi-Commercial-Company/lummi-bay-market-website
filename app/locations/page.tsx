@@ -4,6 +4,7 @@ import styles from '../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
 import { LocationList } from '@/components/locations/LocationList'
+import { PromoSlot } from '@/components/promos/PromoRegion'
 
 export const metadata: Metadata = {
   title: 'Locations',
@@ -28,6 +29,8 @@ export default async function LocationsPage() {
           <FuelPriceBlock subject="exit-260" />
         </Suspense>
       </FuelPriceRail>
+
+      <PromoSlot target={{}} />
 
       <div className={styles.rest}>
         <LocationList />

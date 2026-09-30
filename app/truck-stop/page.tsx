@@ -7,6 +7,7 @@ import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
 import { AmenityBadges } from '@/components/locations/AmenityBadges'
 import { LiveHours } from '@/components/locations/LiveHours'
 import { LocationList } from '@/components/locations/LocationList'
+import { PromoSlot } from '@/components/promos/PromoRegion'
 import { getLocation } from '@/lib/locations'
 
 export const metadata: Metadata = {
@@ -74,6 +75,8 @@ export default async function TruckStopPage() {
           <FuelPriceBlock subject="truck-stop" />
         </Suspense>
       </FuelPriceRail>
+
+      <PromoSlot target={{}} />
 
       <div className={styles.rest}>
         {/* The page's subject is the Truck Stop, so the callout is dropped —

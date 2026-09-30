@@ -65,6 +65,19 @@ a redesign is built in full and turned on in one change (ADR 0018). If it is bla
 file that no longer exists, the site shows the first version it finds and logs the fault — a bad
 setting never leaves the site without a home page.
 
+**`promoRows`** — how promotions are laid out on every page that does not set its own, added
+30 Sep 2026 (ADR 0018, Amendment). A list of `{ "layout": "…" }` rows, one of `1`, `2`, `3`, `4`
+(that many across), `wn` / `nw` (wide + narrow, narrow + wide) or `l3` (a lead and two). Up to six
+rows; live promotions fill them in order and a row with nothing to hold does not render. **Absent
+here on purpose:** with no rows set the site uses one full-width row, then two halves, so a
+promotion published before anyone thinks about rows still shows. A general page or a home page
+version can carry its own `promoRows` in its frontmatter, which wins over this one.
+
+**Promotion dates, if you edit a file by hand.** `startsAt` and `endsAt` must be quoted —
+`endsAt: '2026-10-05'` or `endsAt: '2026-10-05 12:00'`. Unquoted, YAML reads a date as a date
+rather than text, and the CMS build refuses the whole file. The CMS quotes them itself when staff
+save.
+
 ## What is deliberately not here
 Fuel prices (`content/fuel-prices.json`, ADR 0004), Locations, promos, tenants and pages are their
 own collections. Nothing about hours, prices or addresses belongs in a settings file.

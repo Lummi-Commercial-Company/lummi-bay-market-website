@@ -1,5 +1,5 @@
 /* Page grid shared by the Phase 1 shell pages.
-   Two rows so the rail can span `1 / span 2` (ADR 0005). */
+   Three rows so the rail can span `1 / span 3` (ADR 0005, ADR 0018). */
 .pagegrid {
   display: block;
   padding: var(--sp-5) var(--sp-4) var(--sp-8);
@@ -11,7 +11,9 @@
   .pagegrid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--rail-w);
-    grid-template-rows: auto 1fr;
+    /* Title | promo region (full width, empty unless a promo is live) |
+       the page's sections. ADR 0018. */
+    grid-template-rows: auto auto 1fr;
     column-gap: var(--sp-7);
     /* The rail is sticky against the header, so the content column carries the
        top padding rather than the grid. */
@@ -27,8 +29,18 @@
 
 .rest {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 3;
   min-width: 0;
+}
+
+/* With a promo region under it, the title column is at least as tall as the
+   price block beside it, so the full-width region starts below the block
+   rather than running under it. `--rail-h` is measured (RailMetrics); 121px
+   is its measured value, for the first paint. */
+@media (min-width: 900px) {
+  .pagegrid:has(> [data-promos='top']) > .maincol {
+    min-height: var(--rail-h, 121px);
+  }
 }
 
 /* The sentence under a page title. 15px on a phone, 16px from 768px — the

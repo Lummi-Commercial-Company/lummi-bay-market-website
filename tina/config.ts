@@ -1,5 +1,6 @@
 import { defineConfig } from 'tinacms'
 import type { Collection, Template, TinaField } from 'tinacms'
+import { MAX_PROMO_ROWS, ROW_LAYOUTS } from '../lib/promos'
 
 /**
  * TinaCMS schema — Lummi Bay Market.
@@ -550,6 +551,44 @@ function priceFields({ includeRegular = true } = {}): TinaField[] {
  * footer of every page. Removing a page is rare enough to be an engineering
  * change; losing one by accident is not recoverable from the CMS.
  */
+/**
+ * Promo rows (ADR 0018, Revision). The region on a page is a list of rows, and
+ * each row says how many promos sit across it. A row holding fewer live promos
+ * than it has room for re-divides evenly, so expiry never leaves a hole. The
+ * layouts are defined once, in lib/promos.ts.
+ */
+const promoRowsField = (label: string, description: string): TinaField => ({
+  type: 'object',
+  name: 'promoRows',
+  label,
+  description,
+  list: true,
+  ui: {
+    itemProps: (item) => ({
+      label:
+        ROW_LAYOUTS[item?.layout as keyof typeof ROW_LAYOUTS]?.label ?? 'Choose a layout',
+    }),
+    defaultItem: { layout: '2' },
+  },
+  fields: [
+    {
+      type: 'string',
+      name: 'layout',
+      label: 'Promotions across this row',
+      options: Object.entries(ROW_LAYOUTS).map(([value, layout]) => ({
+        value,
+        label: layout.label,
+      })),
+      required: true,
+    },
+  ],
+})
+
+const pageRowsField = promoRowsField(
+  'Promotion rows on this page',
+  `Leave empty to use the rows in Site settings. Up to ${MAX_PROMO_ROWS} rows; promotions fill them in order, and a row with nothing running does not show.`
+)
+
 const pages: Collection = {
   name: 'pages',
   label: 'Pages',
@@ -570,7 +609,10 @@ const pages: Collection = {
       type: 'boolean',
       name: 'showPromos',
       label: 'Show the promotions band on this page',
+      description:
+        'Lets in promotions set to "Every page except home". A promotion that names this page in "Which pages" shows here either way.',
     },
+    pageRowsField,
     ...seoFields,
     pageBodyField,
     {
@@ -613,6 +655,7 @@ const mainPages: Collection = {
       description: 'One sentence under the headline. Leave blank to show the headline alone.',
       ui: { component: 'textarea' },
     },
+    pageRowsField,
     ...seoFields,
     pageBodyField,
     {
@@ -679,7 +722,8 @@ const promos: Collection = {
       type: 'string',
       name: 'headline',
       label: 'Headline',
-      description: 'Around 28 characters reads best. Longer still works, it just gets smaller.',
+      description:
+        '28 characters or fewer — short headlines read best at every size. This is also the name you will see in the list of promotions.',
       required: true,
       isTitle: true,
     },
@@ -713,20 +757,23 @@ const promos: Collection = {
     {
       type: 'string',
       name: 'startsAt',
-      label: 'Starts (YYYY-MM-DD)',
-      description: 'Leave blank to start straight away. Pacific time.',
+      label: 'Starts',
+      description:
+        'A date like 2026-10-03, or a date and time like 2026-10-03 06:00. Pacific time. Leave blank to start straight away.',
     },
     {
       type: 'string',
       name: 'endsAt',
-      label: 'Ends (YYYY-MM-DD)',
-      description: 'Leave blank to run until you turn it off. Pacific time — it stops on its own at the end of this day.',
+      label: 'Ends',
+      description:
+        'A date like 2026-10-05 runs to the end of that day; a date and time like 2026-10-05 12:00 stops at that minute. Pacific time. It comes down on its own. Leave blank to run until you turn it off.',
     },
     {
       type: 'boolean',
       name: 'active',
       label: 'Running',
-      description: 'Turn this off to pull the promotion immediately, whatever the dates say.',
+      description:
+        'On unless you turn it off. Off pulls the promotion immediately, whatever the dates say; turning it back on (and moving the end date if it has passed) brings it and its offer page back.',
     },
     {
       type: 'string',
@@ -746,7 +793,8 @@ const promos: Collection = {
       type: 'object',
       name: 'pages',
       label: 'Which pages',
-      description: 'Only used when "Specific pages only" is chosen above. Add one row per page.',
+      description:
+        'Only used when "Specific pages only" is chosen above. Add one row per page — a general page or another offer page. Locations go in "Which locations", below.',
       list: true,
       ui: { itemProps: (item) => ({ label: item?.page || 'Choose a page' }) },
       fields: [
@@ -760,10 +808,31 @@ const promos: Collection = {
       ],
     },
     {
+      // A separate list, not a third collection on the reference above: Tina
+      // builds one query for a multi-collection reference, and a Location's
+      // required "navLabel" collides with a page's optional one.
+      type: 'object',
+      name: 'locations',
+      label: 'Which locations',
+      description:
+        'Only used when "Specific pages only" is chosen above. Add one row per location page this promotion should appear on.',
+      list: true,
+      ui: { itemProps: (item) => ({ label: item?.location || 'Choose a location' }) },
+      fields: [
+        {
+          type: 'reference',
+          name: 'location',
+          label: 'Location',
+          collections: ['locations'],
+        },
+      ],
+    },
+    {
       type: 'number',
       name: 'priority',
       label: 'Order',
-      description: 'Lower numbers come first when several are running at once.',
+      description:
+        'Lower numbers take a place first when more are running than the page has room for. The rest wait and appear as others end.',
     },
   ],
 }
@@ -1060,6 +1129,10 @@ const settings: Collection = {
       collections: ['mainPages'],
       description: 'Only the version chosen here is shown to visitors.',
     },
+    promoRowsField(
+      'Promotion rows',
+      `How promotions are laid out on every page that does not set its own rows. Each row holds one to four across; up to ${MAX_PROMO_ROWS} rows. Promotions fill the rows in order, a row with nothing running does not show, and a row that loses one re-divides so there is never a gap. Leave empty for one full-width row, then two halves.`
+    ),
   ],
 }
 

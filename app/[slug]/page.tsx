@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import styles from '../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
+import { PromoSlot } from '@/components/promos/PromoRegion'
 import { PageBlocks } from '@/components/pages/PageBlocks'
 import sectionStyles from '@/components/pages/PageSections.module.css'
 import { excerptFromMarkdown, Markdown } from '@/lib/markdown'
@@ -68,6 +69,19 @@ export default async function CollectionPage({
   const page = await getPage(slug)
   if (!page) notFound()
 
+  // "Show the promotions band" lets promos set to "Every page except home" in;
+  // a promo that names this page shows either way. On a page carrying the
+  // Location contact blocks the region goes after the page's sections, not
+  // above them — a guest on /contact came for a phone number (ADR 0018).
+  const promosAtEnd = page.blocks.some((block) => block._template === 'locationContacts')
+  const promoSlot = (
+    <PromoSlot
+      target={{ key: `pages/${page.slug}`, allowAllInterior: page.showPromos }}
+      rows={page.promoRows}
+      position={promosAtEnd ? 'end' : 'top'}
+    />
+  )
+
   return (
     <div className={styles.pagegrid}>
       <div className={styles.maincol}>
@@ -83,9 +97,15 @@ export default async function CollectionPage({
         </Suspense>
       </FuelPriceRail>
 
+      {promosAtEnd ? null : promoSlot}
+
       <div className={styles.rest}>
         <PageBlocks blocks={page.blocks} />
       </div>
+
+      {/* After the sections in the source too, so a phone — one column, in
+          source order — puts it in the same place. */}
+      {promosAtEnd ? promoSlot : null}
     </div>
   )
 }

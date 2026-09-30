@@ -1,6 +1,9 @@
 import type { MetadataRoute } from 'next'
+import { connection } from 'next/server'
 import { getLocations } from '@/lib/locations'
-import { getPages, PRIVACY_SLUG } from '@/lib/pages'
+import { getInfoPages, getPages, PRIVACY_SLUG } from '@/lib/pages'
+import { getPromos } from '@/lib/promo-data'
+import { infoPageState, pacificStamp } from '@/lib/promos'
 import { SITE_URL } from '@/lib/site'
 
 /**
@@ -17,11 +20,21 @@ import { SITE_URL } from '@/lib/site'
  *     or deleted once it is in an app store listing (ADR 0026). `lib/pages.ts`
  *     forces its `noindex` off for the same reason.
  *
- * Still to add when those collections render: `infoPages` (with the promo-window
- * check above) and `tenants`.
+ *   - An offer page (`infoPages`) is in only while a promo pointing at it is
+ *     live. That is decided per request, so the sitemap is too: a sitemap
+ *     built on Friday would still list Friday's offer on Tuesday.
+ *
+ * Still to add when that collection renders: `tenants`.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [locations, pages] = await Promise.all([getLocations(), getPages()])
+  await connection()
+  const [locations, pages, infoPages, promos] = await Promise.all([
+    getLocations(),
+    getPages(),
+    getInfoPages(),
+    getPromos(),
+  ])
+  const now = pacificStamp(new Date())
 
   const staticRoutes = ['', '/locations', '/truck-stop', '/rewards', '/fuel-prices']
 
@@ -43,6 +56,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // These change rarely: a policy, a story, a set of phone numbers.
         changeFrequency: 'monthly' as const,
         priority: 0.5,
+      })),
+    ...infoPages
+      .filter((page) => infoPageState(page.slug, promos, now).state === 'live')
+      .map((page) => ({
+        url: `${SITE_URL}/info/${page.slug}`,
+        changeFrequency: 'daily' as const,
+        priority: 0.6,
       })),
   ]
 }

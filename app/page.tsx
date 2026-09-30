@@ -5,6 +5,7 @@ import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPr
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
 import { LocationList } from '@/components/locations/LocationList'
 import { PageBlocks } from '@/components/pages/PageBlocks'
+import { PromoSlot } from '@/components/promos/PromoRegion'
 import sectionStyles from '@/components/pages/PageSections.module.css'
 import { Markdown } from '@/lib/markdown'
 import { getLiveMainPage } from '@/lib/pages'
@@ -19,7 +20,8 @@ import { getSettings } from '@/lib/settings'
  * in full and switched over by changing one setting.
  *
  * Drawn from docs/proofs/home-review.html: headline and intro, the price rail,
- * the divider band, then the location list with the Truck Stop callout first.
+ * any live promos, the divider band, then the location list with the Truck
+ * Stop callout first.
  */
 
 async function liveHome() {
@@ -63,6 +65,10 @@ export default async function HomePage() {
           <FuelPriceBlock subject="exit-260" />
         </Suspense>
       </FuelPriceRail>
+
+      {/* Promos set to "Home page", in this version's rows or Site settings'.
+          Above the band, as the approved Home draws it. */}
+      <PromoSlot target={{ home: true }} rows={home?.promoRows} />
 
       <div className={styles.rest}>
         {/* TODO: replace with approved Lummi art. The flat teal-to-navy band
