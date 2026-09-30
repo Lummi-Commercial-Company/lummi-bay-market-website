@@ -5,10 +5,16 @@ import { wrapFieldsWithMeta } from 'tinacms'
  * An on/off switch that says which it is.
  *
  * Tina's own toggle has a white track either way; only the knob's side
- * changes, so on and off look alike (owner, 30 Sep 2026: "usually if it's
- * colored it's on and if it's greyed out it's off"). This one is green with
- * the word "On" when on, grey with "Off" when off, and the words can say what
- * on and off mean for that field.
+ * changes, so on and off look alike (owner, 30 Sep 2026). The owner's
+ * direction: the words "Off" and "On" beside their own sides, or a knob that
+ * turns from green to red. This does both —
+ *
+ *     Off  [ ●━━━ ]  On      knob red, left;  "Off" bold and red
+ *     Off  [ ━━━● ]  On      knob green, right; "On" bold and green
+ *
+ * — and then says in words what the position means for that field ("not
+ * showing", "running"). Either side's word can be clicked, as well as the
+ * switch itself.
  *
  * `unsetIs` matters: a field nobody has touched is saved as nothing, and some
  * fields treat nothing as on — a promotion runs unless "Running" is switched
@@ -21,62 +27,79 @@ interface Props {
   field: { label?: string }
 }
 
+const GREEN = '#1f7a45'
+const RED = '#b42318'
+const GREY = '#6b7280'
+
 export function onOffField({
-  on = 'On',
-  off = 'Off',
+  on = '',
+  off = '',
   unsetIs = false,
 }: { on?: string; off?: string; unsetIs?: boolean } = {}) {
   function OnOff({ input, field }: Props) {
     const checked = typeof input.value === 'boolean' ? input.value : unsetIs
+    const meaning = checked ? on : off
+
+    const side = (value: boolean) => ({
+      font: 'inherit',
+      fontSize: 14,
+      padding: '4px 2px',
+      border: 0,
+      background: 'none',
+      cursor: 'pointer',
+      fontWeight: checked === value ? 800 : 500,
+      color: checked === value ? (value ? GREEN : RED) : GREY,
+      textDecoration: checked === value ? 'underline' : 'none',
+      textUnderlineOffset: 4,
+      textDecorationThickness: 2,
+    })
+
     return (
-      <button
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        aria-label={field.label}
-        id={input.name}
-        onClick={() => input.onChange(!checked)}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 10,
-          padding: 0,
-          border: 0,
-          background: 'none',
-          cursor: 'pointer',
-          font: 'inherit',
-        }}
-      >
-        <span
-          aria-hidden="true"
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <button type="button" tabIndex={-1} style={side(false)} onClick={() => input.onChange(false)}>
+          Off
+        </button>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          aria-label={`${field.label ?? 'Setting'}: ${checked ? 'on' : 'off'}`}
+          id={input.name}
+          onClick={() => input.onChange(!checked)}
           style={{
             position: 'relative',
-            width: 46,
-            height: 26,
+            width: 56,
+            height: 30,
+            padding: 0,
             borderRadius: 99,
-            background: checked ? '#1f7a45' : '#c4c9d0',
-            transition: 'background .15s',
+            border: `2px solid ${checked ? GREEN : RED}`,
+            background: checked ? '#e3f1e8' : '#fbe9e7',
+            cursor: 'pointer',
             flex: 'none',
+            transition: 'background .15s, border-color .15s',
           }}
         >
           <span
+            aria-hidden="true"
             style={{
               position: 'absolute',
               top: 3,
-              left: checked ? 23 : 3,
+              left: checked ? 29 : 3,
               width: 20,
               height: 20,
               borderRadius: '50%',
-              background: '#fff',
-              boxShadow: '0 1px 2px rgba(0,0,0,.3)',
-              transition: 'left .15s',
+              background: checked ? GREEN : RED,
+              transition: 'left .15s, background .15s',
             }}
           />
-        </span>
-        <span style={{ fontSize: 14, fontWeight: 700, color: checked ? '#1f7a45' : '#4b5563' }}>
-          {checked ? on : off}
-        </span>
-      </button>
+        </button>
+        <button type="button" tabIndex={-1} style={side(true)} onClick={() => input.onChange(true)}>
+          On
+        </button>
+        {meaning ? (
+          <span style={{ fontSize: 13, fontWeight: 600, color: checked ? GREEN : RED }}>— {meaning}</span>
+        ) : null}
+      </div>
     )
   }
   // Tina's published field-component type is narrower than the props it passes.

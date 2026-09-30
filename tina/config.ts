@@ -304,7 +304,7 @@ const seoFields: TinaField[] = [
   {
     type: 'boolean',
     name: 'noindex',
-    ui: { component: onOffField({ on: 'On — hidden from Google', off: 'Off — Google can list it' }) },
+    ui: { component: onOffField({ on: 'hidden from Google', off: 'Google can list it' }) },
     label: 'Hide from Google',
     description:
       'Keeps the page reachable by its link but out of search results. Leave off unless you know you want this.',
@@ -838,7 +838,7 @@ const promos: Collection = {
     {
       type: 'boolean',
       name: 'active',
-      ui: { component: onOffField({ on: 'On — running', off: 'Off — not showing', unsetIs: true }) },
+      ui: { component: onOffField({ on: 'running', off: 'not showing', unsetIs: true }) },
       label: 'Running',
       description:
         'On unless you turn it off. Off pulls the promotion immediately, whatever the dates say; turning it back on (and moving the end date if it has passed) brings it and its offer page back.',
@@ -1093,7 +1093,7 @@ const motifGroupFields: TinaField[] = [
   {
     type: 'boolean',
     name: 'live',
-    ui: { component: onOffField({ on: 'On — this group is in the header', off: 'Off' }) },
+    ui: { component: onOffField({ on: 'this group is in the header', off: 'not in the header' }) },
     label: 'Use this group in the header',
     description: 'Turn on for the group you want shown. If more than one is on, the first in the list is used.',
   },
@@ -1116,7 +1116,7 @@ const settings: Collection = {
         {
           type: 'boolean',
           name: 'active',
-          ui: { component: onOffField({ on: 'On — showing on every page', off: 'Off' }) },
+          ui: { component: onOffField({ on: 'showing on every page', off: 'not showing' }) },
           label: 'Show the notice',
           description: 'Turn this off and the bar disappears completely — it leaves no gap behind.',
         },
