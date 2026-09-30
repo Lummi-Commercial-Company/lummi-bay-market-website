@@ -302,10 +302,16 @@ refuses it anyway.
 
 **Still open:**
 
-- **The derived state is not shown in the CMS list** (ADR 0018 §4). Tina's collection list has no
-  per-document computed label. Staff read the dates for now.
-- **The headline counter is advisory text in the field's help**, not a live counter. Tina has no
-  built-in counter, and a validation rule would block saving, which ADR 0023 rejects.
+- ~~The derived state is not shown in the CMS.~~ **Done 30 Sep 2026, at the owner's ask.** Tina's
+  collection list has fixed columns, so the tag cannot sit in it. It sits in two places instead,
+  both worked out from the dates whenever they are looked at, never stored
+  (`lib/promo-status.ts`, with tests):
+  - **at the top of each promotion's form**, beside the headline and its 28-character counter.
+    The tag is Live, Scheduled, Ended or Off, with one line on where it shows or why it doesn't;
+  - **Site → Promotion status** in the CMS menu, listing every promotion. It adds the one state a
+    single form cannot know: **Live — waiting**, where more are live than the rows hold.
+- The headline counter is live in the form (n / 28), advisory as ADR 0023 wants: over 28 it
+  says a shorter headline reads better, and it never blocks saving.
 - **Artwork with words baked into it** fights the live text. The first image uploaded is a
   1200 × 630 Facebook graphic of this kind. The system is built for a 2400 × 1350 photograph with
   its subject in the centre strip (ADR 0023). Whether to allow a picture-only promo is the owner's

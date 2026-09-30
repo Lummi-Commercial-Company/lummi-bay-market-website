@@ -18,6 +18,13 @@ import type { ReactNode } from 'react'
  * forbids `<!-- -->` comments outright, which is what made the privacy policy
  * body parse as one `invalid_markdown` node before it was cleaned up.)
  *
+ * Three things the Tina editor writes that plain Markdown readers miss, all
+ * handled (found on the first real offer page, 30 Sep 2026):
+ *   - a line ending in `\` is a line break (Shift+Enter in the editor);
+ *   - character codes like `&#x20;` or `&amp;` are characters — a paragraph
+ *     that is only `&#x20;` is the editor's blank spacer line, and is dropped;
+ *   - a backslash before punctuation (`\*`, `\[`) shows that character.
+ *
  * NOT supported, on purpose: tables, images, footnotes, reference links, HTML
  * blocks, nested lists, setext headings, JSX/MDX expressions.
  *
@@ -35,6 +42,37 @@ type Block =
   | { kind: 'quote'; text: string }
   | { kind: 'rule' }
 
+/** Stands for a hard line break inside a paragraph until it is rendered. */
+const LINE_BREAK = '\u2028'
+
+const NAMED: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: '\u00a0' }
+
+/** `&#x20;` `&#39;` `&amp;` → the characters they stand for. Unknown names are left as typed. */
+export function decodeEntities(text: string): string {
+  return text.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (whole, code: string) => {
+    if (code[0] === '#') {
+      const n = code[1] === 'x' || code[1] === 'X' ? parseInt(code.slice(2), 16) : parseInt(code.slice(1), 10)
+      return Number.isFinite(n) && n > 0 && n <= 0x10ffff ? String.fromCodePoint(n) : whole
+    }
+    return NAMED[code.toLowerCase()] ?? whole
+  })
+}
+
+// Backslash-escaped punctuation (`\*`) is hidden from the inline pass as a
+// private-use character, then restored as the plain character.
+const ESCAPE_BASE = 0xe000
+const hideEscapes = (text: string) =>
+  text.replace(/\\([!-/:-@[-`{-~])/g, (_, ch: string) => String.fromCharCode(ESCAPE_BASE + ch.charCodeAt(0)))
+const restoreEscapes = (text: string) =>
+  text.replace(/[\ue000-\ue07f]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) - ESCAPE_BASE))
+
+/** Plain text as it should read: escapes restored, codes decoded, breaks as <br>. */
+function plainText(text: string, key: string): ReactNode[] {
+  const clean = decodeEntities(restoreEscapes(text))
+  const parts = clean.split(LINE_BREAK)
+  return parts.flatMap((part, index) => (index === 0 ? [part] : [<br key={`${key}-br${index}`} />, part]))
+}
+
 const HEADING = /^(#{1,6})\s+(.*)$/
 const UNORDERED = /^[-*+]\s+(.*)$/
 const ORDERED = /^\d+[.)]\s+(.*)$/
@@ -48,7 +86,20 @@ export function parseMarkdownBlocks(source: string): Block[] {
 
   const flushParagraph = () => {
     if (paragraph.length === 0) return
-    blocks.push({ kind: 'paragraph', text: paragraph.join(' ').trim() })
+    // A line ending in a backslash is a hard line break; LINE_BREAK carries it
+    // through to the renderer. Every other line wraps into the one before.
+    const text = paragraph
+      .map((line, index) =>
+        line.endsWith('\\') && !line.endsWith('\\\\')
+          ? `${line.slice(0, -1).trimEnd()}${index < paragraph.length - 1 ? LINE_BREAK : ''}`
+          : index < paragraph.length - 1
+            ? `${line} `
+            : line
+      )
+      .join('')
+      .trim()
+    // The editor's blank spacer line (`&#x20;`, `&nbsp;`) is not a paragraph.
+    if (decodeEntities(text).trim() !== '') blocks.push({ kind: 'paragraph', text })
     paragraph = []
   }
 
@@ -129,7 +180,8 @@ export function parseMarkdownBlocks(source: string): Block[] {
 const INLINE =
   /(\*\*[^*]+\*\*|__[^_]+__|\*[^*\n]+\*|`[^`\n]+`|\[[^\]\n]+\]\([^()\s]+\))/g
 
-function renderInline(text: string, keyPrefix: string): ReactNode[] {
+function renderInline(source: string, keyPrefix: string): ReactNode[] {
+  const text = hideEscapes(source)
   const out: ReactNode[] = []
   let cursor = 0
   let index = 0
@@ -137,29 +189,29 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
   for (const match of text.matchAll(INLINE)) {
     const token = match[0]
     const at = match.index
-    if (at > cursor) out.push(text.slice(cursor, at))
-    cursor = at + token.length
     const key = `${keyPrefix}-${index++}`
+    if (at > cursor) out.push(...plainText(text.slice(cursor, at), `${key}t`))
+    cursor = at + token.length
 
     if (token.startsWith('**') || token.startsWith('__')) {
-      out.push(<strong key={key}>{token.slice(2, -2)}</strong>)
+      out.push(<strong key={key}>{plainText(token.slice(2, -2), key)}</strong>)
     } else if (token.startsWith('`')) {
-      out.push(<code key={key}>{token.slice(1, -1)}</code>)
+      out.push(<code key={key}>{restoreEscapes(token.slice(1, -1))}</code>)
     } else if (token.startsWith('*')) {
-      out.push(<em key={key}>{token.slice(1, -1)}</em>)
+      out.push(<em key={key}>{plainText(token.slice(1, -1), key)}</em>)
     } else {
       const split = token.indexOf('](')
       const label = token.slice(1, split)
-      const href = token.slice(split + 2, -1)
+      const href = decodeEntities(restoreEscapes(token.slice(split + 2, -1)))
       out.push(
         <MarkdownLink key={key} href={href}>
-          {label}
+          {plainText(label, key)}
         </MarkdownLink>
       )
     }
   }
 
-  if (cursor < text.length) out.push(text.slice(cursor))
+  if (cursor < text.length) out.push(...plainText(text.slice(cursor), `${keyPrefix}-end`))
   return out
 }
 
@@ -230,7 +282,8 @@ export function excerptFromMarkdown(source: string, limit = 160): string {
   const blocks = parseMarkdownBlocks(source)
   const first = blocks.find((block) => block.kind === 'paragraph')
   if (!first || first.kind !== 'paragraph') return ''
-  const plain = first.text
+  const plain = decodeEntities(restoreEscapes(hideEscapes(first.text)))
+    .replaceAll(LINE_BREAK, ' ')
     .replace(/\[([^\]\n]+)\]\([^()\s]+\)/g, '$1')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/__([^_]+)__/g, '$1')

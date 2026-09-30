@@ -3,6 +3,7 @@ import type { Collection, Template, TinaField } from 'tinacms'
 import { MOTIF_LIMITS } from '../lib/motif-check'
 import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
 import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
+import { HeadlineField, PromotionStatusScreen } from './fields/promo-status'
 
 /**
  * Every date staff type is MM/DD/YYYY (owner's direction, 30 Sep 2026). The
@@ -465,7 +466,12 @@ const fuelPrices: Collection = {
   match: { include: 'fuel-prices' },
   ui: {
     allowedActions: { create: false, delete: false },
-    router: () => '/fuel-prices',
+    // No `router` on purpose (30 Sep 2026). A router makes Tina open this
+    // collection as a live page preview whose fields only appear once the
+    // page is wired for click-to-edit (`useTina`). The site's pages are not
+    // wired yet, so the preview showed the page and an empty sidebar — no
+    // inputs at all. Without a router Tina opens its ordinary form. Add the
+    // router back only together with `useTina` on the page it points at.
   },
   fields: [
     {
@@ -559,7 +565,7 @@ function priceFields({ includeRegular = true } = {}): TinaField[] {
  *
  * THE WEB ADDRESS IS THE FILE NAME. There is deliberately no `slug` field.
  * One existed and it was a trap: routing has always been by file name
- * (`ui.router` below, and `generateStaticParams` over `content/pages/`), so a
+ * (`generateStaticParams` over `content/pages/`), so a
  * `slug` field labelled "the part after lummibay.com/" was a text box an editor
  * could change with no effect on the address — or, worse, could disagree with
  * the real address without anything saying so. `/privacy` is published inside
@@ -624,7 +630,12 @@ const pages: Collection = {
   format: 'mdx',
   ui: {
     allowedActions: { delete: false },
-    router: (props) => `/${props.document._sys.filename}`,
+    // No `router` on purpose (30 Sep 2026). A router makes Tina open this
+    // collection as a live page preview whose fields only appear once the
+    // page is wired for click-to-edit (`useTina`). The site's pages are not
+    // wired yet, so the preview showed the page and an empty sidebar — no
+    // inputs at all. Without a router Tina opens its ordinary form. Add the
+    // router back only together with `useTina` on the page it points at.
   },
   fields: [
     { type: 'string', name: 'title', label: 'Page title', required: true, isTitle: true },
@@ -703,7 +714,12 @@ const infoPages: Collection = {
   format: 'mdx',
   ui: {
     allowedActions: { delete: false },
-    router: (props) => `/info/${props.document._sys.filename}`,
+    // No `router` on purpose (30 Sep 2026). A router makes Tina open this
+    // collection as a live page preview whose fields only appear once the
+    // page is wired for click-to-edit (`useTina`). The site's pages are not
+    // wired yet, so the preview showed the page and an empty sidebar — no
+    // inputs at all. Without a router Tina opens its ordinary form. Add the
+    // router back only together with `useTina` on the page it points at.
   },
   fields: [
     {
@@ -754,6 +770,8 @@ const promos: Collection = {
         '28 characters or fewer — short headlines read best at every size. This is also the name you will see in the list of promotions.',
       required: true,
       isTitle: true,
+      // The promotion's Live / Scheduled / Ended / Off tag sits above this box.
+      ui: { component: HeadlineField },
     },
     {
       type: 'string',
@@ -1301,6 +1319,12 @@ const settings: Collection = {
 }
 
 export default defineConfig({
+  // "Promotion status" in the CMS menu: every promotion's Live / Scheduled /
+  // Ended / Off tag, which Tina's own list has no column for (ADR 0018 §4).
+  cmsCallback: (cms) => {
+    cms.plugins.add(PromotionStatusScreen)
+    return cms
+  },
   branch,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID ?? '',
   token: process.env.TINA_TOKEN ?? '',
