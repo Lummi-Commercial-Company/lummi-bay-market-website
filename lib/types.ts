@@ -33,6 +33,8 @@ export interface TruckStopRecord {
   hoursOverrides?: HoursOverride[]
   /** One line, in a customer's words. Shown on /contact (ADR 0015). */
   summary?: string
+  /** The Truck Stop's own photo, on /truck-stop. Never the store's. */
+  hero?: { image?: string; alt?: string }
 }
 
 export interface LocationDoc {
