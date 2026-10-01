@@ -48,7 +48,7 @@
   }
 
   .pagegrid:has(> .restFull) > .maincol {
-    min-height: var(--rail-h, 121px);
+    min-height: var(--rail-h, 129px);
   }
 }
 
@@ -64,11 +64,11 @@
 
 /* With a promo region under it, the title column is at least as tall as the
    price block beside it, so the full-width region starts below the block
-   rather than running under it. `--rail-h` is measured (RailMetrics); 121px
+   rather than running under it. `--rail-h` is measured (RailMetrics); 129px
    is its measured value, for the first paint. */
 @media (min-width: 720px) {
   .pagegrid:has(> [data-promos='top']) > .maincol {
-    min-height: var(--rail-h, 121px);
+    min-height: var(--rail-h, 129px);
   }
 }
 

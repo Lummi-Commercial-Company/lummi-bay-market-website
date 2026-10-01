@@ -217,6 +217,14 @@
   text-align: left;
 }
 
+/* In the resting card the titles sit under the cue's divider; 8px of air so
+   they read as the table's heading rather than touching the line (owner,
+   1 Oct 2026). The panel has its own top padding and keeps 0. */
+.stacked .placeHead,
+.stacked .gradeHead {
+  padding-top: 8px;
+}
+
 /* Navy, not ink: every row label is a link to that place's page, and the card
    reads as one blue object with the cue above it. */
 .place {
