@@ -1,5 +1,5 @@
 {
-  "linkLocations": true,
+  "linkLocations": false,
   "locations": {
     "exit-260": {
       "regular": 4.89,

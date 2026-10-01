@@ -55,12 +55,17 @@ export function sitePhoto(value: unknown): string | undefined {
   return path
 }
 
+function asHero(value: unknown): { image?: string; alt?: string } | undefined {
+  if (!value || typeof value !== 'object') return undefined
+  const hero = value as Record<string, unknown>
+  return { image: sitePhoto(hero.image), alt: asString(hero.alt) || undefined }
+}
+
 function toLocation(data: Record<string, unknown>, body: string): LocationDoc | null {
   const id = asString(data.id) as LocationSlug
   if (!LOCATION_ORDER.includes(id)) return null
 
   const truckStopRaw = data.truckStop as Record<string, unknown> | undefined
-  const heroRaw = data.hero as Record<string, unknown> | undefined
 
   return {
     id,
@@ -88,11 +93,10 @@ function toLocation(data: Record<string, unknown>, body: string): LocationDoc | 
             amenities: asStringList(truckStopRaw.amenities),
             hoursOverrides: asOverrides(truckStopRaw.hoursOverrides),
             summary: asString(truckStopRaw.summary) || undefined,
+            hero: asHero(truckStopRaw.hero),
           }
         : undefined,
-    hero: heroRaw
-      ? { image: sitePhoto(heroRaw.image), alt: asString(heroRaw.alt) || undefined }
-      : undefined,
+    hero: asHero(data.hero),
     body,
   }
 }
