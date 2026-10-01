@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Image from 'next/image'
 import { Suspense } from 'react'
 import styles from '../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
@@ -36,6 +37,21 @@ export default async function TruckStopPage() {
           A fuel station for truckers, with its own small c-store — right off I-5 at
           Exit 260.
         </p>
+
+        {/* The Truck Stop's own main photo (Location Details → Truck Stop →
+            Truck Stop main photo). Nothing when none is uploaded. */}
+        {truckStop.hero?.image ? (
+          <div className={styles.locPhoto}>
+            <Image
+              src={truckStop.hero.image}
+              alt={truckStop.hero.alt ?? ''}
+              fill
+              priority
+              sizes="(min-width: 900px) 720px, 100vw"
+              className={styles.locPhotoImg}
+            />
+          </div>
+        ) : null}
 
         <dl className={styles.dl}>
           <dt>Address</dt>
