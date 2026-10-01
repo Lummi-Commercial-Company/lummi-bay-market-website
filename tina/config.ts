@@ -9,6 +9,7 @@ import { returnToListAfterSave } from './fields/after-save'
 import { DateField, DateTimeField } from './fields/date-field'
 import { onOffField } from './fields/on-off-field'
 import { HeadlineField } from './fields/promo-status'
+import { warnWhenCmsUpdated } from './fields/stale-cms'
 import { RichTextWithLinksField } from './fields/rich-text-links'
 import { arrangeSiteMenu } from './fields/site-menu'
 
@@ -1391,7 +1392,7 @@ export default defineConfig({
   // Ended / Off tag, which Tina's own list has no column for (ADR 0018 §4).
   // The SITE menu: Promotion Status, Media Manager, Header Motif Groups, in
   // that order after Site Settings (tina/fields/site-menu.tsx).
-  cmsCallback: (cms) => returnToListAfterSave(arrangeSiteMenu(cms)),
+  cmsCallback: (cms) => warnWhenCmsUpdated(returnToListAfterSave(arrangeSiteMenu(cms))),
   branch,
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID ?? '',
   token: process.env.TINA_TOKEN ?? '',
