@@ -140,6 +140,36 @@
   }
 }
 
+/* The Location's photo, when it has one. On a phone the card is a 61px row,
+   so it is a 44px square where the mark sits; on desktop it runs across the
+   top of the card, edge to edge, 16:9 (below). */
+.photo {
+  position: relative;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--lb-bone);
+}
+
+.photoImg {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* A card with no photo, in a list where another card has one: the same box,
+   pale, with the placeholder mark in the middle. */
+.photoEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoEmpty .motif {
+  margin: 0;
+}
+
 .cardText {
   min-width: 0;
   display: flex;
@@ -212,6 +242,20 @@
     width: 26px;
     height: 26px;
     margin-bottom: 9px;
+  }
+
+  /* Across the top of the card, edge to edge over its padding. */
+  .photo {
+    width: calc(100% + 32px);
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-width: none;
+    margin: -15px -16px 12px;
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+  }
+
+  .withPhoto {
+    overflow: hidden;
   }
 
   .cardText {

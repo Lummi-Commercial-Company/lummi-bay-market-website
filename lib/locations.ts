@@ -41,6 +41,19 @@ function asOverrides(value: unknown): HoursOverride[] {
   return out
 }
 
+/**
+ * A Location's main photo, if it is one the site can show: a file uploaded to
+ * this site. Anything else would load a third party's file on every visit
+ * (ADR 0025), and the image optimiser refuses it anyway; a header motif is a
+ * mask shape, not a photo (ADR 0021). Shown on the Location's page and on its
+ * card wherever Location cards appear (owner, 1 Oct 2026).
+ */
+export function sitePhoto(value: unknown): string | undefined {
+  const path = asString(value)
+  if (!path.startsWith('/') || path.startsWith('//') || path.startsWith('/uploads/motifs/')) return undefined
+  return path
+}
+
 function toLocation(data: Record<string, unknown>, body: string): LocationDoc | null {
   const id = asString(data.id) as LocationSlug
   if (!LOCATION_ORDER.includes(id)) return null
@@ -77,7 +90,7 @@ function toLocation(data: Record<string, unknown>, body: string): LocationDoc | 
           }
         : undefined,
     hero: heroRaw
-      ? { image: asString(heroRaw.image) || undefined, alt: asString(heroRaw.alt) || undefined }
+      ? { image: sitePhoto(heroRaw.image), alt: asString(heroRaw.alt) || undefined }
       : undefined,
     body,
   }

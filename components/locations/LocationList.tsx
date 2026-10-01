@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import styles from './LocationList.module.css'
@@ -43,6 +44,10 @@ export async function LocationList({
 
   if (cards.length === 0 && !truckStop) return null
 
+  // Once any card has a photo, the others get a pale panel of the same size
+  // with the mark in it, so a row of cards stays one shape (owner, 1 Oct 2026).
+  const anyPhoto = cards.some((location) => location.hero?.image)
+
   const listsItself = subject !== undefined && subject !== 'truck-stop'
   const label = heading || (listsItself ? 'Our other locations' : 'Our locations')
 
@@ -75,11 +80,36 @@ export async function LocationList({
         <ul className={styles.cards}>
           {cards.map((location) => (
             <li key={location.id}>
-              <Link className={styles.card} href={`/locations/${location.id}`}>
-                {/* TODO: replace with approved Lummi art. One placeholder mark
-                    for every card: which motif belongs to which place is an art
-                    decision, not an engineering one. */}
-                <span className={styles.motif} aria-hidden="true" />
+              <Link
+                className={`${styles.card} ${anyPhoto ? styles.withPhoto : ''}`}
+                href={`/locations/${location.id}`}
+              >
+                {/* The Location's main photo, when one is uploaded (owner,
+                    1 Oct 2026): across the top of the card on desktop, a small
+                    square on a phone. It stands in for the motif mark. The
+                    name beside it says which store it is, so it is decorative
+                    to a screen reader. */}
+                {location.hero?.image ? (
+                  <span className={styles.photo}>
+                    <Image
+                      src={location.hero.image}
+                      alt=""
+                      fill
+                      sizes="(min-width: 768px) 400px, 44px"
+                      className={styles.photoImg}
+                    />
+                  </span>
+                ) : anyPhoto ? (
+                  <span className={`${styles.photo} ${styles.photoEmpty}`} aria-hidden="true">
+                    {/* TODO: replace with approved Lummi art. */}
+                    <span className={styles.motif} />
+                  </span>
+                ) : (
+                  /* TODO: replace with approved Lummi art. One placeholder mark
+                     for every card: which motif belongs to which place is an
+                     art decision, not an engineering one. */
+                  <span className={styles.motif} aria-hidden="true" />
+                )}
                 <span className={styles.cardText}>
                   <span className={styles.cardName}>{location.navLabel}</span>
                   <span className={styles.cardLine}>

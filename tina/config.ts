@@ -462,8 +462,16 @@ const locations: Collection = {
       type: 'object',
       name: 'hero',
       label: 'Main photo',
+      description:
+        'Shown wide at the top of this location’s page, and on its card wherever the location cards appear (Home, the Locations page, the other location pages). Leave empty for no photo.',
       fields: [
-        { type: 'image', name: 'image', label: 'Photo' },
+        {
+          type: 'image',
+          name: 'image',
+          label: 'Photo',
+          description:
+            'One landscape photo, 2400 by 1350 or larger, with the storefront in the middle. The page shows a wide strip of it, the card most of it, and a phone a small square from the centre.',
+        },
         {
           type: 'string',
           name: 'alt',

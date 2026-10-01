@@ -121,3 +121,23 @@ mention. He is standing *in* the treeline, not in front of it.
   company's own sasquatch, or some combination — is an art-direction decision with a real budget
   and lead time, and it is on the critical path in the same way the logo is.
 - The guardrail above does not expire. Whoever draws the final art works to it.
+
+## Amendment — 1 Oct 2026: Location photos have a place
+
+At the owner's direction, a Location's **Main photo** (`hero.image`, which the CMS already
+offered) now shows on the site. Until now the field was saved and never drawn, so the owner
+uploaded a photo and nothing happened.
+- **On the Location's page:** under the title, a wide strip, 2:1 from 768px and 16:9 on a phone.
+- **On its card, wherever Location cards appear** (`LocationList`: Home, the Locations index,
+  the other Location pages):
+  - on desktop, across the top of the card, 16:9;
+  - on a phone, a 44px square in place of the motif mark.
+- **Empty cards:** once any card in a list has a photo, the cards without one show a pale panel
+  of the same size with the placeholder mark, so a row stays one shape. With no photos at all,
+  the cards are exactly as before.
+- **Files:** only files uploaded to this site are drawn, and never a header motif
+  (`sitePhoto` in `lib/locations.ts`). One 2400 × 1350 landscape file serves every size; the
+  designer spec lists them.
+
+This does not settle the art-direction gap above. It gives store photography a place to go
+when there is some. The 100 MB media cap in ADR 0013 still applies.
