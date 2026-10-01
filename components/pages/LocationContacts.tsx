@@ -165,7 +165,7 @@ function ContactCard({ entry, nameLevel }: { entry: ContactEntry; nameLevel: 'h2
               where an opening time goes. */}
           <dd className={styles.hrs}>
             <Suspense fallback={entry.hours}>
-              <LiveHours hours={entry.hours} overrides={entry.hoursOverrides} showReason />
+              <LiveHours hours={entry.hours} overrides={entry.hoursOverrides} of={entry.key} showReason />
             </Suspense>
           </dd>
         </div>

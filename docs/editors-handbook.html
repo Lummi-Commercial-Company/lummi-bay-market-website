@@ -339,8 +339,9 @@ footer{
   </div>
 
   <h3>How long "published" takes — it depends what you changed</h3>
-  <p>This is the part people get wrong. Three things on this site publish instantly by design;
-  everything else waits about a minute or two for the site to rebuild itself.</p>
+  <p>This is the part people get wrong. The things you change most — prices, notices, promotions,
+  hours — are read fresh from the CMS and show within about 10–20 seconds; everything else waits
+  about a minute or two for the site to rebuild itself.</p>
 
   <div class="tw">
     <table>
@@ -348,15 +349,15 @@ footer{
       <tbody>
         <tr>
           <td><b>A fuel price</b></td>
-          <td class="n">Immediately</td>
-          <td>Prices are read fresh every time a page loads, not baked into the page. There is no
-          rebuild to wait for.</td>
+          <td class="n">10–20 seconds</td>
+          <td>Prices are read fresh from the CMS, not baked into the page. There is no rebuild to
+          wait for; the site re-checks every 10 seconds.</td>
         </tr>
         <tr>
-          <td><b>The emergency notice</b> (site alert)</td>
-          <td class="n">Under a second</td>
-          <td>Saving it refreshes the site's caches worldwide in about 300 milliseconds, with no
-          rebuild.</td>
+          <td><b>A notice</b> (Site Settings → Notices), or <b>a promotion</b> — switched on or off,
+          re-dated, re-ordered, re-worded — or <b>a location's hours or temporary hours</b></td>
+          <td class="n">10–20 seconds</td>
+          <td>Read fresh from the CMS in the same way, with no rebuild.</td>
         </tr>
         <tr>
           <td><b>A promo starting or ending</b><br><b>An hours override starting or ending</b></td>
@@ -365,8 +366,8 @@ footer{
           has to run at midnight, so nothing can fail to run.</td>
         </tr>
         <tr>
-          <td><b>Everything else</b> — page copy, hours, addresses, promo artwork and wording,
-          settings, the watermark</td>
+          <td><b>Everything else</b> — page copy, offer pages, addresses, photos, footer links,
+          the watermark, the header motifs</td>
           <td class="n">~1–2 min</td>
           <td>Your save becomes a commit, the commit triggers a rebuild, the rebuild publishes.</td>
         </tr>
@@ -949,8 +950,9 @@ footer{
   </ol>
   <div class="note check">
     <h3>How you know it worked</h3>
-    <p>Reload any page on the live site. The bar is there, in the header, within a second. There is
-    no rebuild running — if it is not there after a hard refresh, it did not publish.</p>
+    <p>Reload any page on the live site. The bar is there, in the header, within about 20 seconds.
+    There is no rebuild running — if it is not there after a minute and a hard refresh, it did not
+    publish.</p>
   </div>
   <div class="note">
     <h3>Taking it down matters as much as putting it up</h3>
@@ -1254,9 +1256,8 @@ footer{
     <table>
       <thead><tr><th>Content</th><th class="n">Live in</th></tr></thead>
       <tbody>
-        <tr><td>Fuel price</td><td class="n">Immediately</td></tr>
-        <tr><td>Emergency notice on or off</td><td class="n">Under a second</td></tr>
-        <tr><td>Side watermark on, off, or dimmed</td><td class="n">Under a second</td></tr>
+        <tr><td>Fuel price</td><td class="n">10–20 seconds</td></tr>
+        <tr><td>A notice, a promotion, or a location's hours</td><td class="n">10–20 seconds</td></tr>
         <tr><td>A promo or hours override starting or ending on its date</td><td class="n">On the dot</td></tr>
         <tr><td>Everything else</td><td class="n">~1–2 min</td></tr>
         <tr><td>A page already open on someone's phone</td><td class="n">When they refresh</td></tr>

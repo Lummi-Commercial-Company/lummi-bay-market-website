@@ -23,3 +23,17 @@ test('the CMS knows which build it is running, to warn when a newer one is up', 
   )
   assert.equal(adminBundleFrom('<script type="module" src="/@vite/client"></script>'), null, 'local dev: no check')
 })
+
+test('live fuel prices: the CMS field names go back to the location slugs', async () => {
+  // The shape the content API returned for content/fuel-prices.json (1 Oct 2026).
+  const { fuelPricesFromLive } = await import('./live-shapes.ts')
+  const doc = fuelPricesFromLive({
+    _collection: 'fuelPrices',
+    linkLocations: true,
+    locations: { exit_260: { regular: 4.89 }, minimart: { regular: 3.79 }, fishermans_cove: { regular: 3.85 } },
+    truckStop: { diesel: 4.55, def: 3.29 },
+  })
+  assert.deepEqual(Object.keys(doc.locations), ['exit-260', 'minimart', 'fishermans-cove'])
+  assert.equal(doc.locations['exit-260'].regular, 4.89)
+  assert.equal(doc.truckStop.def, 3.29)
+})

@@ -49,6 +49,10 @@ All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
   - Content is stored as Markdown/JSON **files in the git repo** — this is what lets
     Claude make content updates through chat via a normal commit and push.
 - Static-first: prerender pages (SSG/ISR). No content database to run or back up.
+- **Live content** (1 Oct 2026, ADR 0024 Amendment): fuel prices, notices, promotions and their
+  rows, and Location hours are read per visit from the TinaCloud content API (`lib/tina-live.ts`,
+  10-second cache, the built file as fallback), so a CMS save shows in about 10–20 seconds. Page
+  text still waits for the deploy, which reuses the built CMS editor when only content changed.
 - Domain: **lummibay.com** is canonical; **exit260.com** 301-redirects to the Exit 260
   location page. lcc-lummi.com stays as-is (the footer link — see ADR 0001).
 - Deploy: **Vercel Pro, $20/mo** (best Next.js support; auto-rebuilds on git push). Pro is
@@ -83,8 +87,8 @@ cannot hold the lockup, three links and the pill below ~430px, which is every co
   sitewide and says something the hours cannot; the override is per-Location and fixes the hours
   themselves wherever they render.
 - **Emergency notice**: a list of notices (`alerts` in Site settings) rides inside the sticky
-  header on every page, published by on-demand revalidation in under a second rather than a
-  rebuild — ADR 0017. Since 30 Sep 2026 each notice may carry its own start and end (MM/DD/YYYY,
+  header on every page, read live from the TinaCloud content API (10-second cache) so a save is
+  up in about 10–20 seconds, not after a rebuild — ADR 0017, ADR 0024 Amendment. Since 30 Sep 2026 each notice may carry its own start and end (MM/DD/YYYY,
   optional time), evaluated per visitor in Pacific time; with no dates it is one switch, as
   before. The bar shows one notice: the first live one in list order. Rules in `lib/notices.ts`,
   with tests. It is

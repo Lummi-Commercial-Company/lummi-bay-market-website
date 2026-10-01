@@ -1,5 +1,7 @@
 import { connection } from 'next/server'
 import { readContentJson } from './content'
+import { fuelPricesFromLive } from './live-shapes'
+import { liveDocument } from './tina-live'
 import { LOCATION_ORDER, shortLabelOf } from './locations'
 import { formatUsDay, toStoreDay } from './pacific-time'
 import type { FuelGrade, FuelPricesDoc, LocationDoc, PricedPlace } from './types'
@@ -17,11 +19,10 @@ import type { FuelGrade, FuelPricesDoc, LocationDoc, PricedPlace } from './types
  * with `connection()` and is meant to be called inside a <Suspense> boundary so
  * the rest of the page stays static.
  *
- * PHASE 2: the read below becomes a query against the Tina content API, which
- * is what makes "live on publish" true. Until that project exists the file in
- * this repo is both the source and the fallback, which means a price is live at
- * the end of the next deploy — roughly two minutes. That gap is the open
- * business question in `docs/roadmap.md` Phase 0 item 6.
+ * Done 1 Oct 2026: the read is the TinaCloud content API (lib/tina-live.ts),
+ * so a saved price is on the site within about 10–20 seconds instead of at
+ * the end of the next deploy. The file in this repo is the fallback when the
+ * API cannot be reached, and the source in local development.
  */
 
 export const FUEL_PRICES_PATH = 'fuel-prices.json'
@@ -49,7 +50,8 @@ const EMPTY_PRICES: FuelPricesDoc = {
 export async function getFuelPrices(): Promise<FuelPricesDoc> {
   // Per request, never baked in. See ADR 0024 and the comment in next.config.js.
   await connection()
-  const doc = await readContentJson<FuelPricesDoc>(FUEL_PRICES_PATH)
+  const live = await liveDocument('fuelPrices', FUEL_PRICES_PATH)
+  const doc = live ? fuelPricesFromLive(live) : await readContentJson<FuelPricesDoc>(FUEL_PRICES_PATH)
   if (!doc) return EMPTY_PRICES
   return {
     // `linkLocations` records the checkbox position in the CMS and nothing
@@ -58,8 +60,10 @@ export async function getFuelPrices(): Promise<FuelPricesDoc> {
     linkLocations: doc.linkLocations === true,
     locations: { ...EMPTY_PRICES.locations, ...(doc.locations ?? {}) },
     truckStop: doc.truckStop ?? {},
+    source: live ? 'live' : 'build',
   }
 }
+
 
 export interface PriceRow {
   /** Stable key: a Location slug, or 'truck-stop'. */

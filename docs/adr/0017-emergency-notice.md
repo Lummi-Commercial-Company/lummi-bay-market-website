@@ -90,3 +90,9 @@ and still one switch.
 visitor needs to know. The owner's first notice announces the anniversary celebration. That is an
 event rather than an offer, and it is the owner's call, but the "never used for an offer" rule in
 Consequences stands: a bar that sells is a bar nobody believes on the day it says the road is shut.
+
+**Live read (1 Oct 2026).** The notice is now read from the TinaCloud content API on each visit,
+cached for 10 seconds (ADR 0024, Amendment). A saved notice is up in about 10–20 seconds with no
+deploy and no webhook. `/api/revalidate` was never called by anything, and on its own it could
+not have helped: it drops the cache, but the cache was rebuilt from the *built* file. It remains
+as a manual tool and is no longer the publishing path.

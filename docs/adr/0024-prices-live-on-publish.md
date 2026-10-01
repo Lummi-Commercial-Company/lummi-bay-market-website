@@ -88,3 +88,39 @@ is a second request-time dependency bought for nothing.
 - **This does not license request-time rendering elsewhere.** Promos compute live per visitor
   already (ADR 0018) and the notice does not. Nothing else on the site has a freshness
   requirement measured in seconds, and adding one should have to argue for itself here.
+
+## Amendment — 1 Oct 2026: built as decided, and widened
+
+The decision above was not what shipped. `lib/fuel-prices.ts` rendered per request but read the
+*built* `content/fuel-prices.json`, and its own comment said so ("PHASE 2"). That is the
+regression this ADR warns about. A saved price waited for the next deploy, which took 66 to 263
+seconds measured over eight deploys. The owner asked for under 30 seconds.
+
+**Now:** `lib/tina-live.ts` reads the TinaCloud content API. It uses one generic `document` /
+`collection` query, `X-API-KEY: TINA_TOKEN`, and the API version is the installed
+`@tinacms/graphql` major.minor (a test fails if an upgrade moves it).
+
+| Read live | Where |
+|---|---|
+| Fuel prices | `getFuelPrices` |
+| Notices | the header notice slot (ADR 0017) |
+| Promotions, Site Settings rows, the live home page's rows | the promo region (ADR 0018) |
+| Location hours and temporary hours | `LiveHours` (`of=`) and `LiveCardLine` (ADR 0027) |
+
+Page text and offer pages still arrive with the deploy.
+
+- **10-second cache.** Each read is cached for 10 seconds and then refreshed in the background.
+  Measured against a local content server, a change showed in 3 seconds and the revert in 10.
+  Allow 10–20 seconds on the host.
+- **The built copy is the fallback, always.** No credentials, a timeout over 2.5 seconds, an
+  error or an unparsable answer all fall back to it, and after a failure the API is skipped for
+  30 seconds. With the API unreachable, every page still rendered, in 50ms. Each live part
+  carries `data-source="live|build"` so this can be checked from outside.
+- **Answers are mapped back to the files' shape.** The API answers with the CMS's field names,
+  not the file keys (`exit_260`, `slug` for `exit-260`, `id`), and with asset-host picture
+  addresses. Both are mapped back (`lib/live-shapes.ts`, tested).
+- **Faster deploys for everything else.** `scripts/tina-build.mjs` keeps the built `/admin` in
+  `.next/cache`, keyed by a hash of everything the editor is built from: `tina/`, `lib/`, the
+  packages, the TinaCloud project and branch. A content-only commit, which is every CMS save,
+  copies it instead of rebuilding: 0 seconds instead of about 40. `TINA_FORCE_BUILD=1` always
+  rebuilds.

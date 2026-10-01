@@ -50,6 +50,7 @@ export default async function TruckStopPage() {
               <LiveHours
                 hours={truckStop.hours}
                 overrides={truckStop.hoursOverrides}
+                of={`${exit260.id}-truck-stop`}
                 showReason
               />
             </Suspense>

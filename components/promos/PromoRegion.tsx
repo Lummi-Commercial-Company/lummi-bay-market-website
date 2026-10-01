@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { connection } from 'next/server'
 import { Suspense } from 'react'
 import styles from './PromoRegion.module.css'
-import { getPromos } from '@/lib/promo-data'
+import { getLivePromos } from '@/lib/promo-data'
+import { asRowLayouts } from '@/lib/promo-rows'
 import {
   fillRows,
   livePromosFor,
@@ -13,6 +14,7 @@ import {
   type RowLayout,
 } from '@/lib/promos'
 import { getSettings } from '@/lib/settings'
+import { liveDocument } from '@/lib/tina-live'
 
 /**
  * The promo region (ADR 0007, ADR 0018, ADR 0023).
@@ -57,15 +59,27 @@ interface PromoRegionProps {
 
 async function PromoRegion({ target, rows, position = 'top' }: PromoRegionProps) {
   await connection()
-  const [promos, settings] = await Promise.all([getPromos(), getSettings()])
+  // Promotions and their rows are read live (lib/tina-live.ts), so a change
+  // shows within seconds; the built copies are the fallback.
+  const [{ promos, source }, settings, liveSettings] = await Promise.all([
+    getLivePromos(),
+    getSettings(),
+    liveDocument('settings', 'site.json'),
+  ])
+  const siteRows = liveSettings ? asRowLayouts(liveSettings.promoRows) : settings.promoRows
+  const pageRows = target.home && liveSettings ? ((await liveHomeRows(liveSettings.liveMainPage)) ?? rows) : rows
   const live = livePromosFor(promos, target, pacificStamp(new Date()))
-  const filled = fillRows(rows?.length ? rows : settings.promoRows, live)
+  const filled = fillRows(
+    pageRows?.length ? pageRows : siteRows.length ? siteRows : settings.promoRows,
+    live
+  )
   if (filled.length === 0) return null
 
   return (
     <section
       className={`${styles.region} ${position === 'end' ? styles.atEnd : styles.atTop}`}
       data-promos={position}
+      data-source={source}
       aria-label="Current offers"
     >
       {filled.map((row, rowIndex) => {
@@ -134,4 +148,12 @@ function PromoCard({
       </span>
     </Link>
   )
+}
+
+/** The live home page's own rows, read live; undefined means none set. */
+async function liveHomeRows(liveMainPage: unknown): Promise<RowLayout[] | undefined> {
+  const file = typeof liveMainPage === 'string' ? liveMainPage.split('/').pop() : undefined
+  if (!file) return undefined
+  const home = await liveDocument('mainPages', file)
+  return home ? asRowLayouts(home.promoRows) : undefined
 }

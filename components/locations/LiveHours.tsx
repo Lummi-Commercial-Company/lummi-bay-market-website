@@ -1,5 +1,5 @@
 import { connection } from 'next/server'
-import { resolveHours } from '@/lib/locations'
+import { getLiveLocations, hoursFor, resolveHours } from '@/lib/locations'
 import type { HoursOverride } from '@/lib/types'
 
 /**
@@ -23,15 +23,23 @@ export async function LiveHours({
   overrides,
   showReason = false,
   className,
+  of,
 }: {
   hours: string
   overrides?: HoursOverride[]
+  /**
+   * Whose hours: a Location id, or `{id}-truck-stop`. Given, the hours are read
+   * live (lib/tina-live.ts) so temporary hours saved a moment ago show within
+   * seconds; `hours` and `overrides` are then only the fallback.
+   */
+  of?: string
   /** The detail page shows the why; the card never does. */
   showReason?: boolean
   className?: string
 }) {
   await connection()
-  const resolved = resolveHours(hours, overrides)
+  const current = of ? hoursFor(await getLiveLocations(), of) : undefined
+  const resolved = resolveHours(current?.hours || hours, current ? current.hoursOverrides : overrides)
 
   if (!resolved.isOverride) return <span className={className}>{resolved.hours}</span>
 
