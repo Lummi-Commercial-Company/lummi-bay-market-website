@@ -72,6 +72,30 @@
   }
 }
 
+/* A Location's main photo, under its page title: a wide strip, cropped to
+   fit (owner, 1 Oct 2026). 16:9 on a phone, 2:1 from 768px. */
+.locPhoto {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: var(--sp-3) 0 var(--sp-5);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--lb-bone);
+}
+
+.locPhotoImg {
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (min-width: 768px) {
+  .locPhoto {
+    aspect-ratio: 2 / 1;
+  }
+}
+
 /* The sentence under a page title. 15px on a phone, 16px from 768px — the
    approved templates' `.hero p` / `.page-lede`, not the 18px lead step. */
 .lede {

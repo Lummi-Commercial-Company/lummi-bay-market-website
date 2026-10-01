@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -45,6 +46,21 @@ export default async function LocationPage({
     <div className={styles.pagegrid}>
       <div className={styles.maincol}>
         <h1>{location.name}</h1>
+
+        {/* The Location's main photo (Location Details → Main photo), when
+            one is uploaded. Nothing — no empty frame — when it is not. */}
+        {location.hero?.image ? (
+          <div className={styles.locPhoto}>
+            <Image
+              src={location.hero.image}
+              alt={location.hero.alt ?? ''}
+              fill
+              priority
+              sizes="(min-width: 900px) 720px, 100vw"
+              className={styles.locPhotoImg}
+            />
+          </div>
+        ) : null}
 
         <dl className={styles.dl}>
           <dt>Address</dt>
