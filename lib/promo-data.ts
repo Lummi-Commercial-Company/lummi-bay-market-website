@@ -4,6 +4,7 @@ import { listContentFilesDeep, readContentFile } from './content'
 import { splitFrontmatter } from './frontmatter'
 import { getInfoPages } from './pages'
 import { toPromo, type PromoDoc } from './promos'
+import { liveCollection } from './tina-live'
 
 /**
  * Every promo document in content/promos/, parsed and checked — whatever its
@@ -45,4 +46,29 @@ export async function getPromos(): Promise<PromoDoc[]> {
     promos.push(result.promo)
   }
   return promos
+}
+
+/**
+ * The same, read live from the CMS (lib/tina-live.ts), so a promotion saved a
+ * moment ago — switched on, re-dated, re-ordered — shows within seconds. The
+ * built files are the fallback. An offer page still has to be built before a
+ * promotion can link to it: offer pages are static pages, so a promotion
+ * pointing at one that is not built yet waits for the deploy, as it should.
+ */
+export async function getLivePromos(): Promise<{ promos: PromoDoc[]; source: 'live' | 'build' }> {
+  const docs = await liveCollection('promos')
+  if (!docs) return { promos: await getPromos(), source: 'build' }
+
+  const offerPages = new Set((await getInfoPages()).map((page) => page.slug))
+  const promos: PromoDoc[] = []
+  for (const doc of docs) {
+    const result = toPromo(doc.relativePath.replace(/\.mdx?$/, ''), doc.values)
+    if ('refused' in result) {
+      console.error(`[promos] ${doc.relativePath} is not shown: ${result.refused}`)
+      continue
+    }
+    if (!offerPages.has(result.promo.link)) continue
+    promos.push(result.promo)
+  }
+  return { promos, source: 'live' }
 }

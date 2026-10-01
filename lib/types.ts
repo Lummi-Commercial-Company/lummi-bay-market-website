@@ -85,6 +85,8 @@ export interface FuelPricesDoc {
   locations: Record<LocationSlug, PricedPlace>
   /** Never touched by `linkLocations`. Always priced on its own. */
   truckStop: PricedPlace
+  /** Where this read came from: the content API, or the built file (lib/tina-live.ts). */
+  source?: 'live' | 'build'
 }
 
 export interface SocialLink {

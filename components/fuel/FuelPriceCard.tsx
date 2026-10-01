@@ -38,6 +38,7 @@ export function FuelPriceCard({
   cardColumnLabels,
   panelColumnLabels,
   updated,
+  source,
 }: {
   subjectKey: string
   companionKey?: string
@@ -47,6 +48,8 @@ export function FuelPriceCard({
   cardColumnLabels: string[]
   panelColumnLabels: string[]
   updated: string | null
+  /** Where the prices were read from (lib/tina-live.ts) — a data attribute, for checking. */
+  source?: 'live' | 'build'
 }) {
   const [condensed, setCondensed] = useState(false)
   const [open, setOpen] = useState(false)
@@ -98,7 +101,7 @@ export function FuelPriceCard({
   const liveColumns = condensed || panel.length > 0 ? panelColumnLabels : cardColumnLabels
 
   return (
-    <aside className={styles.block} aria-label="Fuel prices" data-condensed={condensed}>
+    <aside className={styles.block} aria-label="Fuel prices" data-condensed={condensed} data-source={source}>
       {/* Marks the point the card has scrolled past. Zero height, no paint. */}
       <div ref={sentinel} className={styles.sentinel} aria-hidden="true" />
 

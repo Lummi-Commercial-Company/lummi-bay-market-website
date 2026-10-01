@@ -73,6 +73,7 @@ export async function FuelPriceBlock({ subject = 'exit-260' }: FuelPriceBlockPro
       cardColumnLabels={cardColumns.map((g) => FUEL_GRADE_LABELS[g])}
       panelColumnLabels={panelColumns.map((g) => FUEL_GRADE_LABELS[g])}
       updated={formatUpdated(latestUpdated(rows))}
+      source={prices.source}
     />
   )
 }

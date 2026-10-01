@@ -2,9 +2,10 @@ import Link from 'next/link'
 import { connection } from 'next/server'
 import { Suspense } from 'react'
 import styles from './SiteHeader.module.css'
-import { liveNotice } from '@/lib/notices'
+import { liveNotice, noticesFrom } from '@/lib/notices'
 import { pacificStamp } from '@/lib/pacific-time'
 import { getSettings } from '@/lib/settings'
+import { liveDocument } from '@/lib/tina-live'
 import type { SiteAlertDoc } from '@/lib/types'
 
 /**
@@ -23,9 +24,12 @@ export function SiteAlertSlot() {
 
 async function LiveSiteAlert() {
   await connection()
-  const settings = await getSettings()
-  const notice = liveNotice(settings.alerts, pacificStamp(new Date()))
-  return notice ? <SiteAlert alert={notice} /> : null
+  // Read live from the CMS (lib/tina-live.ts), so a notice saved a moment ago
+  // is up within seconds; the built settings are the fallback.
+  const live = await liveDocument('settings', 'site.json')
+  const notices = live ? noticesFrom(live) : (await getSettings()).alerts
+  const notice = liveNotice(notices, pacificStamp(new Date()))
+  return notice ? <SiteAlert alert={notice} source={live ? 'live' : 'build'} /> : null
 }
 
 /**
@@ -43,7 +47,7 @@ async function LiveSiteAlert() {
  * fixes the hours themselves wherever they render (ADR 0027). This is sitewide,
  * immediate, and says something the hours cannot.
  */
-export function SiteAlert({ alert }: { alert: SiteAlertDoc }) {
+export function SiteAlert({ alert, source }: { alert: SiteAlertDoc; source?: 'live' | 'build' }) {
   if (!alert.active || !alert.headline.trim()) return null
 
   const body = (
@@ -59,7 +63,7 @@ export function SiteAlert({ alert }: { alert: SiteAlertDoc }) {
   )
 
   return (
-    <div className={styles.alert} role="status" aria-live="polite">
+    <div className={styles.alert} role="status" aria-live="polite" data-source={source}>
       <div className={styles.alertInner}>
         {alert.link ? (
           <Link href={alert.link} className={styles.alertLink}>

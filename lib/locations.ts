@@ -1,4 +1,5 @@
 import { cacheLife, cacheTag } from 'next/cache'
+import { liveCollection } from './tina-live'
 import { CACHE_TAGS } from './cache-tags'
 import { readContentFile, listContentFiles } from './content'
 import { splitFrontmatter } from './frontmatter'
@@ -113,6 +114,39 @@ export async function getLocations(): Promise<LocationDoc[]> {
   return docs.sort(
     (a, b) => LOCATION_ORDER.indexOf(a.id) - LOCATION_ORDER.indexOf(b.id)
   )
+}
+
+/**
+ * The Locations read live from the CMS (lib/tina-live.ts), for the parts that
+ * work out the hours per visit — so temporary hours saved a moment ago show
+ * within seconds. The built files are the fallback, and still supply each
+ * Location's body text. The CMS calls the `id` field `slug` (tina/config.ts,
+ * `nameOverride`), so it is read under either name.
+ */
+export async function getLiveLocations(): Promise<LocationDoc[]> {
+  const docs = await liveCollection('locations')
+  const built = await getLocations()
+  if (!docs) return built
+  const live = docs
+    .map(({ values }) => {
+      const id = asString(values.id) || asString(values.slug)
+      return toLocation({ ...values, id }, built.find((b) => b.id === id)?.body ?? '')
+    })
+    .filter((doc): doc is LocationDoc => doc !== null)
+  return live.length ? live.sort((a, b) => LOCATION_ORDER.indexOf(a.id) - LOCATION_ORDER.indexOf(b.id)) : built
+}
+
+/**
+ * Hours by the key the pages use: a Location's id (`minimart`), or its id and
+ * `-truck-stop` for the Truck Stop on its property (`exit-260-truck-stop`).
+ */
+export function hoursFor(
+  locations: LocationDoc[],
+  key: string
+): { hours: string; hoursOverrides?: LocationDoc['hoursOverrides'] } | undefined {
+  const truck = key.endsWith('-truck-stop')
+  const location = locations.find((l) => l.id === (truck ? key.slice(0, -'-truck-stop'.length) : key))
+  return truck ? location?.truckStop : location
 }
 
 export async function getLocation(id: LocationSlug): Promise<LocationDoc | undefined> {

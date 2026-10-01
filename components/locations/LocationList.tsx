@@ -63,7 +63,7 @@ export async function LocationList({
             <p className={styles.truckLine}>
               {truckStop.summary ? <>{truckStop.summary} </> : null}
               <Suspense fallback={truckStop.hours}>
-                <LiveHours hours={truckStop.hours} overrides={truckStop.hoursOverrides} />
+                <LiveHours hours={truckStop.hours} overrides={truckStop.hoursOverrides} of={`${truckHome.id}-truck-stop`} />
               </Suspense>
               .
             </p>

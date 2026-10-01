@@ -79,6 +79,7 @@ export default async function LocationPage({
               <LiveHours
                 hours={location.hours}
                 overrides={location.hoursOverrides}
+                of={location.id}
                 showReason
               />
             </Suspense>
@@ -116,6 +117,7 @@ export default async function LocationPage({
                 <LiveHours
                   hours={location.truckStop.hours}
                   overrides={location.truckStop.hoursOverrides}
+                  of={`${location.id}-truck-stop`}
                 />
               </Suspense>
               .

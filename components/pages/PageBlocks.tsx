@@ -161,7 +161,7 @@ async function HoursTable({
               <th scope="row">{row.label}</th>
               <td>
                 <Suspense fallback={row.hours}>
-                  <LiveHours hours={row.hours} overrides={row.overrides} showReason />
+                  <LiveHours hours={row.hours} overrides={row.overrides} of={row.key} showReason />
                 </Suspense>
               </td>
             </tr>
