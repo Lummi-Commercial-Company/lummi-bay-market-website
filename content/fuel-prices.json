@@ -1,8 +1,8 @@
 {
-  "linkLocations": true,
+  "linkLocations": false,
   "locations": {
     "exit-260": {
-      "regular": 4.99,
+      "regular": 4.89,
       "diesel": 6.99,
       "updated": "09/29/2026"
     },
