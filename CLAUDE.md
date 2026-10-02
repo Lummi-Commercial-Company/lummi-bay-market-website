@@ -20,6 +20,9 @@ Lummi Bay Market brand.
 2. **Lummi Bay Minimart** — fuel + convenience store.
 3. **The Cove** (aka "Fisherman's Cove") — fuel + convenience store.
 All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
+**Staff can add a Location** in the CMS (owner, 2 Oct 2026): its file name is its address, it
+appears everywhere Locations are listed, and it is priced under Fuel Prices → Other store prices
+— ADR 0030.
 
 ## Hard rules (never break)
 - **Logo is locked.** Use the existing logo art as-is. Never redraw, recolor, or

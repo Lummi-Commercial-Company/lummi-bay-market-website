@@ -13,6 +13,10 @@ Single source: `content/fuel-prices.json`, a TinaCMS collection with `ui.global:
 appears under "Site" in the sidebar and opens straight to the form. Nothing else stores
 prices — the whole site reads from here.
 
+**Locations added later** (ADR 0030) are priced in `otherStores` in the same file — one row
+each: `{ "location": "content/locations/<id>.mdx", "regular", "diesel", "def", "updated" }`.
+A row never overrides the first three, and the shared-price switch does not copy into it.
+
 **Eight prices.** Regular + diesel at each of the three Locations; diesel + DEF at the
 Truck Stop. Midgrade, premium and ethanol-free are NOT priced on this site.
 

@@ -25,7 +25,8 @@ import type { PriceRow } from '@/lib/fuel-prices'
  * published price is live immediately (ADR 0024).
  */
 
-export type FuelSubject = 'exit-260' | 'minimart' | 'fishermans-cove' | 'truck-stop'
+/** A Location id, or 'truck-stop'. Any Location — staff can add them (ADR 0030). */
+export type FuelSubject = string
 
 export interface FuelPriceBlockProps {
   /**
@@ -43,8 +44,11 @@ export async function FuelPriceBlock({ subject = 'exit-260' }: FuelPriceBlockPro
   const [locations, prices] = await Promise.all([getLocations(), getFuelPrices()])
   const rows = allPriceRows(locations, prices)
 
-  const subjectRow = rows.find((row) => row.key === subject)
+  // A Location with no prices posted yet has no row of its own; its page leads
+  // with the flagship instead of losing the block (ADR 0005, ADR 0030).
+  const subjectRow = rows.find((row) => row.key === subject) ?? rows.find((row) => row.key === 'exit-260')
   if (!subjectRow) return null
+  subject = subjectRow.key
 
   // The companion in the resting card: the Truck Stop, or Exit 260 when the
   // Truck Stop is the subject. It is the row that moves into the panel when the

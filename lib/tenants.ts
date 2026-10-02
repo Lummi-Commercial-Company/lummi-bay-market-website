@@ -2,7 +2,7 @@ import { cacheLife, cacheTag } from 'next/cache'
 import { CACHE_TAGS } from './cache-tags'
 import { listContentFiles, readContentFile } from './content'
 import { splitFrontmatter } from './frontmatter'
-import { LOCATION_ORDER, sitePhoto } from './locations'
+import { sitePhoto } from './locations'
 import { asBlocks, getPages } from './pages'
 import { tenantGates } from './tenant-rules'
 import type { LocationSlug, PageDoc, TenantDoc, TenantPlacement } from './types'
@@ -35,10 +35,9 @@ function asString(value: unknown): string {
   return typeof value === 'string' ? value : ''
 }
 
-/** `content/locations/exit-260.mdx` → `exit-260`, if it is one of ours. */
+/** `content/locations/exit-260.mdx` → `exit-260`. Looked up where it is shown. */
 function asLocation(value: unknown): LocationSlug | undefined {
-  const id = asString(value).split('/').pop()?.replace(/\.mdx?$/, '')
-  return LOCATION_ORDER.find((slug) => slug === id)
+  return asString(value).split('/').pop()?.replace(/\.mdx?$/, '') || undefined
 }
 
 export function toTenant(slug: string, data: Record<string, unknown>, body: string): TenantDoc | null {

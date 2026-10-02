@@ -10,7 +10,8 @@ site's master mark, used sitewide (header, home hero). The three Locations are s
 operating under Lummi Bay Market. Referred to as "Lummi Bay Market" in copy.
 
 **Location** — A physical Lummi Bay fuel + convenience site with its own name.
-Exactly three exist; there are no others in scope.
+Three exist today — Exit 260, the Minimart, Fisherman's Cove — and staff can add another in
+the CMS (ADR 0030). A Location's id is its file name and its web address.
 
 **Exit 260** — A Location. Full name "Lummi Bay Market at Exit 260"; nav label
 "Exit 260". Sits on the Salish Village development beside I-5 Exit 260. The Location is
@@ -39,7 +40,7 @@ Exit 260 / Salish Village: **Piroshky Piroshky** (a counter inside the store), *
 and **Black Bear Diner** (freestanding buildings; Black Bear not yet built), and **Hi-Tide
 Coffee** (a truck outside the store). The site never mentions renting, leasing or landlords — see
 ADR 0016. A Tenant is **not a Location**
-— Locations are the three Lummi Bay stores and nothing else, and the Locations index and
+— Locations are Lummi Bay's own stores and nothing else, and the Locations index and
 the fuel price table both read from that set. A Tenant is also **not an Amenity**: the Cove
 Kitchen is an Amenity because Lummi Bay Market runs it, while the piroshki counter sits
 inside the Exit 260 store and is somebody else's business. Ownership decides which, not
@@ -50,9 +51,10 @@ _Avoid_: partner, vendor, concession.
 diesel, and DEF. Midgrade, premium, and ethanol-free are not priced on this site.
 _Avoid_: fuel type, product.
 
-**Fuel Price** — A posted price for one Fuel Grade at one place. Four places post prices:
-the three Locations and the Truck Stop. The three Locations may be priced together or
-separately; the Truck Stop is always priced on its own.
+**Fuel Price** — A posted price for one Fuel Grade at one place. The places that post prices
+are the Locations and the Truck Stop. The first three Locations may be priced together or
+separately; a Location added later is priced on its own row (ADR 0030); the Truck Stop is always
+priced on its own.
 _Avoid_: gas price, pump price, rate.
 
 **DEF** — Diesel exhaust fluid. Not a fuel, but posted and priced like one, so it is a

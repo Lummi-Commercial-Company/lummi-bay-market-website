@@ -371,25 +371,44 @@ const locations: Collection = {
   label: 'Location Details',
   path: 'content/locations',
   format: 'mdx',
-  // There are exactly three Locations and there are no others in scope. A
-  // fourth would appear in the locations index, the fuel price table, /contact
-  // and the sitemap — a business renting space on our property is a Tenant, not
-  // a Location. Adding and deleting are therefore off.
-  ui: { allowedActions: { create: false, delete: false } },
+  // Staff can add a Location (owner, 2 Oct 2026; ADR 0030). It appears in the
+  // Locations index and menu, on /contact and in the sitemap, and in the fuel
+  // table once Fuel Prices has a row for it. A business renting space on our
+  // property is still an Other Business, not a Location (ADR 0016).
+  //
+  // Deleting stays off: a Location's address is printed, bookmarked and linked
+  // from promotions. "Show on the website" takes one off the site instead.
+  //
+  // The file name is the web address, filled in from the short name.
+  ui: {
+    allowedActions: { create: true, delete: false },
+    filename: {
+      slugify: (values) =>
+        String(values?.navLabel || values?.name || '')
+          .toLowerCase()
+          .replace(/['’]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, ''),
+    },
+  },
   fields: [
     {
-      // Every Tina document already has a built-in `id`, so a content field
-      // called `id` collides in the generated GraphQL schema. `nameOverride`
-      // keeps the key in the .mdx file as `id` — which is what the content
-      // model specifies and what lib/locations.ts reads — while Tina's own
-      // name for it is `slug`.
+      // The first three files carry an `id` line; the site now takes the id
+      // from the file name, which always matches it, so this is hidden. Every
+      // Tina document already has a built-in `id`, hence `slug` + nameOverride.
       type: 'string',
       name: 'slug',
       nameOverride: 'id',
       label: 'Location ID',
-      description: 'Set once when the location was created. Changing it breaks the web address and every link to it.',
-      required: true,
-      ui: { validate: (value?: string) => (value ? undefined : 'Required') },
+      ui: { component: 'hidden' },
+    },
+    {
+      type: 'boolean',
+      name: 'showOnSite',
+      label: 'Show on the website',
+      description:
+        'Off keeps this location off the site everywhere — useful while a new store is being written up before it opens. Its web address only works while this is on.',
+      ui: { component: onOffField({ on: 'on the website', off: 'hidden from the website', unsetIs: true }) },
     },
     {
       type: 'string',
@@ -405,6 +424,13 @@ const locations: Collection = {
       label: 'Short name (menus and cards)',
       description: 'Two or three words. For example: Exit 260.',
       required: true,
+    },
+    {
+      type: 'number',
+      name: 'order',
+      label: 'Position in lists',
+      description:
+        '1 shows first. Leave blank for the usual order: Exit 260, Minimart, Fisherman’s Cove, then any others A–Z. Used everywhere locations are listed, including the fuel prices.',
     },
     {
       type: 'string',
@@ -486,7 +512,7 @@ const locations: Collection = {
       name: 'truckStop',
       label: 'Truck Stop (Exit 260 only)',
       description:
-        'The Truck Stop is a separate fuel station for truckers sharing the Exit 260 property — not a service of the store. Its phone, hours and amenities are its own and are never mixed with the store’s. Leave this empty at the other two locations.',
+        'The Truck Stop is a separate fuel station for truckers sharing the Exit 260 property — not a service of the store. Its phone, hours and amenities are its own and are never mixed with the store’s. Leave this empty at every other location.',
       fields: [
         {
           type: 'string',
@@ -574,6 +600,26 @@ const fuelPrices: Collection = {
           label: 'Fisherman’s Cove',
           fields: priceFields(),
         },
+      ],
+    },
+    {
+      // Locations added after the first three (ADR 0030). The three above are
+      // fixed boxes; a list is what can grow when a Location is added. Folded
+      // into the same price map on read (lib/live-shapes.ts withOtherStores).
+      type: 'object',
+      name: 'otherStores',
+      label: 'Other store prices',
+      description:
+        'For any location added after the first three. Add a row, pick the location, and type its prices. A new location shows in the price table once it has a price here. Not copied from Exit 260.',
+      list: true,
+      ui: {
+        itemProps: (item) => ({
+          label: item?.location ? String(item.location).split('/').pop()?.replace(/\.mdx?$/, '') : 'Choose a location',
+        }),
+      },
+      fields: [
+        { type: 'reference', name: 'location', label: 'Location', collections: ['locations'] },
+        ...priceFields(),
       ],
     },
     {

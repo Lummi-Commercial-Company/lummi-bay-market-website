@@ -4,16 +4,21 @@ import { CACHE_TAGS } from './cache-tags'
 import { readContentFile, listContentFiles } from './content'
 import { splitFrontmatter } from './frontmatter'
 import { isWithinWindow, storeToday, windowLengthDays } from './pacific-time'
+import { compareLocations, isUsableLocationId } from './location-order'
 import type { HoursOverride, LocationDoc, LocationSlug } from './types'
 
 /**
- * The Location set. Exactly three exist and there are no others in scope
- * (CONTEXT.md). Every list of Locations on the site is derived from this —
- * never authored per page (ADR 0009).
+ * The Location set: every document in content/locations/. Staff can add one in
+ * the CMS (owner, 2 Oct 2026; ADR 0030) — it was a fixed three until then.
+ * Every list of Locations on the site is derived from it, never authored per
+ * page (ADR 0009), so a new Location appears in the Locations index and menu,
+ * on /contact, in the sitemap, and in the fuel table once it has a price.
  *
- * Display order is fixed: Exit 260 (the flagship), Minimart, Fisherman's Cove.
+ * Its id is its file name, which is its web address. Order: a Location's
+ * "Position in lists" when one is set; otherwise the usual order — Exit 260
+ * (the flagship), Minimart, Fisherman's Cove — then any others A–Z.
  */
-export const LOCATION_ORDER: LocationSlug[] = ['exit-260', 'minimart', 'fishermans-cove']
+export { compareLocations, isUsableLocationId, LOCATION_ORDER } from './location-order'
 
 function asString(value: unknown, fallback = ''): string {
   return typeof value === 'string' ? value : fallback
@@ -70,14 +75,22 @@ function asHero(value: unknown): { image?: string; alt?: string } | undefined {
   return { image: sitePhoto(hero.image), alt: asString(hero.alt) || undefined }
 }
 
-function toLocation(data: Record<string, unknown>, body: string): LocationDoc | null {
-  const id = asString(data.id) as LocationSlug
-  if (!LOCATION_ORDER.includes(id)) return null
+function toLocation(data: Record<string, unknown>, body: string, fileId: string): LocationDoc | null {
+  // The file name is the id and the address. The first three also carry an
+  // `id` line, which matches; a Location added in the CMS has only its name.
+  const id = asString(data.id).trim() || fileId
+  if (!isUsableLocationId(id)) {
+    console.error(`[locations] "${id}" is not a usable web address (lowercase letters, numbers and hyphens); skipped`)
+    return null
+  }
+  // "Show on the website" off: written but not yet open. Unset means shown.
+  if (data.showOnSite === false) return null
 
   const truckStopRaw = data.truckStop as Record<string, unknown> | undefined
 
   return {
     id,
+    order: typeof data.order === 'number' && Number.isFinite(data.order) ? data.order : undefined,
     name: asString(data.name),
     navLabel: asString(data.navLabel),
     shortLabel: asString(data.shortLabel) || undefined,
@@ -119,15 +132,14 @@ export async function getLocations(): Promise<LocationDoc[]> {
   const files = await listContentFiles('locations')
   const docs: LocationDoc[] = []
   for (const file of files) {
+    if (file.startsWith('.')) continue
     const raw = await readContentFile(`locations/${file}`)
     if (!raw) continue
     const { data, body } = splitFrontmatter(raw)
-    const doc = toLocation(data, body)
+    const doc = toLocation(data, body, file.replace(/\.mdx?$/, ''))
     if (doc) docs.push(doc)
   }
-  return docs.sort(
-    (a, b) => LOCATION_ORDER.indexOf(a.id) - LOCATION_ORDER.indexOf(b.id)
-  )
+  return docs.sort(compareLocations)
 }
 
 /**
@@ -142,12 +154,13 @@ export async function getLiveLocations(): Promise<LocationDoc[]> {
   const built = await getLocations()
   if (!docs) return built
   const live = docs
-    .map(({ values }) => {
-      const id = asString(values.id) || asString(values.slug)
-      return toLocation({ ...values, id }, built.find((b) => b.id === id)?.body ?? '')
+    .map(({ values, filename }) => {
+      const fileId = filename.replace(/\.mdx?$/, '')
+      const id = asString(values.id) || asString(values.slug) || fileId
+      return toLocation({ ...values, id }, built.find((b) => b.id === id)?.body ?? '', fileId)
     })
     .filter((doc): doc is LocationDoc => doc !== null)
-  return live.length ? live.sort((a, b) => LOCATION_ORDER.indexOf(a.id) - LOCATION_ORDER.indexOf(b.id)) : built
+  return live.length ? live.sort(compareLocations) : built
 }
 
 /**

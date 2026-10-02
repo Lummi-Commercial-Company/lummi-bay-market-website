@@ -6,7 +6,13 @@
 
 import type { RowLayout } from './promos.ts'
 
-export type LocationSlug = 'exit-260' | 'minimart' | 'fishermans-cove'
+/**
+ * A Location's id: its file name in content/locations/, which is also its web
+ * address (`/locations/{id}`). Staff can add Locations (owner, 2 Oct 2026;
+ * ADR 0030), so this is any id, not a fixed three. The original three are
+ * `exit-260`, `minimart` and `fishermans-cove`.
+ */
+export type LocationSlug = string
 
 /** The only three grades priced on this site (CONTEXT.md, ADR 0004). */
 export type FuelGrade = 'regular' | 'diesel' | 'def'
@@ -39,6 +45,8 @@ export interface TruckStopRecord {
 
 export interface LocationDoc {
   id: LocationSlug
+  /** "Position in lists" — 1 first. Unset: the usual order (ADR 0030). */
+  order?: number
   name: string
   navLabel: string
   /** Tightest label, for the fuel price band. Falls back to navLabel. */
@@ -86,6 +94,11 @@ export interface FuelPricesDoc {
    * per-location entries below (ADR 0004).
    */
   linkLocations: boolean
+  /**
+   * Keyed by Location id. The first three are fixed objects in the file; any
+   * Location added later is priced in the file's `otherStores` list, which is
+   * folded in here on read (ADR 0030) — callers see one map either way.
+   */
   locations: Record<LocationSlug, PricedPlace>
   /** Never touched by `linkLocations`. Always priced on its own. */
   truckStop: PricedPlace

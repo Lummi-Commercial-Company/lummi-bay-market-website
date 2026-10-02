@@ -34,6 +34,6 @@ test('live fuel prices: the CMS field names go back to the location slugs', asyn
     truckStop: { diesel: 4.55, def: 3.29 },
   })
   assert.deepEqual(Object.keys(doc.locations), ['exit-260', 'minimart', 'fishermans-cove'])
-  assert.equal(doc.locations['exit-260'].regular, 4.89)
+  assert.equal(doc.locations['exit-260']?.regular, 4.89)
   assert.equal(doc.truckStop.def, 3.29)
 })
