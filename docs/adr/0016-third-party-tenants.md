@@ -189,9 +189,11 @@ that is a nav decision to take then, on its own merits.
 
 **The Liquor Store is not a tenant.** A Liquor Store document was saved under Other Businesses;
 Lummi Bay Market owns and runs it, so it is a page of ours (`/liquor-store`, under Pages), as is
-the Tobacco & Liquor Drive-Thru (`/drive-thru`). Both are linked from the Exit 260 page, the
-Locations page and the Locations menu through Exit 260's "Also inside this location (pages)"
-field, and the Liquor Store from the footer's Visit column. The same reasoning that keeps the Cove
+the Tobacco & Liquor Drive-Thru (`/drive-thru`). Both are linked from the Exit 260 page
+(under What's here) and the Locations menu through Exit 260's "Also inside this location
+(pages)" field, and the Liquor Store from the footer's Visit column. They were also listed under
+the "Our locations" cards until the owner removed that row the same day: it sat directly above
+the footer and read as part of it. The same reasoning that keeps the Cove
 Kitchen an Amenity: the test is who runs it, not where it is.
 
 **The index is named "Dining at Salish Village"** — the owner's choice, which overrides the
