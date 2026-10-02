@@ -128,6 +128,22 @@ async function InfoPageBody({ params }: { params: Params }) {
                 </span>
               </div>
             ) : null}
+            {/* The offer's picture stays in the title column, beside the price
+                block, at the 720 x 200 the designer spec draws it; the text
+                below runs the full page width (owner, 2 Oct 2026). */}
+            {info.lead ? (
+              <figure
+                className={`${infoStyles.hero} ${info.state === 'ended' ? infoStyles.faded : ''}`}
+              >
+                <Image
+                  src={info.lead.image}
+                  alt={info.lead.alt}
+                  fill
+                  sizes="(min-width: 900px) 720px, 100vw"
+                  priority
+                />
+              </figure>
+            ) : null}
           </>
         )}
       </div>
@@ -144,19 +160,6 @@ async function InfoPageBody({ params }: { params: Params }) {
 
       {info.state === 'upcoming' ? null : (
         <div className={styles.rest}>
-          {info.lead ? (
-            <figure
-              className={`${infoStyles.hero} ${info.state === 'ended' ? infoStyles.faded : ''}`}
-            >
-              <Image
-                src={info.lead.image}
-                alt={info.lead.alt}
-                fill
-                sizes="(min-width: 900px) 720px, 100vw"
-                priority
-              />
-            </figure>
-          ) : null}
           <Markdown source={page.body} className={sectionStyles.prose} />
           {/* Buttons and sections invite action on an offer that is running;
               once it has ended they would be the page contradicting itself. */}

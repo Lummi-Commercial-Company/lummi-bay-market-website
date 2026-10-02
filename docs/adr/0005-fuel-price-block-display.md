@@ -366,3 +366,21 @@ been true since the rail became sticky. On phones it still worked, because nothi
   - the cue's words, "⌄ All prices", sit at the bar's right-hand end. Below 900px only "All"
     shows, but screen readers still hear "All prices";
   - the panel hangs from the bar at 38px.
+
+## Amendment — 2 Oct 2026: only the title shares the row with the block
+
+The owner asked why the inside pages stopped short of the full width below the price block: the
+block is about 130px tall, and the right-hand column under it stood empty for the rest of the page.
+- From 720px, **only the title column** shares the top row with the block: the title, and on a
+  Location or Truck Stop page its photo, or on an offer page its picture.
+- **Everything after it** runs across both columns (`.rest`, `app/page.module.css`): a
+  Location's details and badges, a general page's text and sections, the Location cards.
+- The title column is held at least the block's resting height (`--rail-h`), so the full-width
+  part always starts below the block. Without promotions in between it gets the promo region's
+  gap. The sticky condensed bar floats over it on scroll, as it always has over the full-width
+  promotions.
+- **Line length is kept:** long text keeps its own 68ch measure (`.prose`), so it never runs
+  1168px wide.
+- **The pictures stay at their designed sizes:** the photos (720 × 360) and offer pictures
+  (720 × 200) stay in the title column, at the sizes the designer spec draws.
+- **Phones:** the stacking order is now title, photo, price block, then the details.

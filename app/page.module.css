@@ -36,39 +36,33 @@
   min-width: 0;
 }
 
-/* Home's lower half — the band, the Truck Stop callout and the three Location
-   cards — runs the full page width under the promotions, not in the title
-   column beside an empty rail (owner, 30 Sep 2026). The title column is held
-   at least as tall as the resting price block, so this always starts below
-   it; the condensed bar may float over it on scroll, as it does over the
-   full-width promotions. */
+/* Everything after the title runs the full page width (owner, 30 Sep and
+   2 Oct 2026). Only the title column shares the top row with the price block;
+   the page's sections — Home's band and Location cards, a Location's details,
+   a general page's text — sit in `.rest`, across both columns. The title
+   column is held at least as tall as the resting price block, so `.rest` (and
+   the promo region) always start below it; the condensed bar may float over
+   them on scroll, as it always has over the full-width promotions. Long text
+   keeps its own measure (`.prose`, 68ch), so it never runs 1168px wide. */
 @media (min-width: 720px) {
-  .restFull {
+  .rest {
     grid-column: 1 / -1;
   }
 
-  .pagegrid:has(> .restFull) > .maincol {
+  .pagegrid:has(> [data-rail]) > .maincol {
     min-height: var(--rail-h, 129px);
   }
-}
 
-/* A page with no price block (/fuel-prices) keeps the full width where the
-   two columns are new, 720–899px, rather than sitting in half the page beside
-   an empty column. From 900px it keeps the layout it has always had. */
-@media (min-width: 720px) and (max-width: 899.98px) {
-  .pagegrid:not(:has(> [data-rail])) > .maincol,
-  .pagegrid:not(:has(> [data-rail])) > .rest {
+  /* With no promotions between them, the full-width sections would start
+     flush under the price block; give them the gap the promo region has. */
+  .pagegrid:not(:has(> [data-promos='top'])) > .rest {
+    margin-top: var(--sp-6);
+  }
+
+  /* A page with no price block (/fuel-prices) uses the full width throughout
+     rather than sitting in half the page beside an empty column. */
+  .pagegrid:not(:has(> [data-rail])) > .maincol {
     grid-column: 1 / -1;
-  }
-}
-
-/* With a promo region under it, the title column is at least as tall as the
-   price block beside it, so the full-width region starts below the block
-   rather than running under it. `--rail-h` is measured (RailMetrics); 129px
-   is its measured value, for the first paint. */
-@media (min-width: 720px) {
-  .pagegrid:has(> [data-promos='top']) > .maincol {
-    min-height: var(--rail-h, 129px);
   }
 }
 

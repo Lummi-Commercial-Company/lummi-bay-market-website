@@ -53,6 +53,22 @@ export default async function TruckStopPage() {
           </div>
         ) : null}
 
+      </div>
+
+      {/* The Truck Stop leads the table here, so diesel and DEF are the first
+          numbers a driver hits, and Exit 260 becomes the row that moves into
+          the panel on condense. */}
+      <FuelPriceRail>
+        <Suspense fallback={<FuelPriceBlockFallback />}>
+          <FuelPriceBlock subject="truck-stop" />
+        </Suspense>
+      </FuelPriceRail>
+
+      <PromoSlot target={{}} />
+
+      <div className={styles.rest}>
+        {/* The details run the full page width, under the title, photo and
+            promotions (owner, 2 Oct 2026). */}
         <dl className={styles.dl}>
           <dt>Address</dt>
           <dd>
@@ -82,20 +98,7 @@ export default async function TruckStopPage() {
         {/* The Truck Stop's badges come from its own record, never merged
             with the store's (docs/proofs/amenity-badges.html). */}
         <AmenityBadges amenities={truckStop.amenities} />
-      </div>
 
-      {/* The Truck Stop leads the table here, so diesel and DEF are the first
-          numbers a driver hits, and Exit 260 becomes the row that moves into
-          the panel on condense. */}
-      <FuelPriceRail>
-        <Suspense fallback={<FuelPriceBlockFallback />}>
-          <FuelPriceBlock subject="truck-stop" />
-        </Suspense>
-      </FuelPriceRail>
-
-      <PromoSlot target={{}} />
-
-      <div className={styles.rest}>
         {/* The page's subject is the Truck Stop, so the callout is dropped —
             and ONLY the callout. Exit 260 is a different store at the same
             address and stays, with the other Locations (ADR 0009). */}
