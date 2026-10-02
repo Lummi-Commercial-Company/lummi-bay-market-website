@@ -2,7 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { CSSProperties } from 'react'
 import styles from './TenantCards.module.css'
-import { getTenants, PLACEMENT_GROUPS, tenantHref } from '@/lib/tenants'
+import { getLocations } from '@/lib/locations'
+import { getTenants, PLACEMENT_GROUPS, placementLabel, tenantHref } from '@/lib/tenants'
 import type { TenantDoc } from '@/lib/types'
 
 /**
@@ -19,7 +20,7 @@ import type { TenantDoc } from '@/lib/types'
  * where forgetting it would be easiest.
  */
 export async function TenantList({ heading }: { heading?: string }) {
-  const tenants = await getTenants()
+  const [tenants, locations] = await Promise.all([getTenants(), getLocations()])
   if (tenants.length === 0) return null
 
   return (
@@ -30,9 +31,12 @@ export async function TenantList({ heading }: { heading?: string }) {
         if (here.length === 0) return null
         // Under a section heading the groups are one level down.
         const GroupHeading = heading ? 'h3' : 'h2'
+        // "Inside Exit 260": the store these businesses are in, when they share one.
+        const homes = new Set(here.map((tenant) => tenant.location))
+        const home = homes.size === 1 ? locations.find((l) => homes.has(l.id))?.navLabel : undefined
         return (
           <div key={group.placement} className={styles.group}>
-            <GroupHeading className={styles.groupLabel}>{group.label}</GroupHeading>
+            <GroupHeading className={styles.groupLabel}>{placementLabel(group.placement, home)}</GroupHeading>
             <p className={styles.groupSub}>{group.sub}</p>
             <ul className={styles.row} style={{ '--n': Math.min(here.length, 3) } as CSSProperties}>
               {here.map((tenant) => (

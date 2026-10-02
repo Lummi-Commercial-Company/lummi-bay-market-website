@@ -1042,7 +1042,8 @@ const tenants: Collection = {
       type: 'string',
       name: 'placement',
       label: 'Where on the property',
-      description: 'Used to group the cards, so a visitor knows where to walk.',
+      description:
+        'Groups the cards, so a visitor knows where to walk. On the page these read as "Inside Exit 260" (the store it is in), "Salish Village" and "Parking Lot Exclusive".',
       options: [
         { value: 'inside', label: 'Inside our store' },
         { value: 'property', label: 'Its own building on the property' },

@@ -210,8 +210,11 @@ called.
 - A card on the Locations list — under the Location cards, wherever the list appears (Home, the
   Locations page, each Location page, the Truck Stop page) — links to whichever page carries
   that section, and appears only when at least one business is saved.
-- Cards are grouped "Inside the store", "On the property", "In the lot" (the template's groups),
-  open businesses first. The disclosure line is drawn once at the foot of the list and once on
+- Cards are grouped by `placement`, open businesses first. The headings are the owner's
+  wording (2 Oct 2026), and the same words label the business's own page: **"Inside Exit 260"**
+  (the Location it is in), **"Salish Village"** (its own building on the property) and
+  **"Parking Lot Exclusive"** (a truck or trailer in the lot). The "Salish Village" heading and
+  label fall inside this page's exception, which therefore covers the business pages too. The disclosure line is drawn once at the foot of the list and once on
   each business page; it is not a field.
 - A business whose card goes "A page here on our site" has its page at `/dining/{file name}`,
   in the sitemap. One whose card goes "Straight to their own website" opens that site in a new

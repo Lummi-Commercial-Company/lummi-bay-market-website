@@ -25,11 +25,24 @@ export { namesLine, tenantHref } from './tenant-rules'
 const PLACEMENTS: readonly TenantPlacement[] = ['inside', 'property', 'lot']
 
 /** Card groups, in the order a guest walks: the store, the lot, the truck. */
-export const PLACEMENT_GROUPS: readonly { placement: TenantPlacement; label: string; sub: string }[] = [
-  { placement: 'inside', label: 'Inside the store', sub: 'Walk in through the main doors — no second stop.' },
-  { placement: 'property', label: 'On the property', sub: 'Their own building — park once and walk across.' },
-  { placement: 'lot', label: 'In the lot', sub: 'A truck, not a building — look for it near the fuel lanes.' },
+export const PLACEMENT_GROUPS: readonly { placement: TenantPlacement; sub: string }[] = [
+  { placement: 'inside', sub: 'Walk in through the main doors — no second stop.' },
+  { placement: 'property', sub: 'Their own building — park once and walk across.' },
+  { placement: 'lot', sub: 'A truck, not a building — look for it near the fuel lanes.' },
 ]
+
+/**
+ * What "Where on the property" reads as on the site — the owner's wording,
+ * 2 Oct 2026: "Inside Exit 260", "Salish Village", "Parking Lot Exclusive".
+ * "Inside" names the Location the business is in; with none known it says
+ * "Inside the store". "Salish Village" is allowed here as part of the dining
+ * pages' exception to the hard rule on other Lummi companies (ADR 0016).
+ */
+export function placementLabel(placement: TenantPlacement, place?: string): string {
+  if (placement === 'inside') return place ? `Inside ${place}` : 'Inside the store'
+  if (placement === 'property') return 'Salish Village'
+  return 'Parking Lot Exclusive'
+}
 
 function asString(value: unknown): string {
   return typeof value === 'string' ? value : ''
