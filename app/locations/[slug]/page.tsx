@@ -6,6 +6,7 @@ import styles from '../../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
 import { AmenityBadges } from '@/components/locations/AmenityBadges'
+import { InsideLinks } from '@/components/locations/InsideLinks'
 import { LiveHours } from '@/components/locations/LiveHours'
 import { LocationList } from '@/components/locations/LocationList'
 import { PromoSlot } from '@/components/promos/PromoRegion'
@@ -112,6 +113,10 @@ export default async function LocationPage({
         ) : location.amenities.length === 1 ? (
           <p>{location.amenities[0]} available at this location.</p>
         ) : null}
+
+        {/* Parts of this store with their own page — the Liquor Store at
+            Exit 260 (Location Details → "Also inside this location"). */}
+        <InsideLinks location={location} />
 
         {/* The page's own card is dropped and the label reads "Our other
             locations"; the Truck Stop callout stays on Exit 260 (ADR 0009). */}

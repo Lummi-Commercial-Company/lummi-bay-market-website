@@ -62,6 +62,8 @@ export interface LocationDoc {
   lat?: number
   lng?: number
   amenities: string[]
+  /** Page slugs for parts of this store with their own page (`liquor-store`). */
+  inside: string[]
   truckStop?: TruckStopRecord
   hero?: { image?: string; alt?: string }
   /** MDX body, unparsed. Not rendered in Phase 1. */
@@ -195,6 +197,7 @@ export type PageBlock =
   | { _template: 'locationList'; heading?: string }
   | { _template: 'locationContacts'; heading?: string }
   | { _template: 'locationsMap'; heading?: string }
+  | { _template: 'tenantList'; heading?: string }
   | { _template: 'callout'; heading?: string; text?: string }
   | { _template: 'ctaRow'; buttons: PageCtaButton[] }
   | { _template: 'faq'; heading?: string; items: PageFaqItem[] }
@@ -255,6 +258,34 @@ export interface InfoPageDoc {
   slug: string
   title: string
   seoDescription?: string
+  body: string
+  blocks: PageBlock[]
+}
+
+/** Where a tenant is on the property — groups the cards on the dining page. */
+export type TenantPlacement = 'inside' | 'property' | 'lot'
+
+/**
+ * An independent business renting space on one of our properties (ADR 0016).
+ * Never a Location and never an Amenity. Everything optional is already
+ * gated: `hours` is present only when confirmed with the business, `logo` and
+ * `photo` only when we have permission to use them.
+ */
+export interface TenantDoc {
+  /** The file name without its extension: the address `/dining/{slug}`. */
+  slug: string
+  name: string
+  /** The Location it is at, by id; undefined if the reference is broken. */
+  location?: LocationSlug
+  placement: TenantPlacement
+  /** Not open yet: the card shows "Opening soon" and links nowhere. */
+  planned: boolean
+  summary?: string
+  hours?: string
+  linkMode: 'internal' | 'external'
+  externalUrl?: string
+  logo?: string
+  photo?: string
   body: string
   blocks: PageBlock[]
 }

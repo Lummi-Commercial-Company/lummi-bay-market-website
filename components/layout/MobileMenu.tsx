@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useId, useRef, useState } from 'react'
-import { isCurrent, NAV_ITEMS } from './nav-items'
+import { isCurrent, NAV_ITEMS, type SubNavItem } from './nav-items'
 import styles from './SiteHeader.module.css'
 
 /**
@@ -22,8 +22,11 @@ import styles from './SiteHeader.module.css'
  * positioned inside the header: the header clips its overflow for the motif
  * band, and anything absolutely positioned inside it would be cut off.
  * Being out of flow, the panel also cannot change the height it is placed by.
+ *
+ * Under "Locations" it lists every place, indented, as the desktop Locations
+ * list does (owner, 2 Oct 2026; ADR 0008 amended) — still three top-level items.
  */
-export function MobileMenu() {
+export function MobileMenu({ locationsMenu = [] }: { locationsMenu?: SubNavItem[] }) {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const panelId = useId()
@@ -106,10 +109,33 @@ export function MobileMenu() {
               >
                 {item.label}
               </Link>
+              {item.href === '/locations' && locationsMenu.length ? (
+                <SubList items={locationsMenu} pathname={pathname} onPick={() => setOpen(false)} />
+              ) : null}
             </li>
           ))}
         </ul>
       </nav>
     </>
+  )
+}
+
+function SubList({ items, pathname, onPick }: { items: SubNavItem[]; pathname: string; onPick: () => void }) {
+  return (
+    <ul className={styles.menuSub}>
+      {items.map((entry) => (
+        <li key={entry.href}>
+          <Link
+            href={entry.href}
+            className={`${styles.menuLink} ${styles.menuSubLink}`}
+            aria-current={pathname === entry.href ? 'page' : undefined}
+            onClick={onPick}
+          >
+            {entry.label}
+          </Link>
+          {entry.children?.length ? <SubList items={entry.children} pathname={pathname} onPick={onPick} /> : null}
+        </li>
+      ))}
+    </ul>
   )
 }

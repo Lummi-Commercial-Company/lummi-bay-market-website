@@ -3,8 +3,10 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import styles from './LocationList.module.css'
 import { LiveCardLine } from './LiveCardLine'
+import { InsideLinks } from './InsideLinks'
 import { LiveHours } from './LiveHours'
 import { getLocations } from '@/lib/locations'
+import { getDiningPage, getTenants, namesLine } from '@/lib/tenants'
 import type { LocationSlug } from '@/lib/types'
 
 /**
@@ -35,7 +37,7 @@ export async function LocationList({
   subject?: LocationSlug | 'truck-stop'
   heading?: string
 }) {
-  const locations = await getLocations()
+  const [locations, tenants, dining] = await Promise.all([getLocations(), getTenants(), getDiningPage()])
   const cards = locations.filter((location) => location.id !== subject)
   // Only Exit 260 carries a Truck Stop record today; the list does not assume
   // which Location it is.
@@ -129,6 +131,27 @@ export async function LocationList({
           ))}
         </ul>
       ) : null}
+
+      {/* The dining page, once there is a business on it (owner, 2 Oct 2026;
+          ADR 0016). The card's name is the page's own title. */}
+      {dining && tenants.length > 0 ? (
+        <Link className={styles.dining} href={`/${dining.slug}`}>
+          <span className={styles.diningText}>
+            <span className={styles.diningName}>{dining.navLabel || dining.title}</span>
+            <span className={styles.diningLine}>{namesLine(tenants.map((t) => t.name))}</span>
+          </span>
+          <span className={styles.diningGo} aria-hidden="true">
+            See all →
+          </span>
+        </Link>
+      ) : null}
+
+      {/* Parts of these stores with their own page, under the cards — a link
+          cannot sit inside a card that is itself one link. */}
+      {cards.map((location) => (
+        <InsideLinks key={location.id} location={location} />
+      ))}
     </section>
   )
 }
+

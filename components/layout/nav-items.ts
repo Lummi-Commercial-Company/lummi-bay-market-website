@@ -17,3 +17,16 @@ export const NAV_ITEMS = [
 export function isCurrent(href: string, pathname: string): boolean {
   return href === '/' ? pathname === '/' : pathname.startsWith(href)
 }
+
+/**
+ * What "Locations" opens: every place to buy something (owner, 2 Oct 2026) —
+ * the Truck Stop, each Location, and under a Location the parts of it with a
+ * page of their own (the Liquor Store at Exit 260). Built from the content by
+ * the header (SiteHeader), so a renamed store or a new page shows up by itself.
+ * "Locations" itself still goes to /locations; the nav is still three items.
+ */
+export interface SubNavItem {
+  href: string
+  label: string
+  children?: SubNavItem[]
+}

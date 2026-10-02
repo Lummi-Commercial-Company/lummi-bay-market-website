@@ -223,6 +223,22 @@ const pageBlocks: Template[] = [
     ],
   },
   {
+    // The cards come from Other Businesses — nothing is typed here. The page
+    // carrying this section is the dining page: the "Dining at Salish Village"
+    // card under Our locations links to it (owner, 2 Oct 2026; ADR 0016).
+    name: 'tenantList',
+    label: 'Other businesses on our properties (always up to date)',
+    fields: [
+      {
+        type: 'string',
+        name: 'heading',
+        label: 'Heading',
+        description:
+          'Optional. The cards themselves come from Other Businesses, grouped by where each one is, and the line saying they are independently run is always added. Put this section on one page only: that page is the one the Locations card links to.',
+      },
+    ],
+  },
+  {
     // Everything on the card — name, synopsis, amenities, address, phone and
     // hours — is read from the Location documents. Nothing is typed here, so a
     // phone number changed in one place changes everywhere it appears.
@@ -451,6 +467,19 @@ const locations: Collection = {
       description:
         'One thing per line — "Car wash", "Propane", "Hot food". Put the reason someone would stop first. Two or more are needed for the badges to show. Do not combine two things in one line.',
       list: true,
+    },
+    {
+      // Parts of this store with a page of their own — the Liquor Store and
+      // the drive-thru at Exit 260 (owner, 2 Oct 2026). Lummi Bay Market's own,
+      // never an independent business: those are Other Businesses (ADR 0016).
+      type: 'object',
+      name: 'inside',
+      label: 'Also inside this location (pages)',
+      description:
+        'Parts of this store that have a page of their own, such as the Liquor Store. Each one is linked from this location’s page, from the Locations page, and under this location in the Locations menu. Make the page first under Pages, then pick it here.',
+      list: true,
+      ui: { itemProps: (item) => ({ label: item?.page ? String(item.page).split('/').pop()?.replace(/\.mdx?$/, '') : 'Choose a page' }) },
+      fields: [{ type: 'reference', name: 'page', label: 'Page', collections: ['pages'] }],
     },
     {
       type: 'object',
@@ -952,7 +981,7 @@ const tenants: Collection = {
       name: 'name',
       label: 'Business name',
       description:
-        'An independent business at one of our properties — they run themselves, we simply point to them. The page is called "Also at Exit 260". Nothing appears on the site until at least one business is published.',
+        'An independent business at one of our properties — they run themselves, we simply point to them. Each one gets a card on the Dining at Salish Village page. Nothing appears on the site until at least one business is saved here. Not for anything Lummi Bay Market runs itself, such as the Liquor Store — that is a page under Pages.',
       required: true,
       isTitle: true,
     },
@@ -974,6 +1003,16 @@ const tenants: Collection = {
         { value: 'lot', label: 'In the lot (truck or trailer)' },
       ],
       required: true,
+    },
+    {
+      type: 'string',
+      name: 'status',
+      label: 'Open yet?',
+      description: 'Opening soon shows the card with an "Opening soon" badge and no link, so it can be written before the doors open.',
+      options: [
+        { value: 'open', label: 'Open' },
+        { value: 'planned', label: 'Opening soon' },
+      ],
     },
     {
       type: 'string',

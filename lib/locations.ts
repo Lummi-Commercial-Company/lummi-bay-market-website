@@ -55,6 +55,15 @@ export function sitePhoto(value: unknown): string | undefined {
   return path
 }
 
+/** `inside` rows (`{ page: 'content/pages/liquor-store.mdx' }`) to page slugs. */
+function asInside(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  return value
+    .map((row) => (row as Record<string, unknown> | null)?.page ?? row)
+    .map((ref) => (typeof ref === 'string' ? ref.split('/').pop()?.replace(/\.mdx?$/, '') : undefined))
+    .filter((slug): slug is string => Boolean(slug))
+}
+
 function asHero(value: unknown): { image?: string; alt?: string } | undefined {
   if (!value || typeof value !== 'object') return undefined
   const hero = value as Record<string, unknown>
@@ -85,6 +94,7 @@ function toLocation(data: Record<string, unknown>, body: string): LocationDoc | 
     lat: typeof data.lat === 'number' ? data.lat : undefined,
     lng: typeof data.lng === 'number' ? data.lng : undefined,
     amenities: asStringList(data.amenities),
+    inside: asInside(data.inside),
     truckStop:
       truckStopRaw && typeof truckStopRaw === 'object'
         ? {

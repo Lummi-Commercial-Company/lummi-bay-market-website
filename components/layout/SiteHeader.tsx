@@ -6,7 +6,10 @@ import { HeaderMotifs } from './HeaderMotifs'
 import { MobileMenu } from './MobileMenu'
 import { SiteAlertSlot } from './SiteAlert'
 import { SiteNav } from './SiteNav'
+import { getLocations } from '@/lib/locations'
+import { getPages } from '@/lib/pages'
 import { getSettings } from '@/lib/settings'
+import type { SubNavItem } from './nav-items'
 
 const HEADER_ID = 'site-header'
 
@@ -22,7 +25,7 @@ const HEADER_ID = 'site-header'
  * the lockup in the header.
  */
 export async function SiteHeader() {
-  const settings = await getSettings()
+  const [settings, locationsMenu] = await Promise.all([getSettings(), locationsMenuItems()])
 
   return (
     <div className={styles.wrap} id={HEADER_ID}>
@@ -40,7 +43,7 @@ export async function SiteHeader() {
             />
           </Link>
 
-          <SiteNav />
+          <SiteNav locationsMenu={locationsMenu} />
 
           <HeaderMotifs />
 
@@ -55,7 +58,7 @@ export async function SiteHeader() {
           </Link>
 
           {/* Phone only: the three nav items, behind the ☰ (ADR 0029). */}
-          <MobileMenu />
+          <MobileMenu locationsMenu={locationsMenu} />
         </div>
       </header>
 
@@ -70,4 +73,24 @@ export async function SiteHeader() {
       <HeaderMetrics targetId={HEADER_ID} />
     </div>
   )
+}
+
+/**
+ * The Locations menu, in the site's order for places (ADR 0009): the Truck
+ * Stop, then each Location with the parts of it that have their own page.
+ */
+async function locationsMenuItems(): Promise<SubNavItem[]> {
+  const [locations, pages] = await Promise.all([getLocations(), getPages()])
+  const truckHome = locations.find((location) => location.truckStop)
+  return [
+    ...(truckHome ? [{ href: '/truck-stop', label: 'Truck Stop' }] : []),
+    ...locations.map((location) => ({
+      href: `/locations/${location.id}`,
+      label: location.navLabel,
+      children: location.inside
+        .map((slug) => pages.find((page) => page.slug === slug))
+        .filter((page): page is NonNullable<typeof page> => Boolean(page))
+        .map((page) => ({ href: `/${page.slug}`, label: page.navLabel || page.title })),
+    })),
+  ]
 }

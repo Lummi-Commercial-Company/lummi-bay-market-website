@@ -29,6 +29,11 @@
         "column": "visit"
       },
       {
+        "label": "Liquor Store",
+        "url": "/liquor-store",
+        "column": "visit"
+      },
+      {
         "label": "Minimart",
         "url": "/locations/minimart",
         "column": "visit"

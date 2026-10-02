@@ -5,6 +5,7 @@ import { getInfoPages, getPages, PRIVACY_SLUG } from '@/lib/pages'
 import { getPromos } from '@/lib/promo-data'
 import { infoPageState, pacificStamp } from '@/lib/promos'
 import { SITE_URL } from '@/lib/site'
+import { getTenants } from '@/lib/tenants'
 
 /**
  * The sitemap is derived, never hand-maintained. Adding a page to the `pages`
@@ -24,15 +25,18 @@ import { SITE_URL } from '@/lib/site'
  *     live. That is decided per request, so the sitemap is too: a sitemap
  *     built on Friday would still list Friday's offer on Tuesday.
  *
- * Still to add when that collection renders: `tenants`.
+ *   - A business in Other Businesses (`tenants`) is in when its card goes to
+ *     a page here, `/dining/{file name}`; a card that goes straight to the
+ *     business's own website has no page here to list (ADR 0016).
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   await connection()
-  const [locations, pages, infoPages, promos] = await Promise.all([
+  const [locations, pages, infoPages, promos, tenants] = await Promise.all([
     getLocations(),
     getPages(),
     getInfoPages(),
     getPromos(),
+    getTenants(),
   ])
   const now = pacificStamp(new Date())
 
@@ -63,6 +67,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${SITE_URL}/info/${page.slug}`,
         changeFrequency: 'daily' as const,
         priority: 0.6,
+      })),
+    ...tenants
+      .filter((tenant) => tenant.linkMode === 'internal')
+      .map((tenant) => ({
+        url: `${SITE_URL}/dining/${tenant.slug}`,
+        changeFrequency: 'monthly' as const,
+        priority: 0.4,
       })),
   ]
 }
