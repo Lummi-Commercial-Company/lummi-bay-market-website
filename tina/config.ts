@@ -6,6 +6,7 @@ import { pacificStamp } from '../lib/pacific-time'
 import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
 import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
 import { returnToListAfterSave } from './fields/after-save'
+import { parsePrice, SharedDateField, SharedPriceField } from './fields/shared-price'
 import { DateField, DateTimeField } from './fields/date-field'
 import { onOffField } from './fields/on-off-field'
 import { HeadlineField } from './fields/promo-status'
@@ -515,10 +516,10 @@ const fuelPrices: Collection = {
     {
       type: 'boolean',
       name: 'linkLocations',
-      ui: { component: onOffField() },
+      ui: { component: onOffField({ on: 'Exit 260 fills in the other two', off: 'each store typed on its own' }) },
       label: 'The three stores usually share a price',
       description:
-        'A reminder for you, nothing more. It does not change the website: every store always shows the price typed against its own name below. The Truck Stop is never affected by it.',
+        'On: whatever you type for Exit 260 is copied into Minimart and Fisherman’s Cove as you type, so you fill in one store instead of three. Each store still shows the price in its own box — if one is different today, type over it after the copy, or switch this off. Off: nothing is copied. The Truck Stop is never copied.',
     },
     {
       type: 'object',
@@ -534,7 +535,7 @@ const fuelPrices: Collection = {
           name: 'exit_260',
           nameOverride: 'exit-260',
           label: 'Exit 260',
-          fields: priceFields(),
+          fields: priceFields({ copiesToOthers: true }),
         },
         { type: 'object', name: 'minimart', label: 'Minimart', fields: priceFields() },
         {
@@ -563,14 +564,21 @@ const fuelPrices: Collection = {
  * Leaving a price blank means "we do not sell this here" and prints an em-dash.
  * It does not mean zero.
  */
-function priceFields({ includeRegular = true } = {}): TinaField[] {
+function priceFields({ includeRegular = true, copiesToOthers = false } = {}): TinaField[] {
+  // Exit 260's boxes also fill Minimart and Fisherman's Cove while "The three
+  // stores usually share a price" is on (tina/fields/shared-price.tsx).
+  const copyNote = copiesToOthers
+    ? ' With "The three stores usually share a price" on, this also fills in Minimart and Fisherman’s Cove.'
+    : ''
+  const priceUi = copiesToOthers ? { ui: { component: SharedPriceField, parse: parsePrice } } : {}
   const fields: TinaField[] = []
   if (includeRegular) {
     fields.push({
       type: 'number',
       name: 'regular',
       label: 'Regular ($ per gallon)',
-      description: 'For example 3.79. Leave blank if it is not sold here.',
+      description: `For example 3.79. Leave blank if it is not sold here.${copyNote}`,
+      ...priceUi,
     })
   }
   fields.push(
@@ -578,21 +586,22 @@ function priceFields({ includeRegular = true } = {}): TinaField[] {
       type: 'number',
       name: 'diesel',
       label: 'Diesel ($ per gallon)',
-      description: 'Leave blank if it is not sold here.',
+      description: `Leave blank if it is not sold here.${copyNote}`,
+      ...priceUi,
     },
     {
       type: 'number',
       name: 'def',
       label: 'DEF ($ per gallon)',
-      description: 'Diesel exhaust fluid. Leave blank if it is not sold here.',
+      description: `Diesel exhaust fluid. Leave blank if it is not sold here.${copyNote}`,
+      ...priceUi,
     },
     {
       type: 'string',
       name: 'updated',
       label: 'Last changed (MM/DD/YYYY)',
-      description:
-        'Shown to customers next to the prices, for example 09/29/2026. Update it whenever you change a price here.',
-      ui: { component: DateField, validate: dateOnly },
+      description: `Shown to customers next to the prices, for example 09/29/2026. Update it whenever you change a price here.${copyNote}`,
+      ui: { component: copiesToOthers ? SharedDateField : DateField, validate: dateOnly },
     }
   )
   return fields

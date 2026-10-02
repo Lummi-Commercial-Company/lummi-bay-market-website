@@ -112,3 +112,21 @@ misreport the Truck Stop, whose prices move on a different schedule from retail.
   would have to be read at request time from something the build cannot see: a second runtime
   dependency bought for nothing. The stamp also matters more now, not less — with publish latency
   at zero it is the only thing on the page telling a guest how fresh the number is.
+
+## Amendment — 1 Oct 2026: the shared-price switch copies, in the form only
+
+The owner switched on "The three stores usually share a price" and expected one price to change
+all three stores. It was a reminder and did nothing, which is confusing for a switch. It now does
+something, without breaking the rule above that the site never reads one shared price:
+- While the switch is on, whatever is typed in **Exit 260's** boxes (regular, diesel, DEF,
+  "Last changed") is copied, as it is typed, into **Minimart's and Fisherman's Cove's** boxes in
+  the CMS form. This is `tina/fields/shared-price.tsx`.
+- Each store's box is still saved separately and is still what the site shows. A store that
+  differs that day is typed over after the copy, or the switch is turned off.
+- Copying goes one way only, from Exit 260, so it is always clear which box drives the others.
+  The Truck Stop is never copied.
+
+Checked in the local CMS:
+- with the switch on, Exit 260's prices and date appeared in both other stores;
+- with it off, nothing copied;
+- a save stored all three stores' prices as numbers and left the Truck Stop unchanged.

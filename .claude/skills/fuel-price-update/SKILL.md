@@ -30,8 +30,11 @@ Truck Stop. Midgrade, premium and ethanol-free are NOT priced on this site.
 
 Rules that hold no matter who is editing:
 - **One price per place per grade. There is no "all locations" price field.** `linkLocations`
-  records the checkbox position for the editor's convenience. It must never decide which
-  price the site reads — see ADR 0004 for why.
+  must never decide which price the site reads — see ADR 0004 for why. In the CMS it is an
+  editing aid (1 Oct 2026): while it is on, whatever is typed in Exit 260's boxes (prices and
+  "Last changed") is copied into Minimart's and Fisherman's Cove's boxes in the form, before
+  saving. Each store's own box is still what is saved and shown. Editing the file by hand,
+  copy the values yourself.
 - **The Truck Stop is never touched by the checkbox.** Truck-lane diesel is not car-lane diesel.
 - The grades a place sells are the entries present in its price list. Don't declare grades twice.
 
