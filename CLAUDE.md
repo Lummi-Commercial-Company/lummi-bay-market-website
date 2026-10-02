@@ -184,7 +184,8 @@ the layout and cannot be lost or moved by a page.
   **Built 2 Oct 2026:** the index is the page **"Dining at Salish Village"** (`/dining`, a `pages`
   document carrying the "Other businesses" section), grouped by where each business is rather than
   alphabetically, with a card under "Our locations" wherever that list appears. **The owner allowed
-  the "Salish Village" name for this page and that card only** — the hard rule on other Lummi
+  the "Salish Village" name for this page, its business pages and that card only** (the group
+  headings read "Inside Exit 260", "Salish Village", "Parking Lot Exclusive" — owner, 2 Oct 2026) — the hard rule on other Lummi
   companies holds everywhere else (nav, footer, all other copy). Business pages are
   `/dining/{file name}`. Not in the nav. **The Liquor Store and the Tobacco & Liquor Drive-Thru are
   not tenants** — Lummi Bay Market runs them, so they are `pages` (`/liquor-store`, `/drive-thru`),

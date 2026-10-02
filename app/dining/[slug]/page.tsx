@@ -11,8 +11,7 @@ import sectionStyles from '@/components/pages/PageSections.module.css'
 import tenantStyles from '@/components/tenants/TenantCards.module.css'
 import { getLocation } from '@/lib/locations'
 import { excerptFromMarkdown, Markdown } from '@/lib/markdown'
-import { getDiningPage, getTenant, getTenants } from '@/lib/tenants'
-import type { TenantPlacement } from '@/lib/types'
+import { getDiningPage, getTenant, getTenants, placementLabel } from '@/lib/tenants'
 
 /**
  * One business's page — a document in Other Businesses whose card is set to
@@ -46,12 +45,6 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   }
 }
 
-const WHERE: Record<TenantPlacement, (place: string) => string> = {
-  inside: (place) => `Inside the ${place} store`,
-  property: (place) => `Its own building at ${place}`,
-  lot: (place) => `In the lot at ${place}`,
-}
-
 export default async function TenantPage({ params }: { params: Params }) {
   const tenant = await getTenant((await params).slug)
   if (!tenant) notFound()
@@ -75,7 +68,7 @@ export default async function TenantPage({ params }: { params: Params }) {
         ) : null}
         <h1>{tenant.name}</h1>
         <div className={tenantStyles.chips}>
-          {location ? <span className={tenantStyles.chip}>{WHERE[tenant.placement](location.navLabel)}</span> : null}
+          <span className={tenantStyles.chip}>{placementLabel(tenant.placement, location?.navLabel)}</span>
           {tenant.planned ? <span className={tenantStyles.chip}>Opening soon</span> : null}
         </div>
       </div>
