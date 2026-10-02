@@ -86,11 +86,9 @@ export default async function CollectionPage({
     <div className={styles.pagegrid}>
       <div className={styles.maincol}>
         <h1>{page.title}</h1>
-        <Markdown source={page.body} className={sectionStyles.prose} />
       </div>
 
-      {/* The same price block every other page carries. The rail is not sticky
-          — ADR 0006 records why it must never be. */}
+      {/* The same price block every other page carries (ADR 0005, ADR 0006). */}
       <FuelPriceRail>
         <Suspense fallback={<FuelPriceBlockFallback />}>
           <FuelPriceBlock />
@@ -99,7 +97,10 @@ export default async function CollectionPage({
 
       {promosAtEnd ? null : promoSlot}
 
+      {/* The page's text and sections run the full page width under the title
+          (owner, 2 Oct 2026); the text keeps its own 68ch measure. */}
       <div className={styles.rest}>
+        <Markdown source={page.body} className={sectionStyles.prose} />
         <PageBlocks blocks={page.blocks} />
       </div>
 

@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import styles from '../../page.module.css'
@@ -62,6 +61,20 @@ export default async function LocationPage({
           </div>
         ) : null}
 
+      </div>
+
+      <FuelPriceRail>
+        <Suspense fallback={<FuelPriceBlockFallback />}>
+          <FuelPriceBlock subject={location.id} />
+        </Suspense>
+      </FuelPriceRail>
+
+      {/* A promo set to "Specific pages only" can name this Location. */}
+      <PromoSlot target={{ key: `locations/${location.id}` }} />
+
+      <div className={styles.rest}>
+        {/* The Location's details run the full page width, under the title,
+            photo and promotions (owner, 2 Oct 2026). */}
         <dl className={styles.dl}>
           <dt>Address</dt>
           <dd>
@@ -100,45 +113,6 @@ export default async function LocationPage({
           <p>{location.amenities[0]} available at this location.</p>
         ) : null}
 
-        {/* Only exit-260 carries a Truck Stop record. The summary reads from
-            that record and never from the store's `amenities` — the showers and
-            the driver lounge are the Truck Stop's, not the store's.
-
-            It reads the record's own `summary`, the prose field staff write.
-            It used to build a sentence by lowercasing the amenity list, which
-            turned "DEF" into "def". Never case-fold content to fit a sentence. */}
-        {location.truckStop ? (
-          <>
-            <h2>Truck Stop</h2>
-            <p>
-              {location.truckStop.summary ||
-                `A separate fuel station on the same property: ${location.truckStop.amenities.join(', ')}.`}{' '}
-              <Suspense fallback={location.truckStop.hours}>
-                <LiveHours
-                  hours={location.truckStop.hours}
-                  overrides={location.truckStop.hoursOverrides}
-                  of={`${location.id}-truck-stop`}
-                />
-              </Suspense>
-              .
-            </p>
-            <p>
-              <Link href="/truck-stop">More about the Truck Stop</Link>
-            </p>
-          </>
-        ) : null}
-      </div>
-
-      <FuelPriceRail>
-        <Suspense fallback={<FuelPriceBlockFallback />}>
-          <FuelPriceBlock subject={location.id} />
-        </Suspense>
-      </FuelPriceRail>
-
-      {/* A promo set to "Specific pages only" can name this Location. */}
-      <PromoSlot target={{ key: `locations/${location.id}` }} />
-
-      <div className={styles.rest}>
         {/* The page's own card is dropped and the label reads "Our other
             locations"; the Truck Stop callout stays on Exit 260 (ADR 0009). */}
         <LocationList subject={location.id} />

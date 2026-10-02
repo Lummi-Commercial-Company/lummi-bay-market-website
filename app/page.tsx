@@ -70,7 +70,7 @@ export default async function HomePage() {
           Above the band, as the approved Home draws it. */}
       <PromoSlot target={{ home: true }} rows={home?.promoRows} />
 
-      <div className={`${styles.rest} ${styles.restFull}`}>
+      <div className={styles.rest}>
         {/* TODO: replace with approved Lummi art. The flat teal-to-navy band
             the approved Home draws between the top of the page and the list —
             not the wavy waterline, which is a different element. */}

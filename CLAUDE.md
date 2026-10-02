@@ -74,7 +74,8 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
 cannot hold the lockup, three links and the pill below ~430px, which is every common phone
 (ADR 0029). Still three items.
 - Locations: index → 3 detail pages (nav labels: Exit 260 · Minimart · Fisherman's Cove).
-- Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it.
+- Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it — the
+  navy Truck Stop box at the top of "Our other locations", once (owner, 2 Oct 2026, ADR 0009).
 - `/fuel-prices` still exists as a page — reached from the price block's "All prices" panel
   only, not from the nav and not from the footer (ADR 0008, amended 18 Sep 2026).
 - **Rewards**: a "Get the App" pill in the header's right-hand utility slot on **every** page,

@@ -77,3 +77,14 @@ first. Truncating with an ellipsis is the right failure here — the row height 
 way, and a wrap would push every row below it.
 - The heading has two forms — "Our locations" and "Our other locations" — and which one shows
   follows from whether anything was filtered out.
+
+## Amendment — 2 Oct 2026: said once on the Exit 260 page
+
+On the page the owner found "two routes to it" redundant rather than emphatic, and they were
+right. The page's own "Truck Stop" section, with its summary and a "More about the Truck Stop"
+link, sat directly above the callout, and the callout repeated the same sentence. The owner's
+choice was to keep the callout, the navy box with the cedar "Truck Stop →" button, and remove
+the page's own section. The Exit 260 page now describes the Truck Stop once, in the callout.
+CLAUDE.md's "a short summary that links to it" is now the callout itself. Nothing else in this
+ADR changes: the callout still leads the list everywhere except `/truck-stop`, and the Exit 260
+card still stays on `/truck-stop`.
