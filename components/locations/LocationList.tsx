@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import styles from './LocationList.module.css'
 import { LiveCardLine } from './LiveCardLine'
-import { InsideLinks } from './InsideLinks'
 import { LiveHours } from './LiveHours'
 import { getLocations } from '@/lib/locations'
 import { getDiningPage, getTenants, namesLine } from '@/lib/tenants'
@@ -146,11 +145,6 @@ export async function LocationList({
         </Link>
       ) : null}
 
-      {/* Parts of these stores with their own page, under the cards — a link
-          cannot sit inside a card that is itself one link. */}
-      {cards.map((location) => (
-        <InsideLinks key={location.id} location={location} />
-      ))}
     </section>
   )
 }

@@ -502,7 +502,7 @@ const locations: Collection = {
       name: 'inside',
       label: 'Also inside this location (pages)',
       description:
-        'Parts of this store that have a page of their own, such as the Liquor Store. Each one is linked from this location’s page, from the Locations page, and under this location in the Locations menu. Make the page first under Pages, then pick it here.',
+        'Parts of this store that have a page of their own, such as the Liquor Store. Each one is linked from this location’s page (under What’s here) and under this location in the Locations menu. Make the page first under Pages, then pick it here.',
       list: true,
       ui: { itemProps: (item) => ({ label: item?.page ? String(item.page).split('/').pop()?.replace(/\.mdx?$/, '') : 'Choose a page' }) },
       fields: [{ type: 'reference', name: 'page', label: 'Page', collections: ['pages'] }],
