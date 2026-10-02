@@ -1,8 +1,8 @@
 import { connection } from 'next/server'
 import { readContentJson } from './content'
-import { fuelPricesFromLive } from './live-shapes'
+import { fuelPricesFromLive, withOtherStores } from './live-shapes'
 import { liveDocument } from './tina-live'
-import { LOCATION_ORDER, shortLabelOf } from './locations'
+import { shortLabelOf } from './locations'
 import { formatUsDay, toStoreDay } from './pacific-time'
 import type { FuelGrade, FuelPricesDoc, LocationDoc, PricedPlace } from './types'
 
@@ -51,14 +51,20 @@ export async function getFuelPrices(): Promise<FuelPricesDoc> {
   // Per request, never baked in. See ADR 0024 and the comment in next.config.js.
   await connection()
   const live = await liveDocument('fuelPrices', FUEL_PRICES_PATH)
-  const doc = live ? fuelPricesFromLive(live) : await readContentJson<FuelPricesDoc>(FUEL_PRICES_PATH)
+  const doc = live
+    ? fuelPricesFromLive(live)
+    : await readContentJson<FuelPricesDoc & { otherStores?: unknown }>(FUEL_PRICES_PATH)
   if (!doc) return EMPTY_PRICES
   return {
     // `linkLocations` records the checkbox position in the CMS and nothing
     // else. It must never decide what the site reads — the site always reads
     // the per-location entries (ADR 0004).
     linkLocations: doc.linkLocations === true,
-    locations: { ...EMPTY_PRICES.locations, ...(doc.locations ?? {}) },
+    // Stores added after the first three are a list in the file (ADR 0030).
+    locations: withOtherStores(
+      { ...EMPTY_PRICES.locations, ...(doc.locations ?? {}) },
+      (doc as { otherStores?: unknown }).otherStores
+    ),
     truckStop: doc.truckStop ?? {},
     source: live ? 'live' : 'build',
   }
@@ -101,15 +107,21 @@ export function locationRow(location: LocationDoc, prices: FuelPricesDoc): Price
 }
 
 /**
- * Every priced place, in the fixed site order: the Truck Stop callout first,
- * then Exit 260, Minimart, Fisherman's Cove (ADR 0005 / ADR 0009).
+ * Every priced place: the Truck Stop first, then the Locations in site order
+ * (ADR 0005 / ADR 0009) — `locations` arrives sorted from getLocations().
+ *
+ * The first three always have a row. A Location added later has one only once
+ * a price is entered for it (ADR 0030): until then it is a store with nothing
+ * posted, and a row of dashes would read as "sold out".
  */
+const ORIGINAL_THREE = new Set(['exit-260', 'minimart', 'fishermans-cove'])
+
 export function allPriceRows(locations: LocationDoc[], prices: FuelPricesDoc): PriceRow[] {
-  const byId = new Map(locations.map((loc) => [loc.id, loc]))
   const rows: PriceRow[] = [truckStopRow(prices)]
-  for (const id of LOCATION_ORDER) {
-    const loc = byId.get(id)
-    if (loc) rows.push(locationRow(loc, prices))
+  for (const loc of locations) {
+    const own = prices.locations[loc.id]
+    const priced = own && FUEL_GRADES.some((grade) => typeof own[grade] === 'number')
+    if (ORIGINAL_THREE.has(loc.id) || priced) rows.push(locationRow(loc, prices))
   }
   return rows
 }

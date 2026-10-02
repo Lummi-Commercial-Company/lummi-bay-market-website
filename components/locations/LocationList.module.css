@@ -297,3 +297,89 @@
     font-size: 12px;
   }
 }
+
+/* "Also inside Exit 260: Liquor Store → · Drive-Thru →" (InsideLinks). */
+.inside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+  margin: 12px 0 0;
+}
+
+.insideLabel {
+  font: 600 0.6875rem/1.4 var(--ff-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lb-navy);
+}
+
+.insideLink {
+  font: 600 0.875rem/1.4 var(--ff-body);
+  color: var(--lb-navy);
+}
+
+/* "Dining at Salish Village" — the other businesses on the property, as one
+   full-width row under the cards. Light, so it reads as a neighbour of the
+   Location cards rather than a fourth store. */
+.dining {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 13px 14px;
+  background: var(--lb-paper);
+  border: 1px solid rgba(28, 78, 143, 0.14);
+  border-left: 3px solid var(--lb-teal);
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.dining:hover .diningName {
+  text-decoration: underline;
+}
+
+.diningText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.diningName {
+  font: 700 15px/1.2 var(--ff-display);
+  color: var(--lb-navy);
+}
+
+.diningLine {
+  font: 400 12px/1.45 var(--ff-body);
+  color: var(--lb-ink);
+  opacity: 0.8;
+}
+
+.diningGo {
+  margin-left: auto;
+  flex: 0 0 auto;
+  font: 600 0.6875rem/1 var(--ff-body);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--lb-navy);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .dining {
+    margin-top: 14px;
+    padding: 15px 18px;
+    border-radius: var(--radius-card);
+  }
+
+  .diningName {
+    font-size: 1.0625rem;
+  }
+
+  .diningLine {
+    font-size: 0.8125rem;
+  }
+}

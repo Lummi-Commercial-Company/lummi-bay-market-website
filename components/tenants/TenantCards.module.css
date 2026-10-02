@@ -1,0 +1,229 @@
+/* ===========================================================================
+   Other businesses — drawn from docs/proofs/tenant-index-template.html and
+   tenant-page-template.html (ADR 0016). Grouped by where each business is,
+   and a group divides its row evenly, as promo rows do (ADR 0018).
+   =========================================================================== */
+
+.section {
+  margin-top: var(--sp-5);
+}
+
+.sectionHeading {
+  font: 700 1.25rem/1.2 var(--ff-display);
+  color: var(--lb-navy);
+  margin: 0 0 var(--sp-4);
+}
+
+.group + .group {
+  margin-top: var(--sp-5);
+}
+
+.groupLabel {
+  font: 700 0.625rem/1 var(--ff-body);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lb-navy);
+  margin: 0 0 4px;
+}
+
+.groupSub {
+  font: 400 0.8125rem/1.5 var(--ff-body);
+  color: var(--lb-ink);
+  opacity: 0.75;
+  margin: 0 0 12px;
+}
+
+.row {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 720px) {
+  .row {
+    grid-template-columns: repeat(var(--n, 1), minmax(0, 1fr));
+  }
+}
+
+.row > li {
+  display: flex;
+}
+
+.card {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 15px 16px;
+  background: var(--lb-paper);
+  border: 1px solid rgb(28 78 143 / 0.16);
+  border-left: 3px solid var(--lb-teal);
+  border-radius: var(--radius-card);
+  color: inherit;
+  text-decoration: none;
+}
+
+a.card:hover .name {
+  text-decoration: underline;
+}
+
+a.card:focus-visible {
+  outline: 3px solid var(--lb-teal);
+  outline-offset: 2px;
+}
+
+.planned {
+  border-left-color: rgb(28 78 143 / 0.25);
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  margin: -15px -16px 4px -16px;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  overflow: hidden;
+  background: var(--lb-bone);
+}
+
+.photo img {
+  object-fit: cover;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.badge {
+  align-self: flex-start;
+  font: 600 0.625rem/1 var(--ff-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lb-navy);
+  background: var(--lb-bone);
+  border: 1px solid rgb(28 78 143 / 0.2);
+  border-radius: 99px;
+  padding: 5px 9px;
+}
+
+.name {
+  font: 700 1.0625rem/1.2 var(--ff-display);
+  color: var(--lb-navy);
+  margin: 0;
+}
+
+.blurb {
+  font: 400 0.875rem/1.5 var(--ff-body);
+  color: var(--lb-ink);
+  margin: 0;
+}
+
+.hours {
+  font: 500 0.8125rem/1.4 var(--ff-body);
+  color: var(--lb-ink);
+  opacity: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+
+.go {
+  margin-top: auto;
+  padding-top: 8px;
+  font: 600 0.6875rem/1 var(--ff-body);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--lb-navy);
+}
+
+/* Once, at the foot of the list — on every card it would read as a warning. */
+.disclosure {
+  margin: var(--sp-5) 0 0;
+  padding: 13px 15px;
+  border-left: 3px solid var(--lb-cedar);
+  background: var(--lb-bone);
+  border-radius: 0 10px 10px 0;
+  font: 500 0.8125rem/1.55 var(--ff-body);
+  color: var(--lb-ink);
+  max-width: 62ch;
+}
+
+/* ---- A business's own page --------------------------------------------- */
+.backlink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: 600 0.875rem/1 var(--ff-body);
+  color: var(--lb-navy);
+}
+
+.hero {
+  position: relative;
+  aspect-ratio: 18 / 5;
+  max-width: 100%;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--lb-bone);
+  margin: 0 0 var(--sp-4);
+}
+
+.hero img {
+  object-fit: cover;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 var(--sp-4);
+}
+
+.chip {
+  font: 600 0.75rem/1 var(--ff-body);
+  color: var(--lb-navy);
+  background: var(--lb-bone);
+  border: 1px solid rgb(28 78 143 / 0.18);
+  border-radius: 99px;
+  padding: 7px 11px;
+}
+
+.hourscard {
+  max-width: 420px;
+  padding: 14px 16px;
+  margin: var(--sp-4) 0 0;
+  background: var(--lb-paper);
+  border: 1px solid rgb(28 78 143 / 0.16);
+  border-radius: var(--radius-card);
+}
+
+.hourscard h2 {
+  font: 700 0.625rem/1 var(--ff-body);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lb-navy);
+  margin: 0 0 8px;
+}
+
+.hourscard p {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.hourscard .hoursNote {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: var(--sp-5) 0 0;
+}

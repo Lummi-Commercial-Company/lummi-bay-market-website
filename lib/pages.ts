@@ -116,6 +116,8 @@ function asBlock(value: unknown): PageBlock | null {
       return { _template: 'locationContacts', heading: asString(record.heading) || undefined }
     case 'locationsMap':
       return { _template: 'locationsMap', heading: asString(record.heading) || undefined }
+    case 'tenantList':
+      return { _template: 'tenantList', heading: asString(record.heading) || undefined }
     case 'callout':
       return {
         _template: 'callout',
@@ -136,7 +138,7 @@ function asBlock(value: unknown): PageBlock | null {
   }
 }
 
-function asBlocks(value: unknown): PageBlock[] {
+export function asBlocks(value: unknown): PageBlock[] {
   const blocks: PageBlock[] = []
   if (Array.isArray(value)) {
     for (const entry of value) {

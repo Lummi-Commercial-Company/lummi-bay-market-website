@@ -83,3 +83,32 @@ that on that page the block *is* the page (register item C6, option A).
   and it should be fixed at the block, not the footer.
 - If the page is ever to be retired, the argument is unchanged from the original *Rejected*
   section above: that is a decision about SEO, not about navigation.
+
+## Amendment — Locations opens a list of every place, 2 Oct 2026
+
+**Owner's direction:** "The word 'locations' in the nav bar should go to the 'locations' page
+featuring all the locations … AND it should be a dropdown listing each location as well." The
+contents chosen: the stores, the Truck Stop, and the parts of a store with a page of their own
+(the Liquor Store and the Tobacco & Liquor Drive-Thru, under Exit 260).
+
+**Still three items.** The list hangs off "Locations"; it adds nothing to the bar. "Locations" is
+still a link to `/locations` — a click goes there, as it always did. The list opens:
+- on hover, for a mouse, with a short grace period so the pointer can cross into it;
+- from the small arrow beside the word, for a keyboard or a finger (a real button with
+  `aria-expanded`); Escape closes it and returns focus to the arrow; a click elsewhere, a scroll
+  or a new page closes it.
+
+On a phone the same places sit indented under "Locations" in the ☰ menu (ADR 0029), which now
+scrolls inside itself when it is taller than the screen.
+
+**It is built from the data, never typed.** The Truck Stop appears when a Location has a Truck
+Stop record; each Location follows in site order (ADR 0009); under each, the pages picked in that
+Location's "Also inside this location (pages)" field. A part of a store with its own page is
+added by making the page and picking it there — no engineer. `components/layout/SiteHeader.tsx`
+(`locationsMenuItems`), `SiteNav.tsx`, `MobileMenu.tsx`.
+
+The list is `position: fixed` under the link, for the same reason the ☰ panel is: the header
+clips its overflow for the motif band, so anything positioned inside it would be cut off.
+
+The dining page (ADR 0016) is not in the list: it is not one of our places, and the owner chose
+the list's contents without it.

@@ -6,7 +6,13 @@
 
 import type { RowLayout } from './promos.ts'
 
-export type LocationSlug = 'exit-260' | 'minimart' | 'fishermans-cove'
+/**
+ * A Location's id: its file name in content/locations/, which is also its web
+ * address (`/locations/{id}`). Staff can add Locations (owner, 2 Oct 2026;
+ * ADR 0030), so this is any id, not a fixed three. The original three are
+ * `exit-260`, `minimart` and `fishermans-cove`.
+ */
+export type LocationSlug = string
 
 /** The only three grades priced on this site (CONTEXT.md, ADR 0004). */
 export type FuelGrade = 'regular' | 'diesel' | 'def'
@@ -39,6 +45,8 @@ export interface TruckStopRecord {
 
 export interface LocationDoc {
   id: LocationSlug
+  /** "Position in lists" — 1 first. Unset: the usual order (ADR 0030). */
+  order?: number
   name: string
   navLabel: string
   /** Tightest label, for the fuel price band. Falls back to navLabel. */
@@ -62,6 +70,8 @@ export interface LocationDoc {
   lat?: number
   lng?: number
   amenities: string[]
+  /** Page slugs for parts of this store with their own page (`liquor-store`). */
+  inside: string[]
   truckStop?: TruckStopRecord
   hero?: { image?: string; alt?: string }
   /** MDX body, unparsed. Not rendered in Phase 1. */
@@ -84,6 +94,11 @@ export interface FuelPricesDoc {
    * per-location entries below (ADR 0004).
    */
   linkLocations: boolean
+  /**
+   * Keyed by Location id. The first three are fixed objects in the file; any
+   * Location added later is priced in the file's `otherStores` list, which is
+   * folded in here on read (ADR 0030) — callers see one map either way.
+   */
   locations: Record<LocationSlug, PricedPlace>
   /** Never touched by `linkLocations`. Always priced on its own. */
   truckStop: PricedPlace
@@ -195,6 +210,7 @@ export type PageBlock =
   | { _template: 'locationList'; heading?: string }
   | { _template: 'locationContacts'; heading?: string }
   | { _template: 'locationsMap'; heading?: string }
+  | { _template: 'tenantList'; heading?: string }
   | { _template: 'callout'; heading?: string; text?: string }
   | { _template: 'ctaRow'; buttons: PageCtaButton[] }
   | { _template: 'faq'; heading?: string; items: PageFaqItem[] }
@@ -255,6 +271,34 @@ export interface InfoPageDoc {
   slug: string
   title: string
   seoDescription?: string
+  body: string
+  blocks: PageBlock[]
+}
+
+/** Where a tenant is on the property — groups the cards on the dining page. */
+export type TenantPlacement = 'inside' | 'property' | 'lot'
+
+/**
+ * An independent business renting space on one of our properties (ADR 0016).
+ * Never a Location and never an Amenity. Everything optional is already
+ * gated: `hours` is present only when confirmed with the business, `logo` and
+ * `photo` only when we have permission to use them.
+ */
+export interface TenantDoc {
+  /** The file name without its extension: the address `/dining/{slug}`. */
+  slug: string
+  name: string
+  /** The Location it is at, by id; undefined if the reference is broken. */
+  location?: LocationSlug
+  placement: TenantPlacement
+  /** Not open yet: the card shows "Opening soon" and links nowhere. */
+  planned: boolean
+  summary?: string
+  hours?: string
+  linkMode: 'internal' | 'external'
+  externalUrl?: string
+  logo?: string
+  photo?: string
   body: string
   blocks: PageBlock[]
 }

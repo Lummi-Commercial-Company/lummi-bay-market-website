@@ -20,6 +20,9 @@ Lummi Bay Market brand.
 2. **Lummi Bay Minimart** — fuel + convenience store.
 3. **The Cove** (aka "Fisherman's Cove") — fuel + convenience store.
 All three share the Lummi Bay identity; each keeps its own name as a sub-brand.
+**Staff can add a Location** in the CMS (owner, 2 Oct 2026): its file name is its address, it
+appears everywhere Locations are listed, and it is priced under Fuel Prices → Other store prices
+— ADR 0030.
 
 ## Hard rules (never break)
 - **Logo is locked.** Use the existing logo art as-is. Never redraw, recolor, or
@@ -74,6 +77,10 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
 cannot hold the lockup, three links and the pill below ~430px, which is every common phone
 (ADR 0029). Still three items.
 - Locations: index → 3 detail pages (nav labels: Exit 260 · Minimart · Fisherman's Cove).
+  "Locations" links to the index **and opens a list** of every place — Truck Stop, each store, and
+  under a store the pages picked in its "Also inside this location (pages)" field (Liquor Store,
+  Drive-Thru) — on hover or from the arrow beside it; on a phone, indented in the ☰ menu. Built
+  from the Location data; still three nav items (owner, 2 Oct 2026, ADR 0008 amended).
 - Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it — the
   navy Truck Stop box at the top of "Our other locations", once (owner, 2 Oct 2026, ADR 0009).
 - `/fuel-prices` still exists as a page — reached from the price block's "All prices" panel
@@ -174,7 +181,14 @@ the layout and cannot be lost or moved by a page.
   fuel price table) and never an Amenity. **Settled 16 Sep 2026: the Cove Kitchen is an
   Amenity, not a tenant** — Lummi Bay Market runs it, so it stays in Fisherman's Cove's
   `amenities` and is unaffected by whether tenants are advertised at all.
-  The index is its own page, "Also at Exit 260" — never "Salish Village" (ADR 0001 collision) — grouped by where each business is rather than alphabetically. Not in the nav.
+  **Built 2 Oct 2026:** the index is the page **"Dining at Salish Village"** (`/dining`, a `pages`
+  document carrying the "Other businesses" section), grouped by where each business is rather than
+  alphabetically, with a card under "Our locations" wherever that list appears. **The owner allowed
+  the "Salish Village" name for this page and that card only** — the hard rule on other Lummi
+  companies holds everywhere else (nav, footer, all other copy). Business pages are
+  `/dining/{file name}`. Not in the nav. **The Liquor Store and the Tobacco & Liquor Drive-Thru are
+  not tenants** — Lummi Bay Market runs them, so they are `pages` (`/liquor-store`, `/drive-thru`),
+  linked through Exit 260's "Also inside this location (pages)" field — ADR 0016, Amendment.
 A new page never appears in the nav on its own — the nav stays three items (ADR 0008).
 
 ## Specialist agents (delegate to keep context lean)

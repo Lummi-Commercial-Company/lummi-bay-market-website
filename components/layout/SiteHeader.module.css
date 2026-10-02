@@ -107,6 +107,121 @@
   background: rgb(245 241 232 / 0.1);
 }
 
+/* ---- The Locations list (ADR 0008, amended 2 Oct 2026) ------------------ */
+/* "Locations" stays a link to /locations; the arrow beside it opens the list.
+   The two sit together as one 40px-tall item, the arrow a 24px-wide part of
+   it, so the row of three keeps its rhythm. */
+.navGroup {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+}
+
+.navGroup > .navLink {
+  padding-right: 6px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.navToggle {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 40px;
+  padding: 0 4px 0 0;
+  border: 0;
+  border-radius: 0 6px 6px 0;
+  background: none;
+  color: var(--lb-bone);
+  cursor: pointer;
+}
+
+.navToggle svg {
+  transition: transform 0.15s;
+}
+
+.navToggle[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+.navToggle:hover,
+.navToggle[aria-expanded='true'] {
+  background: rgb(245 241 232 / 0.1);
+}
+
+.navToggle:focus-visible,
+.navPanelLink:focus-visible {
+  outline: 3px solid var(--lb-teal);
+  outline-offset: -3px;
+}
+
+/* Fixed, placed by SiteNav from the item's own box: the header clips its
+   overflow, so a list positioned inside it would be cut off. In the header's
+   colours, like the ☰ panel. */
+.navPanel {
+  position: fixed;
+  z-index: calc(var(--z-header) + 1);
+  min-width: 240px;
+  max-width: calc(100vw - 32px);
+  background: var(--lb-navy);
+  border: 1px solid rgb(245 241 232 / 0.18);
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.28);
+  padding: 6px;
+}
+
+.navPanel[hidden] {
+  display: none;
+}
+
+.navPanelList,
+.navPanelSub {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navPanelSub {
+  margin: 2px 0 4px 12px;
+  padding-left: 8px;
+  border-left: 1px solid rgb(245 241 232 / 0.2);
+}
+
+.navPanelLink {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: var(--lb-bone);
+  text-decoration: none;
+  font: 500 14px/1.2 var(--ff-body);
+  white-space: nowrap;
+}
+
+.navPanelLink[aria-current] {
+  background: rgb(245 241 232 / 0.16);
+  font-weight: 600;
+}
+
+.navPanelLink:hover {
+  background: rgb(245 241 232 / 0.1);
+}
+
+.navPanelChild {
+  min-height: 36px;
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navToggle svg {
+    transition: none;
+  }
+}
+
 /* ---- The ☰ menu — phone only (ADR 0029) --------------------------------- */
 /* Rightmost in the row, after the pill, as the approved template places it. */
 .menuBtn {
@@ -146,6 +261,10 @@
   background: var(--lb-navy);
   border-bottom: 1px solid rgb(245 241 232 / 0.18);
   padding: 6px 10px 12px;
+  /* The list of places makes it taller than a short phone. */
+  max-height: calc(100dvh - var(--hd-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .menuPanel[hidden] {
@@ -186,6 +305,26 @@
 .menuLink:focus-visible {
   outline: 3px solid var(--lb-teal);
   outline-offset: -3px;
+}
+
+/* The places under "Locations", indented beneath it. */
+.menuSub {
+  list-style: none;
+  margin: 2px 0 4px 14px;
+  padding: 0 0 0 8px;
+  border-left: 1px solid rgb(245 241 232 / 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menuSub .menuSub {
+  margin-left: 12px;
+}
+
+.menuSubLink {
+  min-height: 44px;
+  font-size: 14px;
 }
 
 @media (min-width: 768px) {

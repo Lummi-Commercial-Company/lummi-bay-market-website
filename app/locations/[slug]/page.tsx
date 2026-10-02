@@ -6,15 +6,21 @@ import styles from '../../page.module.css'
 import { FuelPriceBlock, FuelPriceBlockFallback } from '@/components/fuel/FuelPriceBlock'
 import { FuelPriceRail } from '@/components/fuel/FuelPriceRail'
 import { AmenityBadges } from '@/components/locations/AmenityBadges'
+import { InsideLinks } from '@/components/locations/InsideLinks'
 import { LiveHours } from '@/components/locations/LiveHours'
 import { LocationList } from '@/components/locations/LocationList'
 import { PromoSlot } from '@/components/promos/PromoRegion'
-import { getLocation, LOCATION_ORDER } from '@/lib/locations'
+import { getLocation, getLocations } from '@/lib/locations'
 import { JsonLd, locationJsonLd } from '@/lib/structured-data'
 import type { LocationSlug } from '@/lib/types'
 
-export function generateStaticParams() {
-  return LOCATION_ORDER.map((slug) => ({ slug }))
+/**
+ * Every Location document, so one added in the CMS gets its page on the next
+ * deploy — and before that, on demand: an address not listed here is rendered
+ * when first asked for (ADR 0030).
+ */
+export async function generateStaticParams() {
+  return (await getLocations()).map((location) => ({ slug: location.id }))
 }
 
 export async function generateMetadata({
@@ -112,6 +118,10 @@ export default async function LocationPage({
         ) : location.amenities.length === 1 ? (
           <p>{location.amenities[0]} available at this location.</p>
         ) : null}
+
+        {/* Parts of this store with their own page — the Liquor Store at
+            Exit 260 (Location Details → "Also inside this location"). */}
+        <InsideLinks location={location} />
 
         {/* The page's own card is dropped and the label reads "Our other
             locations"; the Truck Stop callout stays on Exit 260 (ADR 0009). */}

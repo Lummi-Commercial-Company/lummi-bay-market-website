@@ -8,7 +8,11 @@ description: The content schema for the three Lummi Bay Market locations and how
 ## Schema (per location)
 Each location is one Markdown/MDX file in `content/locations/`, defined as a TinaCMS
 "Locations" collection (content lives as files in the git repo — no database):
-- `id` (slug): exit-260 | minimart | fishermans-cove
+- `id` (slug): the file name — exit-260 | minimart | fishermans-cove, plus any Location staff
+  add in the CMS (ADR 0030). A new file carries no `id` line; the file name is the id and the
+  web address, and must be lowercase letters, numbers and hyphens.
+- `order`: optional "Position in lists" (1 first). Blank = the usual order, then others A–Z.
+- `showOnSite`: optional; `false` takes the Location off the site entirely. Unset = shown.
 - `name`: full name (e.g., "Lummi Bay Market at Exit 260")
 - `navLabel`: short nav label (Exit 260 | Minimart | Fisherman's Cove)
 - `shortLabel`: the tightest display label, for the fuel price band where horizontal

@@ -184,3 +184,44 @@ that is a nav decision to take then, on its own merits.
   fields in the CMS; nothing about them needs an engineer or an ADR revision.
 - Worth knowing at some point, though it does not block anything: whether a tenant contract
   requires a listing and on whose website, since every lease here is LCC's.
+
+## Amendment — built, and named "Dining at Salish Village", 2 Oct 2026
+
+**The Liquor Store is not a tenant.** A Liquor Store document was saved under Other Businesses;
+Lummi Bay Market owns and runs it, so it is a page of ours (`/liquor-store`, under Pages), as is
+the Tobacco & Liquor Drive-Thru (`/drive-thru`). Both are linked from the Exit 260 page, the
+Locations page and the Locations menu through Exit 260's "Also inside this location (pages)"
+field, and the Liquor Store from the footer's Visit column. The same reasoning that keeps the Cove
+Kitchen an Amenity: the test is who runs it, not where it is.
+
+**The index is named "Dining at Salish Village"** — the owner's choice, which overrides the
+"Also at Exit 260, never Salish Village" rule above **for this page and the card that links to it,
+and nowhere else.** CLAUDE.md's hard rule on other Lummi companies still holds everywhere else:
+no "Salish Village" in the nav, the footer (the footer still refuses a link that names it), or
+any other copy. The page title is the page's own field, so the card reads whatever the page is
+called.
+
+**How it is built:**
+- The index is an ordinary page document, `content/pages/dining.mdx` → `/dining`, carrying one
+  section, "Other businesses on our properties", that draws the cards from Other Businesses.
+  Its title and words are edited under Pages like any other page.
+- A card on the Locations list — under the Location cards, wherever the list appears (Home, the
+  Locations page, each Location page, the Truck Stop page) — links to whichever page carries
+  that section, and appears only when at least one business is saved.
+- Cards are grouped "Inside the store", "On the property", "In the lot" (the template's groups),
+  open businesses first. The disclosure line is drawn once at the foot of the list and once on
+  each business page; it is not a field.
+- A business whose card goes "A page here on our site" has its page at `/dining/{file name}`,
+  in the sitemap. One whose card goes "Straight to their own website" opens that site in a new
+  tab, marked as leaving; an address that is not a plain http(s) one is dropped and the card
+  goes to the page here instead.
+- **`status: planned` shows, rather than hiding.** The original decision said a planned tenant
+  "does not render"; the approved template draws it as a card with an "Opening soon" badge that
+  links nowhere, which is what was built — so Black Bear Diner can be on the page before it opens.
+  The field is "Open yet?" in the CMS.
+- Gates enforced by the site whatever the document says, with tests (`lib/tenant-rules.ts`):
+  hours only once confirmed with the business; logo and photo only with permission.
+
+**The four records are placeholders.** Piroshky Piroshky, Wendy's, Black Bear Diner (planned)
+and Hi-Tide Coffee were entered with a one-line description each and no hours, logo or photo.
+The wording is ours, not the businesses', and is to be confirmed with them.

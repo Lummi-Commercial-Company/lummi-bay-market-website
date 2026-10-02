@@ -6,6 +6,7 @@ import { LocationsMap } from './LocationsMap'
 import styles from './PageSections.module.css'
 import { LiveHours } from '@/components/locations/LiveHours'
 import { LocationList } from '@/components/locations/LocationList'
+import { TenantList } from '@/components/tenants/TenantList'
 import { getLocations } from '@/lib/locations'
 import { Markdown } from '@/lib/markdown'
 import type { HoursOverride, PageBlock } from '@/lib/types'
@@ -67,6 +68,9 @@ function PageBlockRow({ block }: { block: PageBlock }) {
 
     case 'locationsMap':
       return <LocationsMap heading={block.heading} />
+
+    case 'tenantList':
+      return <TenantList heading={block.heading} />
 
     case 'hoursTable':
       return <HoursTable heading={block.heading} includeTruckStop={block.includeTruckStop} />

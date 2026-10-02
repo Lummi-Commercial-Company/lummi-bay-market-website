@@ -40,9 +40,41 @@ export function fuelPricesFromLive(values: Record<string, unknown>): FuelPricesD
   const locations = (values.locations ?? {}) as Record<string, PricedPlace>
   return {
     linkLocations: values.linkLocations === true,
-    locations: Object.fromEntries(
-      Object.entries(locations).map(([key, prices]) => [key.replace(/_/g, '-'), prices])
-    ) as FuelPricesDoc['locations'],
+    locations: withOtherStores(
+      Object.fromEntries(Object.entries(locations).map(([key, prices]) => [key.replace(/_/g, '-'), prices])),
+      values.otherStores
+    ),
     truckStop: (values.truckStop ?? {}) as PricedPlace,
   }
+}
+
+/**
+ * Prices for Locations added after the first three (ADR 0030). The file keeps
+ * them as a list — `otherStores: [{ location: 'content/locations/x.mdx',
+ * regular, diesel, def, updated }]` — because the CMS cannot grow a fixed set
+ * of boxes when a Location is added. Folded into the one map the site reads.
+ *
+ * A row never overrides one of the fixed three (their own boxes win), a row
+ * with no store picked is ignored, and when a store is listed twice the first
+ * row counts.
+ */
+export function withOtherStores(
+  locations: Record<string, PricedPlace>,
+  otherStores: unknown
+): Record<string, PricedPlace> {
+  const out = { ...locations }
+  if (!Array.isArray(otherStores)) return out
+  for (const row of otherStores) {
+    if (!row || typeof row !== 'object') continue
+    const record = row as Record<string, unknown>
+    const id = typeof record.location === 'string' ? record.location.split('/').pop()?.replace(/\.mdx?$/, '') : ''
+    if (!id || id in out) continue
+    const prices: PricedPlace = {}
+    for (const grade of ['regular', 'diesel', 'def'] as const) {
+      if (typeof record[grade] === 'number') prices[grade] = record[grade] as number
+    }
+    if (typeof record.updated === 'string' && record.updated) prices.updated = record.updated
+    out[id] = prices
+  }
+  return out
 }

@@ -223,6 +223,22 @@ const pageBlocks: Template[] = [
     ],
   },
   {
+    // The cards come from Other Businesses — nothing is typed here. The page
+    // carrying this section is the dining page: the "Dining at Salish Village"
+    // card under Our locations links to it (owner, 2 Oct 2026; ADR 0016).
+    name: 'tenantList',
+    label: 'Other businesses on our properties (always up to date)',
+    fields: [
+      {
+        type: 'string',
+        name: 'heading',
+        label: 'Heading',
+        description:
+          'Optional. The cards themselves come from Other Businesses, grouped by where each one is, and the line saying they are independently run is always added. Put this section on one page only: that page is the one the Locations card links to.',
+      },
+    ],
+  },
+  {
     // Everything on the card — name, synopsis, amenities, address, phone and
     // hours — is read from the Location documents. Nothing is typed here, so a
     // phone number changed in one place changes everywhere it appears.
@@ -355,25 +371,44 @@ const locations: Collection = {
   label: 'Location Details',
   path: 'content/locations',
   format: 'mdx',
-  // There are exactly three Locations and there are no others in scope. A
-  // fourth would appear in the locations index, the fuel price table, /contact
-  // and the sitemap — a business renting space on our property is a Tenant, not
-  // a Location. Adding and deleting are therefore off.
-  ui: { allowedActions: { create: false, delete: false } },
+  // Staff can add a Location (owner, 2 Oct 2026; ADR 0030). It appears in the
+  // Locations index and menu, on /contact and in the sitemap, and in the fuel
+  // table once Fuel Prices has a row for it. A business renting space on our
+  // property is still an Other Business, not a Location (ADR 0016).
+  //
+  // Deleting stays off: a Location's address is printed, bookmarked and linked
+  // from promotions. "Show on the website" takes one off the site instead.
+  //
+  // The file name is the web address, filled in from the short name.
+  ui: {
+    allowedActions: { create: true, delete: false },
+    filename: {
+      slugify: (values) =>
+        String(values?.navLabel || values?.name || '')
+          .toLowerCase()
+          .replace(/['’]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, ''),
+    },
+  },
   fields: [
     {
-      // Every Tina document already has a built-in `id`, so a content field
-      // called `id` collides in the generated GraphQL schema. `nameOverride`
-      // keeps the key in the .mdx file as `id` — which is what the content
-      // model specifies and what lib/locations.ts reads — while Tina's own
-      // name for it is `slug`.
+      // The first three files carry an `id` line; the site now takes the id
+      // from the file name, which always matches it, so this is hidden. Every
+      // Tina document already has a built-in `id`, hence `slug` + nameOverride.
       type: 'string',
       name: 'slug',
       nameOverride: 'id',
       label: 'Location ID',
-      description: 'Set once when the location was created. Changing it breaks the web address and every link to it.',
-      required: true,
-      ui: { validate: (value?: string) => (value ? undefined : 'Required') },
+      ui: { component: 'hidden' },
+    },
+    {
+      type: 'boolean',
+      name: 'showOnSite',
+      label: 'Show on the website',
+      description:
+        'Off keeps this location off the site everywhere — useful while a new store is being written up before it opens. Its web address only works while this is on.',
+      ui: { component: onOffField({ on: 'on the website', off: 'hidden from the website', unsetIs: true }) },
     },
     {
       type: 'string',
@@ -389,6 +424,13 @@ const locations: Collection = {
       label: 'Short name (menus and cards)',
       description: 'Two or three words. For example: Exit 260.',
       required: true,
+    },
+    {
+      type: 'number',
+      name: 'order',
+      label: 'Position in lists',
+      description:
+        '1 shows first. Leave blank for the usual order: Exit 260, Minimart, Fisherman’s Cove, then any others A–Z. Used everywhere locations are listed, including the fuel prices.',
     },
     {
       type: 'string',
@@ -453,11 +495,24 @@ const locations: Collection = {
       list: true,
     },
     {
+      // Parts of this store with a page of their own — the Liquor Store and
+      // the drive-thru at Exit 260 (owner, 2 Oct 2026). Lummi Bay Market's own,
+      // never an independent business: those are Other Businesses (ADR 0016).
+      type: 'object',
+      name: 'inside',
+      label: 'Also inside this location (pages)',
+      description:
+        'Parts of this store that have a page of their own, such as the Liquor Store. Each one is linked from this location’s page, from the Locations page, and under this location in the Locations menu. Make the page first under Pages, then pick it here.',
+      list: true,
+      ui: { itemProps: (item) => ({ label: item?.page ? String(item.page).split('/').pop()?.replace(/\.mdx?$/, '') : 'Choose a page' }) },
+      fields: [{ type: 'reference', name: 'page', label: 'Page', collections: ['pages'] }],
+    },
+    {
       type: 'object',
       name: 'truckStop',
       label: 'Truck Stop (Exit 260 only)',
       description:
-        'The Truck Stop is a separate fuel station for truckers sharing the Exit 260 property — not a service of the store. Its phone, hours and amenities are its own and are never mixed with the store’s. Leave this empty at the other two locations.',
+        'The Truck Stop is a separate fuel station for truckers sharing the Exit 260 property — not a service of the store. Its phone, hours and amenities are its own and are never mixed with the store’s. Leave this empty at every other location.',
       fields: [
         {
           type: 'string',
@@ -545,6 +600,26 @@ const fuelPrices: Collection = {
           label: 'Fisherman’s Cove',
           fields: priceFields(),
         },
+      ],
+    },
+    {
+      // Locations added after the first three (ADR 0030). The three above are
+      // fixed boxes; a list is what can grow when a Location is added. Folded
+      // into the same price map on read (lib/live-shapes.ts withOtherStores).
+      type: 'object',
+      name: 'otherStores',
+      label: 'Other store prices',
+      description:
+        'For any location added after the first three. Add a row, pick the location, and type its prices. A new location shows in the price table once it has a price here. Not copied from Exit 260.',
+      list: true,
+      ui: {
+        itemProps: (item) => ({
+          label: item?.location ? String(item.location).split('/').pop()?.replace(/\.mdx?$/, '') : 'Choose a location',
+        }),
+      },
+      fields: [
+        { type: 'reference', name: 'location', label: 'Location', collections: ['locations'] },
+        ...priceFields(),
       ],
     },
     {
@@ -952,7 +1027,7 @@ const tenants: Collection = {
       name: 'name',
       label: 'Business name',
       description:
-        'An independent business at one of our properties — they run themselves, we simply point to them. The page is called "Also at Exit 260". Nothing appears on the site until at least one business is published.',
+        'An independent business at one of our properties — they run themselves, we simply point to them. Each one gets a card on the Dining at Salish Village page. Nothing appears on the site until at least one business is saved here. Not for anything Lummi Bay Market runs itself, such as the Liquor Store — that is a page under Pages.',
       required: true,
       isTitle: true,
     },
@@ -974,6 +1049,16 @@ const tenants: Collection = {
         { value: 'lot', label: 'In the lot (truck or trailer)' },
       ],
       required: true,
+    },
+    {
+      type: 'string',
+      name: 'status',
+      label: 'Open yet?',
+      description: 'Opening soon shows the card with an "Opening soon" badge and no link, so it can be written before the doors open.',
+      options: [
+        { value: 'open', label: 'Open' },
+        { value: 'planned', label: 'Opening soon' },
+      ],
     },
     {
       type: 'string',
