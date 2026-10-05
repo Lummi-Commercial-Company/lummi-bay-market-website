@@ -76,21 +76,21 @@ export async function SiteHeader() {
 }
 
 /**
- * The Locations menu, in the site's order for places (ADR 0009): the Truck
- * Stop, then each Location with the parts of it that have their own page.
+ * The Locations menu: each Location with the parts of it that have their own
+ * page. The Truck Stop sits under the Location whose property it shares
+ * (Exit 260), first, ahead of the pages picked in "Also inside this location".
  */
 async function locationsMenuItems(): Promise<SubNavItem[]> {
   const [locations, pages] = await Promise.all([getLocations(), getPages()])
-  const truckHome = locations.find((location) => location.truckStop)
-  return [
-    ...(truckHome ? [{ href: '/truck-stop', label: 'Truck Stop' }] : []),
-    ...locations.map((location) => ({
-      href: `/locations/${location.id}`,
-      label: location.navLabel,
-      children: location.inside
+  return locations.map((location) => ({
+    href: `/locations/${location.id}`,
+    label: location.navLabel,
+    children: [
+      ...(location.truckStop ? [{ href: '/truck-stop', label: 'Truck Stop' }] : []),
+      ...location.inside
         .map((slug) => pages.find((page) => page.slug === slug))
         .filter((page): page is NonNullable<typeof page> => Boolean(page))
         .map((page) => ({ href: `/${page.slug}`, label: page.navLabel || page.title })),
-    })),
-  ]
+    ],
+  }))
 }

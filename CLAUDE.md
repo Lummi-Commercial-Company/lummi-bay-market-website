@@ -77,8 +77,8 @@ Primary nav (3): **Home · Locations · Truck Stop** — Fuel Prices removed, se
 cannot hold the lockup, three links and the pill below ~430px, which is every common phone
 (ADR 0029). Still three items.
 - Locations: index → 3 detail pages (nav labels: Exit 260 · Minimart · Fisherman's Cove).
-  "Locations" links to the index **and opens a list** of every place — Truck Stop, each store, and
-  under a store the pages picked in its "Also inside this location (pages)" field (Liquor Store,
+  "Locations" links to the index **and opens a list** of every place — each store, and
+  under a store its Truck Stop (Exit 260, listed first) and the pages picked in its "Also inside this location (pages)" field (Liquor Store,
   Drive-Thru) — on hover or from the arrow beside it; on a phone, indented in the ☰ menu. Built
   from the Location data; still three nav items (owner, 2 Oct 2026, ADR 0008 amended).
 - Truck Stop: dedicated page; the Exit 260 page carries a short summary that links to it — the
