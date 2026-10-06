@@ -96,7 +96,7 @@
     "image": "/uploads/backgrounds/placeholder-salmon-pattern.png",
     "fit": "repeat",
     "scale": 40,
-    "opacity": 100
+    "opacity": 40
   },
   "headerMotifs": {
     "show": true,
