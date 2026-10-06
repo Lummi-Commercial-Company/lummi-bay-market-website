@@ -95,8 +95,8 @@
     "enabled": true,
     "image": "/uploads/backgrounds/placeholder-salmon-pattern.png",
     "fit": "repeat",
-    "scale": 40,
-    "opacity": 40
+    "scale": 15,
+    "opacity": 17
   },
   "headerMotifs": {
     "show": true,
