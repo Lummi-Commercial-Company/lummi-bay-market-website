@@ -65,6 +65,8 @@
   border-radius: var(--radius-card);
   color: inherit;
   text-decoration: none;
+  /* Rounds the photo's top corners with the card's own. */
+  overflow: hidden;
 }
 
 a.card:hover .name {
@@ -80,12 +82,17 @@ a.card:focus-visible {
   border-left-color: rgb(28 78 143 / 0.25);
 }
 
+/* Edge to edge across the top of the card, over its padding. 16:9, but never
+   taller than 240px: a business alone in its row has a card the full page
+   width, and an uncapped 16:9 photo there would be 650px tall. The cap trims
+   top and bottom only, so a centred subject survives every width. */
 .photo {
   position: relative;
+  width: calc(100% + 32px);
+  max-width: none;
   aspect-ratio: 16 / 9;
-  max-width: 100%;
-  margin: -15px -16px 4px -16px;
-  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  max-height: 240px;
+  margin: -15px -16px 4px;
   overflow: hidden;
   background: var(--lb-bone);
 }

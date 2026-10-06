@@ -189,6 +189,16 @@ footer{
   .page{padding-left:16px; padding-right:16px}
   .meta{gap:4px 16px}
 }
+/* The image-slot table (section 06): the slot's name and where staff upload it
+   need room, or every row grows to a dozen lines. */
+.slots table{table-layout:fixed}
+.slots th:nth-child(1){width:20%}
+.slots th:nth-child(2){width:22%}
+.slots th:nth-child(3){width:16%}
+.slots th:nth-child(4){width:17%}
+.slots th:nth-child(5){width:12%}
+.slots th:nth-child(6){width:13%}
+.slots th,.slots td{white-space:normal; overflow-wrap:break-word}
 /* ---------- print: the PDF is generated from this same file ---------- */
 @page{size:Letter; margin:15mm 14mm 17mm}
 @media print{
@@ -239,6 +249,10 @@ footer{
   thead{display:table-header-group}
   tr{break-inside:avoid}
   .tw{overflow:visible}          /* a scroll container clips on paper */
+  /* The one table longer than a sheet: its rows stay whole, and the header
+     repeats, but the table itself may continue onto the next page rather than
+     leave the section's opening sheet empty. */
+  .tw.slots,.tw.slots table{break-inside:auto}
 
   /* Four columns keeps the palette to two short rows. */
   .swatches{grid-template-columns:repeat(4,1fr)}
@@ -260,7 +274,7 @@ footer{
   palette and type rules that govern them. Built so you can size, colour and export an asset
   correctly without reading the codebase.</p>
   <div class="meta">
-    <span><b>Version</b> 30 Sep 2026 — promo and phone sizes measured on the built site</span>
+    <span><b>Version</b> 6 Oct 2026 — every image slot re-measured on the built site</span>
     <span><b>Palette &amp; type</b> locked — approved 2026 refresh</span>
     <span><b>Content width</b> 1200px max</span>
     <span><b>Density</b> supply at 2× — one exception, §07</span>
@@ -465,7 +479,7 @@ footer{
         <tr><td><b>Line height</b></td><td class="n">1.1 / 1.5</td><td>1.1 display, 1.5 body. Sentence case throughout.</td></tr>
         <tr><td><b>Corner radius</b></td><td class="n">8px / 12px</td><td>8 on controls, 12 on cards. Soft, no heavy shadows.</td></tr>
         <tr><td><b>Waterline</b></td><td class="n">header 5px<br>Home band 10px</td><td>Both flat and drawn in code, nothing to supply: a solid 5px teal line under the navy header on every page, and on Home a 10px teal-into-navy band under the page top. The wavy 18px waterline is not used on the site at present.</td></tr>
-        <tr><td><b>Sticky header, phone</b></td><td class="n">56px</td><td>About 7% of a 375×812 screen, held permanently. It grew 47 → 52 → 56 for measured reasons, never for taste.</td></tr>
+        <tr><td><b>Sticky header</b></td><td class="n">58px desktop<br>56px phone</td><td>Held permanently on every page; an emergency notice, when one is running, adds its own strip below it. The phone bar grew 47 → 52 → 56 for measured reasons, never for taste.</td></tr>
         <tr><td><b>Logo in the header</b></td><td class="n">112 × 40 desktop<br>95 × 34 phone</td><td>Plus the lockup's own clear space: the paddle-handle height on all sides, minimum width ≈72px.</td></tr>
         <tr><td><b>Header art clearance</b></td><td class="n">20px</td><td>No header image comes within 20px of the navigation's right edge — a floor, not a target. Art starts at whichever lands further right, this or the lockup's clear space.</td></tr>
       </tbody>
@@ -499,54 +513,44 @@ footer{
     <table>
       <thead><tr><th>State</th><th class="n">Desktop</th><th class="n">Phone</th></tr></thead>
       <tbody>
-        <tr><td><b>Resting card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Location + Truck Stop</span></td><td class="n">400 × 110</td><td class="n">345 × 102</td></tr>
+        <tr><td><b>Resting card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Location + Truck Stop</span></td><td class="n">400 × 129</td><td class="n">343 × 127</td></tr>
         <tr><td><b>Condensed bar</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The page's own Location alone</span></td><td class="n">400 × 39</td><td class="n">one line</td></tr>
         <tr><td><b>Never wider than</b></td><td class="n">400px</td><td class="n">400px</td></tr>
-        <tr><td><b>Cost before any page content</b></td><td class="n">—</td><td class="n">191px</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="tnote">On a phone that 191px is control 45 + gap 10 + block 135, on every page, with the
-  sticky header holding a further 56 above it. It is why a fourth element above a page title gets
-  measured before it gets added.</p>
-
-  <div class="note">
-    <h3>Three numbers that disagree between sources — check before you build to them</h3>
-    <p>Found while assembling this section, and left visible rather than quietly resolved, because
-    picking one at random is how a wrong number becomes the agreed one.</p>
-    <p><b>The resting card height.</b> Skill <code>fuel-price-update</code> gives the desktop
-    resting card as <b>400 × 110</b> in its state table and as <b>400 × 151</b> in the sentence
-    above it. <b>The condensed bar width</b> is <b>400px</b> in one table and <b>360px</b> in the
-    prose. <b>The phone header</b> is <b>56px</b> since tap targets were measured (ADR 0010), but
-    the promo stacking arithmetic still adds it as 52, so the "page title at 424px" figure is 4px
-    light. None of the three changes a design decision; all three would waste an afternoon if
-    built to blind.</p>
-  </div>
+  <p class="tnote">Resting sizes measured on the built site, 6 Oct 2026. From 720px wide the block
+  sits beside the page title and stays on screen as the page scrolls; below 720px it sits above the
+  title and scrolls away.</p>
 </section>
 
 <section>
   <h2><span class="num">06 / page imagery</span>Every image slot, at the size it renders</h2>
   <p class="sec-lede">CSS pixels are what the browser draws. <b>Supply at 2× those numbers</b> so the
   art holds on a retina screen. The page caps at 1200px wide, which leaves <b>1168px for content</b>
-  inside its 16px margins; the phone column is <b>343px</b> at a 375px device. Promo and info page
-  figures were measured on the built site on 30 Sep 2026.</p>
+  inside its 16px margins; the phone column is <b>343px</b> at a 375px device. Every figure below
+  was measured on the built site on 6 Oct 2026, and the last column is the most a file may weigh.
+  Where one photo shows in several places, <b>one file serves them all</b> — supply it once, at
+  the size given.</p>
 
-  <div class="tw">
+  <div class="tw slots">
     <table>
-      <thead><tr><th>Slot</th><th class="n">Desktop (CSS px)</th><th class="n">Phone (CSS px)</th><th class="n">Supply at</th><th>Format</th></tr></thead>
+      <thead><tr><th>Slot</th><th class="n">Desktop (CSS px)</th><th class="n">Phone (CSS px)</th><th class="n">Supply at</th><th>Format</th><th class="n">Max file</th></tr></thead>
       <tbody>
-        <tr><td><b>Promo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One master serves every slot — see section 08</span></td><td class="n">1168 × 234 &nbsp;(5:1)<br>down to 282 × 158</td><td class="n">343 × 193 &nbsp;(16:9)</td><td class="n">2400 × 1350<br>subject inside the<br>centre 2400 × 480</td><td>JPG</td></tr>
-        <tr><td><b>Location photo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One per Location, in Location Details → Main photo</span></td><td class="n">page 720 × 360 &nbsp;(2:1)<br>card 380 × 214 &nbsp;(16:9)</td><td class="n">page 358 × 201<br>card 44 × 44 square</td><td class="n">2400 × 1350<br>storefront in the centre</td><td>JPG</td></tr>
-        <tr><td><b>Info page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The page a promo links to. <b>No file of its own</b> — it shows the promo's master</span></td><td class="n">720 × 200</td><td class="n">343 × 140</td><td class="n">nothing extra —<br>the promo's<br>2400 × 1350</td><td>—</td></tr>
-        <tr><td><b>Tenant page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Independent businesses on site</span></td><td class="n">1200 × 190</td><td class="n">343 × 132</td><td class="n">2400 × 380</td><td>JPG</td></tr>
-        <tr><td><b>Tenant card thumbnail</b><br><span style="color:var(--ink-soft);font-size:.8125rem">On the index, 3 across</span></td><td class="n">391 × 78 &nbsp;(5:1)</td><td class="n">343 × 78</td><td class="n">782 × 156</td><td>JPG</td></tr>
-        <tr><td><b>Rewards app screenshot</b></td><td class="n">8:5 box (1.6)</td><td class="n">8:5 box</td><td class="n">2× the rendered box</td><td>PNG</td></tr>
-        <tr><td><b>Page backdrop — wide</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Cropped at the page edge, ~10% opacity</span></td><td class="n">866 × 2948<br>renders ≈186 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
-        <tr><td><b>Page backdrop — narrow</b></td><td class="n">503 × 2948<br>renders ≈108 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td></tr>
-        <tr><td><b>Header motif</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One file per motif, or one holding several — see below</span></td><td class="n">≈50 tall at the approved 86% scale<br>(40–100% of a 58px bar)</td><td class="n">same height;<br>fewer fit</td><td>vector</td><td>SVG mask, ≤ 20 KB</td></tr>
-        <tr><td><b>Social share card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Not an on-page slot — see section 07</span></td><td class="n">1200 &times; 630</td><td class="n">same file</td><td class="n">1200 &times; 630<br><b>not 2&times;</b></td><td>JPG</td></tr>
-        <tr><td><b>Social icon</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One per account, in the footer social row</span></td><td class="n">≈20 glyph<br>in a 44 × 44 target</td><td class="n">same</td><td>vector</td><td>inline SVG</td></tr>
-        <tr><td><b>Waterline</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Drawn in code — see section 05</span></td><td class="n">5px line / 10px band</td><td class="n">same</td><td>nothing to supply</td><td>—</td></tr>
+        <tr><td><b>Promo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One master serves every slot — see section 08</span></td><td class="n">1168 × 234 &nbsp;(5:1)<br>down to 282 × 158</td><td class="n">343 × 193 &nbsp;(16:9)</td><td class="n">2400 × 1350<br>subject inside the<br>centre 2400 × 480</td><td>JPG</td><td class="n">200 KB</td></tr>
+        <tr><td><b>Info page hero</b><br><span style="color:var(--ink-soft);font-size:.8125rem">The page a promo links to. <b>No file of its own</b> — it shows the promo's master</span></td><td class="n">720 × 200</td><td class="n">343 × 140</td><td class="n">nothing extra —<br>the promo's<br>2400 × 1350</td><td>—</td><td class="n">—</td></tr>
+        <tr><td><b>Location photo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Location Details → Main photo. One file: the Location's page and its card</span></td><td class="n">page 720 × 360 &nbsp;(2:1)<br>card 378 × 213 &nbsp;(16:9)<br>card 575 × 323 two across</td><td class="n">page 343 × 193 &nbsp;(16:9)<br>card 44 × 44 square</td><td class="n">1600 × 900<br>storefront in the centre</td><td>JPG</td><td class="n">250 KB</td></tr>
+        <tr><td><b>Truck Stop photo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Location Details → Exit 260 → Truck Stop main photo. Its own photo, never the store's</span></td><td class="n">720 × 360 &nbsp;(2:1)</td><td class="n">343 × 193 &nbsp;(16:9)</td><td class="n">1600 × 900</td><td>JPG</td><td class="n">250 KB</td></tr>
+        <tr><td><b>Page picture</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Pages → Extra sections → picture. Full page width (the Liquor Store photo)</span></td><td class="n">1168 × 584 &nbsp;(2:1)</td><td class="n">343 × 172 &nbsp;(2:1)</td><td class="n">2400 × 1200</td><td>JPG</td><td class="n">300 KB</td></tr>
+        <tr><td><b>Business photo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Other Businesses → Photo. One file: the card on Dining at Salish Village and the business's own page</span></td><td class="n">card 16:9, never over 240 tall:<br>≈376 × 211 three across<br>573 × 240 two across<br>1164 × 240 alone<br>page 720 × 200 &nbsp;(18:5)</td><td class="n">card 339 × 191<br>page 343 × 95</td><td class="n">2400 × 1350<br>subject inside the<br>centre 2400 × 480</td><td>JPG</td><td class="n">250 KB</td></tr>
+        <tr><td><b>Business logo</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Other Businesses → Logo. Shown whole, never cropped, inside its box</span></td><td class="n">fits a 160 × 40 box</td><td class="n">same</td><td class="n">320 × 80</td><td>PNG or SVG, see-through</td><td class="n">30 KB</td></tr>
+        <tr><td><b>Rewards app screenshot</b></td><td class="n">8:5 box (1.6)</td><td class="n">8:5 box</td><td class="n">2× the rendered box</td><td>PNG</td><td class="n">150 KB</td></tr>
+        <tr><td><b>Page backdrop — wide</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Cropped at the page edge, ~10% opacity</span></td><td class="n">866 × 2948<br>renders ≈186 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td><td class="n">150 KB</td></tr>
+        <tr><td><b>Page backdrop — narrow</b></td><td class="n">503 × 2948<br>renders ≈108 wide</td><td class="n">hidden</td><td class="n">as supplied</td><td>PNG, alpha</td><td class="n">150 KB</td></tr>
+        <tr><td><b>Header motif</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Site Settings → Header motifs. One file per motif, or one holding several — see below</span></td><td class="n">≈50 tall at the approved 86% scale<br>(40–100% of the 58px bar)</td><td class="n">≈48 tall<br>(of the 56px bar); fewer fit</td><td class="n">vector, drawn<br>about 50 tall</td><td>SVG mask</td><td class="n">20 KB<br>(aim for 10)</td></tr>
+        <tr><td><b>Social share card</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Not an on-page slot — see section 07</span></td><td class="n">1200 &times; 630</td><td class="n">same file</td><td class="n">1200 &times; 630<br><b>not 2&times;</b></td><td>JPG</td><td class="n">200 KB</td></tr>
+        <tr><td><b>Social icon</b><br><span style="color:var(--ink-soft);font-size:.8125rem">One per account, in the footer social row. Already drawn</span></td><td class="n">≈20 glyph<br>in a 44 × 44 target</td><td class="n">same</td><td>vector</td><td>inline SVG</td><td class="n">—</td></tr>
+        <tr><td><b>Waterline</b><br><span style="color:var(--ink-soft);font-size:.8125rem">Drawn in code — see section 05</span></td><td class="n">5px line / 10px band</td><td class="n">same</td><td>nothing to supply</td><td>—</td><td class="n">—</td></tr>
       </tbody>
     </table>
   </div>
@@ -559,9 +563,12 @@ footer{
   drawing job: Facebook, Instagram and Yelp, in that order, Yelp last because customers speak
   there and the business does not.</p>
 
-  <p class="tnote">Location cards carry a 26 × 26 motif, not a photograph — do not supply store
-  photography for them. The fuel-price block carries no art at all: it is the most-used thing on
-  the site and it is a table.</p>
+  <p class="tnote"><b>Crops, in one line each.</b> A Location photo is cut to 2:1 on its page
+  (a little off the top and bottom of a 16:9 file) and to a centred square in the phone card, so
+  keep the storefront in the middle. A business photo is cut like a promo — the full-width card
+  keeps only the centre 2400 × 480 band — so the same subject rule applies. A Location with no
+  photo shows a 26 × 26 placeholder motif on its card instead. The fuel-price block carries no art
+  at all: it is the most-used thing on the site and it is a table.</p>
 
   <h3>Motifs ship as masks, not as coloured artwork</h3>
   <p>Supply decorative motifs as <b>solid shapes on a transparent background, in SVG</b>. The site
@@ -826,10 +833,11 @@ footer{
       <tbody>
         <tr><td>Promo, full width</td><td>JPG</td><td class="n">&lt; 200 KB</td><td>Quality 72–80, sRGB, progressive</td></tr>
         <tr><td>Promo, half or smaller</td><td>JPG</td><td class="n">&lt; 120 KB</td><td>as above</td></tr>
-        <tr><td>Page or tenant hero</td><td>JPG</td><td class="n">&lt; 250 KB</td><td>as above</td></tr>
-        <tr><td>Card thumbnail</td><td>JPG</td><td class="n">&lt; 60 KB</td><td>as above</td></tr>
+        <tr><td>Location, Truck Stop or business photo</td><td>JPG</td><td class="n">&lt; 250 KB</td><td>as above</td></tr>
+        <tr><td>Page picture (full width)</td><td>JPG</td><td class="n">&lt; 300 KB</td><td>as above</td></tr>
+        <tr><td>Business logo</td><td>PNG or SVG</td><td class="n">&lt; 30 KB</td><td>Transparent background</td></tr>
         <tr><td>Anything with transparency</td><td>PNG-8 where possible</td><td class="n">&lt; 150 KB</td><td>Flat art rarely needs PNG-24</td></tr>
-        <tr><td>Motifs, waterline, icons</td><td>SVG</td><td class="n">&lt; 10 KB</td><td>Outline all text before export</td></tr>
+        <tr><td>Header motifs, icons</td><td>SVG</td><td class="n">&lt; 10 KB (20 KB refused)</td><td>Outline all text before export</td></tr>
       </tbody>
     </table>
   </div>
@@ -860,9 +868,8 @@ footer{
       <tbody>
         <tr><td><b>All tribal motifs</b></td><td><span class="pill open">Placeholder</span></td><td>Every motif on the site is an interim silhouette. Authentic, commissioned or tribe-approved art must replace them before launch.</td></tr>
         <tr><td><b>Promo art with words in it</b></td><td><span class="pill proposed">Owner's call</span></td><td>The first promo image uploaded is a 1200 × 630 Facebook graphic with its own headline and price in the art. As a promo it fails twice: the site's live words land on top of the baked-in ones, and the wide crops cut through them. Until the owner decides whether the site should offer a <b>picture-only</b> promo (no live words, for finished graphics like this), promo art is a photograph or illustration with no copy, per section 08.</td></tr>
-        <tr><td><b>Tenant artwork</b></td><td><span class="pill locked">Settled 17 Sep 2026</span></td><td>Ownership decided that tenants <b>are</b> advertised: a tenants page with a card each. So the card thumbnail and page hero above are live slots, not hypothetical ones. What is still missing is the artwork itself, and it is not ours to draw — each tenant supplies their own, and an external card may carry no art at all. Commission nothing; collect it.</td></tr>
+        <tr><td><b>Business photos and logos</b></td><td><span class="pill locked">Built 2 Oct 2026</span></td><td>The Dining at Salish Village page and a page per business are live, with four businesses entered and no pictures yet. The photo and logo slots are in section 06. The artwork is not ours to draw — each business supplies its own. Commission nothing; collect it, and switch on "We have permission to use their logo and photo" in the CMS, or neither shows.</td></tr>
         <tr><td><b>Map on the contact page</b></td><td><span class="pill proposed">Waiting on the map</span></td><td>The mechanism is settled — an embedded Google My Maps behind a click-to-load still image (ADR 0019, ADR 0025) — so there is no pin artwork to draw: My Maps supplies its own. What is outstanding is one asset, and it cannot be made until the map is: <b>a picture of the finished map</b>, which is what a visitor sees until they click to load the live one. Until then both map fields stay empty, and an empty map renders one section fewer, not a broken page.</td></tr>
-        <tr><td><b>Social icons</b></td><td><span class="pill proposed">Accounts supplied</span></td><td>Three accounts are in hand and in render order. The three glyphs still have to be drawn as inline SVG — see section 06. Nothing renders while the list is empty, so a missing icon is a blank row, never a broken link.</td></tr>
       </tbody>
     </table>
   </div>
@@ -875,7 +882,9 @@ footer{
       <h3>Do</h3>
       <ul>
         <li>Make navy dominant. Teal and cedar are accents, and the waterline is the recurring signature that ties pages together.</li>
-        <li>Supply one 2400 × 1350 master for every promo, with the subject inside the centre 2400 × 480 band. It serves all five desktop slots, the tablet, the phone and the promo's info page.</li>
+        <li>Supply one 2400 × 1350 master for every promo, with the subject inside the centre 2400 × 480 band. It serves all five desktop slots, the tablet, the phone and the promo's info page. Business photos follow the same rule.</li>
+        <li>Supply Location and Truck Stop photos at 1600 × 900, storefront in the middle.</li>
+        <li>Keep every file under its size in section 06.</li>
         <li>Keep faces, products and logos out of the bottom-left corner of promo art — the words sit there.</li>
         <li>Export at 2× the CSS size listed, in sRGB, with EXIF stripped.</li>
         <li>Keep the subject centred in promo art, so it survives a row re-dividing.</li>

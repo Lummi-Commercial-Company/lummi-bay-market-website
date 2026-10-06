@@ -47,19 +47,20 @@ const DOCS = {
     src: 'docs/design-spec-sheet.html',
     out: 'docs/lummi-bay-asset-specs-brand-guide.pdf',
     title: 'Lummi Bay Market — asset specs & brand guide',
+    date: '6 Oct 2026',
   },
   handbook: {
     src: 'docs/editors-handbook.html',
     out: 'docs/lummi-bay-editors-handbook.pdf',
     title: "Lummi Bay Market — editor's handbook",
+    date: '17 Sep 2026',
   },
 };
 
-// The date printed beside the title on every page. It is one constant rather
-// than a copy per document, and it is not `new Date()`: a document's footer
-// should say when the document was revised, not when someone happened to
-// re-run the renderer.
-const DOC_DATE = '17 Sep 2026';
+// The date printed beside the title on every page is each document's own
+// `date` above, and it is not `new Date()`: a document's footer should say when
+// that document was revised, not when someone happened to re-run the renderer.
+// (It was one shared constant until the brand guide was revised alone.)
 
 const arg = process.argv[2] || 'brand-guide';
 const keys = arg === 'all' ? Object.keys(DOCS) : [arg];
@@ -115,10 +116,10 @@ function localFontCss() {
 // Printed into the bottom margin of every page. Chrome renders these templates
 // without the page's own webfonts, so the stack is deliberately generic and the
 // size is set inline — an unstyled template prints at an unreadable zoom.
-const footerFor = (title) => `
+const footerFor = (title, date) => `
 <div style="width:100%;margin:0 12mm;font:400 8px/1.4 -apple-system,Segoe UI,Helvetica,Arial,sans-serif;
             color:#6B6659;display:flex;justify-content:space-between;align-items:baseline">
-  <span>${title.replace(/&/g, '&amp;')} · ${DOC_DATE}</span>
+  <span>${title.replace(/&/g, '&amp;')} · ${date}</span>
   <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
 </div>`;
 
@@ -168,7 +169,7 @@ const footerFor = (title) => `
       printBackground: true,          // the swatches ARE the content
       displayHeaderFooter: true,
       headerTemplate: '<div></div>',
-      footerTemplate: footerFor(doc.title),
+      footerTemplate: footerFor(doc.title, doc.date),
       margin: { top: '15mm', right: '14mm', bottom: '17mm', left: '14mm' },
     });
     await page.close();
