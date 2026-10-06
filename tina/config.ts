@@ -1431,6 +1431,8 @@ const settings: Collection = {
           name: 'opacity',
           label: 'How faint (percent)',
           description: '10 is the tested setting. Higher numbers start to compete with the text.',
+          // The full 0–100 range: opacity is the owner's call, not clamped (ADR 0020).
+          ui: { component: rangeField(0, 100, 10, 1, '%') },
         },
         {
           type: 'string',
@@ -1445,6 +1447,7 @@ const settings: Collection = {
           type: 'number',
           name: 'height',
           label: 'Height (percent of the screen)',
+          ui: { component: rangeField(10, 100, 100, 1, '%') },
         },
       ],
     },
