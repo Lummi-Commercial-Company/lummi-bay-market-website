@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { listAddressFor } from '../tina/fields/after-save.ts'
+import { listAddressFor, parentLevelOf } from '../tina/fields/after-save.ts'
 
 /** Saving a document goes back up one level (owner, 30 Sep 2026). */
 test('a saved document returns to the list it is in, folder and all', () => {
@@ -13,6 +13,19 @@ test('Site Settings and Fuel Prices stay on their form', () => {
   assert.equal(listAddressFor('#/collections/edit/settings/site'), null)
   assert.equal(listAddressFor('#/collections/edit/fuelPrices/fuel-prices'), null)
   assert.equal(listAddressFor('#/collections/promos/~'), null, 'not a form: nothing to do')
+})
+
+test('saving one motif in Site Settings goes back to its motif group', () => {
+  const crumbs = [
+    { formId: 'content/settings/site.json', formName: '' },
+    { formId: 'content/settings/site.json', formName: 'headerMotifs' },
+    { formId: 'content/settings/site.json', formName: 'headerMotifs.groups.0' },
+    { formId: 'content/settings/site.json', formName: 'headerMotifs.groups.0.motifs.2' },
+  ]
+  assert.equal(parentLevelOf(crumbs)?.formName, 'headerMotifs.groups.0')
+  assert.equal(parentLevelOf(crumbs.slice(0, 1)), null, 'top of the form: stay')
+  assert.equal(parentLevelOf([]), null)
+  assert.equal(parentLevelOf(undefined), null)
 })
 
 test('the CMS knows which build it is running, to warn when a newer one is up', async () => {

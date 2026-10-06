@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import { BackToTop } from '@/components/layout/BackToTop'
 import { PageBackdrop } from '@/components/layout/PageBackdrop'
+import { PageBackground } from '@/components/layout/PageBackground'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { getSettings } from '@/lib/settings'
@@ -85,6 +86,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <a className="skip-link" href="#main">
           Skip to content
         </a>
+
+        {/* The full-page background, under the watermark (ADR 0031). */}
+        <PageBackground settings={settings.pageBackground} />
 
         {/* Decoration, behind everything, off on phones (ADR 0020). */}
         <PageBackdrop settings={settings.backdrop} />

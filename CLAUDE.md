@@ -110,6 +110,9 @@ cannot hold the lockup, three links and the pill below ~430px, which is every co
   with strength, scale, spacing and ink — all in Site Settings → Header motifs, below the
   background watermark. The site checks every
   file again before drawing it. Uploading art does not approve it — the cultural rule still holds.
+- **Full-page background** (6 Oct 2026, ADR 0031): Site Settings → Full-page background — one
+  image behind every page, tiled (size by slider, % of the image) or cover/contain, with a
+  faintness slider. Separate from the side watermark. The salmon pattern is a placeholder.
 - **Dates are MM/DD/YYYY** everywhere staff type or read them (owner's direction, 30 Sep 2026) —
   promotions, temporary hours, fuel price stamps — with an optional time such as `12:00 PM`, typed or
   picked from the Calendar button beside every date box (`tina/fields/date-field.tsx`). One
