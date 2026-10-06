@@ -89,7 +89,7 @@
     "image": "/uploads/sasquatch-narrow-bg.png",
     "opacity": 10,
     "side": "left",
-    "height": 10
+    "height": 100
   },
   "headerMotifs": {
     "show": true,
