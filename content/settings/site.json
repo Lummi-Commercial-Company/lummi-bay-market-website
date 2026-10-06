@@ -84,20 +84,24 @@
     "embedCode": "",
     "stillImage": ""
   },
+  "backdrop": {
+    "enabled": true,
+    "image": "/uploads/sasquatch-narrow-bg.png",
+    "opacity": 10,
+    "side": "left",
+    "height": 100
+  },
   "headerMotifs": {
     "show": true,
     "groups": [
       {
-        "name": "Placeholder motifs (TODO: replace with approved Lummi art)",
+        "name": "Salmon, Owl, Octopus, Crab",
         "motifs": [
           {
-            "file": "/uploads/motifs/placeholder-canoe.svg"
+            "file": "/uploads/motifs/Salmon.svg"
           },
           {
-            "file": "/uploads/motifs/placeholder-paddle.svg"
-          },
-          {
-            "file": "/uploads/motifs/placeholder-salmon.svg"
+            "file": "/uploads/motifs/Owl.svg"
           },
           {
             "file": "/uploads/motifs/Octopus.svg"
@@ -106,11 +110,11 @@
             "file": "/uploads/motifs/Crab.svg"
           }
         ],
-        "strength": 12,
-        "scale": 50,
-        "spacing": 10,
+        "strength": 33,
+        "scale": 56,
+        "spacing": 20,
         "ink": "white",
-        "repeat": false,
+        "repeat": true,
         "live": true
       }
     ]
