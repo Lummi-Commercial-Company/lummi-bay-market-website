@@ -3,6 +3,7 @@ import { CACHE_TAGS } from './cache-tags'
 import { readContentJson } from './content'
 import { DEFAULT_FOOTER_LINKS, DEFAULT_PRIVACY_LINK, footerLinksFrom, privacyLinkFrom } from './footer-links'
 import { noticesFrom } from './notices'
+import { pageBackgroundFrom } from './page-background'
 import { asRowLayouts } from './promo-rows'
 import { DEFAULT_PROMO_ROWS } from './promos'
 import type { SiteSettings, SocialLink } from './types'
@@ -39,6 +40,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   map: { embedCode: '', stillImage: '' },
   alerts: [],
   backdrop: { enabled: false, opacity: 10, side: 'left', height: 100 },
+  pageBackground: pageBackgroundFrom(undefined),
   promoRows: DEFAULT_PROMO_ROWS,
   headerMotifs: { show: false, groups: [] },
 }
@@ -106,6 +108,7 @@ export async function getSettings(): Promise<SiteSettings> {
       height: typeof backdrop.height === 'number' ? backdrop.height : 100,
       crop: backdrop.crop === 'narrow' ? 'narrow' : 'full',
     },
+    pageBackground: pageBackgroundFrom(raw.pageBackground),
     liveMainPage: raw.liveMainPage ? String(raw.liveMainPage) : undefined,
     // Never empty: a site with no rows would hold live promos nobody can see.
     promoRows: asRowLayouts(raw.promoRows).length

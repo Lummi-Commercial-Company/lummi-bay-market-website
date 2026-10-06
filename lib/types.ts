@@ -4,6 +4,7 @@
  * change it there first and follow it here.
  */
 
+import type { PageBackgroundSettings } from './page-background.ts'
 import type { RowLayout } from './promos.ts'
 
 /**
@@ -154,6 +155,8 @@ export interface SiteSettings {
   /** Every saved notice, in the order staff put them. The bar shows the first live one. */
   alerts: SiteAlertDoc[]
   backdrop: PageBackdropSettings
+  /** The full-page background, tiled or filling the page (ADR 0031). */
+  pageBackground: PageBackgroundSettings
   /** Which `mainPages` document is live (ADR 0018). */
   liveMainPage?: string
   /**

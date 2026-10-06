@@ -3,6 +3,7 @@ import type { Collection, Template, TinaField } from 'tinacms'
 import { MOTIF_LIMITS } from '../lib/motif-check'
 import { noticeState, toNotice } from '../lib/notices'
 import { pacificStamp } from '../lib/pacific-time'
+import { OPACITY, SCALE } from '../lib/page-background'
 import { MAX_PROMO_ROWS, parseWhen, ROW_LAYOUTS } from '../lib/promos'
 import { GroupNameField, MotifFileField, rangeField } from './fields/motif-fields'
 import { returnToListAfterSave } from './fields/after-save'
@@ -1448,6 +1449,44 @@ const settings: Collection = {
           name: 'height',
           label: 'Height (percent of the screen)',
           ui: { component: rangeField(10, 100, 100, 1, '%') },
+        },
+      ],
+    },
+    {
+      // ADR 0031. TODO: replace with approved Lummi art — the salmon pattern is a placeholder.
+      type: 'object',
+      name: 'pageBackground',
+      label: 'Full-page background',
+      description:
+        'One image behind every page — tiled, or filling the page. Separate from the watermark above; both can be on at once. The salmon pattern is a placeholder until approved Lummi art replaces it.',
+      fields: [
+        { type: 'boolean', name: 'enabled', label: 'Show the background', ui: { component: onOffField() } },
+        { type: 'image', name: 'image', label: 'Image', description: 'A PNG or SVG with a transparent background tiles best.' },
+        {
+          type: 'string',
+          name: 'fit',
+          label: 'How it fills the page',
+          options: [
+            { value: 'repeat', label: 'Tile — repeat across and down' },
+            { value: 'repeat-x', label: 'Tile across only' },
+            { value: 'repeat-y', label: 'Tile down only' },
+            { value: 'cover', label: 'Cover — one image fills the page, edges cropped' },
+            { value: 'contain', label: 'Contain — one whole image, centred' },
+          ],
+        },
+        {
+          type: 'number',
+          name: 'scale',
+          label: 'Tile size (percent of the image)',
+          description: `For the tile choices only: each tile at this share of the image's own size, ${SCALE.min}–${SCALE.max}%.`,
+          ui: { component: rangeField(SCALE.min, SCALE.max, SCALE.fallback, 5, '%') },
+        },
+        {
+          type: 'number',
+          name: 'opacity',
+          label: 'How faint (percent)',
+          description: 'Lower is fainter. Keep it light enough that text stays easy to read.',
+          ui: { component: rangeField(OPACITY.min, OPACITY.max, OPACITY.fallback, 1, '%') },
         },
       ],
     },

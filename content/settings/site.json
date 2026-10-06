@@ -91,6 +91,13 @@
     "side": "left",
     "height": 100
   },
+  "pageBackground": {
+    "enabled": true,
+    "image": "/uploads/backgrounds/placeholder-salmon-pattern.png",
+    "fit": "repeat",
+    "scale": 40,
+    "opacity": 100
+  },
   "headerMotifs": {
     "show": true,
     "groups": [
