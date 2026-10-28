@@ -127,5 +127,10 @@
       }
     ]
   },
-  "liveMainPage": "content/main-pages/home.mdx"
+  "liveMainPage": "content/main-pages/home.mdx",
+  "promoRows": [
+    {
+      "layout": "2"
+    }
+  ]
 }
