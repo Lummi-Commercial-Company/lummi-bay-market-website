@@ -1,20 +1,20 @@
 {
-  "linkLocations": false,
+  "linkLocations": true,
   "locations": {
     "exit-260": {
-      "regular": 4.89,
+      "regular": 4.39,
       "diesel": 6.99,
-      "updated": "09/29/2026"
+      "updated": "10/28/2026"
     },
     "minimart": {
-      "regular": 3.79,
+      "regular": 4.39,
       "diesel": 4.29,
-      "updated": "09/29/2026"
+      "updated": "10/28/2026"
     },
     "fishermans-cove": {
-      "regular": 3.85,
+      "regular": 4.39,
       "diesel": 4.29,
-      "updated": "09/29/2026"
+      "updated": "10/28/2026"
     }
   },
   "truckStop": {
