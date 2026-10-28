@@ -86,9 +86,9 @@
     "stillImage": ""
   },
   "backdrop": {
-    "enabled": true,
+    "enabled": false,
     "image": "/uploads/sasquatch-narrow-bg.png",
-    "opacity": 10,
+    "opacity": 11,
     "side": "left",
     "height": 100
   },
