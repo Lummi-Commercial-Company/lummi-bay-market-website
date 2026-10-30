@@ -4,16 +4,19 @@
     "exit-260": {
       "regular": 4.39,
       "diesel": 6.99,
+      "def": 2.99,
       "updated": "10/28/2026"
     },
     "minimart": {
       "regular": 4.39,
       "diesel": 4.29,
+      "def": 2.99,
       "updated": "10/28/2026"
     },
     "fishermans-cove": {
       "regular": 4.39,
       "diesel": 4.29,
+      "def": 2.99,
       "updated": "10/28/2026"
     }
   },
